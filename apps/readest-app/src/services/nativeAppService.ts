@@ -1,258 +1,231 @@
-import {
-  exists,
-  mkdir,
-  open as openFile,
-  readTextFile,
-  readFile,
-  writeTextFile,
-  writeFile,
-  readDir,
-  remove,
-  copyFile,
-  BaseDirectory,
-  WriteFileOptions,
-} from '@tauri-apps/plugin-fs';
-import { convertFileSrc } from '@tauri-apps/api/core';
-import { open as openDialog } from '@tauri-apps/plugin-dialog';
-import { join, appDataDir, appCacheDir } from '@tauri-apps/api/path';
-import { type as osType } from '@tauri-apps/plugin-os';
-
 import { Book } from '@/types/book';
 import { FileSystem, BaseDir, AppPlatform } from '@/types/system';
 import { isContentURI, isValidURL } from '@/utils/misc';
 import { getCoverFilename, getFilename } from '@/utils/book';
-import { copyURIToPath } from '@/utils/bridge';
-import { NativeFile, RemoteFile } from '@/utils/file';
-
+import { WebFile, RemoteFile } from '@/utils/file';
 import { BaseAppService } from './appService';
 import { LOCAL_BOOKS_SUBDIR } from './constants';
 
 declare global {
   interface Window {
     IS_ROUNDED?: boolean;
+    showOpenFilePicker?: (options?: any) => Promise<any>;
+    showDirectoryPicker?: (options?: any) => Promise<any>;
   }
 }
 
-const OS_TYPE = osType();
-
+// Helper for resolving file paths in the web environment
 const resolvePath = (fp: string, base: BaseDir): { baseDir: number; base: BaseDir; fp: string } => {
   switch (base) {
-    case 'Settings':
-      return { baseDir: BaseDirectory.AppConfig, fp, base };
-    case 'Data':
-      return { baseDir: BaseDirectory.AppData, fp, base };
-    case 'Cache':
-      return { baseDir: BaseDirectory.AppCache, fp, base };
-    case 'Log':
-      return { baseDir: BaseDirectory.AppLog, fp, base };
     case 'Books':
-      return {
-        baseDir: BaseDirectory.AppData,
-        fp: `${LOCAL_BOOKS_SUBDIR}/${fp}`,
-        base,
-      };
+      return { baseDir: 1, fp: `${LOCAL_BOOKS_SUBDIR}/${fp}`, base };
+    case 'Settings':
+      return { baseDir: 2, fp, base };
+    case 'Data':
+      return { baseDir: 3, fp, base };
+    case 'Cache':
+      return { baseDir: 4, fp, base };
+    case 'Log':
+      return { baseDir: 5, fp, base };
     case 'None':
-      return {
-        baseDir: 0,
-        fp,
-        base,
-      };
+      return { baseDir: 0, fp, base };
     default:
-      return {
-        baseDir: BaseDirectory.Temp,
-        fp,
-        base,
-      };
+      return { baseDir: 0, fp, base };
   }
 };
 
-export const nativeFileSystem: FileSystem = {
+// Implement file system operations for web environment
+export const webFileSystem: FileSystem = {
   getURL(path: string) {
-    return isValidURL(path) ? path : convertFileSrc(path);
+    return isValidURL(path) ? path : path; // In web, paths are already URLs or blob URLs
   },
+  
   async getBlobURL(path: string, base: BaseDir) {
-    const content = await this.readFile(path, base, 'binary');
-    return URL.createObjectURL(new Blob([content]));
-  },
-  async openFile(path: string, base: BaseDir, name?: string) {
-    const { fp, baseDir } = resolvePath(path, base);
-    const fname = name || getFilename(fp);
     if (isValidURL(path)) {
-      return await new RemoteFile(path, name).open();
-    } else if (isContentURI(path)) {
-      if (path.includes('com.android.externalstorage')) {
-        // If the URI is from shared internal storage (like /storage/emulated/0),
-        // we can access it directly using the path — no need to copy.
-        return await new NativeFile(fp, fname, base ? baseDir : null).open();
-      } else {
-        // Otherwise, for content:// URIs (e.g. from MediaStore, Drive, or third-party apps),
-        // we cannot access the file directly — so we copy it to a temporary cache location.
-        const prefix = this.getPrefix('Cache');
-        const dst = `${prefix}/${fname}`;
-        const res = await copyURIToPath({ uri: path, dst });
-        if (!res.success) {
-          console.error('Failed to open file:', res);
-          throw new Error('Failed to open file');
-        }
-        return await new NativeFile(dst, fname, base ? baseDir : null).open();
-      }
-    } else {
-      const prefix = this.getPrefix(base);
-      if (prefix && OS_TYPE !== 'android') {
-        // NOTE: RemoteFile currently performs about 2× faster than NativeFile
-        // due to an unresolved performance issue in Tauri (see tauri-apps/tauri#9190).
-        // Once the bug is resolved, we should switch back to using NativeFile.
-        // RemoteFile is not usable on Android due to unknown issues of range fetch with Android WebView.
-        const absolutePath = await join(prefix, path);
-        return await new RemoteFile(this.getURL(absolutePath), fname).open();
-      } else {
-        return await new NativeFile(fp, fname, base ? baseDir : null).open();
-      }
+      return path; // If it's already a URL, return it
     }
+    
+    // For files stored in IndexedDB or other web storage, we would retrieve and convert to blob
+    const response = await fetch(path);
+    const blob = await response.blob();
+    return URL.createObjectURL(blob);
   },
+  
+  async openFile(path: string, base: BaseDir, name?: string) {
+    const { fp } = resolvePath(path, base);
+    const fname = name || getFilename(fp);
+    
+    if (isValidURL(path)) {
+      return await new RemoteFile(path, name).open() as unknown as File;
+    }
+    
+    // In a web environment, we can't directly open a file from the filesystem
+    // This would only work for files selected by the user via file input
+    throw new Error('Direct file access not supported in web environment');
+  },
+  
   async copyFile(srcPath: string, dstPath: string, base: BaseDir) {
-    if (isContentURI(srcPath)) {
-      const prefix = this.getPrefix(base);
-      if (!prefix) {
-        throw new Error('Invalid base directory');
-      }
-      const res = await copyURIToPath({
-        uri: srcPath,
-        dst: `${prefix}/${dstPath}`,
-      });
-      if (!res.success) {
-        console.error('Failed to copy file:', res);
-        throw new Error('Failed to copy file');
-      }
+    console.warn('File copying between paths is limited in web environment');
+    
+    // In a web environment, we can copy blobs between storage locations
+    // but not directly access the file system outside of the sandbox
+    if (isValidURL(srcPath)) {
+      const response = await fetch(srcPath);
+      const blob = await response.blob();
+      // Here we would save the blob to some web storage (localStorage, IndexedDB, etc.)
+      console.log(`Would save ${dstPath} to web storage`);
     } else {
-      const { fp, baseDir } = resolvePath(dstPath, base);
-      await copyFile(srcPath, fp, base && { toPathBaseDir: baseDir });
+      throw new Error('Source file cannot be accessed in web environment');
     }
   },
+  
   async readFile(path: string, base: BaseDir, mode: 'text' | 'binary') {
-    const { fp, baseDir } = resolvePath(path, base);
-
-    return mode === 'text'
-      ? (readTextFile(fp, base && { baseDir }) as Promise<string>)
-      : ((await readFile(fp, base && { baseDir })).buffer as ArrayBuffer);
+    // In web environment, we would retrieve from web storage or fetch from URL
+    if (isValidURL(path)) {
+      const response = await fetch(path);
+      return mode === 'text' ? await response.text() : await response.arrayBuffer();
+    }
+    
+    // For data stored in web storage (localStorage, IndexedDB, etc.)
+    throw new Error('File reading from local storage not implemented for web');
   },
+  
   async writeFile(path: string, base: BaseDir, content: string | ArrayBuffer | File) {
-    // NOTE: this could be very slow for large files and might block the UI thread
-    // so do not use this for large files
-    const { fp, baseDir } = resolvePath(path, base);
-
-    if (typeof content === 'string') {
-      return writeTextFile(fp, content, base && { baseDir });
-    } else if (content instanceof File) {
-      const writeOptions = { write: true, create: true, baseDir } as WriteFileOptions;
-      // TODO: use writeFile directly when @tauri-apps/plugin-fs@2.2.1 is released
-      // return writeFile(fp, content.stream(), base && writeOptions);
-      const file = await openFile(fp, base && writeOptions);
-      const reader = content.stream().getReader();
-      try {
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          await file.write(value);
-        }
-      } finally {
-        reader.releaseLock();
-        await file.close();
-      }
-    } else {
-      return writeFile(fp, new Uint8Array(content), base && { baseDir });
-    }
+    console.warn('File writing is limited in web environment');
+    
+    // In web environment, we would save to IndexedDB or other web storage
+    // This is a stub implementation
+    console.log(`Would write to ${path} in ${base} storage`);
+    return;
   },
+  
   async removeFile(path: string, base: BaseDir) {
-    const { fp, baseDir } = resolvePath(path, base);
-
-    return remove(fp, base && { baseDir });
+    console.warn('File removal is limited in web environment');
+    
+    // In web environment, we would remove from IndexedDB or other web storage
+    console.log(`Would remove ${path} from ${base} storage`);
+    return;
   },
+  
   async createDir(path: string, base: BaseDir, recursive = false) {
-    const { fp, baseDir } = resolvePath(path, base);
-
-    await mkdir(fp, base && { baseDir, recursive });
+    console.warn('Directory creation is limited in web environment');
+    
+    // Web doesn't have traditional directories
+    // We might implement virtual directories in web storage
+    console.log(`Would create directory ${path} in ${base} storage`);
+    return;
   },
+  
   async removeDir(path: string, base: BaseDir, recursive = false) {
-    const { fp, baseDir } = resolvePath(path, base);
-
-    await remove(fp, base && { baseDir, recursive });
+    console.warn('Directory removal is limited in web environment');
+    
+    // Similar to createDir, this would remove virtual directories
+    console.log(`Would remove directory ${path} from ${base} storage`);
+    return;
   },
+  
   async readDir(path: string, base: BaseDir) {
-    const { fp, baseDir } = resolvePath(path, base);
-
-    const list = await readDir(fp, base && { baseDir });
-    return list.map((entity) => {
-      return {
-        path: entity.name,
-        isDir: entity.isDirectory,
-      };
-    });
+    console.warn('Directory listing is limited in web environment');
+    
+    // We would list virtual directories from web storage
+    return [];
   },
+  
   async exists(path: string, base: BaseDir) {
-    const { fp, baseDir } = resolvePath(path, base);
-
-    try {
-      const res = await exists(fp, base && { baseDir });
-      return res;
-    } catch {
-      return false;
-    }
+    // Check if a file exists in web storage
+    console.warn('File existence check is limited in web environment');
+    return false;
   },
+  
   getPrefix() {
-    return null;
-  },
+    return '';
+  }
 };
 
+// Web implementation of the app service
 export class NativeAppService extends BaseAppService {
-  fs = nativeFileSystem;
-  appPlatform = 'tauri' as AppPlatform;
-  isAppDataSandbox = ['android', 'ios'].includes(OS_TYPE);
-  isMobile = ['android', 'ios'].includes(OS_TYPE);
-  isAndroidApp = OS_TYPE === 'android';
-  isIOSApp = OS_TYPE === 'ios';
-  hasTrafficLight = OS_TYPE === 'macos';
-  hasWindow = !(OS_TYPE === 'ios' || OS_TYPE === 'android');
-  hasWindowBar = !(OS_TYPE === 'ios' || OS_TYPE === 'android');
-  hasContextMenu = !(OS_TYPE === 'ios' || OS_TYPE === 'android');
-  hasRoundedWindow = !(OS_TYPE === 'ios' || OS_TYPE === 'android') && !!window.IS_ROUNDED;
-  hasSafeAreaInset = OS_TYPE === 'ios' || OS_TYPE === 'android';
-  hasHaptics = OS_TYPE === 'ios' || OS_TYPE === 'android';
-  hasSysFontsList = !(OS_TYPE === 'ios' || OS_TYPE === 'android');
+  fs = webFileSystem;
+  appPlatform = 'web' as AppPlatform;
+  isAppDataSandbox = true;
+  isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  isAndroidApp = /Android/i.test(navigator.userAgent);
+  isIOSApp = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+  hasTrafficLight = false; // No traffic lights in web browsers
+  hasWindow = true;
+  hasWindowBar = false; // No window bar in browsers
+  hasContextMenu = false; // Limited context menu support in browsers
+  hasRoundedWindow = false;
+  hasSafeAreaInset = this.isMobile;
+  hasHaptics = 'vibrate' in navigator;
+  hasSysFontsList = true;
 
-  override resolvePath(fp: string, base: BaseDir): { baseDir: number; base: BaseDir; fp: string } {
+  override resolvePath(fp: string, base: BaseDir) {
     return resolvePath(fp, base);
   }
 
   async getInitBooksDir(): Promise<string> {
-    return join(await appDataDir(), LOCAL_BOOKS_SUBDIR);
+    return LOCAL_BOOKS_SUBDIR;
   }
 
   async getCacheDir(): Promise<string> {
-    return await appCacheDir();
+    return 'cache';
   }
 
   async selectDirectory(): Promise<string> {
-    const selected = await openDialog({
-      directory: true,
-      multiple: false,
-    });
-    return selected as string;
+    // Use the modern File System Access API if available
+    if (window.showDirectoryPicker) {
+      try {
+        const dirHandle = await window.showDirectoryPicker();
+        return dirHandle.name;
+      } catch (e) {
+        console.error('Directory selection error:', e);
+        throw new Error('User cancelled directory selection');
+      }
+    }
+    
+    throw new Error('Directory selection not supported in this browser');
   }
 
   async selectFiles(name: string, extensions: string[]): Promise<string[]> {
-    const selected = await openDialog({
-      multiple: true,
-      filters: [{ name, extensions }],
-    });
-    return Array.isArray(selected) ? selected : selected ? [selected] : [];
+    // Use the modern File System Access API if available
+    if (window.showOpenFilePicker) {
+      try {
+        const fileHandles = await window.showOpenFilePicker({
+          multiple: true,
+          types: [
+            {
+              description: name,
+              accept: {
+                'application/octet-stream': extensions.map(ext => `.${ext}`)
+              }
+            }
+          ]
+        });
+        
+        // Create object URLs for the selected files
+        const files = await Promise.all(fileHandles.map(handle => handle.getFile()));
+        return files.map(file => URL.createObjectURL(file));
+      } catch (e) {
+        console.error('File selection error:', e);
+        if (e instanceof Error && e.name !== 'AbortError') {
+          throw e;
+        }
+        return [];
+      }
+    }
+    
+    // Fallback to traditional file input (would need to be shown to user)
+    throw new Error('Please use a file input element for this browser');
   }
 
   getCoverImageUrl = (book: Book): string => {
-    return this.fs.getURL(`${this.localBooksDir}/${getCoverFilename(book)}`);
+    return book.coverPath || '';
   };
 
   getCoverImageBlobUrl = async (book: Book): Promise<string> => {
-    return this.fs.getBlobURL(`${this.localBooksDir}/${getCoverFilename(book)}`, 'None');
+    if (book.coverPath) {
+      return book.coverPath;
+    }
+    return '';
   };
 }

@@ -6,8 +6,6 @@ import { useLibraryStore } from '@/store/libraryStore';
 import { useSettingsStore } from '@/store/settingsStore';
 import { useTranslation } from '@/hooks/useTranslation';
 import { useLongPress } from '@/hooks/useLongPress';
-import { Menu, MenuItem } from '@tauri-apps/api/menu';
-import { revealItemInDir } from '@tauri-apps/plugin-opener';
 import { getOSPlatform } from '@/utils/misc';
 import { getLocalBookFilename } from '@/utils/book';
 import { BOOK_UNGROUPED_ID, BOOK_UNGROUPED_NAME } from '@/services/constants';
@@ -141,83 +139,11 @@ const BookshelfItem: React.FC<BookshelfItemProps> = ({
   };
 
   const bookContextMenuHandler = async (book: Book) => {
-    if (!appService?.hasContextMenu) return;
-    const osPlatform = getOSPlatform();
-    const fileRevealLabel =
-      FILE_REVEAL_LABELS[osPlatform as FILE_REVEAL_PLATFORMS] || FILE_REVEAL_LABELS.default;
-    const selectBookMenuItem = await MenuItem.new({
-      text: selectedBooks.includes(book.hash) ? _('Deselect Book') : _('Select Book'),
-      action: async () => {
-        if (!isSelectMode) handleSetSelectMode(true);
-        toggleSelection(book.hash);
-      },
-    });
-    const showBookInFinderMenuItem = await MenuItem.new({
-      text: _(fileRevealLabel),
-      action: async () => {
-        const folder = `${settings.localBooksDir}/${getLocalBookFilename(book)}`;
-        revealItemInDir(folder);
-      },
-    });
-    const showBookDetailsMenuItem = await MenuItem.new({
-      text: _('Show Book Details'),
-      action: async () => {
-        showBookDetailsModal(book);
-      },
-    });
-    const downloadBookMenuItem = await MenuItem.new({
-      text: _('Download Book'),
-      action: async () => {
-        handleBookDownload(book);
-      },
-    });
-    const uploadBookMenuItem = await MenuItem.new({
-      text: _('Upload Book'),
-      action: async () => {
-        handleBookUpload(book);
-      },
-    });
-    const deleteBookMenuItem = await MenuItem.new({
-      text: _('Delete'),
-      action: async () => {
-        await handleBookDelete(book);
-      },
-    });
-    const menu = await Menu.new();
-    menu.append(selectBookMenuItem);
-    menu.append(showBookDetailsMenuItem);
-    menu.append(showBookInFinderMenuItem);
-    if (book.uploadedAt && !book.downloadedAt) {
-      menu.append(downloadBookMenuItem);
-    }
-    if (!book.uploadedAt && book.downloadedAt) {
-      menu.append(uploadBookMenuItem);
-    }
-    menu.append(deleteBookMenuItem);
-    menu.popup();
+    showBookDetailsModal(book);
   };
 
   const groupContextMenuHandler = async (group: BooksGroup) => {
-    if (!appService?.hasContextMenu) return;
-    const selectGroupMenuItem = await MenuItem.new({
-      text: selectedBooks.includes(group.id) ? _('Deselect Group') : _('Select Group'),
-      action: async () => {
-        if (!isSelectMode) handleSetSelectMode(true);
-        toggleSelection(group.id);
-      },
-    });
-    const deleteGroupMenuItem = await MenuItem.new({
-      text: _('Delete'),
-      action: async () => {
-        for (const book of group.books) {
-          await handleBookDelete(book);
-        }
-      },
-    });
-    const menu = await Menu.new();
-    menu.append(selectGroupMenuItem);
-    menu.append(deleteGroupMenuItem);
-    menu.popup();
+    handleGroupClick(group);
   };
 
   const { pressing, handlers } = useLongPress({

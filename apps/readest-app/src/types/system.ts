@@ -3,7 +3,7 @@ import { Book, BookConfig, BookContent } from './book';
 import { BookDoc } from '@/libs/document';
 import { ProgressHandler } from '@/utils/transfer';
 
-export type AppPlatform = 'web' | 'tauri';
+export type AppPlatform = 'web';
 export type BaseDir = 'Books' | 'Settings' | 'Data' | 'Log' | 'Cache' | 'None';
 
 export interface FileSystem {

@@ -2,8 +2,7 @@ import clsx from 'clsx';
 import React, { useEffect, useRef } from 'react';
 import { useEnv } from '@/context/EnvContext';
 
-import { tauriHandleMinimize, tauriHandleToggleMaximize, tauriHandleClose } from '@/utils/window';
-import { isTauriAppPlatform } from '@/services/environment';
+import { handleMinimize, handleToggleMaximize, handleClose } from '@/utils/webWindow';
 
 interface WindowButtonsProps {
   className?: string;
@@ -47,60 +46,39 @@ const WindowButtons: React.FC<WindowButtonsProps> = ({
   const parentRef = useRef<HTMLDivElement>(null);
   const { appService } = useEnv();
 
+  // In web mode, we don't need the title bar dragging functionality
   const handleMouseDown = async (e: MouseEvent) => {
-    const target = e.target as HTMLElement;
-
-    if (
-      target.closest('.btn') ||
-      target.closest('.window-button') ||
-      target.closest('.dropdown-container') ||
-      target.closest('.exclude-title-bar-mousedown')
-    ) {
-      return;
-    }
-
-    const { getCurrentWindow } = await import('@tauri-apps/api/window');
-    if (e.buttons === 1) {
-      if (e.detail === 2) {
-        getCurrentWindow().toggleMaximize();
-      } else {
-        getCurrentWindow().startDragging();
-      }
-    }
+    // No-op in web environment
+    console.log('Title bar mouse down - not supported in web environment');
   };
 
   useEffect(() => {
-    if (!isTauriAppPlatform()) return;
-    const headerElement = headerRef?.current;
-    headerElement?.addEventListener('mousedown', handleMouseDown);
-
-    return () => {
-      headerElement?.removeEventListener('mousedown', handleMouseDown);
-    };
+    // No need to add listeners in web mode
+    return () => {};
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleMinimize = async () => {
+  const handleMinimizeClick = async () => {
     if (onMinimize) {
       onMinimize();
     } else {
-      tauriHandleMinimize();
+      handleMinimize();
     }
   };
 
-  const handleMaximize = async () => {
+  const handleMaximizeClick = async () => {
     if (onToggleMaximize) {
       onToggleMaximize();
     } else {
-      tauriHandleToggleMaximize();
+      handleToggleMaximize();
     }
   };
 
-  const handleClose = async () => {
+  const handleCloseClick = async () => {
     if (onClose) {
       onClose();
     } else {
-      tauriHandleClose();
+      handleClose();
     }
   };
 
@@ -114,7 +92,7 @@ const WindowButtons: React.FC<WindowButtonsProps> = ({
       )}
     >
       {showMinimize && appService?.hasWindowBar && (
-        <WindowButton onClick={handleMinimize} ariaLabel='Minimize' id='titlebar-minimize'>
+        <WindowButton onClick={handleMinimizeClick} ariaLabel='Minimize' id='titlebar-minimize'>
           <svg xmlns='http://www.w3.org/2000/svg' width='1em' height='1em' viewBox='0 0 24 24'>
             <path fill='currentColor' d='M20 14H4v-2h16' />
           </svg>
@@ -122,7 +100,7 @@ const WindowButtons: React.FC<WindowButtonsProps> = ({
       )}
 
       {showMaximize && appService?.hasWindowBar && (
-        <WindowButton onClick={handleMaximize} ariaLabel='Maximize/Restore' id='titlebar-maximize'>
+        <WindowButton onClick={handleMaximizeClick} ariaLabel='Maximize/Restore' id='titlebar-maximize'>
           <svg xmlns='http://www.w3.org/2000/svg' width='1em' height='1em' viewBox='0 0 24 24'>
             <path fill='currentColor' d='M4 4h16v16H4zm2 4v10h12V8z' />
           </svg>
@@ -130,7 +108,7 @@ const WindowButtons: React.FC<WindowButtonsProps> = ({
       )}
 
       {showClose && (appService?.hasWindowBar || onClose) && (
-        <WindowButton onClick={handleClose} ariaLabel='Close' id='titlebar-close'>
+        <WindowButton onClick={handleCloseClick} ariaLabel='Close' id='titlebar-close'>
           <svg xmlns='http://www.w3.org/2000/svg' width='1em' height='1em' viewBox='0 0 24 24'>
             <path
               fill='currentColor'

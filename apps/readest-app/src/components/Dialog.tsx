@@ -1,10 +1,11 @@
 import clsx from 'clsx';
-import React, { ReactNode, useEffect, useState } from 'react';
-import { MdArrowBackIosNew, MdArrowForwardIos } from 'react-icons/md';
+import React, { ReactNode, useEffect, useState, useRef, useImperativeHandle } from 'react';
+import { MdArrowBackIosNew, MdArrowForwardIos, MdClose } from 'react-icons/md';
+import { IoAlertCircleOutline } from 'react-icons/io5';
 import { useEnv } from '@/context/EnvContext';
 import { useDrag } from '@/hooks/useDrag';
 import { useResponsiveSize } from '@/hooks/useResponsiveSize';
-import { impactFeedback } from '@tauri-apps/plugin-haptics';
+import { impactFeedback } from '@/utils/haptics';
 import { getDirFromUILanguage } from '@/utils/rtl';
 
 const VELOCITY_THRESHOLD = 0.5;

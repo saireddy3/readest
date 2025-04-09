@@ -1,10 +1,8 @@
 import { useEffect, useRef } from 'react';
-import { getCurrentWindow } from '@tauri-apps/api/window';
-import { isTauriAppPlatform, isWebAppPlatform } from '@/services/environment';
+import { isWebAppPlatform } from '@/services/environment';
 
 export const useScreenWakeLock = (lock: boolean) => {
   const wakeLockRef = useRef<WakeLockSentinel | null>(null);
-  const unlistenOnFocusChangedRef = useRef<Promise<() => void> | null>(null);
 
   useEffect(() => {
     const requestWakeLock = async () => {
@@ -39,33 +37,33 @@ export const useScreenWakeLock = (lock: boolean) => {
       }
     };
 
+    const handleFocusChange = () => {
+      if (document.hasFocus()) {
+        requestWakeLock();
+      } else {
+        releaseWakeLock();
+      }
+    };
+
     if (lock) {
       requestWakeLock();
     } else if (wakeLockRef.current) {
       releaseWakeLock();
     }
 
-    if (isWebAppPlatform() && lock) {
+    // Use web standard APIs for handling visibility and focus changes
+    if (lock) {
       document.addEventListener('visibilitychange', handleVisibilityChange);
-    } else if (isTauriAppPlatform() && lock) {
-      unlistenOnFocusChangedRef.current = getCurrentWindow().onFocusChanged(
-        ({ payload: focused }) => {
-          if (focused) {
-            requestWakeLock();
-          } else {
-            releaseWakeLock();
-          }
-        },
-      );
+      window.addEventListener('focus', handleFocusChange);
+      window.addEventListener('blur', handleFocusChange);
     }
 
     return () => {
       releaseWakeLock();
-      if (isWebAppPlatform() && lock) {
+      if (lock) {
         document.removeEventListener('visibilitychange', handleVisibilityChange);
-      }
-      if (unlistenOnFocusChangedRef.current) {
-        unlistenOnFocusChangedRef.current.then((f) => f());
+        window.removeEventListener('focus', handleFocusChange);
+        window.removeEventListener('blur', handleFocusChange);
       }
     };
   }, [lock]);

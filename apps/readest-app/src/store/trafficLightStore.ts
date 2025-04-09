@@ -1,9 +1,5 @@
 import { create } from 'zustand';
-import { invoke } from '@tauri-apps/api/core';
 import { AppService } from '@/types/system';
-
-const WINDOW_CONTROL_PAD_X = 10.0;
-const WINDOW_CONTROL_PAD_Y = 22.0;
 
 interface TrafficLightState {
   appService?: AppService;
@@ -32,29 +28,39 @@ export const useTrafficLightStore = create<TrafficLightState>((set, get) => {
     },
 
     setTrafficLightVisibility: async (visible: boolean) => {
-      const { getCurrentWindow } = await import('@tauri-apps/api/window');
-      const currentWindow = getCurrentWindow();
-      const isFullscreen = await currentWindow.isFullscreen();
+      // In web mode, we check if we're in fullscreen using the browser API
+      const isFullscreen = !!document.fullscreenElement;
       set({ isTrafficLightVisible: !isFullscreen && visible, shouldShowTrafficLight: visible });
-      invoke('set_traffic_lights', {
-        visible: visible,
-        x: WINDOW_CONTROL_PAD_X,
-        y: WINDOW_CONTROL_PAD_Y,
-      });
+      // No need to invoke native code in web environment
     },
 
     initializeTrafficLightListeners: async () => {
-      const { getCurrentWindow } = await import('@tauri-apps/api/window');
-      const currentWindow = getCurrentWindow();
-
-      const unlistenEnterFullScreen = await currentWindow.listen('will-enter-fullscreen', () => {
+      // Use standard web event listeners for fullscreen changes
+      const handleEnterFullScreen = () => {
         set({ isTrafficLightVisible: false });
-      });
+      };
 
-      const unlistenExitFullScreen = await currentWindow.listen('will-exit-fullscreen', () => {
+      const handleExitFullScreen = () => {
         const { shouldShowTrafficLight } = get();
         set({ isTrafficLightVisible: shouldShowTrafficLight });
+      };
+
+      document.addEventListener('fullscreenchange', () => {
+        if (document.fullscreenElement) {
+          handleEnterFullScreen();
+        } else {
+          handleExitFullScreen();
+        }
       });
+
+      // Return cleanup functions
+      const unlistenEnterFullScreen = () => {
+        document.removeEventListener('fullscreenchange', handleEnterFullScreen);
+      };
+
+      const unlistenExitFullScreen = () => {
+        document.removeEventListener('fullscreenchange', handleExitFullScreen);
+      };
 
       set({ unlistenEnterFullScreen, unlistenExitFullScreen });
     },

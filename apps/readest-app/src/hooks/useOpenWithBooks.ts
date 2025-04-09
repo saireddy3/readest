@@ -1,21 +1,19 @@
 import { useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { onOpenUrl } from '@tauri-apps/plugin-deep-link';
-import { getCurrentWindow } from '@tauri-apps/api/window';
-import { isTauriAppPlatform } from '@/services/environment';
 import { useLibraryStore } from '@/store/libraryStore';
 import { navigateToLibrary } from '@/utils/nav';
 
-interface SingleInstancePayload {
-  args: string[];
-  cwd: string;
+// Define window.OPEN_WITH_FILES for TypeScript
+declare global {
+  interface Window {
+    OPEN_WITH_FILES?: string[];
+  }
 }
 
 export function useOpenWithBooks() {
   const router = useRouter();
   const { setCheckOpenWithBooks } = useLibraryStore();
-  const listenedOpenWithBooks = useRef(false);
-
+  
   const handleOpenWithFileUrl = (url: string) => {
     console.log('Handle Open with URL:', url);
     let filePath = url;
@@ -29,29 +27,29 @@ export function useOpenWithBooks() {
     }
   };
 
+  // In web environment, we can implement file opening via registerProtocolHandler
+  // or using the File System Access API when available
   useEffect(() => {
-    if (!isTauriAppPlatform()) return;
-    if (listenedOpenWithBooks.current) return;
-    listenedOpenWithBooks.current = true;
-
-    const unlistenDeeplink = getCurrentWindow().listen('single-instance', ({ event, payload }) => {
-      console.log('Received deep link:', event, payload);
-      const { args } = payload as SingleInstancePayload;
-      if (args?.[1]) {
-        handleOpenWithFileUrl(args[1]);
+    // For the web, we could use the Web Share Target API or File System Access API
+    // But this is currently not fully supported across browsers
+    // This is a placeholder for future implementation
+    
+    // One option would be to handle files dropped on the page
+    const handleDrop = (event: DragEvent) => {
+      event.preventDefault();
+      if (event.dataTransfer?.files && event.dataTransfer.files.length > 0) {
+        const files = Array.from(event.dataTransfer.files);
+        window.OPEN_WITH_FILES = files.map(file => URL.createObjectURL(file));
+        setCheckOpenWithBooks(true);
+        navigateToLibrary(router, `reload=${Date.now()}`);
       }
-    });
-    const listenOpenWithFiles = async () => {
-      return await onOpenUrl((urls) => {
-        urls.forEach((url) => {
-          handleOpenWithFileUrl(url);
-        });
-      });
     };
-    const unlistenOpenUrl = listenOpenWithFiles();
+
+    // We're not adding any event listeners here because the drop handling 
+    // is already implemented in the library page
+    
     return () => {
-      unlistenDeeplink.then((f) => f());
-      unlistenOpenUrl.then((f) => f());
+      // Cleanup if needed
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

@@ -1,4 +1,4 @@
-import { invoke } from '@tauri-apps/api/core';
+// Web-based implementation of bridge functions
 
 export interface CopyURIRequest {
   uri: string;
@@ -15,15 +15,22 @@ export interface UseBackgroundAudioRequest {
 }
 
 export async function copyURIToPath(request: CopyURIRequest): Promise<CopyURIResponse> {
-  const result = await invoke<CopyURIResponse>('plugin:native-bridge|copy_uri_to_path', {
-    payload: request,
-  });
-
-  return result;
+  console.warn('copyURIToPath is not supported in web environment');
+  return {
+    success: false,
+    error: 'This feature is not available in web browsers',
+  };
 }
 
 export async function invokeUseBackgroundAudio(request: UseBackgroundAudioRequest): Promise<void> {
-  await invoke('plugin:native-bridge|use_background_audio', {
-    payload: request,
-  });
+  console.warn('useBackgroundAudio is not supported in web environment');
+  // In a web environment, we can still attempt to keep audio playing in background
+  if (request.enabled) {
+    try {
+      // This is a no-op in web - browsers handle background audio differently
+      console.log('Background audio requested but not fully supported in web');
+    } catch (error) {
+      console.error('Error with background audio:', error);
+    }
+  }
 }

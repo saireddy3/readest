@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { PiUserCircle } from 'react-icons/pi';
-import { PiUserCircleCheck } from 'react-icons/pi';
+import { PiUserCircle, PiUserCircleCheck } from 'react-icons/pi';
 import { MdCheck } from 'react-icons/md';
+import { useUser } from '@supabase/auth-helpers-react';
 
 import { setAboutDialogVisible } from '@/components/AboutWindow';
-import { hasUpdater, isTauriAppPlatform, isWebAppPlatform } from '@/services/environment';
+import { hasUpdater, isWebAppPlatform } from '@/services/environment';
 import { DOWNLOAD_READEST_URL } from '@/services/constants';
 import { useAuth } from '@/context/AuthContext';
 import { useEnv } from '@/context/EnvContext';
@@ -14,7 +14,7 @@ import { useSettingsStore } from '@/store/settingsStore';
 import { useTranslation } from '@/hooks/useTranslation';
 import { getStoragePlanData } from '@/utils/access';
 import { navigateToLogin, navigateToProfile } from '@/utils/nav';
-import { tauriHandleSetAlwaysOnTop, tauriHandleToggleFullScreen } from '@/utils/window';
+import { saveSettings } from '@/utils/settings';
 import { QuotaType } from '@/types/user';
 import MenuItem from '@/components/MenuItem';
 import Quota from '@/components/Quota';
@@ -63,7 +63,15 @@ const SettingsMenu: React.FC<BookMenuProps> = ({ setIsDropdownOpen }) => {
   };
 
   const handleFullScreen = () => {
-    tauriHandleToggleFullScreen();
+    if (document.fullscreenElement) {
+      document.exitFullscreen().catch(err => {
+        console.error('Error exiting fullscreen:', err);
+      });
+    } else {
+      document.documentElement.requestFullscreen().catch(err => {
+        console.error('Error entering fullscreen:', err);
+      });
+    }
     setIsDropdownOpen?.(false);
   };
 
@@ -72,7 +80,7 @@ const SettingsMenu: React.FC<BookMenuProps> = ({ setIsDropdownOpen }) => {
     setSettings(settings);
     saveSettings(envConfig, settings);
     setIsAlwaysOnTop(settings.alwaysOnTop);
-    tauriHandleSetAlwaysOnTop(settings.alwaysOnTop);
+    // Web environment doesn't support always on top
     setIsDropdownOpen?.(false);
   };
 
@@ -170,7 +178,7 @@ const SettingsMenu: React.FC<BookMenuProps> = ({ setIsDropdownOpen }) => {
         icon={isAutoUpload ? <MdCheck className='text-base-content' /> : undefined}
         onClick={toggleAutoUploadBooks}
       />
-      {isTauriAppPlatform() && !appService?.isMobile && (
+      {!appService?.isMobile && (
         <MenuItem
           label={_('Auto Import on File Open')}
           icon={isAutoImportBooksOnOpen ? <MdCheck className='text-base-content' /> : undefined}

@@ -1,237 +1,169 @@
-import { FileHandle, open, BaseDirectory, SeekMode } from '@tauri-apps/plugin-fs';
+// Web-based implementation for file handling
 import { getOSPlatform } from './misc';
 
-class DeferredBlob extends Blob {
-  #dataPromise: Promise<ArrayBuffer>;
-  #type: string;
+export class DeferredBlob extends Blob {
+  promise: Promise<ArrayBuffer>;
 
-  constructor(dataPromise: Promise<ArrayBuffer>, type: string) {
-    super();
-    this.#dataPromise = dataPromise;
-    this.#type = type;
+  constructor(
+    promise: Promise<ArrayBuffer>,
+    options?: BlobPropertyBag,
+  ) {
+    super([], options);
+    this.promise = promise;
   }
 
-  override async arrayBuffer() {
-    const data = await this.#dataPromise;
-    return data;
+  async arrayBuffer(): Promise<ArrayBuffer> {
+    return this.promise;
   }
 
-  override async text() {
-    const data = await this.#dataPromise;
-    return new TextDecoder().decode(data);
-  }
-
-  override stream() {
-    return new ReadableStream({
-      start: async (controller) => {
-        const data = await this.#dataPromise;
-        const reader = new ReadableStream({
-          start(controller) {
-            controller.enqueue(new Uint8Array(data));
-            controller.close();
-          },
-        }).getReader();
-        const pump = () =>
-          reader.read().then(({ done, value }): Promise<void> => {
-            if (done) {
-              controller.close();
-              return Promise.resolve();
-            }
-            controller.enqueue(value);
-            return pump();
-          });
-        return pump();
-      },
+  slice(start?: number, end?: number, contentType?: string): Blob {
+    const slicePromise = this.promise.then(buffer => {
+      const slicedBuffer = buffer.slice(start || 0, end || buffer.byteLength);
+      return slicedBuffer;
     });
-  }
-
-  override get type() {
-    return this.#type;
+    return new DeferredBlob(slicePromise, { type: contentType || this.type });
   }
 }
 
-export interface ClosableFile extends File {
-  open(): Promise<this>;
+export interface ClosableFile {
+  open(): Promise<void>;
   close(): Promise<void>;
 }
 
-export class NativeFile extends File implements ClosableFile {
-  #handle: FileHandle | null = null;
-  #fp: string;
-  #name: string;
-  #baseDir: BaseDirectory | null;
-  #lastModified: number = 0;
-  #size: number = -1;
-  #type: string = '';
+export class NativeFile implements ClosableFile {
+  readonly path: string;
+  private offset = 0;
+  private cachedData: Map<number, ArrayBuffer> = new Map();
+  
+  static readonly MAX_CACHE_SIZE = 10;
+  static readonly CHUNK_SIZE = 1024 * 1024; // 1MB
 
-  static MAX_CACHE_CHUNK_SIZE = 1024 * 1024;
-  static MAX_CACHE_ITEMS_SIZE = 20;
-  #cache: Map<number, ArrayBuffer> = new Map();
-  #order: number[] = [];
-
-  constructor(fp: string, name?: string, baseDir: BaseDirectory | null = null, type = '') {
-    super([], name || fp, { type });
-    this.#fp = fp;
-    this.#baseDir = baseDir;
-    this.#name = name || fp;
+  constructor(path: string) {
+    this.path = path;
   }
 
-  async open() {
-    this.#handle = await open(this.#fp, this.#baseDir ? { baseDir: this.#baseDir } : undefined);
-    const stats = await this.#handle.stat();
-    this.#size = stats.size;
-    this.#lastModified = stats.mtime ? stats.mtime.getTime() : Date.now();
-    return this;
+  async open(): Promise<void> {
+    console.warn('NativeFile.open is not fully supported in web environment');
+    // In web environment, we can't directly open files from the file system
+    // This is a placeholder for API compatibility
+    return Promise.resolve();
   }
 
-  async close() {
-    if (this.#handle) {
-      await this.#handle.close();
-      this.#handle = null;
+  async close(): Promise<void> {
+    console.warn('NativeFile.close is not fully supported in web environment');
+    // Clear cache when closing
+    this.cachedData.clear();
+    return Promise.resolve();
+  }
+
+  async seek(offset: number): Promise<void> {
+    this.offset = offset;
+    return Promise.resolve();
+  }
+
+  /**
+   * Read data from the file
+   * In web environment, this is a stub implementation
+   * Real files would need to be loaded via file input or drag-and-drop
+   */
+  async read(len: number): Promise<ArrayBuffer> {
+    console.warn('NativeFile.read is not supported in web environment');
+    // Return empty buffer in web environment
+    return new ArrayBuffer(0);
+  }
+
+  /**
+   * Returns a blob that can be used to read a segment of the file
+   * In web environment, this returns an empty blob
+   */
+  slice(offset: number, len: number): Blob {
+    console.warn('NativeFile.slice is not fully supported in web environment');
+
+    // Create a promise that resolves to an empty buffer
+    const promise = Promise.resolve(new ArrayBuffer(0));
+    return new DeferredBlob(promise);
+  }
+
+  /**
+   * Returns a blob for the entire file
+   * In web environment, this returns an empty blob
+   */
+  toBlob(): Blob {
+    console.warn('NativeFile.toBlob is not fully supported in web environment');
+    
+    // Create a promise that resolves to an empty buffer
+    const promise = Promise.resolve(new ArrayBuffer(0));
+    return new DeferredBlob(promise);
+  }
+}
+
+/**
+ * Create a NativeFile instance
+ * In web environment, this is a stub implementation
+ */
+export function createNativeFile(path: string): NativeFile {
+  return new NativeFile(path);
+}
+
+/**
+ * Web implementation for file reading
+ * This can be used with File objects from file inputs
+ */
+export class WebFile implements ClosableFile {
+  private file: File;
+  private fileReader: FileReader | null = null;
+
+  constructor(file: File) {
+    this.file = file;
+  }
+
+  async open(): Promise<void> {
+    this.fileReader = new FileReader();
+    return Promise.resolve();
+  }
+
+  async close(): Promise<void> {
+    this.fileReader = null;
+    return Promise.resolve();
+  }
+
+  async readAsArrayBuffer(): Promise<ArrayBuffer> {
+    if (!this.fileReader) {
+      throw new Error('File not opened');
     }
-    this.#cache.clear();
-    this.#order = [];
-  }
 
-  override get name() {
-    return this.#name;
-  }
-
-  override get type() {
-    return this.#type;
-  }
-
-  override get size() {
-    return this.#size;
-  }
-
-  override get lastModified() {
-    return this.#lastModified;
-  }
-
-  async stat() {
-    return this.#handle?.stat();
-  }
-
-  async seek(offset: number, whence: SeekMode): Promise<number> {
-    if (!this.#handle) {
-      throw new Error('File handle is not open');
-    }
-    return this.#handle.seek(offset, whence);
-  }
-
-  // exclusive reading of the end: [start, end)
-  async readData(start: number, end: number): Promise<ArrayBuffer> {
-    if (!this.#handle) {
-      throw new Error('File handle is not open');
-    }
-    start = Math.max(0, start);
-    end = Math.max(start, Math.min(this.size, end));
-    const size = end - start;
-
-    if (size > NativeFile.MAX_CACHE_CHUNK_SIZE) {
-      await this.#handle.seek(start, SeekMode.Start);
-      const buffer = new Uint8Array(size);
-      await this.#handle.read(buffer);
-      return buffer.buffer;
-    }
-
-    const cachedChunkStart = Array.from(this.#cache.keys()).find((chunkStart) => {
-      const buffer = this.#cache.get(chunkStart)!;
-      return start >= chunkStart && end <= chunkStart + buffer.byteLength;
-    });
-
-    if (cachedChunkStart !== undefined) {
-      this.#updateAccessOrder(cachedChunkStart);
-      const buffer = this.#cache.get(cachedChunkStart)!;
-      const offset = start - cachedChunkStart;
-      return buffer.slice(offset, offset + size);
-    }
-
-    const chunkStart = Math.max(0, start - 1024);
-    const chunkEnd = Math.min(this.size, chunkStart + NativeFile.MAX_CACHE_CHUNK_SIZE);
-    const chunkSize = chunkEnd - chunkStart;
-
-    await this.#handle.seek(chunkStart, SeekMode.Start);
-    const buffer = new Uint8Array(chunkSize);
-    await this.#handle.read(buffer);
-
-    this.#cache.set(chunkStart, buffer.buffer);
-    this.#updateAccessOrder(chunkStart);
-    this.#ensureCacheSize();
-
-    const offset = start - chunkStart;
-    return buffer.buffer.slice(offset, offset + size);
-  }
-
-  #updateAccessOrder(chunkStart: number) {
-    const index = this.#order.indexOf(chunkStart);
-    if (index > -1) {
-      this.#order.splice(index, 1);
-    }
-    this.#order.unshift(chunkStart);
-  }
-
-  #ensureCacheSize() {
-    while (this.#cache.size > NativeFile.MAX_CACHE_ITEMS_SIZE) {
-      const oldestKey = this.#order.pop();
-      if (oldestKey !== undefined) {
-        this.#cache.delete(oldestKey);
+    return new Promise<ArrayBuffer>((resolve, reject) => {
+      if (!this.fileReader) {
+        reject(new Error('File not opened'));
+        return;
       }
-    }
-  }
 
-  override slice(start = 0, end = this.size, contentType = this.type): Blob {
-    // console.log(`Slicing: ${start}-${end}, size: ${end - start}`);
-    const dataPromise = this.readData(start, end);
-    return new DeferredBlob(dataPromise, contentType);
-  }
-
-  override stream(): ReadableStream<Uint8Array> {
-    const CHUNK_SIZE = 1024 * 1024;
-    let offset = 0;
-
-    return new ReadableStream<Uint8Array>({
-      pull: async (controller) => {
-        if (!this.#handle) {
-          controller.error(new Error('File handle is not open'));
-          return;
+      this.fileReader.onload = () => {
+        if (this.fileReader?.result instanceof ArrayBuffer) {
+          resolve(this.fileReader.result);
+        } else {
+          reject(new Error('Failed to read file as ArrayBuffer'));
         }
+      };
 
-        if (offset >= this.size) {
-          controller.close();
-          return;
-        }
+      this.fileReader.onerror = () => {
+        reject(new Error('Error reading file'));
+      };
 
-        const end = Math.min(offset + CHUNK_SIZE, this.size);
-        const buffer = new Uint8Array(end - offset);
-
-        await this.#handle.seek(offset, SeekMode.Start);
-        const bytesRead = await this.#handle.read(buffer);
-
-        if (bytesRead === null || bytesRead === 0) {
-          controller.close();
-          return;
-        }
-
-        controller.enqueue(buffer.subarray(0, bytesRead));
-        offset += bytesRead;
-      },
-
-      cancel: async () => {
-        await this.#handle?.close();
-      },
+      this.fileReader.readAsArrayBuffer(this.file);
     });
   }
 
-  override async text() {
-    const blob = this.slice(0, this.size);
-    return blob.text();
+  slice(start?: number, end?: number): Blob {
+    return this.file.slice(start, end);
   }
 
-  override async arrayBuffer() {
-    const blob = this.slice(0, this.size);
-    return blob.arrayBuffer();
+  get name(): string {
+    return this.file.name;
+  }
+
+  get size(): number {
+    return this.file.size;
   }
 }
 
@@ -279,7 +211,6 @@ export class RemoteFile extends File implements ClosableFile {
     }
     this.#size = Number(response.headers.get('content-length'));
     this.#type = response.headers.get('content-type') || '';
-    return this;
   }
 
   async _open_with_range() {
@@ -289,16 +220,16 @@ export class RemoteFile extends File implements ClosableFile {
     }
     this.#size = Number(response.headers.get('content-range')?.split('/')[1]);
     this.#type = response.headers.get('content-type') || '';
-    return this;
   }
 
-  async open() {
+  async open(): Promise<void> {
     // FIXME: currently HEAD request in asset protocol is not supported on Android
     if (getOSPlatform() === 'android') {
-      return this._open_with_range();
+      await this._open_with_range();
     } else {
-      return this._open_with_head();
+      await this._open_with_head();
     }
+    return Promise.resolve();
   }
 
   async close(): Promise<void> {
@@ -387,7 +318,7 @@ export class RemoteFile extends File implements ClosableFile {
     // console.log(`Slicing: ${start}-${end}, size: ${end - start}`);
     const dataPromise = this.fetchRange(start, end - 1);
 
-    return new DeferredBlob(dataPromise, contentType);
+    return new DeferredBlob(dataPromise, { type: contentType });
   }
 
   override async text() {

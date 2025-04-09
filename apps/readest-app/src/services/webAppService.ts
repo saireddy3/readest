@@ -7,6 +7,7 @@ import { RemoteFile } from '@/utils/file';
 import { isPWA } from './environment';
 import { BaseAppService } from './appService';
 import { LOCAL_BOOKS_SUBDIR } from './constants';
+import { openFileDialog } from '@/utils/webFileSystem';
 
 const resolvePath = (fp: string, base: BaseDir): { baseDir: number; base: BaseDir; fp: string } => {
   switch (base) {
@@ -196,7 +197,7 @@ export class WebAppService extends BaseAppService {
   isAndroidApp = false;
   isIOSApp = false;
   hasTrafficLight = false;
-  hasWindow = false;
+  hasWindow = true;
   hasWindowBar = false;
   hasContextMenu = false;
   hasRoundedWindow = false;
@@ -217,11 +218,33 @@ export class WebAppService extends BaseAppService {
   }
 
   async selectDirectory(): Promise<string> {
-    throw new Error('selectDirectory is not supported in browser');
+    try {
+      const result = await openFileDialog({ directory: true });
+      if (result && result.length > 0) {
+        return result[0];
+      }
+      throw new Error('No directory selected');
+    } catch (error) {
+      console.error('Error selecting directory:', error);
+      throw new Error('Directory selection is not fully supported in browser');
+    }
   }
 
-  async selectFiles(): Promise<string[]> {
-    throw new Error('selectFiles is not supported in browser');
+  async selectFiles(name: string, extensions: string[]): Promise<string[]> {
+    try {
+      const result = await openFileDialog({
+        multiple: true,
+        filters: [{ name, extensions }]
+      });
+      
+      if (result && result.length > 0) {
+        return result;
+      }
+      return [];
+    } catch (error) {
+      console.error('Error selecting files:', error);
+      throw new Error('File selection failed');
+    }
   }
 
   getCoverImageUrl = (book: Book): string => {

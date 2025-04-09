@@ -12,12 +12,8 @@ import { getFilename, listFormater } from '@/utils/book';
 import { eventDispatcher } from '@/utils/event';
 import { ProgressPayload } from '@/utils/transfer';
 import { throttle } from '@/utils/throttle';
-import { parseOpenWithFiles } from '@/helpers/cli';
-import { isTauriAppPlatform, hasUpdater } from '@/services/environment';
-import { checkForAppUpdates } from '@/helpers/updater';
 import { FILE_ACCEPT_FORMATS, SUPPORTED_FILE_EXTS } from '@/services/constants';
-import { impactFeedback } from '@tauri-apps/plugin-haptics';
-import { getCurrentWebview } from '@tauri-apps/api/webview';
+import { impactFeedback } from '@/utils/haptics';
 
 import { useEnv } from '@/context/EnvContext';
 import { useAuth } from '@/context/AuthContext';
@@ -31,7 +27,6 @@ import { useDemoBooks } from './hooks/useDemoBooks';
 import { useBooksSync } from './hooks/useBooksSync';
 import { useScreenWakeLock } from '@/hooks/useScreenWakeLock';
 import { useOpenWithBooks } from '@/hooks/useOpenWithBooks';
-import { tauriHandleSetAlwaysOnTop, tauriQuitApp } from '@/utils/window';
 
 import { AboutWindow } from '@/components/AboutWindow';
 import { Toast } from '@/components/Toast';
@@ -87,9 +82,7 @@ const LibraryPageContent = ({ searchParams }: { searchParams: ReadonlyURLSearchP
 
   useShortcuts({
     onQuitApp: async () => {
-      if (isTauriAppPlatform()) {
-        await tauriQuitApp();
-      }
+      console.log('Quit app not supported in web environment');
     },
   });
 
@@ -100,13 +93,9 @@ const LibraryPageContent = ({ searchParams }: { searchParams: ReadonlyURLSearchP
 
   useEffect(() => {
     const doCheckAppUpdates = async () => {
-      if (hasUpdater() && settings.autoCheckUpdates) {
-        await checkForAppUpdates(_);
-      }
+      console.log('Auto update not supported in web environment');
     };
-    if (settings.alwaysOnTop) {
-      tauriHandleSetAlwaysOnTop(settings.alwaysOnTop);
-    }
+    
     doCheckAppUpdates();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [settings]);
@@ -168,22 +157,6 @@ const LibraryPageContent = ({ searchParams }: { searchParams: ReadonlyURLSearchP
       libraryPage?.addEventListener('dragover', handleDragOver as unknown as EventListener);
       libraryPage?.addEventListener('dragleave', handleDragLeave as unknown as EventListener);
       libraryPage?.addEventListener('drop', handleDrop as unknown as EventListener);
-    }
-
-    if (isTauriAppPlatform()) {
-      const unlisten = getCurrentWebview().onDragDropEvent((event) => {
-        if (event.payload.type === 'over') {
-          setIsDragging(true);
-        } else if (event.payload.type === 'drop') {
-          setIsDragging(false);
-          handleDropedFiles(event.payload.paths);
-        } else {
-          setIsDragging(false);
-        }
-      });
-      return () => {
-        unlisten.then((fn) => fn());
-      };
     }
 
     return () => {
@@ -251,27 +224,12 @@ const LibraryPageContent = ({ searchParams }: { searchParams: ReadonlyURLSearchP
       setSettings(settings);
 
       const libraryBooks = await appService.loadLibraryBooks();
-      if (checkOpenWithBooks && isTauriAppPlatform()) {
-        await handleOpenWithBooks(appService, libraryBooks);
-      } else {
-        setCheckOpenWithBooks(false);
-        setLibrary(libraryBooks);
-      }
-
+      setCheckOpenWithBooks(false);
+      setLibrary(libraryBooks);
+      
       setLibraryLoaded(true);
       if (loadingTimeout) clearTimeout(loadingTimeout);
       setLoading(false);
-    };
-
-    const handleOpenWithBooks = async (appService: AppService, libraryBooks: Book[]) => {
-      const openWithFiles = (await parseOpenWithFiles()) || [];
-
-      if (openWithFiles.length > 0) {
-        await processOpenWithFiles(appService, openWithFiles, libraryBooks);
-      } else {
-        setCheckOpenWithBooks(false);
-        setLibrary(libraryBooks);
-      }
     };
 
     initLogin();
@@ -336,13 +294,6 @@ const LibraryPageContent = ({ searchParams }: { searchParams: ReadonlyURLSearchP
     }
     appService?.saveLibraryBooks(libraryBooks);
     setLoading(false);
-  };
-
-  const selectFilesTauri = async () => {
-    const exts = appService?.isAndroidApp ? [] : SUPPORTED_FILE_EXTS;
-    const files = (await appService?.selectFiles(_('Select Books'), exts)) || [];
-    // Cannot filter out files on Android since some content providers may not return the file name
-    return files;
   };
 
   const selectFilesWeb = () => {
@@ -460,18 +411,16 @@ const LibraryPageContent = ({ searchParams }: { searchParams: ReadonlyURLSearchP
   const handleImportBooks = async () => {
     setIsSelectMode(false);
     console.log('Importing books...');
-    let files;
-
-    if (isTauriAppPlatform()) {
-      if (appService?.isIOSApp) {
-        files = (await selectFilesWeb()) as [File];
-      } else {
-        files = (await selectFilesTauri()) as [string];
+    
+    try {
+      const fileList = await selectFilesWeb() as FileList;
+      if (fileList && fileList.length > 0) {
+        const files = Array.from(fileList) as File[];
+        importBooks(files);
       }
-    } else {
-      files = (await selectFilesWeb()) as [File];
+    } catch (error) {
+      console.error('Error selecting files:', error);
     }
-    importBooks(files);
   };
 
   const handleToggleSelectMode = () => {
@@ -490,6 +439,10 @@ const LibraryPageContent = ({ searchParams }: { searchParams: ReadonlyURLSearchP
 
   const handleShowDetailsBook = (book: Book) => {
     setShowDetailsBook(book);
+  };
+
+  const handleQuit = async () => {
+    console.log('Quit app not supported in web environment');
   };
 
   if (!appService) {

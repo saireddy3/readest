@@ -13,7 +13,6 @@ import { useTranslation } from '@/hooks/useTranslation';
 import { ThemeMode } from '@/styles/themes';
 import { getStyles } from '@/utils/style';
 import { getMaxInlineSize } from '@/utils/config';
-import { tauriHandleToggleFullScreen } from '@/utils/window';
 import { saveViewSettings } from '../utils/viewSettingsHelper';
 import MenuItem from '@/components/MenuItem';
 
@@ -37,8 +36,8 @@ const ViewMenu: React.FC<ViewMenuProps> = ({
   const [isScrolledMode, setScrolledMode] = useState(viewSettings!.scrolled);
   const [zoomLevel, setZoomLevel] = useState(viewSettings!.zoomLevel!);
 
-  const zoomIn = () => setZoomLevel((prev) => Math.min(prev + ZOOM_STEP, MAX_ZOOM_LEVEL));
-  const zoomOut = () => setZoomLevel((prev) => Math.max(prev - ZOOM_STEP, MIN_ZOOM_LEVEL));
+  const zoomIn = () => setZoomLevel((prev: number) => Math.min(prev + ZOOM_STEP, MAX_ZOOM_LEVEL));
+  const zoomOut = () => setZoomLevel((prev: number) => Math.max(prev - ZOOM_STEP, MIN_ZOOM_LEVEL));
   const resetZoom = () => setZoomLevel(100);
   const toggleScrolledMode = () => setScrolledMode(!isScrolledMode);
 
@@ -54,7 +53,15 @@ const ViewMenu: React.FC<ViewMenuProps> = ({
   };
 
   const handleFullScreen = () => {
-    tauriHandleToggleFullScreen();
+    if (document.fullscreenElement) {
+      document.exitFullscreen().catch(err => {
+        console.error('Error exiting fullscreen:', err);
+      });
+    } else {
+      document.documentElement.requestFullscreen().catch(err => {
+        console.error('Error entering fullscreen:', err);
+      });
+    }
     setIsDropdownOpen?.(false);
   };
 

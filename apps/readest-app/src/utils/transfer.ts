@@ -1,4 +1,4 @@
-import { invoke, Channel } from '@tauri-apps/api/core';
+// Web-based implementation of file transfer utilities
 
 export type UploadMethod = 'POST' | 'PUT';
 
@@ -70,56 +70,4 @@ export const webDownload = async (downloadUrl: string, onProgress?: ProgressHand
   }
 
   return new Blob(chunks);
-};
-
-export const tauriUpload = async (
-  url: string,
-  filePath: string,
-  method: UploadMethod,
-  progressHandler?: ProgressHandler,
-  headers?: Map<string, string>,
-): Promise<string> => {
-  const ids = new Uint32Array(1);
-  window.crypto.getRandomValues(ids);
-  const id = ids[0];
-
-  const onProgress = new Channel<ProgressPayload>();
-  if (progressHandler) {
-    onProgress.onmessage = progressHandler;
-  }
-
-  return await invoke('upload_file', {
-    id,
-    url,
-    filePath,
-    method,
-    headers: headers ?? {},
-    onProgress,
-  });
-};
-
-export const tauriDownload = async (
-  url: string,
-  filePath: string,
-  progressHandler?: ProgressHandler,
-  headers?: Map<string, string>,
-  body?: string,
-): Promise<void> => {
-  const ids = new Uint32Array(1);
-  window.crypto.getRandomValues(ids);
-  const id = ids[0];
-
-  const onProgress = new Channel<ProgressPayload>();
-  if (progressHandler) {
-    onProgress.onmessage = progressHandler;
-  }
-
-  await invoke('download_file', {
-    id,
-    url,
-    filePath,
-    headers: headers ?? {},
-    onProgress,
-    body,
-  });
 };

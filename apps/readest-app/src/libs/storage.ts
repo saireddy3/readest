@@ -1,9 +1,7 @@
-import { getAPIBaseUrl, isWebAppPlatform } from '@/services/environment';
+import { getAPIBaseUrl } from '@/services/environment';
 import { getUserID } from '@/utils/access';
 import { fetchWithAuth } from '@/utils/fetch';
 import {
-  tauriUpload,
-  tauriDownload,
   webUpload,
   webDownload,
   ProgressHandler,
@@ -55,11 +53,7 @@ export const uploadFile = async (
     });
 
     const { uploadUrl } = await response.json();
-    if (isWebAppPlatform()) {
-      await webUpload(file, uploadUrl, onProgress);
-    } else {
-      await tauriUpload(uploadUrl, fileFullPath, 'PUT', onProgress);
-    }
+    await webUpload(file, uploadUrl, onProgress);
   } catch (error) {
     console.error('File upload failed:', error);
     if (error instanceof Error) {
@@ -89,13 +83,7 @@ export const downloadFile = async (
     );
 
     const { downloadUrl } = await response.json();
-
-    if (isWebAppPlatform()) {
-      return await webDownload(downloadUrl, onProgress);
-    } else {
-      await tauriDownload(downloadUrl, fileFullPath, onProgress);
-      return;
-    }
+    return await webDownload(downloadUrl, onProgress);
   } catch (error) {
     console.error('File download failed:', error);
     throw new Error('File download failed');

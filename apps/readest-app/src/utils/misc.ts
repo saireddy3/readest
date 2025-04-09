@@ -31,11 +31,19 @@ export const makeSafeFilename = (filename: string, replacement = '_') => {
 };
 
 export const getUserLang = () => {
+  // Check if code is running in browser environment
+  if (typeof window === 'undefined') {
+    return 'en'; // Default language for server-side rendering
+  }
   const locale = localStorage?.getItem('i18nextLng') || navigator?.language || '';
   return locale.split('-')[0] || 'en';
 };
 
 export const isCJKEnv = () => {
+  // Check if code is running in browser environment
+  if (typeof window === 'undefined') {
+    return false; // Default for server-side rendering
+  }
   const browserLanguage = navigator.language || '';
   const uiLanguage = localStorage?.getItem('i18nextLng') || '';
   const isCJKUI = ['zh', 'ja', 'ko'].some((lang) => uiLanguage.startsWith(lang));
@@ -44,6 +52,11 @@ export const isCJKEnv = () => {
 };
 
 export const getUserLocale = (lang: string): string | undefined => {
+  // Check if code is running in browser environment
+  if (typeof window === 'undefined') {
+    return undefined; // Return undefined for server-side rendering
+  }
+  
   const languages =
     navigator.languages && navigator.languages.length > 0
       ? navigator.languages
@@ -57,6 +70,11 @@ export const getUserLocale = (lang: string): string | undefined => {
 // when possible please use appService.isIOSApp || getOSPlatform() === 'ios'
 // to check if the app is running on iOS
 export const getOSPlatform = () => {
+  // Check if code is running in browser environment
+  if (typeof window === 'undefined') {
+    return ''; // Empty string for server-side rendering
+  }
+  
   const userAgent = navigator.userAgent.toLowerCase();
 
   if (/iphone|ipad|ipod/.test(userAgent)) return 'ios';

@@ -13,8 +13,7 @@ import { useSidebarStore } from '@/store/sidebarStore';
 import { Book } from '@/types/book';
 import { SystemSettings } from '@/types/settings';
 import { parseOpenWithFiles } from '@/helpers/cli';
-import { tauriHandleClose, tauriHandleOnCloseWindow } from '@/utils/window';
-import { isTauriAppPlatform } from '@/services/environment';
+import { handleClose, handleOnCloseWindow } from '@/utils/webWindow';
 import { uniqueId } from '@/utils/misc';
 import { eventDispatcher } from '@/utils/event';
 import { navigateToLibrary } from '@/utils/nav';
@@ -77,10 +76,11 @@ const ReaderContent: React.FC<{ ids?: string; settings: SystemSettings }> = ({ i
   }, []);
 
   useEffect(() => {
-    if (isTauriAppPlatform()) tauriHandleOnCloseWindow(handleCloseBooks);
+    const unlisten = handleOnCloseWindow(handleCloseBooks);
     window.addEventListener('beforeunload', handleCloseBooks);
     eventDispatcher.on('quit-app', handleCloseBooks);
     return () => {
+      unlisten();
       window.removeEventListener('beforeunload', handleCloseBooks);
       eventDispatcher.off('quit-app', handleCloseBooks);
     };
@@ -136,7 +136,7 @@ const ReaderContent: React.FC<{ ids?: string; settings: SystemSettings }> = ({ i
     if (bookKeys.filter((key) => key !== bookKey).length == 0) {
       const openWithFiles = (await parseOpenWithFiles()) || [];
       if (openWithFiles.length > 0) {
-        tauriHandleClose();
+        handleClose();
       } else {
         saveSettingsAndGoToLibrary();
       }

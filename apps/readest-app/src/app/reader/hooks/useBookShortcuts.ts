@@ -1,12 +1,10 @@
 import { useReaderStore } from '@/store/readerStore';
 import { useNotebookStore } from '@/store/notebookStore';
-import { isTauriAppPlatform } from '@/services/environment';
 import useShortcuts from '@/hooks/useShortcuts';
 import useBooksManager from './useBooksManager';
 import { useSidebarStore } from '@/store/sidebarStore';
 import { useSettingsStore } from '@/store/settingsStore';
 import { getStyles } from '@/utils/style';
-import { tauriQuitApp } from '@/utils/window';
 import { eventDispatcher } from '@/utils/event';
 import { MAX_ZOOM_LEVEL, MIN_ZOOM_LEVEL, ZOOM_STEP } from '@/services/constants';
 
@@ -86,9 +84,8 @@ const useBookShortcuts = ({ sideBarBookKey, bookKeys }: UseBookShortcutsProps) =
 
   const quitApp = async () => {
     // on web platform use browser's default shortcut to close the tab
-    if (isTauriAppPlatform()) {
-      await tauriQuitApp();
-    }
+    await eventDispatcher.dispatch('quit-app');
+    window.close();
   };
 
   const showSearchBar = () => {

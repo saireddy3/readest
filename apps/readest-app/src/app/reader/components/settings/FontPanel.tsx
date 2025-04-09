@@ -20,7 +20,6 @@ import { useTranslation } from '@/hooks/useTranslation';
 import { useEnv } from '@/context/EnvContext';
 import { getOSPlatform, isCJKEnv } from '@/utils/misc';
 import { getSysFontsList } from '@/utils/font';
-import { isTauriAppPlatform } from '@/services/environment';
 import { saveViewSettings } from '../../utils/viewSettingsHelper';
 import NumberInput from './NumberInput';
 import FontDropdown from './FontDropDown';
@@ -120,11 +119,8 @@ const FontPanel: React.FC<{ bookKey: string }> = ({ bookKey }) => {
   });
 
   useEffect(() => {
-    if (isTauriAppPlatform() && appService?.hasSysFontsList) {
-      getSysFontsList().then((fonts) => {
-        setSysFonts(fonts);
-      });
-    }
+    // Web implementation doesn't have access to system fonts
+    setSysFonts([]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

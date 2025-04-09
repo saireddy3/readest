@@ -3,8 +3,6 @@ import { FoliateView } from '@/types/view';
 import { useEnv } from '@/context/EnvContext';
 import { useReaderStore } from '@/store/readerStore';
 import { eventDispatcher } from '@/utils/event';
-import { isTauriAppPlatform } from '@/services/environment';
-import { tauriGetWindowLogicalPosition } from '@/utils/window';
 
 export const useClickEvent = (
   bookKey: string,
@@ -25,18 +23,7 @@ export const useClickEvent = (
           if (viewElement) {
             const { screenX } = msg.data;
             const viewRect = viewElement.getBoundingClientRect();
-            let windowStartX;
-            // Currently for tauri APP the window.screenX is always 0
-            if (isTauriAppPlatform()) {
-              if (appService?.isMobile) {
-                windowStartX = 0;
-              } else {
-                const windowPosition = await tauriGetWindowLogicalPosition();
-                windowStartX = windowPosition.x;
-              }
-            } else {
-              windowStartX = window.screenX;
-            }
+            const windowStartX = window.screenX;
             const viewStartX = windowStartX + viewRect.left;
             const viewCenterX = viewStartX + viewRect.width / 2;
             const consumed = eventDispatcher.dispatchSync('iframe-single-click');

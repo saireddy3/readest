@@ -17,10 +17,7 @@ import { useThemeStore } from '@/store/themeStore';
 import { useSettingsStore } from '@/store/settingsStore';
 import { useTranslation } from '@/hooks/useTranslation';
 import { useTrafficLightStore } from '@/store/trafficLightStore';
-import { isTauriAppPlatform } from '@/services/environment';
-import { onOpenUrl } from '@tauri-apps/plugin-deep-link';
-import { start, cancel, onUrl, onInvalidUrl } from '@fabianlars/tauri-plugin-oauth';
-import { openUrl } from '@tauri-apps/plugin-opener';
+
 import { handleAuthCallback } from '@/helpers/auth';
 import { getAppleIdAuth, Scope } from './utils/appleIdAuth';
 import { authWithCustomTab, authWithSafari } from './utils/nativeAuth';
@@ -28,11 +25,6 @@ import { READEST_WEB_BASE_URL } from '@/services/constants';
 import WindowButtons from '@/components/WindowButtons';
 
 type OAuthProvider = 'google' | 'apple' | 'azure' | 'github';
-
-interface SingleInstancePayload {
-  args: string[];
-  cwd: string;
-}
 
 interface ProviderLoginProp {
   provider: OAuthProvider;
@@ -42,7 +34,6 @@ interface ProviderLoginProp {
 }
 
 const WEB_AUTH_CALLBACK = `${READEST_WEB_BASE_URL}/auth/callback`;
-const DEEPLINK_CALLBACK = 'readest://auth-callback';
 
 const ProviderLogin: React.FC<ProviderLoginProp> = ({ provider, handleSignIn, Icon, label }) => {
   return (
@@ -67,80 +58,42 @@ export default function AuthPage() {
   const { isDarkMode } = useThemeStore();
   const { isTrafficLightVisible } = useTrafficLightStore();
   const { settings, setSettings, saveSettings } = useSettingsStore();
-  const [port, setPort] = useState<number | null>(null);
-  const isOAuthServerRunning = useRef(false);
   const [isMounted, setIsMounted] = useState(false);
 
   const headerRef = useRef<HTMLDivElement>(null);
 
-  const getTauriRedirectTo = (isOAuth: boolean) => {
-    if (process.env.NODE_ENV === 'production' || appService?.isMobile) {
-      if (appService?.isMobile) {
-        return isOAuth ? DEEPLINK_CALLBACK : WEB_AUTH_CALLBACK;
-      }
-      return DEEPLINK_CALLBACK;
-    }
-    return `http://localhost:${port}`; // only for development env on Desktop
-  };
-
-  const getWebRedirectTo = () => {
+  const getRedirectTo = () => {
     return process.env.NODE_ENV === 'production'
       ? WEB_AUTH_CALLBACK
       : `${window.location.origin}/auth/callback`;
   };
 
-  const tauriSignInApple = async () => {
+  const handleAppleSignIn = async () => {
     if (!supabase) {
       throw new Error('No backend connected');
     }
-    supabase.auth.signOut();
-    const request = {
-      scope: ['fullName', 'email'] as Scope[],
-    };
-    const appleAuthResponse = await getAppleIdAuth(request);
-    if (appleAuthResponse.identityToken) {
-      const { error } = await supabase.auth.signInWithIdToken({
-        provider: 'apple',
-        token: appleAuthResponse.identityToken,
-      });
-      if (error) {
-        console.error('Authentication error:', error);
-      }
-    }
-  };
-
-  const tauriSignIn = async (provider: OAuthProvider) => {
-    if (!supabase) {
-      throw new Error('No backend connected');
-    }
-    supabase.auth.signOut();
-    const { data, error } = await supabase.auth.signInWithOAuth({
-      provider,
+    
+    // In web mode, we use the standard Supabase OAuth flow with redirects
+    await supabase.auth.signInWithOAuth({
+      provider: 'apple',
       options: {
-        skipBrowserRedirect: true,
-        redirectTo: getTauriRedirectTo(true),
+        redirectTo: getRedirectTo(),
       },
     });
+  };
 
-    if (error) {
-      console.error('Authentication error:', error);
-      return;
+  const handleOAuthSignIn = async (provider: OAuthProvider) => {
+    if (!supabase) {
+      throw new Error('No backend connected');
     }
-    // Open the OAuth URL in a ASWebAuthenticationSession on iOS to comply with Apple's guidelines
-    // for other platforms, open the OAuth URL in the default browser
-    if (appService?.isIOSApp) {
-      const res = await authWithSafari({ authUrl: data.url });
-      if (res) {
-        handleOAuthUrl(res.redirectUrl);
-      }
-    } else if (appService?.isAndroidApp) {
-      const res = await authWithCustomTab({ authUrl: data.url });
-      if (res) {
-        handleOAuthUrl(res.redirectUrl);
-      }
-    } else {
-      await openUrl(data.url);
-    }
+    
+    // In web mode, use standard OAuth redirect flow
+    await supabase.auth.signInWithOAuth({
+      provider,
+      options: {
+        redirectTo: getRedirectTo(),
+      },
+    });
   };
 
   const handleOAuthUrl = async (url: string) => {
@@ -159,46 +112,34 @@ export default function AuthPage() {
     }
   };
 
-  const startTauriOAuth = async () => {
-    try {
-      if (process.env.NODE_ENV === 'production' || appService?.isMobile) {
-        const { getCurrentWindow } = await import('@tauri-apps/api/window');
-        const currentWindow = getCurrentWindow();
-        currentWindow.listen('single-instance', ({ event, payload }) => {
-          console.log('Received deep link:', event, payload);
-          const { args } = payload as SingleInstancePayload;
-          if (args?.[1]) {
-            handleOAuthUrl(args[1]);
-          }
-        });
-        await onOpenUrl((urls) => {
-          urls.forEach((url) => {
-            handleOAuthUrl(url);
-          });
-        });
-      } else {
-        const port = await start();
-        setPort(port);
-        console.log(`OAuth server started on port ${port}`);
-
-        await onUrl(handleOAuthUrl);
-        await onInvalidUrl((url) => {
-          console.log('Received invalid OAuth URL:', url);
-        });
+  useEffect(() => {
+    // Check for OAuth response in URL hash (for web-based authentication)
+    if (typeof window !== 'undefined') {
+      const hash = window.location.hash;
+      if (hash) {
+        handleOAuthUrl(hash);
       }
-    } catch (error) {
-      console.error('Error starting OAuth server:', error);
     }
-  };
-
-  const stopTauriOAuth = async () => {
-    try {
-      if (port) {
-        await cancel(port);
-        console.log('OAuth server stopped');
+    
+    // Set up Supabase auth state change listener
+    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_IN' && session) {
+        // Handle successful sign-in
+        login(session);
+        router.push('/');
       }
-    } catch (error) {
-      console.error('Error stopping OAuth server:', error);
+    });
+    
+    return () => {
+      authListener.subscription.unsubscribe();
+    };
+  }, []);
+
+  const handleSignIn = (provider: OAuthProvider) => {
+    if (provider === 'apple') {
+      handleAppleSignIn();
+    } else {
+      handleOAuthSignIn(provider);
     }
   };
 
@@ -224,14 +165,14 @@ export default function AuthPage() {
           link_text: _('Already have an account? Sign in'),
         },
         sign_up: {
-          email_label: _('Email address'),
-          password_label: _('Create a Password'),
+          email_label: _('Email'),
+          password_label: _('Password'),
           email_input_placeholder: _('Your email address'),
           password_input_placeholder: _('Your password'),
           button_label: _('Sign up'),
           loading_button_label: _('Signing up...'),
           social_provider_text: _('Sign in with {{provider}}'),
-          link_text: _('Don’t have an account? Sign up'),
+          link_text: _("Don't have an account? Sign up"),
           confirmation_text: _('Check your email for the confirmation link'),
         },
         magic_link: {
@@ -266,34 +207,6 @@ export default function AuthPage() {
   };
 
   useEffect(() => {
-    if (!isTauriAppPlatform()) return;
-    if (isOAuthServerRunning.current) return;
-    isOAuthServerRunning.current = true;
-
-    startTauriOAuth();
-    return () => {
-      isOAuthServerRunning.current = false;
-      stopTauriOAuth();
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    const { data: subscription } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (session?.access_token && session.user) {
-        login(session.access_token, session.user);
-        const redirectTo = new URLSearchParams(window.location.search).get('redirect');
-        router.push(redirectTo ?? '/library');
-      }
-    });
-
-    return () => {
-      subscription?.subscription.unsubscribe();
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [router]);
-
-  useEffect(() => {
     setIsMounted(true);
   }, []);
 
@@ -301,73 +214,8 @@ export default function AuthPage() {
     return null;
   }
 
-  // For tauri app development, use a custom OAuth server to handle the OAuth callback
-  // For tauri app production, use deeplink to handle the OAuth callback
   // For web app, use the built-in OAuth callback page /auth/callback
-  return isTauriAppPlatform() ? (
-    <div
-      className={clsx(
-        'fixed inset-0 z-0 flex select-none flex-col items-center overflow-y-auto',
-        'bg-base-100 border-base-200 border',
-        appService?.hasSafeAreaInset && 'pt-[env(safe-area-inset-top)]',
-      )}
-    >
-      <div
-        ref={headerRef}
-        className={clsx(
-          'fixed z-10 flex w-full items-center justify-between py-2 pe-6 ps-4',
-          appService?.hasTrafficLight && 'pt-11',
-        )}
-      >
-        <button onClick={handleGoBack} className={clsx('btn btn-ghost h-8 min-h-8 w-8 p-0')}>
-          <IoArrowBack className='text-base-content' />
-        </button>
-
-        {appService?.hasWindowBar && (
-          <WindowButtons
-            headerRef={headerRef}
-            showMinimize={!isTrafficLightVisible}
-            showMaximize={!isTrafficLightVisible}
-            showClose={!isTrafficLightVisible}
-            onClose={handleGoBack}
-          />
-        )}
-      </div>
-      <div
-        className={clsx('z-20 pb-8', appService?.hasTrafficLight ? 'mt-24' : 'mt-12')}
-        style={{ maxWidth: '420px' }}
-      >
-        <ProviderLogin
-          provider='google'
-          handleSignIn={tauriSignIn}
-          Icon={FcGoogle}
-          label={_('Sign in with Google')}
-        />
-        <ProviderLogin
-          provider='apple'
-          handleSignIn={appService?.isIOSApp ? tauriSignInApple : tauriSignIn}
-          Icon={FaApple}
-          label={_('Sign in with Apple')}
-        />
-        <ProviderLogin
-          provider='github'
-          handleSignIn={tauriSignIn}
-          Icon={FaGithub}
-          label={_('Sign in with GitHub')}
-        />
-        <hr className='border-base-300 my-3 mt-6 w-64 border-t' />
-        <Auth
-          supabaseClient={supabase}
-          appearance={{ theme: ThemeSupa }}
-          theme={isDarkMode ? 'dark' : 'light'}
-          magicLink={true}
-          providers={[]}
-          redirectTo={getTauriRedirectTo(false)}
-          localization={getAuthLocalization()}
-        />
-      </div>
-    </div>
-  ) : (
+  return (
     <div style={{ maxWidth: '420px', margin: 'auto', padding: '2rem', paddingTop: '4rem' }}>
       <button
         onClick={handleGoBack}
@@ -381,7 +229,7 @@ export default function AuthPage() {
         theme={isDarkMode ? 'dark' : 'light'}
         magicLink={true}
         providers={['google', 'apple', 'github']}
-        redirectTo={getWebRedirectTo()}
+        redirectTo={getRedirectTo()}
         localization={getAuthLocalization()}
       />
     </div>
