@@ -1,6 +1,5 @@
 'use client';
 
-import { AuthProvider } from '@/context/AuthContext';
 import { EnvProvider } from '@/context/EnvContext';
 import { CSPostHogProvider } from '@/context/PHContext';
 import { SyncProvider } from '@/context/SyncContext';
@@ -12,11 +11,9 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
   return (
     <CSPostHogProvider>
       <EnvProvider>
-        <AuthProvider>
-          <IconContext.Provider value={{ size: `${iconSize}px` }}>
-            <SyncProvider>{children}</SyncProvider>
-          </IconContext.Provider>
-        </AuthProvider>
+        <IconContext.Provider value={{ size: `${iconSize}px` }}>
+          <SyncProvider>{children}</SyncProvider>
+        </IconContext.Provider>
       </EnvProvider>
     </CSPostHogProvider>
   );

@@ -18,17 +18,6 @@ export const navigateToReader = (
   }
 };
 
-export const navigateToLogin = (router: ReturnType<typeof useRouter>) => {
-  const pathname = window.location.pathname;
-  const search = window.location.search;
-  const currentPath = pathname !== '/auth' ? pathname + search : '/';
-  router.push(`/auth?redirect=${encodeURIComponent(currentPath)}`);
-};
-
-export const navigateToProfile = (router: ReturnType<typeof useRouter>) => {
-  router.push('/user');
-};
-
 export const navigateToLibrary = (
   router: ReturnType<typeof useRouter>,
   queryParams?: string,
@@ -39,4 +28,9 @@ export const navigateToLibrary = (
 
 export const redirectToLibrary = () => {
   redirect('/library');
+};
+
+// Replaced auth navigation with library navigation since authentication is removed
+export const navigateToLogin = (router: ReturnType<typeof useRouter>) => {
+  navigateToLibrary(router);
 };

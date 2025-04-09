@@ -9,7 +9,6 @@ import { transformBookNoteFromDB } from '@/utils/transform';
 import { transformBookFromDB } from '@/utils/transform';
 import { DBBook, DBBookConfig, DBBookNote } from '@/types/records';
 import { Book, BookConfig, BookDataRecord, BookNote } from '@/types/book';
-import { navigateToLogin } from '@/utils/nav';
 
 const transformsFromDB = {
   books: transformBookFromDB,
@@ -125,11 +124,6 @@ export function useSync(bookKey?: string) {
     } catch (err: unknown) {
       console.error(err);
       if (err instanceof Error) {
-        if (err.message.includes('Not authenticated') && settings.keepLogin) {
-          settings.keepLogin = false;
-          setSettings(settings);
-          navigateToLogin(router);
-        }
         setSyncError(err.message || `Error pulling ${type}`);
       } else {
         setSyncError(`Error pulling ${type}`);

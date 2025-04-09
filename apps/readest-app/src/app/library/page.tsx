@@ -7,7 +7,7 @@ import { ReadonlyURLSearchParams, useRouter, useSearchParams } from 'next/naviga
 
 import { Book } from '@/types/book';
 import { AppService } from '@/types/system';
-import { navigateToLogin, navigateToReader } from '@/utils/nav';
+import { navigateToReader } from '@/utils/nav';
 import { getFilename, listFormater } from '@/utils/book';
 import { eventDispatcher } from '@/utils/event';
 import { ProgressPayload } from '@/utils/transfer';
@@ -16,7 +16,6 @@ import { FILE_ACCEPT_FORMATS, SUPPORTED_FILE_EXTS } from '@/services/constants';
 import { impactFeedback } from '@/utils/haptics';
 
 import { useEnv } from '@/context/EnvContext';
-import { useAuth } from '@/context/AuthContext';
 import { useThemeStore } from '@/store/themeStore';
 import { useTranslation } from '@/hooks/useTranslation';
 import { useLibraryStore } from '@/store/libraryStore';
@@ -45,7 +44,6 @@ const LibraryPageWithSearchParams = () => {
 const LibraryPageContent = ({ searchParams }: { searchParams: ReadonlyURLSearchParams | null }) => {
   const router = useRouter();
   const { envConfig, appService } = useEnv();
-  const { token, user } = useAuth();
   const {
     library: libraryBooks,
     updateBook,
@@ -203,20 +201,6 @@ const LibraryPageContent = ({ searchParams }: { searchParams: ReadonlyURLSearchP
     if (isInitiating.current) return;
     isInitiating.current = true;
 
-    const initLogin = async () => {
-      const appService = await envConfig.getAppService();
-      const settings = await appService.loadSettings();
-      if (token && user) {
-        if (!settings.keepLogin) {
-          settings.keepLogin = true;
-          setSettings(settings);
-          saveSettings(envConfig, settings);
-        }
-      } else if (settings.keepLogin) {
-        router.push('/auth');
-      }
-    };
-
     const loadingTimeout = setTimeout(() => setLoading(true), 300);
     const initLibrary = async () => {
       const appService = await envConfig.getAppService();
@@ -232,7 +216,6 @@ const LibraryPageContent = ({ searchParams }: { searchParams: ReadonlyURLSearchP
       setLoading(false);
     };
 
-    initLogin();
     initLibrary();
     return () => {
       setCheckOpenWithBooks(false);
@@ -270,10 +253,6 @@ const LibraryPageContent = ({ searchParams }: { searchParams: ReadonlyURLSearchP
       try {
         const book = await appService?.importBook(file, libraryBooks);
         setLibrary(libraryBooks);
-        if (user && book && !book.uploadedAt && settings.autoUpload) {
-          console.log('Uploading book:', book.title);
-          handleBookUpload(book);
-        }
       } catch (error) {
         const filename = typeof file === 'string' ? file : file.name;
         const baseFilename = getFilename(filename);
@@ -335,20 +314,6 @@ const LibraryPageContent = ({ searchParams }: { searchParams: ReadonlyURLSearchP
       });
       return true;
     } catch (err) {
-      if (err instanceof Error) {
-        if (err.message.includes('Not authenticated') && settings.keepLogin) {
-          settings.keepLogin = false;
-          setSettings(settings);
-          navigateToLogin(router);
-          return false;
-        } else if (err.message.includes('Insufficient storage quota')) {
-          eventDispatcher.dispatch('toast', {
-            type: 'error',
-            message: _('Insufficient storage quota'),
-          });
-          return false;
-        }
-      }
       eventDispatcher.dispatch('toast', {
         type: 'error',
         message: _('Failed to upload book: {{title}}', {

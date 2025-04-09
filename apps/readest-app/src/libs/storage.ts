@@ -1,18 +1,9 @@
-import { getAPIBaseUrl } from '@/services/environment';
-import { getUserID } from '@/utils/access';
-import { fetchWithAuth } from '@/utils/fetch';
 import {
   webUpload,
   webDownload,
   ProgressHandler,
   ProgressPayload,
 } from '@/utils/transfer';
-
-const API_ENDPOINTS = {
-  upload: getAPIBaseUrl() + '/storage/upload',
-  download: getAPIBaseUrl() + '/storage/download',
-  delete: getAPIBaseUrl() + '/storage/delete',
-};
 
 export const createProgressHandler = (
   totalFiles: number,
@@ -39,28 +30,12 @@ export const uploadFile = async (
   onProgress?: ProgressHandler,
   bookHash?: string,
 ) => {
-  try {
-    const response = await fetchWithAuth(API_ENDPOINTS.upload, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        fileName: file.name,
-        fileSize: file.size,
-        bookHash,
-      }),
-    });
-
-    const { uploadUrl } = await response.json();
-    await webUpload(file, uploadUrl, onProgress);
-  } catch (error) {
-    console.error('File upload failed:', error);
-    if (error instanceof Error) {
-      throw error;
-    }
-    throw new Error('File upload failed');
+  // No remote upload needed in web mode
+  console.log('File upload skipped in web mode:', file.name);
+  if (onProgress) {
+    onProgress({ progress: 100, total: 100, transferSpeed: 0 });
   }
+  return;
 };
 
 export const downloadFile = async (
@@ -68,41 +43,16 @@ export const downloadFile = async (
   fileFullPath: string,
   onProgress?: ProgressHandler,
 ) => {
-  try {
-    const userId = await getUserID();
-    if (!userId) {
-      throw new Error('Not authenticated');
-    }
-
-    const fileKey = `${userId}/${filePath}`;
-    const response = await fetchWithAuth(
-      `${API_ENDPOINTS.download}?fileKey=${encodeURIComponent(fileKey)}`,
-      {
-        method: 'GET',
-      },
-    );
-
-    const { downloadUrl } = await response.json();
-    return await webDownload(downloadUrl, onProgress);
-  } catch (error) {
-    console.error('File download failed:', error);
-    throw new Error('File download failed');
+  // No remote download needed in web mode
+  console.log('File download skipped in web mode:', filePath);
+  if (onProgress) {
+    onProgress({ progress: 100, total: 100, transferSpeed: 0 });
   }
+  throw new Error('File download skipped in web mode');
 };
 
 export const deleteFile = async (filePath: string) => {
-  try {
-    const userId = await getUserID();
-    if (!userId) {
-      throw new Error('Not authenticated');
-    }
-
-    const fileKey = `${userId}/${filePath}`;
-    await fetchWithAuth(`${API_ENDPOINTS.delete}?fileKey=${encodeURIComponent(fileKey)}`, {
-      method: 'DELETE',
-    });
-  } catch (error) {
-    console.error('File deletion failed:', error);
-    throw new Error('File deletion failed');
-  }
+  // No remote deletion needed in web mode
+  console.log('File deletion skipped in web mode:', filePath);
+  return;
 };

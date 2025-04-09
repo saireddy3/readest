@@ -4,7 +4,6 @@ import { Position } from '@/utils/sel';
 import { getAPIBaseUrl } from '@/services/environment';
 import { useSettingsStore } from '@/store/settingsStore';
 import { useTranslation } from '@/hooks/useTranslation';
-import { useAuth } from '@/context/AuthContext';
 
 const LANGUAGES = {
   AUTO: 'Auto Detect',
@@ -46,7 +45,6 @@ const DeepLPopup: React.FC<DeepLPopupProps> = ({
   popupHeight,
 }) => {
   const _ = useTranslation();
-  const { token } = useAuth();
   const { settings, setSettings } = useSettingsStore();
   const [sourceLang, setSourceLang] = useState('AUTO');
   const [targetLang, setTargetLang] = useState(settings.globalReadSettings.translateTargetLang);
@@ -76,7 +74,6 @@ const DeepLPopup: React.FC<DeepLPopupProps> = ({
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${token ?? ''}`,
           },
           body: JSON.stringify({
             text: [text],
@@ -103,11 +100,7 @@ const DeepLPopup: React.FC<DeepLPopupProps> = ({
         setTranslation(translatedText);
       } catch (err) {
         console.error(err);
-        if (!token) {
-          setError(_('Unable to fetch the translation. Please log in first and try again.'));
-        } else {
-          setError(_('Unable to fetch the translation. Try again later.'));
-        }
+        setError(_('Unable to fetch the translation. Try again later.'));
       } finally {
         setLoading(false);
       }
@@ -115,7 +108,7 @@ const DeepLPopup: React.FC<DeepLPopupProps> = ({
 
     fetchTranslation();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [text, token, sourceLang, targetLang]);
+  }, [text, sourceLang, targetLang]);
 
   return (
     <div>
