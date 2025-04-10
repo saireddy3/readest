@@ -5,17 +5,16 @@ import { useRouter } from 'next/navigation';
 import { EnvProvider } from '@/context/EnvContext';
 import { SyncProvider } from '@/context/SyncContext';
 import { useEnv } from '@/context/EnvContext';
-import { useLibraryStore } from '@/store/libraryStore';
 import { useSettingsStore } from '@/store/settingsStore';
 import Spinner from '@/components/Spinner';
 import Reader from '@/app/reader/components/Reader';
+import { Book } from '@/types/book';
 
 const BOOK_URL = 'https://cdn.readest.com/books/this-side-of-paradise.epub';
 
 const DirectReaderContent = () => {
   const router = useRouter();
   const { envConfig, appService } = useEnv();
-  const { setLibrary, library } = useLibraryStore();
   const { settings, setSettings } = useSettingsStore();
   const [loading, setLoading] = useState(true);
   const [bookHash, setBookHash] = useState<string | null>(null);
@@ -31,10 +30,6 @@ const DirectReaderContent = () => {
         // Load settings
         const loadedSettings = await appService.loadSettings();
         setSettings(loadedSettings);
-        
-        // Load library books (needed for some operations)
-        const libraryBooks = await appService.loadLibraryBooks();
-        setLibrary(libraryBooks);
         
         console.log("Attempting to load book from URL...");
         
@@ -53,12 +48,14 @@ const DirectReaderContent = () => {
           const filename = BOOK_URL.split('/').pop() || 'book.epub';
           const file = new File([blob], filename, { type: 'application/epub+zip' });
           
+          // We need an empty books array to pass to importBook
+          const emptyLibrary: Book[] = [];
+          
           // Now import the book using the File object
-          // IMPORTANT: We're setting saveBook to TRUE to make sure the file is saved locally
           const book = await appService.importBook(
             file,
-            libraryBooks,
-            true,  // CHANGED: Save the book file locally so it can be found later
+            emptyLibrary,
+            true,  // Save the book file locally so it can be found later
             true,  // Save the cover as well
             false  // don't overwrite
           );
@@ -69,8 +66,8 @@ const DirectReaderContent = () => {
             
             console.log("Book successfully imported:", book.hash);
             
-            // Save the updated book with URL to the library
-            await appService.saveLibraryBooks(libraryBooks);
+            // Save the book to local storage
+            await appService.saveLibraryBooks([book]);
             
             setBookHash(book.hash);
             // Open reader with this book
@@ -91,7 +88,7 @@ const DirectReaderContent = () => {
     };
 
     loadBookFromUrl();
-  }, [appService, router, setLibrary, setSettings]);
+  }, [appService, router, setSettings]);
 
   if (loading) {
     return (
@@ -115,9 +112,9 @@ const DirectReaderContent = () => {
             <p className="py-4">{error}</p>
             <button 
               className="btn btn-primary"
-              onClick={() => router.push('/library')}
+              onClick={() => window.location.reload()}
             >
-              Go to Library
+              Try Again
             </button>
           </div>
         </div>

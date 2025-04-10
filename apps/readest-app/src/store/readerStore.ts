@@ -7,7 +7,6 @@ import { BookDoc, DocumentLoader, SectionItem, TOCItem } from '@/libs/document';
 import { updateTocCFI, updateTocID } from '@/utils/toc';
 import { useSettingsStore } from './settingsStore';
 import { useBookDataStore } from './bookDataStore';
-import { useLibraryStore } from './libraryStore';
 
 interface ViewState {
   /* Unique key for each book view */
@@ -112,8 +111,9 @@ export const useReaderStore = create<ReaderStore>((set, get) => ({
       if (!bookData) {
         const appService = await envConfig.getAppService();
         const { settings } = useSettingsStore.getState();
-        const { library } = useLibraryStore.getState();
-        const book = library.find((b) => b.hash === id);
+        // Find the book from saved books
+        const books = await appService.loadLibraryBooks();
+        const book = books.find((b) => b.hash === id);
         if (!book) {
           throw new Error('Book not found');
         }
@@ -224,18 +224,11 @@ export const useReaderStore = create<ReaderStore>((set, get) => ({
 
       const progress: [number, number] = [(pageinfo.next ?? pageinfo.current) + 1, pageinfo.total];
 
-      // Update library book progress
-      const { library, setLibrary } = useLibraryStore.getState();
-      const bookIndex = library.findIndex((b) => b.hash === id);
-      if (bookIndex !== -1) {
-        const updatedLibrary = [...library];
-        const existingBook = updatedLibrary[bookIndex]!;
-        updatedLibrary[bookIndex] = {
-          ...existingBook,
-          progress,
-          updatedAt: Date.now(),
-        };
-        setLibrary(updatedLibrary);
+      // Update book progress without library store dependency
+      const book = bookData.book;
+      if (book) {
+        book.progress = progress;
+        book.updatedAt = Date.now();
       }
 
       const oldConfig = bookData.config;

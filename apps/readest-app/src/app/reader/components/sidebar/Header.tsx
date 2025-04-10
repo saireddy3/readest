@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import React from 'react';
-import { GiBookshelf } from 'react-icons/gi';
+import { IoReload } from 'react-icons/io5';
 import { FiSearch } from 'react-icons/fi';
 import { MdOutlinePushPin, MdPushPin } from 'react-icons/md';
 import { MdArrowBackIosNew } from 'react-icons/md';
@@ -39,8 +39,9 @@ const SidebarHeader: React.FC<{
         <button
           className='btn btn-ghost hidden h-8 min-h-8 w-8 p-0 sm:flex'
           onClick={onGoToLibrary}
+          title="Reload Book"
         >
-          <GiBookshelf className='fill-base-content' />
+          <IoReload className='fill-base-content' />
         </button>
       </div>
       <div className='flex min-w-24 max-w-32 items-center justify-between sm:size-[70%]'>

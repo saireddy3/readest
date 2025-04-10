@@ -3,7 +3,6 @@ import { SystemSettings } from '@/types/settings';
 import { Book, BookConfig, BookNote } from '@/types/book';
 import { EnvConfigType } from '@/services/environment';
 import { BookDoc } from '@/libs/document';
-import { useLibraryStore } from './libraryStore';
 
 interface BookData {
   /* Persistent data shared with different views of the same book */
@@ -62,17 +61,28 @@ export const useBookDataStore = create<BookDataState>((set, get) => ({
     settings: SystemSettings,
   ) => {
     const appService = await envConfig.getAppService();
-    const { library, setLibrary } = useLibraryStore.getState();
-    const bookIndex = library.findIndex((b) => b.hash === bookKey.split('-')[0]);
-    if (bookIndex == -1) return;
-    const book = library.splice(bookIndex, 1)[0]!;
+    const id = bookKey.split('-')[0];
+    if (!id) return;
+    
+    const bookData = get().booksData[id];
+    if (!bookData || !bookData.book) return;
+    
+    const book = bookData.book;
     book.progress = config.progress;
     book.updatedAt = Date.now();
-    library.unshift(book);
-    setLibrary(library);
+    
     config.updatedAt = Date.now();
     await appService.saveBookConfig(book, config, settings);
-    await appService.saveLibraryBooks(library);
+    
+    // Save the single book to maintain book data
+    const books = await appService.loadLibraryBooks();
+    const bookIndex = books.findIndex(b => b.hash === id);
+    if (bookIndex >= 0) {
+      books[bookIndex] = book;
+    } else {
+      books.push(book);
+    }
+    await appService.saveLibraryBooks(books);
   },
   updateBooknotes: (key: string, booknotes: BookNote[]) => {
     let updatedConfig: BookConfig | undefined;

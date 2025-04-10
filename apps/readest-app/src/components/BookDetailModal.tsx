@@ -7,7 +7,6 @@ import { BookDoc } from '@/libs/document';
 import { useEnv } from '@/context/EnvContext';
 import { useSettingsStore } from '@/store/settingsStore';
 import { useTranslation } from '@/hooks/useTranslation';
-import { useLibraryStore } from '@/store/libraryStore';
 import {
   formatAuthors,
   formatDate,
@@ -33,7 +32,6 @@ const BookDetailModal = ({ book, isOpen, onClose }: BookDetailModalProps) => {
   const [bookMeta, setBookMeta] = useState<BookDoc['metadata'] | null>(null);
   const { envConfig, appService } = useEnv();
   const { settings } = useSettingsStore();
-  const { updateBook } = useLibraryStore();
 
   useEffect(() => {
     const loadingTimeout = setTimeout(() => setLoading(true), 300);
@@ -62,7 +60,15 @@ const BookDetailModal = ({ book, isOpen, onClose }: BookDetailModalProps) => {
 
   const confirmDelete = async () => {
     await appService?.deleteBook(book, !!book.uploadedAt);
-    await updateBook(envConfig, book);
+    
+    // Update book in the library
+    const books = await appService?.loadLibraryBooks() || [];
+    const bookIndex = books.findIndex(b => b.hash === book.hash);
+    if (bookIndex >= 0) {
+      books[bookIndex] = { ...book, deletedAt: Date.now() };
+      await appService?.saveLibraryBooks(books);
+    }
+    
     handleClose();
     setShowDeleteAlert(false);
   };

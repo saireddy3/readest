@@ -12,11 +12,10 @@ import { useReaderStore } from '@/store/readerStore';
 import { useSidebarStore } from '@/store/sidebarStore';
 import { Book } from '@/types/book';
 import { SystemSettings } from '@/types/settings';
-import { parseOpenWithFiles } from '@/helpers/cli';
 import { handleClose, handleOnCloseWindow } from '@/utils/webWindow';
 import { uniqueId } from '@/utils/misc';
 import { eventDispatcher } from '@/utils/event';
-import { navigateToLibrary } from '@/utils/nav';
+import { redirectToDirectReader } from '@/utils/nav';
 import { BOOK_IDS_SEPARATOR } from '@/services/constants';
 
 import useBooksManager from '../hooks/useBooksManager';
@@ -111,9 +110,9 @@ const ReaderContent: React.FC<{ ids?: string; settings: SystemSettings }> = ({ i
     clearViewState(bookKey);
   };
 
-  const saveSettingsAndGoToLibrary = () => {
+  const saveSettingsAndReload = () => {
     saveSettings(envConfig, settings);
-    navigateToLibrary(router);
+    redirectToDirectReader();
   };
 
   const handleCloseBooks = async () => {
@@ -122,9 +121,9 @@ const ReaderContent: React.FC<{ ids?: string; settings: SystemSettings }> = ({ i
     await saveSettings(envConfig, settings);
   };
 
-  const handleCloseBooksToLibrary = () => {
+  const handleCloseBooksAndReload = () => {
     handleCloseBooks();
-    navigateToLibrary(router);
+    redirectToDirectReader();
   };
 
   const handleCloseBook = async (bookKey: string) => {
@@ -134,12 +133,7 @@ const ReaderContent: React.FC<{ ids?: string; settings: SystemSettings }> = ({ i
     }
     dismissBook(bookKey);
     if (bookKeys.filter((key) => key !== bookKey).length == 0) {
-      const openWithFiles = (await parseOpenWithFiles()) || [];
-      if (openWithFiles.length > 0) {
-        handleClose();
-      } else {
-        saveSettingsAndGoToLibrary();
-      }
+      handleClose();
     }
   };
 
@@ -158,7 +152,7 @@ const ReaderContent: React.FC<{ ids?: string; settings: SystemSettings }> = ({ i
 
   return (
     <div className={clsx('flex', appService?.isIOSApp ? 'h-[100vh]' : 'h-dvh')}>
-      <SideBar onGoToLibrary={handleCloseBooksToLibrary} />
+      <SideBar onGoToLibrary={handleCloseBooksAndReload} />
       <BooksGrid bookKeys={bookKeys} onCloseBook={handleCloseBook} />
       <TTSControl />
       <Notebook />
