@@ -38,7 +38,6 @@
     "i18next-http-backend": "^3.0.1",
     "js-md5": "^0.8.3",
     "next": "15.2.4",
-    "posthog-js": "^1.205.0",
     "react": "19.0.0",
     "react-color": "^2.19.3",
     "react-dom": "19.0.0",
