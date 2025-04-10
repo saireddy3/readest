@@ -4,7 +4,6 @@ import { BookConfig } from '@/types/book';
 import { FoliateView, wrappedFoliateView } from '@/types/view';
 import { useThemeStore } from '@/store/themeStore';
 import { useReaderStore } from '@/store/readerStore';
-import { useParallelViewStore } from '@/store/parallelViewStore';
 import { useClickEvent, useTouchEvent } from '../hooks/useIframeEvents';
 import { useFoliateEvents } from '../hooks/useFoliateEvents';
 import { useProgressSync } from '../hooks/useProgressSync';
@@ -36,7 +35,6 @@ const FoliateViewer: React.FC<{
   const isViewCreated = useRef(false);
   const { getView, setView: setFoliateView, setProgress } = useReaderStore();
   const { getViewSettings, setViewSettings } = useReaderStore();
-  const { getParallels } = useParallelViewStore();
   const { themeCode, isDarkMode } = useThemeStore();
   const viewSettings = getViewSettings(bookKey)!;
 
@@ -123,17 +121,6 @@ const FoliateViewer: React.FC<{
           viewRef.current?.next(1);
         }
       }
-    }
-    const parallelViews = getParallels(bookKey);
-    if (parallelViews && parallelViews.size > 0) {
-      parallelViews.forEach((key) => {
-        if (key !== bookKey) {
-          const target = getView(key)?.renderer;
-          if (target) {
-            target.goTo?.({ index: detail.index, anchor: detail.fraction });
-          }
-        }
-      });
     }
   };
 

@@ -2,13 +2,11 @@ import clsx from 'clsx';
 import React from 'react';
 import { GiBookshelf } from 'react-icons/gi';
 import { FiSearch } from 'react-icons/fi';
-import { MdOutlineMenu, MdOutlinePushPin, MdPushPin } from 'react-icons/md';
+import { MdOutlinePushPin, MdPushPin } from 'react-icons/md';
 import { MdArrowBackIosNew } from 'react-icons/md';
 
 import { useResponsiveSize } from '@/hooks/useResponsiveSize';
 import { useTrafficLightStore } from '@/store/trafficLightStore';
-import Dropdown from '@/components/Dropdown';
-import BookMenu from './BookMenu';
 
 const SidebarHeader: React.FC<{
   isPinned: boolean;
@@ -55,17 +53,6 @@ const SidebarHeader: React.FC<{
         >
           <FiSearch size={iconSize18} className='text-base-content' />
         </button>
-        <Dropdown
-          className={clsx(
-            window.innerWidth < 640 && 'dropdown-end',
-            'dropdown-bottom flex justify-center',
-          )}
-          menuClassName={window.innerWidth < 640 ? 'no-triangle mt-1' : 'dropdown-center mt-3'}
-          buttonClassName='btn btn-ghost h-8 min-h-8 w-8 p-0'
-          toggleButton={<MdOutlineMenu className='fill-base-content' />}
-        >
-          <BookMenu />
-        </Dropdown>
         <div className='right-0 hidden h-8 w-8 items-center justify-center sm:flex'>
           <button
             onClick={onTogglePin}
