@@ -198,7 +198,7 @@ const FooterBar: React.FC<FooterBarProps> = ({
           <Slider
             heightPx={sliderHeight}
             bubbleLabel={`${Math.round(progressFraction * 100)}%`}
-            initialValue={progressValid ? progressFraction * 100 : 0}
+            initialValue={progressValid && !isNaN(progressFraction) ? Math.round(progressFraction * 100) : 0}
             onChange={(e) => handleProgressChange(e)}
           />
           <Button
@@ -221,8 +221,12 @@ const FooterBar: React.FC<FooterBarProps> = ({
           }}
         >
           <Slider
-            initialValue={viewSettings?.defaultFontSize ?? 16}
-            bubbleLabel={`${viewSettings?.defaultFontSize ?? 16}`}
+            initialValue={viewSettings?.defaultFontSize && !isNaN(viewSettings.defaultFontSize) 
+              ? viewSettings.defaultFontSize 
+              : 16}
+            bubbleLabel={`${viewSettings?.defaultFontSize && !isNaN(viewSettings.defaultFontSize) 
+              ? viewSettings.defaultFontSize 
+              : 16}`}
             minLabel='A'
             maxLabel='A'
             minClassName='text-xs'
@@ -233,10 +237,15 @@ const FooterBar: React.FC<FooterBarProps> = ({
           />
           <div className='flex w-full items-center justify-between gap-x-6'>
             <Slider
-              initialValue={getMarginProgressValue(
+              initialValue={!isNaN(getMarginProgressValue(
                 viewSettings?.marginPx ?? 44,
-                viewSettings?.gapPercent ?? 5,
-              )}
+                viewSettings?.gapPercent ?? 5
+              )) 
+              ? getMarginProgressValue(
+                viewSettings?.marginPx ?? 44,
+                viewSettings?.gapPercent ?? 5
+              ) 
+              : 50}
               bubbleElement={<TbBoxMargin size={marginIconSize} />}
               minLabel={_('Small')}
               maxLabel={_('Large')}
@@ -244,7 +253,9 @@ const FooterBar: React.FC<FooterBarProps> = ({
               onChange={handleMarginChange}
             />
             <Slider
-              initialValue={(viewSettings?.lineHeight ?? 1.6) * 10}
+              initialValue={viewSettings?.lineHeight && !isNaN(viewSettings.lineHeight) 
+                ? Math.round(viewSettings.lineHeight * 10) 
+                : 16}
               bubbleElement={<RxLineHeight size={marginIconSize} />}
               minLabel={_('Small')}
               maxLabel={_('Large')}
@@ -307,7 +318,7 @@ const FooterBar: React.FC<FooterBarProps> = ({
             className='text-base-content mx-2 w-full'
             min={0}
             max={100}
-            value={progressValid ? progressFraction * 100 : 0}
+            value={progressValid && !isNaN(progressFraction) ? Math.round(progressFraction * 100) : 0}
             onChange={(e) =>
               handleProgressChange(parseInt((e.target as HTMLInputElement).value, 10))
             }

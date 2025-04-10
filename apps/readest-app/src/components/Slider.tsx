@@ -33,15 +33,19 @@ const Slider: React.FC<SliderProps> = ({
   bubbleClassName = '',
   onChange,
 }) => {
-  const [value, setValue] = useState(initialValue);
+  // Ensure initialValue is a valid number
+  const safeInitialValue = isNaN(initialValue) ? 50 : initialValue;
+  const [value, setValue] = useState(safeInitialValue);
   const [isRtl, setIsRtl] = useState(false);
   const sliderRef = useRef<HTMLDivElement>(null);
 
   const handleChange = (e: React.ChangeEvent) => {
     const newValue = parseInt((e.target as HTMLInputElement).value, 10);
-    setValue(newValue);
-    if (onChange) {
-      onChange(newValue);
+    if (!isNaN(newValue)) {
+      setValue(newValue);
+      if (onChange) {
+        onChange(newValue);
+      }
     }
   };
 
@@ -57,10 +61,15 @@ const Slider: React.FC<SliderProps> = ({
   }, []);
 
   useEffect(() => {
-    setValue(initialValue);
+    // Only update state if initialValue is a valid number
+    if (!isNaN(initialValue)) {
+      setValue(initialValue);
+    }
   }, [initialValue]);
 
-  const percentage = ((value - min) / (max - min)) * 100;
+  // Ensure value is a valid number for percentage calculation
+  const safeValue = isNaN(value) ? min : value;
+  const percentage = ((safeValue - min) / (max - min)) * 100;
 
   return (
     <div
@@ -105,7 +114,7 @@ const Slider: React.FC<SliderProps> = ({
           min={min}
           max={max}
           step={step}
-          value={value}
+          value={isNaN(value) ? min : value}
           className='absolute inset-0 h-full w-full cursor-pointer opacity-0'
           onChange={handleChange}
         />
