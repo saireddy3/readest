@@ -1,5 +1,8 @@
 import withPWAInit from '@ducanh2912/next-pwa';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const isDev = process.env['NODE_ENV'] === 'development';
 const appPlatform = process.env['NEXT_PUBLIC_APP_PLATFORM'];
 
@@ -17,6 +20,16 @@ const nextConfig = {
   // Configure assetPrefix or else the server won't properly resolve your assets.
   assetPrefix: '',
   reactStrictMode: true,
+  // Add webpack config for module resolution
+  webpack: (config, { isServer }) => {
+    // Add an alias for the @pdfjs module
+    config.resolve.alias['@pdfjs'] = path.join(__dirname, 'public/vendor/pdfjs');
+    
+    // Add alias to map foliate-js to foliatejs
+    config.resolve.alias['foliate-js'] = path.join(__dirname, 'node_modules/foliatejs');
+    
+    return config;
+  },
   async headers() {
     return [
       {

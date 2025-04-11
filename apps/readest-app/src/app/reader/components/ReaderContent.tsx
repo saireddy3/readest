@@ -43,16 +43,31 @@ const ReaderContent: React.FC<{ ids?: string; settings: SystemSettings }> = ({ i
 
   useBookShortcuts({ sideBarBookKey, bookKeys });
 
+  // Add an effect to reset initiation state when the ids change
+  useEffect(() => {
+    // Reset the initialization state when ids prop changes
+    isInitiating.current = false;
+  }, [ids]);
+
   useEffect(() => {
     if (isInitiating.current) return;
     isInitiating.current = true;
 
     const bookIds = ids || searchParams?.get('ids') || '';
     const initialIds = bookIds.split(BOOK_IDS_SEPARATOR).filter(Boolean);
+    
+    // If there are no IDs, don't proceed with setting empty book keys
+    // The Reader component will handle loading a default book
+    if (initialIds.length === 0) {
+      console.log('No book IDs provided, skipping initialization');
+      return;
+    }
+    
     const initialBookKeys = initialIds.map((id) => `${id}-${uniqueId()}`);
+    console.log('Initialize books with keys:', initialBookKeys);
     setBookKeys(initialBookKeys);
     const uniqueIds = new Set<string>();
-    console.log('Initialize books', initialBookKeys);
+    
     initialBookKeys.forEach((key, index) => {
       const id = key.split('-')[0]!;
       const isPrimary = !uniqueIds.has(id);
@@ -72,7 +87,7 @@ const ReaderContent: React.FC<{ ids?: string; settings: SystemSettings }> = ({ i
     };
     eventDispatcher.onSync('show-book-details', handleShowBookDetails);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [ids, searchParams]);
 
   useEffect(() => {
     const unlisten = handleOnCloseWindow(handleCloseBooks);
@@ -133,7 +148,7 @@ const ReaderContent: React.FC<{ ids?: string; settings: SystemSettings }> = ({ i
     }
     dismissBook(bookKey);
     if (bookKeys.filter((key) => key !== bookKey).length == 0) {
-      handleClose();
+      redirectToDirectReader();
     }
   };
 

@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 
 const HomePage = () => {
-  redirect('/direct-reader');
+  redirect('/reader');
 };
 
 export default HomePage;

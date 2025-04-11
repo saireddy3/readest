@@ -33,7 +33,7 @@ const FoliateViewer: React.FC<{
   const containerRef = useRef<HTMLDivElement>(null);
   const viewRef = useRef<FoliateView | null>(null);
   const isViewCreated = useRef(false);
-  const { getView, setView: setFoliateView, setProgress } = useReaderStore();
+  const { setView: setFoliateView, setProgress } = useReaderStore();
   const { getViewSettings, setViewSettings } = useReaderStore();
   const { themeCode, isDarkMode } = useThemeStore();
   const viewSettings = getViewSettings(bookKey)!;

@@ -1,8 +1,12 @@
 {
-  "name": "@readest/monorepo",
+  "name": "readest",
+  "version": "0.1.0",
   "private": true,
   "repository": "readest/readest",
   "scripts": {
+    "dev": "cd apps/readest-app && pnpm dev",
+    "build": "cd apps/readest-app && pnpm build",
+    "start": "cd apps/readest-app && pnpm start",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {

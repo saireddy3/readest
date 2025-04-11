@@ -14,7 +14,7 @@ A simplified version of Readest that directly loads ebooks from URLs, bypassing 
 ## How to Use
 
 1. The app will automatically load the book specified in the URL constant.
-2. To change the book URL, edit the `BOOK_URL` constant in the `/app/direct-reader/page.tsx` file.
+2. To change the book URL, edit the `BOOK_URL` constant in the `/app/reader/components/Reader.tsx` file.
 3. The default book URL is: `https://cdn.readest.com/books/this-side-of-paradise.epub`
 
 ## Available Books
@@ -48,8 +48,24 @@ npm start
 - Next.js
 - React
 - Zustand for state management
-- Foliate.js for EPUB rendering
+- Foliatejs for EPUB rendering
 
 ## Note
 
-This is a simplified version focused exclusively on the direct book reader functionality. The library management features have been removed to provide a streamlined reading experience. 
+This is a simplified version focused exclusively on the direct book reader functionality. The library management features have been removed to provide a streamlined reading experience.
+
+## Project Structure
+
+This project has been configured to use foliatejs from the npm registry instead of maintaining it locally.
+
+### Setup Instructions
+
+1. Install dependencies:
+   ```
+   pnpm install
+   ```
+
+2. Run the development server:
+   ```
+   pnpm dev
+   ``` 

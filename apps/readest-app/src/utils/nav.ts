@@ -20,5 +20,7 @@ export const navigateToReader = (
 
 // Used for direct reader redirect
 export const redirectToDirectReader = () => {
-  window.location.href = '/direct-reader';
+  // Force a full page reload to ensure clean component state
+  window.location.href = '/reader';
+  window.location.reload();
 };
