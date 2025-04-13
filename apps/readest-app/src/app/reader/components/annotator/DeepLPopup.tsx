@@ -27,7 +27,7 @@ const LANGUAGES = {
   'ZH-HANT': 'Chinese (Traditional)',
 };
 
-const DEEPL_API_ENDPOINT = getAPIBaseUrl() + '/deepl/translate';
+const DEEPL_API_ENDPOINT = '/api/deepl/translate';
 
 interface DeepLPopupProps {
   text: string;

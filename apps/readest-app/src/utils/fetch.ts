@@ -1,5 +1,3 @@
-import { getAccessToken } from './access';
-
 export const fetchWithAuth = async (url: string, options: RequestInit) => {
   // Authentication removed, perform regular fetch
   const response = await fetch(url, options);

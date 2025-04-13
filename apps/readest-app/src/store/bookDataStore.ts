@@ -60,44 +60,71 @@ export const useBookDataStore = create<BookDataState>((set, get) => ({
     config: BookConfig,
     settings: SystemSettings,
   ) => {
+    console.log(`💾 Saving book config for ${bookKey}`, config);
     const appService = await envConfig.getAppService();
     const id = bookKey.split('-')[0];
-    if (!id) return;
+    if (!id) {
+      console.error(`❌ Invalid book key: ${bookKey}`);
+      return;
+    }
     
     const bookData = get().booksData[id];
-    if (!bookData || !bookData.book) return;
+    if (!bookData || !bookData.book) {
+      console.error(`❌ Book data not found for ${id}`);
+      return;
+    }
     
     const book = bookData.book;
     book.progress = config.progress;
     book.updatedAt = Date.now();
     
     config.updatedAt = Date.now();
-    await appService.saveBookConfig(book, config, settings);
     
-    // Save the single book to maintain book data
-    const books = await appService.loadLibraryBooks();
-    const bookIndex = books.findIndex(b => b.hash === id);
-    if (bookIndex >= 0) {
-      books[bookIndex] = book;
-    } else {
-      books.push(book);
+    try {
+      // Save config file to storage
+      await appService.saveBookConfig(book, config, settings);
+      console.log(`✅ Book config saved to storage for ${bookKey}`);
+      
+      // Save the single book to maintain book data
+      const books = await appService.loadLibraryBooks();
+      const bookIndex = books.findIndex(b => b.hash === id);
+      if (bookIndex >= 0) {
+        books[bookIndex] = book;
+      } else {
+        books.push(book);
+      }
+      await appService.saveLibraryBooks(books);
+      console.log(`✅ Book library updated for ${bookKey}`);
+    } catch (error) {
+      console.error(`❌ Error saving book config for ${bookKey}:`, error);
     }
-    await appService.saveLibraryBooks(books);
   },
   updateBooknotes: (key: string, booknotes: BookNote[]) => {
     let updatedConfig: BookConfig | undefined;
+    console.log(`📝 Updating booknotes for ${key}`, booknotes.length, 'items');
+    
     set((state) => {
       const id = key.split('-')[0]!;
       const book = state.booksData[id];
-      if (!book) return state;
+      if (!book) {
+        console.error(`❌ Book data not found for ${id}`);
+        return state;
+      }
+      
       const dedupedBooknotes = Array.from(
         new Map(booknotes.map((item) => [`${item.id}-${item.type}-${item.cfi}`, item])).values(),
       );
+      
+      console.log(`📊 Deduped booknotes: ${dedupedBooknotes.length} items`);
+      
       updatedConfig = {
         ...book.config,
         updatedAt: Date.now(),
         booknotes: dedupedBooknotes,
       };
+      
+      console.log(`📦 Storing updated config in memory store`);
+      
       return {
         booksData: {
           ...state.booksData,
@@ -112,6 +139,7 @@ export const useBookDataStore = create<BookDataState>((set, get) => ({
         },
       };
     });
+    
     return updatedConfig;
   },
 }));

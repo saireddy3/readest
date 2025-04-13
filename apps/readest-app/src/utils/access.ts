@@ -1,6 +1,7 @@
-import { UserPlan } from '@/types/user';
 import { DEFAULT_STORAGE_QUOTA } from '@/services/constants';
 import { isWebAppPlatform } from '@/services/environment';
+
+type UserPlan = 'free' | 'plus' | 'pro';
 
 interface Token {
   plan: UserPlan;

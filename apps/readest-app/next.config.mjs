@@ -20,6 +20,8 @@ const nextConfig = {
   // Configure assetPrefix or else the server won't properly resolve your assets.
   assetPrefix: '',
   reactStrictMode: true,
+  // Treat as single page application
+  trailingSlash: false,
   // Add webpack config for module resolution
   webpack: (config, { isServer }) => {
     // Add an alias for the @pdfjs module
@@ -29,19 +31,6 @@ const nextConfig = {
     config.resolve.alias['foliate-js'] = path.join(__dirname, 'node_modules/foliatejs');
     
     return config;
-  },
-  async headers() {
-    return [
-      {
-        source: '/.well-known/apple-app-site-association',
-        headers: [
-          {
-            key: 'Content-Type',
-            value: 'application/json',
-          },
-        ],
-      },
-    ];
   },
 };
 
@@ -53,7 +42,6 @@ const withPWA = withPWAInit({
   reloadOnOnline: true,
   swcMinify: true,
   fallbacks: {
-    document: '/offline',
   },
   workboxOptions: {
     disableDevLogs: true,

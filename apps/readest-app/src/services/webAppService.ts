@@ -25,17 +25,41 @@ const dbVersion = 1;
 
 async function openIndexedDB(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open(dbName, dbVersion);
+    let request: IDBOpenDBRequest;
+    
+    try {
+      request = indexedDB.open(dbName, dbVersion);
+    } catch (error) {
+      console.error("Failed to open IndexedDB:", error);
+      reject(new Error("Browser storage is unavailable. Your data won't be saved between sessions."));
+      return;
+    }
 
-    request.onupgradeneeded = () => {
-      const db = request.result;
-      if (!db.objectStoreNames.contains('files')) {
-        db.createObjectStore('files', { keyPath: 'path' });
+    request.onupgradeneeded = (event) => {
+      try {
+        const db = request.result;
+        console.log("Creating or upgrading IndexedDB stores");
+        
+        // Create our main files store if it doesn't exist
+        if (!db.objectStoreNames.contains('files')) {
+          db.createObjectStore('files', { keyPath: 'path' });
+          console.log("Created 'files' object store");
+        }
+      } catch (error) {
+        console.error("Error during IndexedDB upgrade:", error);
+        reject(error);
       }
     };
 
-    request.onsuccess = () => resolve(request.result);
-    request.onerror = () => reject(request.error);
+    request.onsuccess = () => {
+      console.log("IndexedDB opened successfully");
+      resolve(request.result);
+    };
+    
+    request.onerror = () => {
+      console.error("Error opening IndexedDB:", request.error);
+      reject(request.error || new Error("Failed to open IndexedDB"));
+    };
   });
 }
 
@@ -55,12 +79,26 @@ const indexedDBFileSystem: FileSystem = {
       return path;
     }
   },
-  async openFile(path: string, base: BaseDir, filename?: string) {
-    if (isValidURL(path)) {
-      return await new RemoteFile(path, filename).open();
-    } else {
-      const content = await this.readFile(path, base, 'binary');
-      return new File([content], filename || path);
+  async openFile(path: string, base: BaseDir, filename?: string): Promise<File> {
+    try {
+      if (isValidURL(path)) {
+        // For URLs, create and initialize a RemoteFile
+        const remoteFile = new RemoteFile(path, filename);
+        
+        // Call open() which returns void but initializes the RemoteFile
+        await remoteFile.open();
+        
+        // Return the initialized RemoteFile which extends File
+        return remoteFile as File;
+      } else {
+        // For local files stored in IndexedDB
+        const content = await this.readFile(path, base, 'binary');
+        return new File([content], filename || path.split('/').pop() || 'file');
+      }
+    } catch (error) {
+      console.error(`Error opening file ${path}:`, error);
+      // Return an empty file as a fallback
+      return new File([], filename || path.split('/').pop() || 'empty-file');
     }
   },
   async copyFile(srcPath: string, dstPath: string, base: BaseDir) {
@@ -87,6 +125,7 @@ const indexedDBFileSystem: FileSystem = {
   },
   async readFile(path: string, base: BaseDir, mode: 'text' | 'binary') {
     const { fp } = resolvePath(path, base);
+    console.log(`📖 Reading file from IndexedDB: ${fp}`);
     const db = await openIndexedDB();
 
     return new Promise<string | ArrayBuffer>((resolve, reject) => {
@@ -96,6 +135,7 @@ const indexedDBFileSystem: FileSystem = {
 
       request.onsuccess = async () => {
         if (request.result) {
+          console.log(`✅ Found file in IndexedDB: ${fp}`);
           const content = request.result.content;
           if (mode === 'text') resolve(content);
           else {
@@ -107,29 +147,52 @@ const indexedDBFileSystem: FileSystem = {
             } else if (typeof content === 'string') {
               resolve(new TextEncoder().encode(content).buffer as ArrayBuffer);
             } else {
+              console.error(`❌ Unsupported content type in IndexedDB for ${fp}:`, typeof content);
               reject(new Error('Unsupported content type in IndexedDB'));
             }
           }
         } else {
+          console.error(`❌ File not found in IndexedDB: ${fp}`);
           reject(new Error(`File not found: ${fp}`));
         }
       };
 
-      request.onerror = () => reject(request.error);
+      request.onerror = () => {
+        console.error(`❌ Error reading file from IndexedDB: ${fp}`, request.error);
+        reject(request.error);
+      };
     });
   },
   async writeFile(path: string, base: BaseDir, content: string | ArrayBuffer) {
     const { fp } = resolvePath(path, base);
+    console.log(`📝 Writing file to IndexedDB: ${fp}`);
     const db = await openIndexedDB();
 
     return new Promise<void>((resolve, reject) => {
       const transaction = db.transaction('files', 'readwrite');
       const store = transaction.objectStore('files');
 
-      store.put({ path: fp, content });
+      const putRequest = store.put({ path: fp, content });
 
-      transaction.oncomplete = () => resolve();
-      transaction.onerror = () => reject(transaction.error);
+      putRequest.onsuccess = () => {
+        console.log(`✅ Successfully wrote file to IndexedDB: ${fp}`);
+        resolve();
+      };
+
+      putRequest.onerror = () => {
+        console.error(`❌ Error writing file to IndexedDB: ${fp}`, putRequest.error);
+        reject(putRequest.error);
+      };
+
+      transaction.oncomplete = () => {
+        console.log(`✅ Transaction completed for writing file: ${fp}`);
+        resolve();
+      };
+      
+      transaction.onerror = () => {
+        console.error(`❌ Transaction error for writing file: ${fp}`, transaction.error);
+        reject(transaction.error);
+      };
     });
   },
   async removeFile(path: string, base: BaseDir) {
@@ -173,6 +236,7 @@ const indexedDBFileSystem: FileSystem = {
   },
   async exists(path: string, base: BaseDir) {
     const { fp } = resolvePath(path, base);
+    console.log(`🔍 Checking if file exists in IndexedDB: ${fp}`);
     const db = await openIndexedDB();
 
     return new Promise<boolean>((resolve, reject) => {
@@ -180,8 +244,16 @@ const indexedDBFileSystem: FileSystem = {
       const store = transaction.objectStore('files');
       const request = store.get(fp);
 
-      request.onsuccess = () => resolve(!!request.result);
-      request.onerror = () => reject(request.error);
+      request.onsuccess = () => {
+        const exists = !!request.result;
+        console.log(`${exists ? '✅' : '❌'} File existence check in IndexedDB: ${fp} - ${exists ? 'EXISTS' : 'NOT FOUND'}`);
+        resolve(exists);
+      };
+      
+      request.onerror = () => {
+        console.error(`❌ Error checking file existence in IndexedDB: ${fp}`, request.error);
+        reject(request.error);
+      };
     });
   },
   getPrefix() {
@@ -220,7 +292,7 @@ export class WebAppService extends BaseAppService {
   async selectDirectory(): Promise<string> {
     try {
       const result = await openFileDialog({ directory: true });
-      if (result && result.length > 0) {
+      if (result && result.length > 0 && result[0]) {
         return result[0];
       }
       throw new Error('No directory selected');
@@ -238,7 +310,7 @@ export class WebAppService extends BaseAppService {
       });
       
       if (result && result.length > 0) {
-        return result;
+        return result.map(file => typeof file === 'string' ? file : URL.createObjectURL(file));
       }
       return [];
     } catch (error) {

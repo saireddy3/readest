@@ -9,7 +9,6 @@ import {
   ViewSettings,
 } from '@/types/book';
 import { ReadSettings, SystemSettings } from '@/types/settings';
-import { UserStorageQuota } from '@/types/user';
 import { getDefaultMaxBlockSize, getDefaultMaxInlineSize } from '@/utils/config';
 import { stubTranslation as _ } from '@/utils/misc';
 
@@ -476,7 +475,11 @@ export const MAX_ZOOM_LEVEL = 500;
 export const MIN_ZOOM_LEVEL = 50;
 export const ZOOM_STEP = 10;
 
-export const DEFAULT_STORAGE_QUOTA: UserStorageQuota = {
+export const DEFAULT_STORAGE_QUOTA: {
+  free: number;
+  plus: number;
+  pro: number;
+} = {
   free: 500 * 1024 * 1024,
   plus: 2 * 1024 * 1024 * 1024,
   pro: 10 * 1024 * 1024 * 1024,

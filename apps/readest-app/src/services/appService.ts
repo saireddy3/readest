@@ -436,15 +436,36 @@ export abstract class BaseAppService implements AppService {
     return bookDoc.metadata;
   }
 
-  async saveBookConfig(book: Book, config: BookConfig, settings?: SystemSettings) {
-    let serializedConfig: string;
-    if (settings) {
-      const { globalViewSettings } = settings;
-      serializedConfig = serializeConfig(config, globalViewSettings, DEFAULT_BOOK_SEARCH_CONFIG);
-    } else {
-      serializedConfig = JSON.stringify(config);
+  async saveBookConfig(book: Book, config: BookConfig, settings?: SystemSettings): Promise<void> {
+    try {
+      console.log(`📝 Saving book config for ${book.hash}`, { 
+        hasBooknotes: config.booknotes?.length || 0,
+        progressPosition: config.progress?.[0] || 0,
+        location: config.location?.substring(0, 30) || 'none'
+      });
+      
+      let serializedConfig: string;
+      if (settings) {
+        const { globalViewSettings } = settings;
+        serializedConfig = serializeConfig(config, globalViewSettings, DEFAULT_BOOK_SEARCH_CONFIG);
+      } else {
+        serializedConfig = JSON.stringify(config);
+      }
+      
+      const filename = getConfigFilename(book);
+      console.log(`💾 Writing to ${filename} in Books directory`);
+      
+      await this.fs.writeFile(filename, 'Books', serializedConfig);
+      console.log(`✅ Config successfully saved for ${book.hash}`);
+      
+      // Verify the file was written
+      const exists = await this.fs.exists(filename, 'Books');
+      console.log(`📊 Verification - File exists check: ${exists ? '✅' : '❌'}`);
+    } catch (error) {
+      console.error(`❌ Error saving book config:`, error);
+      // We don't rethrow here, as we want the operation to continue
+      // even if there's an error saving the config
     }
-    await this.fs.writeFile(getConfigFilename(book), 'Books', serializedConfig);
   }
 
   async generateCoverImageUrl(book: Book): Promise<string> {

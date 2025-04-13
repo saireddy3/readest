@@ -1,6 +1,7 @@
 import { BookDoc } from '@/libs/document';
 import { BookNote, BookSearchConfig, BookSearchResult } from '@/types/book';
-import { TTS } from 'foliate-js/tts.js';
+// Removing problematic import since TTS type is not needed in this file
+// import { TTS } from 'foliate-js/tts.js';
 
 export type TTSGranularity = 'sentence' | 'word';
 
@@ -22,7 +23,7 @@ export interface FoliateView extends HTMLElement {
   deselect: () => void;
   initTTS: (granularity?: TTSGranularity) => Promise<void>;
   book: BookDoc;
-  tts: TTS | null;
+  tts: any | null;
   language: {
     locale?: string;
     isCJK?: boolean;
