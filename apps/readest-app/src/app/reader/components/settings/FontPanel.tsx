@@ -19,7 +19,6 @@ import { useReaderStore } from '@/store/readerStore';
 import { useTranslation } from '@/hooks/useTranslation';
 import { useEnv } from '@/context/EnvContext';
 import { getOSPlatform, isCJKEnv } from '@/utils/misc';
-import { getSysFontsList } from '@/utils/font';
 import { saveViewSettings } from '../../utils/viewSettingsHelper';
 import NumberInput from './NumberInput';
 import FontDropdown from './FontDropDown';
@@ -65,7 +64,7 @@ const FontFace = ({
 
 const FontPanel: React.FC<{ bookKey: string }> = ({ bookKey }) => {
   const _ = useTranslation();
-  const { envConfig, appService } = useEnv();
+  const { envConfig } = useEnv();
   const { getView, getViewSettings } = useReaderStore();
   const viewSettings = getViewSettings(bookKey)!;
   const view = getView(bookKey)!;

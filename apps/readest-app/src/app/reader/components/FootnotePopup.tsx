@@ -48,7 +48,7 @@ const FootnotePopup: React.FC<FootnotePopupProps> = ({ bookKey, bookDoc }) => {
         e.preventDefault();
         const { detail: popupLinkDetail } = e as CustomEvent;
         popupLinkDetail['follow'] = true;
-        footnoteHandler.handle(bookDoc, e)?.catch((err) => {
+        footnoteHandler.handle(bookDoc, e)?.catch((err:unknown) => {
           console.warn(err);
           getView(bookKey)?.goTo(popupLinkDetail.href);
         });
@@ -131,7 +131,7 @@ const FootnotePopup: React.FC<FootnotePopupProps> = ({ bookKey, bookDoc }) => {
     setGridRect(rect);
     setTrianglePosition(triangPos);
 
-    footnoteHandler.handle(bookDoc, event)?.catch((err) => {
+    footnoteHandler.handle(bookDoc, event)?.catch((err: unknown) => {
       console.warn(err);
       const detail = (event as CustomEvent).detail;
       view?.goTo(detail.href);

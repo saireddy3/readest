@@ -3,7 +3,7 @@
 import clsx from 'clsx';
 import * as React from 'react';
 import { useState, useRef, useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 
 import { useEnv } from '@/context/EnvContext';
 import { useSettingsStore } from '@/store/settingsStore';
@@ -12,7 +12,7 @@ import { useReaderStore } from '@/store/readerStore';
 import { useSidebarStore } from '@/store/sidebarStore';
 import { Book } from '@/types/book';
 import { SystemSettings } from '@/types/settings';
-import { handleClose, handleOnCloseWindow } from '@/utils/webWindow';
+import { handleOnCloseWindow } from '@/utils/webWindow';
 import { uniqueId } from '@/utils/misc';
 import { eventDispatcher } from '@/utils/event';
 import { redirectToDirectReader } from '@/utils/nav';
@@ -28,7 +28,6 @@ import BooksGrid from './BooksGrid';
 import TTSControl from './tts/TTSControl';
 
 const ReaderContent: React.FC<{ ids?: string; settings: SystemSettings }> = ({ ids, settings }) => {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const { envConfig, appService } = useEnv();
   const { bookKeys, dismissBook, getNextBookKey } = useBooksManager();
@@ -123,11 +122,6 @@ const ReaderContent: React.FC<{ ids?: string; settings: SystemSettings }> = ({ i
     eventDispatcher.dispatch('tts-stop', { bookKey });
     await saveBookConfig(bookKey);
     clearViewState(bookKey);
-  };
-
-  const saveSettingsAndReload = () => {
-    saveSettings(envConfig, settings);
-    redirectToDirectReader();
   };
 
   const handleCloseBooks = async () => {

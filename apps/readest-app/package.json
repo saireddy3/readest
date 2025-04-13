@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "dotenv -e .env.web -- next dev",
     "build": "dotenv -e .env.web -- next build",
+    "build:static": "dotenv -e .env.static -- next build",
     "start": "dotenv -e .env.web -- next start",
     "i18n:extract": "i18next-scanner",
     "lint": "next lint",
