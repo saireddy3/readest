@@ -10,8 +10,18 @@ export default defineConfig({
     'react',
     'react-dom',
     'next',
-    'foliate-js',
     '@shmandadi/foliate-js',
+    '@shmandadi/foliate-js/epubcfi.js',
+    '@shmandadi/foliate-js/comic-book.js',
+    '@shmandadi/foliate-js/fb2.js',
+    '@shmandadi/foliate-js/epub.js',
+    '@shmandadi/foliate-js/mobi.js',
+    '@shmandadi/foliate-js/vendor/fflate.js',
+    '@shmandadi/foliate-js/view.js',
+    '@shmandadi/foliate-js/overlayer.js',
+    '@shmandadi/foliate-js/footnotes.js',
+    // Also include original paths for backward compatibility
+    'foliate-js',
     'foliate-js/epubcfi.js',
     'foliate-js/comic-book.js',
     'foliate-js/fb2.js',
@@ -22,5 +32,11 @@ export default defineConfig({
     'foliate-js/overlayer.js',
     'foliate-js/footnotes.js',
     /^!!raw-loader/,
-  ]
+  ],
+  esbuildOptions(options) {
+    options.alias = {
+      // Add alias to map foliate-js to @shmandadi/foliate-js
+      'foliate-js': '@shmandadi/foliate-js',
+    };
+  },
 }); 
