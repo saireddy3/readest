@@ -1,19 +1,42 @@
 {
+  "extends": "@sindresorhus/tsconfig",
   "compilerOptions": {
-    "incremental": true,
-    "target": "es2022",
-    "module": "preserve",
+    "target": "ES2022",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
-    "declaration": true,
+    "skipLibCheck": true,
     "strict": true,
-    "moduleResolution": "bundler",
+    "noEmit": false,
     "esModuleInterop": true,
-    "skipLibCheck": true
-  },
-  "files": [],
-  "references": [
-    {
-      "path": "./apps"
+    "module": "preserve",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
     }
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "raw-loader.d.ts",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
   ]
 }
