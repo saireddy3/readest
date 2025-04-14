@@ -11,9 +11,9 @@
   ],
   "exports": {
     ".": {
-      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/index.js"
     }
   },
   "scripts": {
@@ -23,7 +23,7 @@
     "start": "dotenv -e .env.web -- next start",
     "i18n:extract": "i18next-scanner",
     "lint": "next lint",
-    "build:package": "tsup src/index.ts --format cjs,esm --dts",
+    "build:package": "tsup --config tsup.config.ts",
     "prepublishOnly": "npm run build:package"
   },
   "dependencies": {
