@@ -14,12 +14,12 @@ import { Toast } from '@/components/Toast';
 import ReaderContent from './ReaderContent';
 import { useSidebarStore } from '@/store/sidebarStore';
 import Spinner from '@/components/Spinner';
-import { Book } from '@/types/book';
 
-// Static book URL - you can change this to any supported book URL
-const BOOK_URL = 'https://cdn.readest.com/books/the-scarlet-letter.epub';
+interface ReaderProps {
+  bookUrl?: string;
+}
 
-const Reader: React.FC = () => {
+const Reader: React.FC<ReaderProps> = ({ bookUrl = 'https://cdn.readest.com/books/the-scarlet-letter.epub' }) => {
   const { envConfig, appService } = useEnv();
   const { settings, setSettings } = useSettingsStore();
   const { isSideBarVisible } = useSidebarStore();
@@ -47,9 +47,9 @@ const Reader: React.FC = () => {
         const settings = await appService.loadSettings();
         setSettings(settings);
         
-        console.log("⏳ Fetching book from URL:", BOOK_URL);
+        console.log("⏳ Fetching book from URL:", bookUrl);
         // Fetch the file from URL
-        const response = await fetch(BOOK_URL);
+        const response = await fetch(bookUrl);
         if (!response.ok) {
           throw new Error(`Failed to fetch book: ${response.status} ${response.statusText}`);
         }
@@ -58,7 +58,7 @@ const Reader: React.FC = () => {
         console.log("✅ Successfully fetched book content:", blob.size, "bytes");
         
         // Create a File object from the blob
-        const filename = BOOK_URL.split('/').pop() || 'book.epub';
+        const filename = bookUrl.split('/').pop() || 'book.epub';
         const file = new File([blob], filename, { type: 'application/epub+zip' });
         
         // Generate a hash for the book
@@ -90,7 +90,7 @@ const Reader: React.FC = () => {
           
           if (book) {
             // Ensure the book has the source URL saved
-            book.url = BOOK_URL;
+            book.url = bookUrl;
             
             console.log("✅ Book successfully imported:", book);
             
@@ -123,7 +123,7 @@ const Reader: React.FC = () => {
 
     initSettings();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [bookUrl]);
 
   if (loading) {
     return (

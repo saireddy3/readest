@@ -1,14 +1,30 @@
 {
-  "name": "readest-app",
+  "name": "readest-reader",
   "version": "0.9.32",
-  "private": true,
+  "description": "A reusable e-book reader component for React applications",
+  "private": false,
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
   "scripts": {
     "dev": "dotenv -e .env.web -- next dev",
     "build": "dotenv -e .env.web -- next build",
     "build:static": "dotenv -e .env.static -- next build",
     "start": "dotenv -e .env.web -- next start",
     "i18n:extract": "i18next-scanner",
-    "lint": "next lint"
+    "lint": "next lint",
+    "build:package": "tsup src/index.ts --format cjs,esm --dts",
+    "prepublishOnly": "npm run build:package"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.735.0",
@@ -58,6 +74,17 @@
     "postcss-nested": "^7.0.2",
     "raw-loader": "^4.0.2",
     "tailwindcss": "^3.4.17",
-    "typescript": "^5.7.2"
-  }
+    "typescript": "^5.7.2",
+    "tsup": "^8.0.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "ebook",
+    "reader",
+    "epub",
+    "react",
+    "nextjs"
+  ]
 }
