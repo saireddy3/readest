@@ -24,7 +24,7 @@ export const getAPIBaseUrl = () => {
     : 'production';
   
   const apiBaseUrl = typeof process !== 'undefined' && process.env 
-    ? process.env.NEXT_PUBLIC_API_BASE_URL 
+    ? process.env['NEXT_PUBLIC_API_BASE_URL'] 
     : undefined;
     
   return nodeEnv === 'development'

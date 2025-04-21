@@ -1,5 +1,4 @@
 import { useEffect, useRef } from 'react';
-import { isWebAppPlatform } from '@/services/environment';
 
 export const useScreenWakeLock = (lock: boolean) => {
   const wakeLockRef = useRef<WakeLockSentinel | null>(null);
