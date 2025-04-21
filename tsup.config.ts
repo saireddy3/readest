@@ -3,9 +3,34 @@ import { defineConfig } from 'tsup';
 export default defineConfig({
   entry: ['src/index.ts'],
   format: ['cjs', 'esm'],
-  dts: true,
+  dts: {
+    resolve: true,
+  },
   sourcemap: true,
   clean: true,
+  minify: false,
+  splitting: false,
+  treeshake: true,
+  skipNodeModulesBundle: true,
+  outDir: 'dist',
+  outExtension({ format }) {
+    return {
+      js: format === 'cjs' ? '.js' : '.mjs',
+    };
+  },
+  // Include all static assets
+  loader: {
+    '.png': 'file',
+    '.jpg': 'file',
+    '.jpeg': 'file',
+    '.svg': 'file',
+    '.gif': 'file',
+    '.woff': 'file',
+    '.woff2': 'file',
+    '.ttf': 'file',
+    '.eot': 'file',
+    '.css': 'file',
+  },
   external: [
     'react',
     'react-dom',
@@ -31,6 +56,10 @@ export default defineConfig({
     'foliate-js/view.js',
     'foliate-js/overlayer.js',
     'foliate-js/footnotes.js',
+    'react-i18next',
+    'i18next',
+    'i18next-browser-languagedetector',
+    'i18next-http-backend',
     /^!!raw-loader/,
   ],
   esbuildOptions(options) {
@@ -38,5 +67,17 @@ export default defineConfig({
       // Add alias to map foliate-js to @shmandadi/foliate-js
       'foliate-js': '@shmandadi/foliate-js',
     };
+    // Ensure we handle all file types
+    options.loader = {
+      ...options.loader,
+      '.png': 'file',
+      '.jpg': 'file',
+      '.svg': 'file',
+    };
+    // Preserve path structure for imported assets
+    options.assetNames = 'assets/[name]-[hash]';
+    // Increase bundle size limit
+    options.chunkNames = 'chunks/[name]-[hash]';
   },
+  onSuccess: 'echo ✅ Build completed successfully!',
 }); 
