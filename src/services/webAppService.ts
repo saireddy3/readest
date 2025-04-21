@@ -35,7 +35,7 @@ async function openIndexedDB(): Promise<IDBDatabase> {
       return;
     }
 
-    request.onupgradeneeded = (event) => {
+    request.onupgradeneeded = () => {
       try {
         const db = request.result;
         console.log("Creating or upgrading IndexedDB stores");
@@ -125,7 +125,13 @@ const indexedDBFileSystem: FileSystem = {
   },
   async readFile(path: string, base: BaseDir, mode: 'text' | 'binary') {
     const { fp } = resolvePath(path, base);
-    console.log(`📖 Reading file from IndexedDB: ${fp}`);
+    const isCoverImage = fp.includes('cover.png');
+    
+    // Only log for non-cover images to reduce console noise
+    if (!isCoverImage) {
+      console.log(`📖 Reading file from IndexedDB: ${fp}`);
+    }
+    
     const db = await openIndexedDB();
 
     return new Promise<string | ArrayBuffer>((resolve, reject) => {
@@ -135,7 +141,9 @@ const indexedDBFileSystem: FileSystem = {
 
       request.onsuccess = async () => {
         if (request.result) {
-          console.log(`✅ Found file in IndexedDB: ${fp}`);
+          if (!isCoverImage) {
+            console.log(`✅ Found file in IndexedDB: ${fp}`);
+          }
           const content = request.result.content;
           if (mode === 'text') resolve(content);
           else {
@@ -152,13 +160,20 @@ const indexedDBFileSystem: FileSystem = {
             }
           }
         } else {
-          console.error(`❌ File not found in IndexedDB: ${fp}`);
-          reject(new Error(`File not found: ${fp}`));
+          if (isCoverImage) {
+            // For cover images, silently reject without logging error
+            reject(new Error(`File not found: ${fp}`));
+          } else {
+            console.error(`❌ File not found in IndexedDB: ${fp}`);
+            reject(new Error(`File not found: ${fp}`));
+          }
         }
       };
 
       request.onerror = () => {
-        console.error(`❌ Error reading file from IndexedDB: ${fp}`, request.error);
+        if (!isCoverImage) {
+          console.error(`❌ Error reading file from IndexedDB: ${fp}`, request.error);
+        }
         reject(request.error);
       };
     });
@@ -320,10 +335,30 @@ export class WebAppService extends BaseAppService {
   }
 
   getCoverImageUrl = (book: Book): string => {
-    return this.fs.getURL(`${LOCAL_BOOKS_SUBDIR}/${getCoverFilename(book)}`);
+    const coverPath = `${LOCAL_BOOKS_SUBDIR}/${getCoverFilename(book)}`;
+    try {
+      return this.fs.getURL(coverPath);
+    } catch {
+      console.log(`Unable to load cover for book, using default cover`);
+      return '/assets/default-cover.png';
+    }
   };
 
   getCoverImageBlobUrl = async (book: Book): Promise<string> => {
-    return this.fs.getBlobURL(`${LOCAL_BOOKS_SUBDIR}/${getCoverFilename(book)}`, 'None');
+    const coverPath = `${LOCAL_BOOKS_SUBDIR}/${getCoverFilename(book)}`;
+    
+    try {
+      // First check if the cover file exists
+      const exists = await this.fs.exists(coverPath, 'None');
+      if (!exists) {
+        console.log(`Cover image does not exist: ${coverPath}, using default`);
+        return '/assets/default-cover.png';
+      }
+      
+      return await this.fs.getBlobURL(coverPath, 'None');
+    } catch {
+      console.log(`Unable to load blob cover for book, using default cover`);
+      return '/assets/default-cover.png';
+    }
   };
 }
