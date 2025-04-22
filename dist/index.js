@@ -11,7 +11,6 @@ var clsx8 = require('clsx');
 var React42 = require('react');
 var zustand = require('zustand');
 var tinycolor2 = require('tinycolor2');
-var navigation = require('next/navigation');
 var Image = require('next/image');
 var i18n = require('i18next');
 var reactI18next = require('react-i18next');
@@ -3742,6 +3741,16 @@ init_misc();
 // src/utils/nav.ts
 init_environment();
 init_constants();
+var createMockRouter = () => {
+  return {
+    back: () => console.log("Mock router: back called"),
+    forward: () => console.log("Mock router: forward called"),
+    refresh: () => console.log("Mock router: refresh called"),
+    push: (url) => console.log(`Mock router: push called with url ${url}`),
+    replace: (url) => console.log(`Mock router: replace called with url ${url}`),
+    prefetch: (url) => console.log(`Mock router: prefetch called with url ${url}`)
+  };
+};
 var navigateToReader = (router, bookIds, queryParams, navOptions) => {
   const ids = bookIds.join(BOOK_IDS_SEPARATOR);
   if (isWebAppPlatform() && !isPWA()) {
@@ -3760,9 +3769,16 @@ var redirectToDirectReader = () => {
 // src/app/reader/components/ReaderContent.tsx
 init_constants();
 init_misc();
+var createMockSearchParams = () => {
+  const params = new URLSearchParams(window.location.search);
+  return {
+    get: (key) => params.get(key),
+    toString: () => params.toString()
+  };
+};
 var useBooksManager = () => {
-  const router = navigation.useRouter();
-  const searchParams = navigation.useSearchParams();
+  const router = createMockRouter();
+  const searchParams = createMockSearchParams();
   const { envConfig } = useEnv();
   const { bookKeys } = useReaderStore();
   const { setBookKeys, initViewState } = useReaderStore();
@@ -6291,7 +6307,6 @@ var computeMaxTimestamp = (records) => {
 };
 var SEVEN_DAYS_IN_MS = 7 * 24 * 60 * 60 * 1e3;
 function useSync(bookKey) {
-  navigation.useRouter();
   const { settings, setSettings } = useSettingsStore();
   const { getConfig, setConfig } = useBookDataStore();
   const config = bookKey ? getConfig(bookKey) : null;
@@ -12751,8 +12766,15 @@ var TTSControl = () => {
 var TTSControl_default = TTSControl;
 
 // src/app/reader/components/ReaderContent.tsx
+var useSearchParams = () => {
+  const params = new URLSearchParams(window.location.search);
+  return {
+    get: (key) => params.get(key),
+    toString: () => params.toString()
+  };
+};
 var ReaderContent = ({ ids }) => {
-  const searchParams = navigation.useSearchParams();
+  const searchParams = useSearchParams();
   const { envConfig, appService } = useEnv();
   const { bookKeys, dismissBook, getNextBookKey } = useBooksManager_default();
   const { sideBarBookKey, setSideBarBookKey } = useSidebarStore();

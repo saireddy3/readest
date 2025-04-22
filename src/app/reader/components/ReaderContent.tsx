@@ -3,7 +3,15 @@
 import clsx from 'clsx';
 import * as React from 'react';
 import { useState, useRef, useEffect } from 'react';
-import { useSearchParams } from 'next/navigation';
+
+// Create a mock search params implementation
+const useSearchParams = () => {
+  const params = new URLSearchParams(window.location.search);
+  return {
+    get: (key: string) => params.get(key),
+    toString: () => params.toString()
+  };
+};
 
 import { useEnv } from '@/context/EnvContext';
 import { useSettingsStore } from '@/store/settingsStore';

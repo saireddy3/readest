@@ -1,13 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { query as deeplQuery } from '@/utils/deepl';
 
-const DEFAULT_DEEPL_FREE_API = 'https://api-free.deepl.com/v2/translate';
-
-const getDeepLAPIKey = (keys: string | undefined) => {
-  const keyArray = keys?.split(',') ?? [];
-  return keyArray.length ? keyArray[Math.floor(Math.random() * keyArray.length)] : '';
-};
-
 // CORS headers
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -25,11 +18,7 @@ export async function OPTIONS() {
 
 export async function POST(request: NextRequest) {
   try {
-    const { DEEPL_FREE_API } = process.env;
-    const deepFreeApiUrl = DEEPL_FREE_API || DEFAULT_DEEPL_FREE_API;
-    const deeplApiUrl = deepFreeApiUrl;
-    const deeplAuthKey = getDeepLAPIKey(process.env['DEEPL_FREE_API_KEYS']);
-
+    // DeepL authentication keys are passed directly to the deeplQuery utility
     const body = await request.json();
     const {
       text,

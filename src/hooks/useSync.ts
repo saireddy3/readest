@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { useSyncContext } from '@/context/SyncContext';
 import { SyncData, SyncOp, SyncResult, SyncType } from '@/libs/sync';
 import { useSettingsStore } from '@/store/settingsStore';
@@ -34,7 +33,6 @@ const computeMaxTimestamp = (records: BookDataRecord[]): number => {
 const SEVEN_DAYS_IN_MS = 7 * 24 * 60 * 60 * 1000;
 
 export function useSync(bookKey?: string) {
-  const router = useRouter();
   const { settings, setSettings } = useSettingsStore();
   const { getConfig, setConfig } = useBookDataStore();
   const config = bookKey ? getConfig(bookKey) : null;

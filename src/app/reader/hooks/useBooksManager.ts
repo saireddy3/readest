@@ -1,17 +1,26 @@
 import { useEffect, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
 import { useEnv } from '@/context/EnvContext';
 import { useReaderStore } from '@/store/readerStore';
 import { useSidebarStore } from '@/store/sidebarStore';
 import { uniqueId } from '@/utils/misc';
-import { navigateToReader } from '@/utils/nav';
+import { navigateToReader, createMockRouter } from '@/utils/nav';
+
+// Create a mock search params implementation
+const createMockSearchParams = () => {
+  const params = new URLSearchParams(window.location.search);
+  return {
+    get: (key: string) => params.get(key),
+    toString: () => params.toString()
+  };
+};
 
 const useBooksManager = () => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
+  const router = createMockRouter();
+  const searchParams = createMockSearchParams();
   const { envConfig } = useEnv();
   const { bookKeys } = useReaderStore();
   const { setBookKeys, initViewState } = useReaderStore();
+  // sideBarBookKey is used in the appendBook function
   const { sideBarBookKey, setSideBarBookKey } = useSidebarStore();
   const [shouldUpdateSearchParams, setShouldUpdateSearchParams] = useState(false);
 

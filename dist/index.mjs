@@ -8,7 +8,6 @@ import * as React42 from 'react';
 import React42__default, { createContext, useContext, useState, useEffect, useRef, Suspense, useCallback, isValidElement } from 'react';
 import { create } from 'zustand';
 import tinycolor2 from 'tinycolor2';
-import { useSearchParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import i18n from 'i18next';
 import { initReactI18next, useTranslation as useTranslation$1 } from 'react-i18next';
@@ -3709,6 +3708,16 @@ init_misc();
 // src/utils/nav.ts
 init_environment();
 init_constants();
+var createMockRouter = () => {
+  return {
+    back: () => console.log("Mock router: back called"),
+    forward: () => console.log("Mock router: forward called"),
+    refresh: () => console.log("Mock router: refresh called"),
+    push: (url) => console.log(`Mock router: push called with url ${url}`),
+    replace: (url) => console.log(`Mock router: replace called with url ${url}`),
+    prefetch: (url) => console.log(`Mock router: prefetch called with url ${url}`)
+  };
+};
 var navigateToReader = (router, bookIds, queryParams, navOptions) => {
   const ids = bookIds.join(BOOK_IDS_SEPARATOR);
   if (isWebAppPlatform() && !isPWA()) {
@@ -3727,9 +3736,16 @@ var redirectToDirectReader = () => {
 // src/app/reader/components/ReaderContent.tsx
 init_constants();
 init_misc();
+var createMockSearchParams = () => {
+  const params = new URLSearchParams(window.location.search);
+  return {
+    get: (key) => params.get(key),
+    toString: () => params.toString()
+  };
+};
 var useBooksManager = () => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
+  const router = createMockRouter();
+  const searchParams = createMockSearchParams();
   const { envConfig } = useEnv();
   const { bookKeys } = useReaderStore();
   const { setBookKeys, initViewState } = useReaderStore();
@@ -6258,7 +6274,6 @@ var computeMaxTimestamp = (records) => {
 };
 var SEVEN_DAYS_IN_MS = 7 * 24 * 60 * 60 * 1e3;
 function useSync(bookKey) {
-  useRouter();
   const { settings, setSettings } = useSettingsStore();
   const { getConfig, setConfig } = useBookDataStore();
   const config = bookKey ? getConfig(bookKey) : null;
@@ -12718,6 +12733,13 @@ var TTSControl = () => {
 var TTSControl_default = TTSControl;
 
 // src/app/reader/components/ReaderContent.tsx
+var useSearchParams = () => {
+  const params = new URLSearchParams(window.location.search);
+  return {
+    get: (key) => params.get(key),
+    toString: () => params.toString()
+  };
+};
 var ReaderContent = ({ ids }) => {
   const searchParams = useSearchParams();
   const { envConfig, appService } = useEnv();
