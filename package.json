@@ -1,6 +1,6 @@
 {
   "name": "readest-reader",
-  "version": "0.9.34",
+  "version": "0.9.35",
   "description": "A reusable e-book reader component for React applications",
   "private": false,
   "main": "dist/index.js",

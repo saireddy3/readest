@@ -15,7 +15,30 @@ import {
   generateDarkPalette,
 } from '@/styles/themes';
 
-import fontfacesCSS from '!!raw-loader!../styles/fonts.css';
+// Embedded fonts CSS instead of using raw-loader
+const fontfacesCSS = `/* Basic web fonts, specific font definitions are loaded at runtime */
+@font-face {
+  font-family: 'Literata';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Literata');
+}
+@font-face {
+  font-family: 'Bitter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Bitter');
+}
+@font-face {
+  font-family: 'Fira Code';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Fira Code');
+}`;
+
 import { getOSPlatform } from './misc';
 
 const getFontStyles = (

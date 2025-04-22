@@ -47,7 +47,6 @@ export default defineConfig({
     'i18next',
     'i18next-browser-languagedetector',
     'i18next-http-backend',
-    /^!!raw-loader/,
   ],
   esbuildOptions(options: Record<string, unknown>) {
     // Preserve path structure for imported assets

@@ -8,7 +8,6 @@ import * as React42 from 'react';
 import React42__default, { createContext, useContext, useState, useEffect, useRef, Suspense, useCallback, isValidElement } from 'react';
 import { create } from 'zustand';
 import tinycolor2 from 'tinycolor2';
-import fontfacesCSS from '!!raw-loader!../styles/fonts.css';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import i18n from 'i18next';
@@ -2626,6 +2625,28 @@ var applyCustomTheme = (customTheme) => {
 
 // src/utils/style.ts
 init_misc();
+var fontfacesCSS = `/* Basic web fonts, specific font definitions are loaded at runtime */
+@font-face {
+  font-family: 'Literata';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Literata');
+}
+@font-face {
+  font-family: 'Bitter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Bitter');
+}
+@font-face {
+  font-family: 'Fira Code';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Fira Code');
+}`;
 var getFontStyles = (serif, sansSerif, monospace, defaultFont, defaultCJKFont, fontSize, minFontSize, fontWeight, overrideFont, themeCode) => {
   const { fg, primary } = themeCode;
   const lastSerifFonts = ["Georgia", "Times New Roman"];

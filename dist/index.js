@@ -11,7 +11,6 @@ var clsx8 = require('clsx');
 var React42 = require('react');
 var zustand = require('zustand');
 var tinycolor2 = require('tinycolor2');
-var fontfacesCSS = require('!!raw-loader!../styles/fonts.css');
 var navigation = require('next/navigation');
 var Image = require('next/image');
 var i18n = require('i18next');
@@ -63,7 +62,6 @@ var CFI4__namespace = /*#__PURE__*/_interopNamespace(CFI4);
 var clsx8__default = /*#__PURE__*/_interopDefault(clsx8);
 var React42__namespace = /*#__PURE__*/_interopNamespace(React42);
 var tinycolor2__default = /*#__PURE__*/_interopDefault(tinycolor2);
-var fontfacesCSS__default = /*#__PURE__*/_interopDefault(fontfacesCSS);
 var Image__default = /*#__PURE__*/_interopDefault(Image);
 var i18n__default = /*#__PURE__*/_interopDefault(i18n);
 var HttpApi__default = /*#__PURE__*/_interopDefault(HttpApi);
@@ -2660,6 +2658,28 @@ var applyCustomTheme = (customTheme) => {
 
 // src/utils/style.ts
 init_misc();
+var fontfacesCSS = `/* Basic web fonts, specific font definitions are loaded at runtime */
+@font-face {
+  font-family: 'Literata';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Literata');
+}
+@font-face {
+  font-family: 'Bitter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Bitter');
+}
+@font-face {
+  font-family: 'Fira Code';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Fira Code');
+}`;
 var getFontStyles = (serif, sansSerif, monospace, defaultFont, defaultCJKFont, fontSize, minFontSize, fontWeight, overrideFont, themeCode) => {
   const { fg, primary } = themeCode;
   const lastSerifFonts = ["Georgia", "Times New Roman"];
@@ -2998,7 +3018,7 @@ var getStyles = (viewSettings, themeCode) => {
   const userStylesheet = viewSettings.userStylesheet;
   return `${layoutStyles}
 ${fontStyles}
-${fontfacesCSS__default.default}
+${fontfacesCSS}
 ${userStylesheet}`;
 };
 var mountAdditionalFonts = (document2) => {
