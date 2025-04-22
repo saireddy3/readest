@@ -20,28 +20,19 @@ export const createMockRouter = (): RouterType => {
   };
 };
 
-import { isPWA, isWebAppPlatform } from '@/services/environment';
-import { BOOK_IDS_SEPARATOR } from '@/services/constants';
+// Simple navigation utilities for non-routed applications
 
+// No operation function that just logs what would have happened
 export const navigateToReader = (
-  router: RouterType,
+  _: unknown,
   bookIds: string[],
   queryParams?: string,
-  navOptions?: { scroll?: boolean },
 ) => {
-  const ids = bookIds.join(BOOK_IDS_SEPARATOR);
-  if (isWebAppPlatform() && !isPWA()) {
-    router.push(`/reader/${ids}${queryParams ? `?${queryParams}` : ''}`, navOptions);
-  } else {
-    const params = new URLSearchParams(queryParams || '');
-    params.set('ids', ids);
-    router.push(`/reader?${params.toString()}`, navOptions);
-  }
+  console.log(`Navigation to reader with ids: ${bookIds.join(',')} and params: ${queryParams || 'none'}`);
 };
 
-// Used for direct reader redirect
+// Simple page reload function
 export const redirectToDirectReader = () => {
   // Force a full page reload to ensure clean component state
-  window.location.href = '/reader';
   window.location.reload();
 };

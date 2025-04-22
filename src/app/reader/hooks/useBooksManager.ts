@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useRouter, useSearchParams } from '@/context/RouterContext';
 import { useEnv } from '@/context/EnvContext';
 import { useReaderStore } from '@/store/readerStore';
 import { useSidebarStore } from '@/store/sidebarStore';
@@ -7,12 +6,9 @@ import { uniqueId } from '@/utils/misc';
 import { navigateToReader } from '@/utils/nav';
 
 const useBooksManager = () => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
   const { envConfig } = useEnv();
   const { bookKeys } = useReaderStore();
   const { setBookKeys, initViewState } = useReaderStore();
-  // sideBarBookKey is used within closures in the component, so we need to keep it
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { sideBarBookKey, setSideBarBookKey } = useSidebarStore();
   const [shouldUpdateSearchParams, setShouldUpdateSearchParams] = useState(false);
@@ -21,11 +17,11 @@ const useBooksManager = () => {
     if (shouldUpdateSearchParams) {
       const ids = bookKeys.map((key) => key.split('-')[0]!);
       if (ids) {
-        navigateToReader(router, ids, searchParams?.toString() || '', { scroll: false });
+        navigateToReader(null, ids);
       }
       setShouldUpdateSearchParams(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [bookKeys, shouldUpdateSearchParams]);
 
   // Append a new book and sync with bookKeys and URL
@@ -40,7 +36,7 @@ const useBooksManager = () => {
     setShouldUpdateSearchParams(true);
   };
 
-  // Close a book and sync with bookKeys and URL
+  // Close a book and sync with bookKeys
   const dismissBook = (bookKey: string) => {
     const updatedKeys = bookKeys.filter((key) => key !== bookKey);
     setBookKeys(updatedKeys);

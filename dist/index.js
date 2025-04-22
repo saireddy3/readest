@@ -8,7 +8,7 @@ var clientS3 = require('@aws-sdk/client-s3');
 require('@aws-sdk/s3-request-presigner');
 require('aws4fetch');
 var clsx8 = require('clsx');
-var React43 = require('react');
+var React42 = require('react');
 var zustand = require('zustand');
 var tinycolor2 = require('tinycolor2');
 var Image = require('next/image');
@@ -59,7 +59,7 @@ function _interopNamespace(e) {
 
 var CFI4__namespace = /*#__PURE__*/_interopNamespace(CFI4);
 var clsx8__default = /*#__PURE__*/_interopDefault(clsx8);
-var React43__namespace = /*#__PURE__*/_interopNamespace(React43);
+var React42__namespace = /*#__PURE__*/_interopNamespace(React42);
 var tinycolor2__default = /*#__PURE__*/_interopDefault(tinycolor2);
 var Image__default = /*#__PURE__*/_interopDefault(Image);
 var i18n__default = /*#__PURE__*/_interopDefault(i18n);
@@ -2414,17 +2414,17 @@ var require_i18next_scanner_config = __commonJS({
 
 // src/context/EnvContext.tsx
 init_environment();
-var EnvContext = React43.createContext(void 0);
+var EnvContext = React42.createContext(void 0);
 var EnvProvider = ({ children }) => {
-  const [envConfig] = React43.useState(environment_default);
-  const [appService, setAppService] = React43.useState(null);
-  React43__namespace.default.useEffect(() => {
+  const [envConfig] = React42.useState(environment_default);
+  const [appService, setAppService] = React42.useState(null);
+  React42__namespace.default.useEffect(() => {
     envConfig.getAppService().then((service) => setAppService(service));
   }, [envConfig]);
-  return /* @__PURE__ */ React43__namespace.default.createElement(EnvContext.Provider, { value: { envConfig, appService } }, children);
+  return /* @__PURE__ */ React42__namespace.default.createElement(EnvContext.Provider, { value: { envConfig, appService } }, children);
 };
 var useEnv = () => {
-  const context = React43.useContext(EnvContext);
+  const context = React42.useContext(EnvContext);
   if (!context) throw new Error("useEnv must be used within EnvProvider");
   return context;
 };
@@ -3150,21 +3150,21 @@ var useSettingsStore = zustand.create((set) => ({
 var useTheme = () => {
   const { settings } = useSettingsStore();
   const { themeColor, isDarkMode } = useThemeStore();
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     const customThemes = settings.globalReadSettings?.customThemes ?? [];
     customThemes.forEach((customTheme) => {
       applyCustomTheme(customTheme);
     });
   }, [settings]);
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     const colorScheme = isDarkMode ? "dark" : "light";
     document.documentElement.setAttribute("data-theme", `${themeColor}-${colorScheme}`);
     document.documentElement.style.setProperty("color-scheme", colorScheme);
   }, [themeColor, isDarkMode]);
 };
 var useScreenWakeLock = (lock) => {
-  const wakeLockRef = React43.useRef(null);
-  React43.useEffect(() => {
+  const wakeLockRef = React42.useRef(null);
+  React42.useEffect(() => {
     const requestWakeLock = async () => {
       try {
         if ("wakeLock" in navigator) {
@@ -3273,11 +3273,11 @@ var eventDispatcher = new EventDispatcher();
 
 // src/components/Toast.tsx
 var Toast = () => {
-  const [toastMessage, setToastMessage] = React43.useState("");
-  const toastType = React43.useRef("info");
-  const toastTimeout = React43.useRef(5e3);
-  const messageClass = React43.useRef("");
-  const toastDismissTimeout = React43.useRef(null);
+  const [toastMessage, setToastMessage] = React42.useState("");
+  const toastType = React42.useRef("info");
+  const toastTimeout = React42.useRef(5e3);
+  const messageClass = React42.useRef("");
+  const toastDismissTimeout = React42.useRef(null);
   const toastClassMap = {
     info: "toast-info toast-center toast-middle",
     success: "toast-success toast-top toast-end",
@@ -3290,7 +3290,7 @@ var Toast = () => {
     warning: "alert-warning",
     error: "alert-error"
   };
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     if (toastDismissTimeout.current) clearTimeout(toastDismissTimeout.current);
     toastDismissTimeout.current = setTimeout(() => setToastMessage(""), toastTimeout.current);
     return () => {
@@ -3304,13 +3304,13 @@ var Toast = () => {
     if (timeout) toastTimeout.current = timeout;
     messageClass.current = className;
   };
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     eventDispatcher.on("toast", handleShowToast);
     return () => {
       eventDispatcher.off("toast", handleShowToast);
     };
   }, []);
-  return toastMessage && /* @__PURE__ */ React43__namespace.default.createElement(
+  return toastMessage && /* @__PURE__ */ React42__namespace.default.createElement(
     "div",
     {
       className: clsx8__default.default(
@@ -3319,7 +3319,7 @@ var Toast = () => {
         toastClassMap[toastType.current].includes("toast-top") && "pt-[calc(44px+env(safe-area-inset-top))]"
       )
     },
-    /* @__PURE__ */ React43__namespace.default.createElement(
+    /* @__PURE__ */ React42__namespace.default.createElement(
       "div",
       {
         className: clsx8__default.default(
@@ -3327,7 +3327,7 @@ var Toast = () => {
           alertClassMap[toastType.current]
         )
       },
-      /* @__PURE__ */ React43__namespace.default.createElement(
+      /* @__PURE__ */ React42__namespace.default.createElement(
         "span",
         {
           className: clsx8__default.default(
@@ -3336,69 +3336,11 @@ var Toast = () => {
             messageClass.current
           )
         },
-        toastMessage.split("\n").map((line, idx) => /* @__PURE__ */ React43__namespace.default.createElement(React43__namespace.default.Fragment, { key: idx }, line || /* @__PURE__ */ React43__namespace.default.createElement(React43__namespace.default.Fragment, null, "\xA0"), /* @__PURE__ */ React43__namespace.default.createElement("br", null)))
+        toastMessage.split("\n").map((line, idx) => /* @__PURE__ */ React42__namespace.default.createElement(React42__namespace.default.Fragment, { key: idx }, line || /* @__PURE__ */ React42__namespace.default.createElement(React42__namespace.default.Fragment, null, "\xA0"), /* @__PURE__ */ React42__namespace.default.createElement("br", null)))
       )
     )
   );
 };
-
-// src/utils/nav.ts
-init_environment();
-init_constants();
-var createMockRouter = () => {
-  return {
-    back: () => console.log("Mock router: back called"),
-    forward: () => console.log("Mock router: forward called"),
-    refresh: () => console.log("Mock router: refresh called"),
-    push: (url) => console.log(`Mock router: push called with url ${url}`),
-    replace: (url) => console.log(`Mock router: replace called with url ${url}`),
-    prefetch: (url) => console.log(`Mock router: prefetch called with url ${url}`)
-  };
-};
-var navigateToReader = (router, bookIds, queryParams, navOptions) => {
-  const ids = bookIds.join(BOOK_IDS_SEPARATOR);
-  if (isWebAppPlatform() && !isPWA()) {
-    router.push(`/reader/${ids}${queryParams ? `?${queryParams}` : ""}`, navOptions);
-  } else {
-    const params = new URLSearchParams(queryParams || "");
-    params.set("ids", ids);
-    router.push(`/reader?${params.toString()}`, navOptions);
-  }
-};
-var redirectToDirectReader = () => {
-  window.location.href = "/reader";
-  window.location.reload();
-};
-
-// src/context/RouterContext.tsx
-var AppRouterContext = React43.createContext(null);
-var PathnameContext = React43.createContext("/");
-var SearchParamsContext = React43.createContext(new URLSearchParams());
-function MockNextNavigation({ children }) {
-  const mockRouter = createMockRouter();
-  return /* @__PURE__ */ React43__namespace.default.createElement(AppRouterContext.Provider, { value: mockRouter }, /* @__PURE__ */ React43__namespace.default.createElement(PathnameContext.Provider, { value: "/" }, /* @__PURE__ */ React43__namespace.default.createElement(SearchParamsContext.Provider, { value: new URLSearchParams() }, children)));
-}
-function useRouter() {
-  const router = React43.useContext(AppRouterContext);
-  if (router === null) {
-    throw new Error("useRouter must be used within MockNextNavigation");
-  }
-  return router;
-}
-function usePathname() {
-  const pathname = React43.useContext(PathnameContext);
-  if (pathname === null) {
-    throw new Error("usePathname must be used within MockNextNavigation");
-  }
-  return pathname;
-}
-function useSearchParams() {
-  const searchParams = React43.useContext(SearchParamsContext);
-  if (searchParams === null) {
-    throw new Error("useSearchParams must be used within MockNextNavigation");
-  }
-  return searchParams;
-}
 var useBookDataStore = zustand.create((set, get) => ({
   booksData: {},
   getBookData: (keyOrId) => {
@@ -3795,21 +3737,29 @@ var handleToggleMaximize = () => {
 
 // src/app/reader/components/ReaderContent.tsx
 init_misc();
+
+// src/utils/nav.ts
+var navigateToReader = (_, bookIds, queryParams) => {
+  console.log(`Navigation to reader with ids: ${bookIds.join(",")} and params: ${"none"}`);
+};
+var redirectToDirectReader = () => {
+  window.location.reload();
+};
+
+// src/app/reader/components/ReaderContent.tsx
 init_constants();
 init_misc();
 var useBooksManager = () => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
   const { envConfig } = useEnv();
   const { bookKeys } = useReaderStore();
   const { setBookKeys, initViewState } = useReaderStore();
   const { sideBarBookKey, setSideBarBookKey } = useSidebarStore();
-  const [shouldUpdateSearchParams, setShouldUpdateSearchParams] = React43.useState(false);
-  React43.useEffect(() => {
+  const [shouldUpdateSearchParams, setShouldUpdateSearchParams] = React42.useState(false);
+  React42.useEffect(() => {
     if (shouldUpdateSearchParams) {
       const ids = bookKeys.map((key) => key.split("-")[0]);
       if (ids) {
-        navigateToReader(router, ids, searchParams?.toString() || "", { scroll: false });
+        navigateToReader(null, ids);
       }
       setShouldUpdateSearchParams(false);
     }
@@ -3898,8 +3848,8 @@ var loadShortcuts = () => {
 
 // src/hooks/useShortcuts.ts
 var useShortcuts = (actions, dependencies = []) => {
-  const [shortcuts, setShortcuts] = React43.useState(loadShortcuts);
-  React43.useEffect(() => {
+  const [shortcuts, setShortcuts] = React42.useState(loadShortcuts);
+  React42.useEffect(() => {
     const handleShortcutUpdate = () => {
       setShortcuts(loadShortcuts());
     };
@@ -3954,7 +3904,7 @@ var useShortcuts = (actions, dependencies = []) => {
       processKeyEvent(key.toLowerCase(), ctrlKey, altKey, metaKey, shiftKey);
     }
   };
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     window.addEventListener("keydown", unifiedHandleKeyDown);
     window.addEventListener("message", unifiedHandleKeyDown);
     return () => {
@@ -4131,7 +4081,7 @@ var useTranslation = (namespace = "translation") => {
 init_book();
 var Alert = ({ title, message, onCancel, onConfirm }) => {
   const _ = useTranslation();
-  return /* @__PURE__ */ React43__namespace.default.createElement("div", { className: clsx8__default.default("z-[100] flex justify-center px-4") }, /* @__PURE__ */ React43__namespace.default.createElement(
+  return /* @__PURE__ */ React42__namespace.default.createElement("div", { className: clsx8__default.default("z-[100] flex justify-center px-4") }, /* @__PURE__ */ React42__namespace.default.createElement(
     "div",
     {
       role: "alert",
@@ -4141,7 +4091,7 @@ var Alert = ({ title, message, onCancel, onConfirm }) => {
         "w-full max-w-[90vw] sm:max-w-[70vw] md:max-w-[50vw] lg:max-w-[40vw] xl:max-w-[40vw]"
       )
     },
-    /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "flex items-center space-x-2" }, /* @__PURE__ */ React43__namespace.default.createElement(
+    /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "flex items-center space-x-2" }, /* @__PURE__ */ React42__namespace.default.createElement(
       "svg",
       {
         xmlns: "http://www.w3.org/2000/svg",
@@ -4149,7 +4099,7 @@ var Alert = ({ title, message, onCancel, onConfirm }) => {
         viewBox: "0 0 24 24",
         className: "stroke-info h-6 w-6 shrink-0"
       },
-      /* @__PURE__ */ React43__namespace.default.createElement(
+      /* @__PURE__ */ React42__namespace.default.createElement(
         "path",
         {
           strokeLinecap: "round",
@@ -4158,15 +4108,15 @@ var Alert = ({ title, message, onCancel, onConfirm }) => {
           d: "M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
         }
       )
-    ), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "" }, /* @__PURE__ */ React43__namespace.default.createElement("h3", { className: "font-sm text-base" }, title), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "text-xs" }, message))),
-    /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "flex flex-wrap items-center justify-center gap-2" }, /* @__PURE__ */ React43__namespace.default.createElement("button", { className: "btn btn-sm", onClick: onCancel }, _("Cancel")), /* @__PURE__ */ React43__namespace.default.createElement("button", { className: "btn btn-sm btn-warning", onClick: onConfirm }, _("Confirm")))
+    ), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "" }, /* @__PURE__ */ React42__namespace.default.createElement("h3", { className: "font-sm text-base" }, title), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "text-xs" }, message))),
+    /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "flex flex-wrap items-center justify-center gap-2" }, /* @__PURE__ */ React42__namespace.default.createElement("button", { className: "btn btn-sm", onClick: onCancel }, _("Cancel")), /* @__PURE__ */ React42__namespace.default.createElement("button", { className: "btn btn-sm btn-warning", onClick: onConfirm }, _("Confirm")))
   ));
 };
 var Alert_default = Alert;
 var Spinner = ({ loading }) => {
   const _ = useTranslation();
   if (!loading) return null;
-  return /* @__PURE__ */ React43__namespace.default.createElement(
+  return /* @__PURE__ */ React42__namespace.default.createElement(
     "div",
     {
       className: clsx8__default.default(
@@ -4175,19 +4125,19 @@ var Spinner = ({ loading }) => {
       ),
       role: "status"
     },
-    /* @__PURE__ */ React43__namespace.default.createElement("span", { className: "loading loading-dots loading-lg" }),
-    /* @__PURE__ */ React43__namespace.default.createElement("span", { className: "hidden" }, _("Loading..."))
+    /* @__PURE__ */ React42__namespace.default.createElement("span", { className: "loading loading-dots loading-lg" }),
+    /* @__PURE__ */ React42__namespace.default.createElement("span", { className: "hidden" }, _("Loading..."))
   );
 };
 var Spinner_default = Spinner;
 var useDrag = (onDragMove, onDragEnd) => {
-  const isDragging = React43.useRef(false);
-  const startX = React43.useRef(0);
-  const startY = React43.useRef(0);
-  const lastX = React43.useRef(0);
-  const lastY = React43.useRef(0);
-  const startTime = React43.useRef(0);
-  const handleDragStart = React43.useCallback(
+  const isDragging = React42.useRef(false);
+  const startX = React42.useRef(0);
+  const startY = React42.useRef(0);
+  const lastX = React42.useRef(0);
+  const lastY = React42.useRef(0);
+  const startTime = React42.useRef(0);
+  const handleDragStart = React42.useCallback(
     (e) => {
       e.preventDefault();
       isDragging.current = true;
@@ -4304,8 +4254,8 @@ var Dialog = ({
   onClose
 }) => {
   const { appService } = useEnv();
-  const [isFullHeightInMobile, setIsFullHeightInMobile] = React43__namespace.default.useState(!snapHeight);
-  const [isRtl] = React43.useState(() => getDirFromUILanguage() === "rtl");
+  const [isFullHeightInMobile, setIsFullHeightInMobile] = React42__namespace.default.useState(!snapHeight);
+  const [isRtl] = React42.useState(() => getDirFromUILanguage() === "rtl");
   const iconSize22 = useResponsiveSize(22);
   const isMobile = window.innerWidth < 640;
   const handleKeyDown = (event) => {
@@ -4313,7 +4263,7 @@ var Dialog = ({
       onClose();
     }
   };
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
@@ -4374,7 +4324,7 @@ var Dialog = ({
     }
   };
   const { handleDragStart } = useDrag(handleDragMove, handleDragEnd);
-  return /* @__PURE__ */ React43__namespace.default.createElement(
+  return /* @__PURE__ */ React42__namespace.default.createElement(
     "dialog",
     {
       id: id ?? "dialog",
@@ -4385,14 +4335,14 @@ var Dialog = ({
       ),
       dir: isRtl ? "rtl" : void 0
     },
-    /* @__PURE__ */ React43__namespace.default.createElement(
+    /* @__PURE__ */ React42__namespace.default.createElement(
       "div",
       {
         className: clsx8__default.default("overlay fixed inset-0 z-10 bg-black/50 sm:bg-black/20", bgClassName),
         onClick: onClose
       }
     ),
-    /* @__PURE__ */ React43__namespace.default.createElement(
+    /* @__PURE__ */ React42__namespace.default.createElement(
       "div",
       {
         className: clsx8__default.default(
@@ -4407,31 +4357,31 @@ var Dialog = ({
           transform: `translateY(${(1 - snapHeight) * window.innerHeight}px)`
         } : {}
       },
-      window.innerWidth < 640 && /* @__PURE__ */ React43__namespace.default.createElement(
+      window.innerWidth < 640 && /* @__PURE__ */ React42__namespace.default.createElement(
         "div",
         {
           className: "drag-handle flex h-10 max-h-10 min-h-10 w-full cursor-row-resize items-center justify-center",
           onMouseDown: handleDragStart,
           onTouchStart: handleDragStart
         },
-        /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "bg-base-content/50 h-1 w-10 rounded-full" })
+        /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "bg-base-content/50 h-1 w-10 rounded-full" })
       ),
-      /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "dialog-header bg-base-100 sticky top-1 z-10 flex items-center justify-between px-4" }, header ? header : /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "flex h-11 w-full items-center justify-between" }, /* @__PURE__ */ React43__namespace.default.createElement(
+      /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "dialog-header bg-base-100 sticky top-1 z-10 flex items-center justify-between px-4" }, header ? header : /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "flex h-11 w-full items-center justify-between" }, /* @__PURE__ */ React42__namespace.default.createElement(
         "button",
         {
           tabIndex: -1,
           onClick: onClose,
           className: "btn btn-ghost btn-circle flex h-8 min-h-8 w-8 hover:bg-transparent focus:outline-none sm:hidden"
         },
-        isRtl ? /* @__PURE__ */ React43__namespace.default.createElement(md.MdArrowForwardIos, { size: iconSize22 }) : /* @__PURE__ */ React43__namespace.default.createElement(md.MdArrowBackIosNew, { size: iconSize22 })
-      ), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "z-15 pointer-events-none absolute inset-0 flex h-11 items-center justify-center" }, /* @__PURE__ */ React43__namespace.default.createElement("span", { className: "line-clamp-1 text-center font-bold" }, title ?? "")), /* @__PURE__ */ React43__namespace.default.createElement(
+        isRtl ? /* @__PURE__ */ React42__namespace.default.createElement(md.MdArrowForwardIos, { size: iconSize22 }) : /* @__PURE__ */ React42__namespace.default.createElement(md.MdArrowBackIosNew, { size: iconSize22 })
+      ), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "z-15 pointer-events-none absolute inset-0 flex h-11 items-center justify-center" }, /* @__PURE__ */ React42__namespace.default.createElement("span", { className: "line-clamp-1 text-center font-bold" }, title ?? "")), /* @__PURE__ */ React42__namespace.default.createElement(
         "button",
         {
           tabIndex: -1,
           onClick: onClose,
           className: "bg-base-300/65 btn btn-ghost btn-circle ml-auto hidden h-6 min-h-6 w-6 focus:outline-none sm:flex"
         },
-        /* @__PURE__ */ React43__namespace.default.createElement(
+        /* @__PURE__ */ React42__namespace.default.createElement(
           "svg",
           {
             xmlns: "http://www.w3.org/2000/svg",
@@ -4439,7 +4389,7 @@ var Dialog = ({
             height: "1em",
             viewBox: "0 0 24 24"
           },
-          /* @__PURE__ */ React43__namespace.default.createElement(
+          /* @__PURE__ */ React42__namespace.default.createElement(
             "path",
             {
               fill: "currentColor",
@@ -4448,7 +4398,7 @@ var Dialog = ({
           )
         )
       ))),
-      /* @__PURE__ */ React43__namespace.default.createElement(
+      /* @__PURE__ */ React42__namespace.default.createElement(
         "div",
         {
           className: clsx8__default.default(
@@ -4466,12 +4416,12 @@ var Dialog_default = Dialog;
 // src/components/BookDetailModal.tsx
 var BookDetailModal = ({ book, isOpen, onClose }) => {
   const _ = useTranslation();
-  const [loading, setLoading] = React43.useState(false);
-  const [showDeleteAlert, setShowDeleteAlert] = React43.useState(false);
-  const [bookMeta, setBookMeta] = React43.useState(null);
+  const [loading, setLoading] = React42.useState(false);
+  const [showDeleteAlert, setShowDeleteAlert] = React42.useState(false);
+  const [bookMeta, setBookMeta] = React42.useState(null);
   const { envConfig, appService } = useEnv();
   const { settings } = useSettingsStore();
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     const loadingTimeout = setTimeout(() => setLoading(true), 300);
     const fetchBookDetails = async () => {
       const appService2 = await envConfig.getAppService();
@@ -4504,8 +4454,8 @@ var BookDetailModal = ({ book, isOpen, onClose }) => {
     setShowDeleteAlert(false);
   };
   if (!bookMeta)
-    return loading && /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "fixed inset-0 z-50 flex items-center justify-center" }, /* @__PURE__ */ React43__namespace.default.createElement(Spinner_default, { loading: true }));
-  return /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "fixed inset-0 z-50 flex items-center justify-center" }, /* @__PURE__ */ React43__namespace.default.createElement(
+    return loading && /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "fixed inset-0 z-50 flex items-center justify-center" }, /* @__PURE__ */ React42__namespace.default.createElement(Spinner_default, { loading: true }));
+  return /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "fixed inset-0 z-50 flex items-center justify-center" }, /* @__PURE__ */ React42__namespace.default.createElement(
     Dialog_default,
     {
       title: _("Book Details"),
@@ -4515,7 +4465,7 @@ var BookDetailModal = ({ book, isOpen, onClose }) => {
       boxClassName: "sm:min-w-[480px] sm:h-auto",
       contentClassName: "!px-6 !py-2"
     },
-    /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "flex w-full select-text items-center justify-center" }, /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "relative w-full rounded-lg" }, /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "mb-10 flex h-40 items-start" }, /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "book-cover relative mr-10 aspect-[28/41] h-40 items-end shadow-lg" }, /* @__PURE__ */ React43__namespace.default.createElement(
+    /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "flex w-full select-text items-center justify-center" }, /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "relative w-full rounded-lg" }, /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "mb-10 flex h-40 items-start" }, /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "book-cover relative mr-10 aspect-[28/41] h-40 items-end shadow-lg" }, /* @__PURE__ */ React42__namespace.default.createElement(
       Image__default.default,
       {
         src: book.coverImageUrl,
@@ -4529,7 +4479,7 @@ var BookDetailModal = ({ book, isOpen, onClose }) => {
           );
         }
       }
-    ), /* @__PURE__ */ React43__namespace.default.createElement(
+    ), /* @__PURE__ */ React42__namespace.default.createElement(
       "div",
       {
         className: clsx8__default.default(
@@ -4538,22 +4488,22 @@ var BookDetailModal = ({ book, isOpen, onClose }) => {
         )
       },
       formatTitle(book.title)
-    )), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "title-author flex h-40 flex-col justify-between" }, /* @__PURE__ */ React43__namespace.default.createElement("div", null, /* @__PURE__ */ React43__namespace.default.createElement("p", { className: "text-base-content mb-2 line-clamp-2 break-all text-2xl font-bold" }, formatTitle(book.title) || _("Untitled")), /* @__PURE__ */ React43__namespace.default.createElement("p", { className: "text-neutral-content line-clamp-1" }, formatAuthors(book.author, bookMeta.language) || _("Unknown"))), window.innerWidth >= 400 && /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "flex flex-wrap items-center gap-x-4 gap-y-2 py-2" }, /* @__PURE__ */ React43__namespace.default.createElement(
+    )), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "title-author flex h-40 flex-col justify-between" }, /* @__PURE__ */ React42__namespace.default.createElement("div", null, /* @__PURE__ */ React42__namespace.default.createElement("p", { className: "text-base-content mb-2 line-clamp-2 break-all text-2xl font-bold" }, formatTitle(book.title) || _("Untitled")), /* @__PURE__ */ React42__namespace.default.createElement("p", { className: "text-neutral-content line-clamp-1" }, formatAuthors(book.author, bookMeta.language) || _("Unknown"))), window.innerWidth >= 400 && /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "flex flex-wrap items-center gap-x-4 gap-y-2 py-2" }, /* @__PURE__ */ React42__namespace.default.createElement(
       "button",
       {
         className: "btn rounded-xl bg-red-600 px-4 text-white hover:bg-red-700",
         onClick: handleDelete
       },
       _("Delete")
-    ), /* @__PURE__ */ React43__namespace.default.createElement("button", { className: "btn btn-disabled bg-primary/25 hover:bg-primary/85 rounded-xl px-4 text-white" }, _("More Info"))))), window.innerWidth < 400 && /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "flex flex-wrap items-center gap-x-4 gap-y-2 py-2" }, /* @__PURE__ */ React43__namespace.default.createElement(
+    ), /* @__PURE__ */ React42__namespace.default.createElement("button", { className: "btn btn-disabled bg-primary/25 hover:bg-primary/85 rounded-xl px-4 text-white" }, _("More Info"))))), window.innerWidth < 400 && /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "flex flex-wrap items-center gap-x-4 gap-y-2 py-2" }, /* @__PURE__ */ React42__namespace.default.createElement(
       "button",
       {
         className: "btn rounded bg-red-600 text-white hover:bg-red-700",
         onClick: handleDelete
       },
       _("Delete")
-    ), /* @__PURE__ */ React43__namespace.default.createElement("button", { className: "btn btn-disabled bg-primary/25 hover:bg-primary/85 rounded px-4 text-white" }, _("More Info"))), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "text-base-content my-4" }, /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "mb-4 grid grid-cols-2 gap-4 sm:grid-cols-3" }, /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "overflow-hidden" }, /* @__PURE__ */ React43__namespace.default.createElement("span", { className: "font-bold" }, _("Publisher:")), /* @__PURE__ */ React43__namespace.default.createElement("p", { className: "text-neutral-content line-clamp-1 text-sm" }, formatPublisher(bookMeta.publisher || "") || _("Unknown"))), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "overflow-hidden" }, /* @__PURE__ */ React43__namespace.default.createElement("span", { className: "font-bold" }, _("Published:")), /* @__PURE__ */ React43__namespace.default.createElement("p", { className: "text-neutral-content max-w-28 text-ellipsis text-sm" }, formatDate(bookMeta.published) || _("Unknown"))), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "overflow-hidden" }, /* @__PURE__ */ React43__namespace.default.createElement("span", { className: "font-bold" }, _("Updated:")), /* @__PURE__ */ React43__namespace.default.createElement("p", { className: "text-neutral-content text-sm" }, formatDate(book.lastUpdated) || "")), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "overflow-hidden" }, /* @__PURE__ */ React43__namespace.default.createElement("span", { className: "font-bold" }, _("Language:")), /* @__PURE__ */ React43__namespace.default.createElement("p", { className: "text-neutral-content text-sm" }, formatLanguage(bookMeta.language) || _("Unknown"))), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "overflow-hidden" }, /* @__PURE__ */ React43__namespace.default.createElement("span", { className: "font-bold" }, _("Identifier:")), /* @__PURE__ */ React43__namespace.default.createElement("p", { className: "text-neutral-content line-clamp-1 text-sm" }, bookMeta.identifier || "N/A")), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "overflow-hidden" }, /* @__PURE__ */ React43__namespace.default.createElement("span", { className: "font-bold" }, _("Subjects:")), /* @__PURE__ */ React43__namespace.default.createElement("p", { className: "text-neutral-content line-clamp-1 text-sm" }, formatSubject(bookMeta.subject) || _("Unknown")))))))
-  ), showDeleteAlert && /* @__PURE__ */ React43__namespace.default.createElement(
+    ), /* @__PURE__ */ React42__namespace.default.createElement("button", { className: "btn btn-disabled bg-primary/25 hover:bg-primary/85 rounded px-4 text-white" }, _("More Info"))), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "text-base-content my-4" }, /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "mb-4 grid grid-cols-2 gap-4 sm:grid-cols-3" }, /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "overflow-hidden" }, /* @__PURE__ */ React42__namespace.default.createElement("span", { className: "font-bold" }, _("Publisher:")), /* @__PURE__ */ React42__namespace.default.createElement("p", { className: "text-neutral-content line-clamp-1 text-sm" }, formatPublisher(bookMeta.publisher || "") || _("Unknown"))), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "overflow-hidden" }, /* @__PURE__ */ React42__namespace.default.createElement("span", { className: "font-bold" }, _("Published:")), /* @__PURE__ */ React42__namespace.default.createElement("p", { className: "text-neutral-content max-w-28 text-ellipsis text-sm" }, formatDate(bookMeta.published) || _("Unknown"))), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "overflow-hidden" }, /* @__PURE__ */ React42__namespace.default.createElement("span", { className: "font-bold" }, _("Updated:")), /* @__PURE__ */ React42__namespace.default.createElement("p", { className: "text-neutral-content text-sm" }, formatDate(book.lastUpdated) || "")), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "overflow-hidden" }, /* @__PURE__ */ React42__namespace.default.createElement("span", { className: "font-bold" }, _("Language:")), /* @__PURE__ */ React42__namespace.default.createElement("p", { className: "text-neutral-content text-sm" }, formatLanguage(bookMeta.language) || _("Unknown"))), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "overflow-hidden" }, /* @__PURE__ */ React42__namespace.default.createElement("span", { className: "font-bold" }, _("Identifier:")), /* @__PURE__ */ React42__namespace.default.createElement("p", { className: "text-neutral-content line-clamp-1 text-sm" }, bookMeta.identifier || "N/A")), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "overflow-hidden" }, /* @__PURE__ */ React42__namespace.default.createElement("span", { className: "font-bold" }, _("Subjects:")), /* @__PURE__ */ React42__namespace.default.createElement("p", { className: "text-neutral-content line-clamp-1 text-sm" }, formatSubject(bookMeta.subject) || _("Unknown")))))))
+  ), showDeleteAlert && /* @__PURE__ */ React42__namespace.default.createElement(
     "div",
     {
       className: clsx8__default.default(
@@ -4561,7 +4511,7 @@ var BookDetailModal = ({ book, isOpen, onClose }) => {
         "pb-[calc(env(safe-area-inset-bottom)+16px)]"
       )
     },
-    /* @__PURE__ */ React43__namespace.default.createElement(
+    /* @__PURE__ */ React42__namespace.default.createElement(
       Alert_default,
       {
         title: _("Confirm Deletion"),
@@ -4630,7 +4580,7 @@ var SidebarHeader = ({ isPinned, isSearchBarVisible, onGoToLibrary, onClose, onT
   const iconSize14 = useResponsiveSize(14);
   const iconSize18 = useResponsiveSize(18);
   const iconSize22 = useResponsiveSize(22);
-  return /* @__PURE__ */ React43__namespace.default.createElement(
+  return /* @__PURE__ */ React42__namespace.default.createElement(
     "div",
     {
       className: clsx8__default.default(
@@ -4639,23 +4589,23 @@ var SidebarHeader = ({ isPinned, isSearchBarVisible, onGoToLibrary, onClose, onT
       ),
       dir: "ltr"
     },
-    /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "flex items-center gap-x-8" }, /* @__PURE__ */ React43__namespace.default.createElement(
+    /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "flex items-center gap-x-8" }, /* @__PURE__ */ React42__namespace.default.createElement(
       "button",
       {
         onClick: onClose,
         className: "btn btn-ghost btn-circle flex h-6 min-h-6 w-6 hover:bg-transparent sm:hidden"
       },
-      /* @__PURE__ */ React43__namespace.default.createElement(md.MdArrowBackIosNew, { size: iconSize22 })
-    ), /* @__PURE__ */ React43__namespace.default.createElement(
+      /* @__PURE__ */ React42__namespace.default.createElement(md.MdArrowBackIosNew, { size: iconSize22 })
+    ), /* @__PURE__ */ React42__namespace.default.createElement(
       "button",
       {
         className: "btn btn-ghost hidden h-8 min-h-8 w-8 p-0 sm:flex",
         onClick: onGoToLibrary,
         title: "Reload Book"
       },
-      /* @__PURE__ */ React43__namespace.default.createElement(io5.IoReload, { className: "fill-base-content" })
+      /* @__PURE__ */ React42__namespace.default.createElement(io5.IoReload, { className: "fill-base-content" })
     )),
-    /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "flex min-w-24 max-w-32 items-center justify-between sm:size-[70%]" }, /* @__PURE__ */ React43__namespace.default.createElement(
+    /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "flex min-w-24 max-w-32 items-center justify-between sm:size-[70%]" }, /* @__PURE__ */ React42__namespace.default.createElement(
       "button",
       {
         onClick: onToggleSearchBar,
@@ -4664,8 +4614,8 @@ var SidebarHeader = ({ isPinned, isSearchBarVisible, onGoToLibrary, onClose, onT
           isSearchBarVisible ? "bg-base-300" : ""
         )
       },
-      /* @__PURE__ */ React43__namespace.default.createElement(fi.FiSearch, { size: iconSize18, className: "text-base-content" })
-    ), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "right-0 hidden h-8 w-8 items-center justify-center sm:flex" }, /* @__PURE__ */ React43__namespace.default.createElement(
+      /* @__PURE__ */ React42__namespace.default.createElement(fi.FiSearch, { size: iconSize18, className: "text-base-content" })
+    ), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "right-0 hidden h-8 w-8 items-center justify-center sm:flex" }, /* @__PURE__ */ React42__namespace.default.createElement(
       "button",
       {
         onClick: onTogglePin,
@@ -4674,14 +4624,14 @@ var SidebarHeader = ({ isPinned, isSearchBarVisible, onGoToLibrary, onClose, onT
           isPinned ? "bg-base-300" : "bg-base-300/65"
         )
       },
-      isPinned ? /* @__PURE__ */ React43__namespace.default.createElement(md.MdPushPin, { size: iconSize14 }) : /* @__PURE__ */ React43__namespace.default.createElement(md.MdOutlinePushPin, { size: iconSize14 })
+      isPinned ? /* @__PURE__ */ React42__namespace.default.createElement(md.MdPushPin, { size: iconSize14 }) : /* @__PURE__ */ React42__namespace.default.createElement(md.MdOutlinePushPin, { size: iconSize14 })
     )))
   );
 };
 var Header_default = SidebarHeader;
 init_misc();
 var createExpanderIcon = (isExpanded) => {
-  return /* @__PURE__ */ React43__namespace.default.createElement(
+  return /* @__PURE__ */ React42__namespace.default.createElement(
     "svg",
     {
       viewBox: "0 0 8 10",
@@ -4694,11 +4644,11 @@ var createExpanderIcon = (isExpanded) => {
       style: { transformOrigin: "center" },
       fill: "currentColor"
     },
-    /* @__PURE__ */ React43__namespace.default.createElement("polygon", { points: "0 0, 8 5, 0 10" })
+    /* @__PURE__ */ React42__namespace.default.createElement("polygon", { points: "0 0, 8 5, 0 10" })
   );
 };
 var TOCItemView = ({ bookKey, item, depth, expandedItems }) => {
-  const [isExpanded, setIsExpanded] = React43.useState(expandedItems.includes(item.href || ""));
+  const [isExpanded, setIsExpanded] = React42.useState(expandedItems.includes(item.href || ""));
   const { getView, getProgress } = useReaderStore();
   const progress = getProgress(bookKey);
   const handleToggleExpand = (event) => {
@@ -4714,10 +4664,10 @@ var TOCItemView = ({ bookKey, item, depth, expandedItems }) => {
     }
   };
   const isActive = progress ? progress.sectionHref === item.href : false;
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     setIsExpanded(expandedItems.includes(item.href || ""));
   }, [expandedItems, item.href]);
-  return /* @__PURE__ */ React43__namespace.default.createElement("li", { className: "w-full", style: { paddingTop: "1px" } }, /* @__PURE__ */ React43__namespace.default.createElement(
+  return /* @__PURE__ */ React42__namespace.default.createElement("li", { className: "w-full", style: { paddingTop: "1px" } }, /* @__PURE__ */ React42__namespace.default.createElement(
     "span",
     {
       role: "treeitem",
@@ -4729,8 +4679,8 @@ var TOCItemView = ({ bookKey, item, depth, expandedItems }) => {
       "data-href": item.href ? getContentMd5(item.href) : void 0,
       className: `flex w-full cursor-pointer items-center rounded-md py-2 ${isActive ? "bg-base-300/85 hover:bg-base-300" : "sm:hover:bg-base-300/85"}`
     },
-    item.subitems && /* @__PURE__ */ React43__namespace.default.createElement("span", { onClick: handleToggleExpand, className: "inline-block cursor-pointer" }, createExpanderIcon(isExpanded)),
-    /* @__PURE__ */ React43__namespace.default.createElement(
+    item.subitems && /* @__PURE__ */ React42__namespace.default.createElement("span", { onClick: handleToggleExpand, className: "inline-block cursor-pointer" }, createExpanderIcon(isExpanded)),
+    /* @__PURE__ */ React42__namespace.default.createElement(
       "span",
       {
         className: "ml-2 truncate text-ellipsis",
@@ -4742,7 +4692,7 @@ var TOCItemView = ({ bookKey, item, depth, expandedItems }) => {
       },
       item.label
     )
-  ), item.subitems && isExpanded && /* @__PURE__ */ React43__namespace.default.createElement("ol", { role: "group" }, item.subitems.map((subitem, index) => /* @__PURE__ */ React43__namespace.default.createElement(
+  ), item.subitems && isExpanded && /* @__PURE__ */ React42__namespace.default.createElement("ol", { role: "group" }, item.subitems.map((subitem, index) => /* @__PURE__ */ React42__namespace.default.createElement(
     TOCItemView,
     {
       bookKey,
@@ -4757,8 +4707,8 @@ var TOCView = ({ bookKey, toc }) => {
   const { getProgress } = useReaderStore();
   const { sideBarBookKey } = useSidebarStore();
   const progress = getProgress(bookKey);
-  const [expandedItems, setExpandedItems] = React43.useState([]);
-  const viewRef = React43.useRef(null);
+  const [expandedItems, setExpandedItems] = React42.useState([]);
+  const viewRef = React42.useRef(null);
   const expandParents = (toc2, href) => {
     const parentPath = findParentPath(toc2, href).map((item) => item.href);
     setExpandedItems(parentPath.filter(Boolean));
@@ -4779,7 +4729,7 @@ var TOCView = ({ bookKey, toc }) => {
       expandParents(toc, currentHref);
     }
   };
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     const observer = new MutationObserver(() => {
       const progress2 = getProgress(bookKey);
       if (progress2 && viewRef.current) {
@@ -4792,11 +4742,11 @@ var TOCView = ({ bookKey, toc }) => {
     }
     return () => observer.disconnect();
   }, [viewRef]);
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     if (!progress || eventDispatcher.dispatchSync("tts-is-speaking")) return;
     scrollToProgress(progress);
   }, [toc, progress, sideBarBookKey]);
-  return /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "rounded pt-2" }, /* @__PURE__ */ React43__namespace.default.createElement("ul", { role: "tree", ref: viewRef, className: "px-2" }, toc && toc.map((item, index) => /* @__PURE__ */ React43__namespace.default.createElement(
+  return /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "rounded pt-2" }, /* @__PURE__ */ React42__namespace.default.createElement("ul", { role: "tree", ref: viewRef, className: "px-2" }, toc && toc.map((item, index) => /* @__PURE__ */ React42__namespace.default.createElement(
     TOCItemView,
     {
       bookKey,
@@ -4809,9 +4759,9 @@ var TOCView = ({ bookKey, toc }) => {
 };
 var TOCView_default = TOCView;
 var useScrollToItem = (cfi, progress) => {
-  const viewRef = React43.useRef(null);
-  const [isCurrent, setIsCurrent] = React43.useState(false);
-  React43.useEffect(() => {
+  const viewRef = React42.useRef(null);
+  const [isCurrent, setIsCurrent] = React42.useState(false);
+  React42.useEffect(() => {
     if (!viewRef.current || !progress) return;
     const { location } = progress;
     const start = CFI4__namespace.collapse(location);
@@ -4872,7 +4822,7 @@ var BooknoteItem = ({ bookKey, item }) => {
     setNotebookVisible(true);
     setNotebookEditAnnotation(note2);
   };
-  return /* @__PURE__ */ React43__namespace.default.createElement(
+  return /* @__PURE__ */ React42__namespace.default.createElement(
     "li",
     {
       ref: viewRef,
@@ -4884,7 +4834,7 @@ var BooknoteItem = ({ bookKey, item }) => {
       tabIndex: 0,
       onClick: handleClickItem
     },
-    /* @__PURE__ */ React43__namespace.default.createElement(
+    /* @__PURE__ */ React42__namespace.default.createElement(
       "div",
       {
         className: clsx8__default.default("min-h-4 p-0 transition-all duration-300 ease-in-out"),
@@ -4893,8 +4843,8 @@ var BooknoteItem = ({ bookKey, item }) => {
           "--end-override": "0.3rem"
         }
       },
-      item.note && /* @__PURE__ */ React43__namespace.default.createElement("span", { className: "content font-size-sm font-normal", dir: "auto" }, item.note),
-      /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "flex items-start" }, item.note && /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "my-1 me-2 min-h-full self-stretch border-l-2 border-gray-300" }), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: clsx8__default.default("content font-size-sm line-clamp-3", item.note && "my-2") }, /* @__PURE__ */ React43__namespace.default.createElement(
+      item.note && /* @__PURE__ */ React42__namespace.default.createElement("span", { className: "content font-size-sm font-normal", dir: "auto" }, item.note),
+      /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "flex items-start" }, item.note && /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "my-1 me-2 min-h-full self-stretch border-l-2 border-gray-300" }), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: clsx8__default.default("content font-size-sm line-clamp-3", item.note && "my-2") }, /* @__PURE__ */ React42__namespace.default.createElement(
         "span",
         {
           className: clsx8__default.default(
@@ -4909,7 +4859,7 @@ var BooknoteItem = ({ bookKey, item }) => {
         text || ""
       )))
     ),
-    /* @__PURE__ */ React43__namespace.default.createElement(
+    /* @__PURE__ */ React42__namespace.default.createElement(
       "div",
       {
         className: clsx8__default.default(
@@ -4922,7 +4872,7 @@ var BooknoteItem = ({ bookKey, item }) => {
         },
         onClick: (e) => e.stopPropagation()
       },
-      /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "flex justify-end space-x-3 p-2", dir: "ltr" }, item.note && /* @__PURE__ */ React43__namespace.default.createElement(
+      /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "flex justify-end space-x-3 p-2", dir: "ltr" }, item.note && /* @__PURE__ */ React42__namespace.default.createElement(
         "button",
         {
           className: clsx8__default.default(
@@ -4931,7 +4881,7 @@ var BooknoteItem = ({ bookKey, item }) => {
           ),
           onClick: editNote.bind(null, item)
         },
-        /* @__PURE__ */ React43__namespace.default.createElement(
+        /* @__PURE__ */ React42__namespace.default.createElement(
           "div",
           {
             className: clsx8__default.default(
@@ -4944,7 +4894,7 @@ var BooknoteItem = ({ bookKey, item }) => {
           },
           _("Edit")
         )
-      ), /* @__PURE__ */ React43__namespace.default.createElement(
+      ), /* @__PURE__ */ React42__namespace.default.createElement(
         "button",
         {
           className: clsx8__default.default(
@@ -4953,7 +4903,7 @@ var BooknoteItem = ({ bookKey, item }) => {
           ),
           onClick: deleteNote.bind(null, item)
         },
-        /* @__PURE__ */ React43__namespace.default.createElement(
+        /* @__PURE__ */ React42__namespace.default.createElement(
           "div",
           {
             className: clsx8__default.default(
@@ -4997,19 +4947,19 @@ var BooknoteView = ({ type, bookKey, toc }) => {
   const sortedGroups = Object.values(booknoteGroups).sort((a, b) => {
     return a.id - b.id;
   });
-  return /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "rounded pt-2" }, /* @__PURE__ */ React43__namespace.default.createElement("ul", { role: "tree", className: "px-2" }, sortedGroups.map((group) => /* @__PURE__ */ React43__namespace.default.createElement("li", { key: group.href, className: "p-2" }, /* @__PURE__ */ React43__namespace.default.createElement("h3", { className: "content font-size-base line-clamp-1 font-normal" }, group.label), /* @__PURE__ */ React43__namespace.default.createElement("ul", null, group.booknotes.map((item, index) => /* @__PURE__ */ React43__namespace.default.createElement(BooknoteItem_default, { key: `${index}-${item.cfi}`, bookKey, item })))))));
+  return /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "rounded pt-2" }, /* @__PURE__ */ React42__namespace.default.createElement("ul", { role: "tree", className: "px-2" }, sortedGroups.map((group) => /* @__PURE__ */ React42__namespace.default.createElement("li", { key: group.href, className: "p-2" }, /* @__PURE__ */ React42__namespace.default.createElement("h3", { className: "content font-size-base line-clamp-1 font-normal" }, group.label), /* @__PURE__ */ React42__namespace.default.createElement("ul", null, group.booknotes.map((item, index) => /* @__PURE__ */ React42__namespace.default.createElement(BooknoteItem_default, { key: `${index}-${item.cfi}`, bookKey, item })))))));
 };
 var BooknoteView_default = BooknoteView;
 var TabNavigation = ({ activeTab, onTabChange }) => {
   const _ = useTranslation();
   const tabs = ["toc", "annotations", "bookmarks"];
-  return /* @__PURE__ */ React43__namespace.default.createElement(
+  return /* @__PURE__ */ React42__namespace.default.createElement(
     "div",
     {
       className: clsx8__default.default("bottom-tab border-base-300/50 bg-base-200 relative flex w-full border-t"),
       dir: "ltr"
     },
-    /* @__PURE__ */ React43__namespace.default.createElement(
+    /* @__PURE__ */ React42__namespace.default.createElement(
       "div",
       {
         className: clsx8__default.default(
@@ -5021,14 +4971,14 @@ var TabNavigation = ({ activeTab, onTabChange }) => {
         )
       }
     ),
-    tabs.map((tab) => /* @__PURE__ */ React43__namespace.default.createElement(
+    tabs.map((tab) => /* @__PURE__ */ React42__namespace.default.createElement(
       "div",
       {
         key: tab,
         className: "lg:tooltip lg:tooltip-top z-50 m-1.5 flex-1 cursor-pointer rounded-md p-2",
         "data-tip": tab === "toc" ? _("TOC") : tab === "annotations" ? _("Annotate") : _("Bookmark")
       },
-      /* @__PURE__ */ React43__namespace.default.createElement("div", { className: clsx8__default.default("flex h-6 items-center"), onClick: () => onTabChange(tab) }, tab === "toc" ? /* @__PURE__ */ React43__namespace.default.createElement(io.IoIosList, { className: "mx-auto" }) : tab === "annotations" ? /* @__PURE__ */ React43__namespace.default.createElement(pi.PiNotePencil, { className: "mx-auto" }) : /* @__PURE__ */ React43__namespace.default.createElement(md.MdBookmarkBorder, { className: "mx-auto" }))
+      /* @__PURE__ */ React42__namespace.default.createElement("div", { className: clsx8__default.default("flex h-6 items-center"), onClick: () => onTabChange(tab) }, tab === "toc" ? /* @__PURE__ */ React42__namespace.default.createElement(io.IoIosList, { className: "mx-auto" }) : tab === "annotations" ? /* @__PURE__ */ React42__namespace.default.createElement(pi.PiNotePencil, { className: "mx-auto" }) : /* @__PURE__ */ React42__namespace.default.createElement(md.MdBookmarkBorder, { className: "mx-auto" }))
     ))
   );
 };
@@ -5037,13 +4987,13 @@ var TabNavigation_default = TabNavigation;
 // src/app/reader/components/sidebar/Content.tsx
 var SidebarContent = ({ bookDoc, sideBarBookKey }) => {
   const { appService } = useEnv();
-  const scrollContainerRef = React43.useRef(null);
+  const scrollContainerRef = React42.useRef(null);
   const { getConfig, setConfig } = useBookDataStore();
   const config = getConfig(sideBarBookKey);
-  const [activeTab, setActiveTab] = React43.useState(config?.viewSettings?.sideBarTab || "toc");
-  const [fade, setFade] = React43.useState(false);
-  const [targetTab, setTargetTab] = React43.useState(activeTab);
-  React43.useEffect(() => {
+  const [activeTab, setActiveTab] = React42.useState(config?.viewSettings?.sideBarTab || "toc");
+  const [fade, setFade] = React42.useState(false);
+  const [targetTab, setTargetTab] = React42.useState(activeTab);
+  React42.useEffect(() => {
     const container = scrollContainerRef.current;
     if (!container) return;
     let scrollTimeout;
@@ -5065,7 +5015,7 @@ var SidebarContent = ({ bookDoc, sideBarBookKey }) => {
       clearTimeout(scrollTimeout);
     };
   }, []);
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     if (!sideBarBookKey) return;
     const config2 = getConfig(sideBarBookKey);
     setActiveTab(config2.viewSettings.sideBarTab);
@@ -5082,7 +5032,7 @@ var SidebarContent = ({ bookDoc, sideBarBookKey }) => {
     const config2 = getConfig(sideBarBookKey);
     config2.viewSettings.sideBarTab = tab;
   };
-  return /* @__PURE__ */ React43__namespace.default.createElement(React43__namespace.default.Fragment, null, /* @__PURE__ */ React43__namespace.default.createElement(
+  return /* @__PURE__ */ React42__namespace.default.createElement(React42__namespace.default.Fragment, null, /* @__PURE__ */ React42__namespace.default.createElement(
     "div",
     {
       className: clsx8__default.default(
@@ -5090,7 +5040,7 @@ var SidebarContent = ({ bookDoc, sideBarBookKey }) => {
         "font-sans text-base font-normal sm:text-sm"
       )
     },
-    /* @__PURE__ */ React43__namespace.default.createElement(
+    /* @__PURE__ */ React42__namespace.default.createElement(
       "div",
       {
         ref: scrollContainerRef,
@@ -5099,11 +5049,11 @@ var SidebarContent = ({ bookDoc, sideBarBookKey }) => {
           { "opacity-0": fade, "opacity-100": !fade }
         )
       },
-      targetTab === "toc" && bookDoc.toc && /* @__PURE__ */ React43__namespace.default.createElement(TOCView_default, { toc: bookDoc.toc, bookKey: sideBarBookKey }),
-      targetTab === "annotations" && /* @__PURE__ */ React43__namespace.default.createElement(BooknoteView_default, { type: "annotation", toc: bookDoc.toc ?? [], bookKey: sideBarBookKey }),
-      targetTab === "bookmarks" && /* @__PURE__ */ React43__namespace.default.createElement(BooknoteView_default, { type: "bookmark", toc: bookDoc.toc ?? [], bookKey: sideBarBookKey })
+      targetTab === "toc" && bookDoc.toc && /* @__PURE__ */ React42__namespace.default.createElement(TOCView_default, { toc: bookDoc.toc, bookKey: sideBarBookKey }),
+      targetTab === "annotations" && /* @__PURE__ */ React42__namespace.default.createElement(BooknoteView_default, { type: "annotation", toc: bookDoc.toc ?? [], bookKey: sideBarBookKey }),
+      targetTab === "bookmarks" && /* @__PURE__ */ React42__namespace.default.createElement(BooknoteView_default, { type: "bookmark", toc: bookDoc.toc ?? [], bookKey: sideBarBookKey })
     )
-  ), /* @__PURE__ */ React43__namespace.default.createElement(
+  ), /* @__PURE__ */ React42__namespace.default.createElement(
     "div",
     {
       className: clsx8__default.default(
@@ -5111,7 +5061,7 @@ var SidebarContent = ({ bookDoc, sideBarBookKey }) => {
         appService?.hasSafeAreaInset && "pb-[calc(env(safe-area-inset-bottom)/2)]"
       )
     },
-    /* @__PURE__ */ React43__namespace.default.createElement(TabNavigation_default, { activeTab, onTabChange: handleTabChange })
+    /* @__PURE__ */ React42__namespace.default.createElement(TabNavigation_default, { activeTab, onTabChange: handleTabChange })
   ));
 };
 var Content_default = SidebarContent;
@@ -5124,7 +5074,7 @@ var BookCard = ({ book }) => {
   const showBookDetails = () => {
     eventDispatcher.dispatchSync("show-book-details", book);
   };
-  return /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "flex h-20 w-full items-center" }, /* @__PURE__ */ React43__namespace.default.createElement(
+  return /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "flex h-20 w-full items-center" }, /* @__PURE__ */ React42__namespace.default.createElement(
     Image__default.default,
     {
       src: coverImageUrl,
@@ -5139,13 +5089,13 @@ var BookCard = ({ book }) => {
         e.target.style.display = "none";
       }
     }
-  ), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "min-w-0 flex-1" }, /* @__PURE__ */ React43__namespace.default.createElement("h4", { className: "line-clamp-2 w-[90%] text-sm font-semibold" }, formatTitle(title)), /* @__PURE__ */ React43__namespace.default.createElement("p", { className: "truncate text-xs opacity-75" }, formatAuthors(author))), /* @__PURE__ */ React43__namespace.default.createElement(
+  ), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "min-w-0 flex-1" }, /* @__PURE__ */ React42__namespace.default.createElement("h4", { className: "line-clamp-2 w-[90%] text-sm font-semibold" }, formatTitle(title)), /* @__PURE__ */ React42__namespace.default.createElement("p", { className: "truncate text-xs opacity-75" }, formatAuthors(author))), /* @__PURE__ */ React42__namespace.default.createElement(
     "button",
     {
       className: "btn btn-ghost hover:bg-base-300 h-6 min-h-6 w-6 rounded-full p-0 transition-colors",
       "aria-label": _("More Info")
     },
-    /* @__PURE__ */ React43__namespace.default.createElement(md.MdInfoOutline, { size: iconSize18, className: "fill-base-content", onClick: showBookDetails })
+    /* @__PURE__ */ React42__namespace.default.createElement(md.MdInfoOutline, { size: iconSize18, className: "fill-base-content", onClick: showBookDetails })
   ));
 };
 var BookCard_default = BookCard;
@@ -5161,7 +5111,7 @@ var useSidebar = (initialWidth, isPinned) => {
     toggleSideBar,
     toggleSideBarPin
   } = useSidebarStore();
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     setSideBarWidth(initialWidth);
     setSideBarPin(isPinned);
     setSideBarVisible(isPinned);
@@ -5194,7 +5144,7 @@ var Dropdown = ({
   children,
   onToggle
 }) => {
-  const [isOpen, setIsOpen] = React43.useState(false);
+  const [isOpen, setIsOpen] = React42.useState(false);
   const toggleDropdown = () => {
     const newIsOpen = !isOpen;
     setIsOpen(newIsOpen);
@@ -5204,8 +5154,8 @@ var Dropdown = ({
     setIsOpen(isOpen2);
     onToggle?.(isOpen2);
   };
-  const childrenWithToggle = React43.isValidElement(children) ? React43__namespace.default.cloneElement(children, { setIsDropdownOpen, menuClassName }) : children;
-  return /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "dropdown-container" }, isOpen && /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "fixed inset-0 bg-transparent", onClick: () => setIsDropdownOpen(false) }), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: clsx8__default.default("dropdown", className) }, /* @__PURE__ */ React43__namespace.default.createElement(
+  const childrenWithToggle = React42.isValidElement(children) ? React42__namespace.default.cloneElement(children, { setIsDropdownOpen, menuClassName }) : children;
+  return /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "dropdown-container" }, isOpen && /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "fixed inset-0 bg-transparent", onClick: () => setIsDropdownOpen(false) }), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: clsx8__default.default("dropdown", className) }, /* @__PURE__ */ React42__namespace.default.createElement(
     "div",
     {
       tabIndex: -1,
@@ -5216,13 +5166,13 @@ var Dropdown = ({
   ), isOpen && childrenWithToggle));
 };
 var Dropdown_default = Dropdown;
-var Option = ({ label, isActive, onClick }) => /* @__PURE__ */ React43__namespace.default.createElement(
+var Option = ({ label, isActive, onClick }) => /* @__PURE__ */ React42__namespace.default.createElement(
   "button",
   {
     className: "hover:bg-base-300 flex w-full items-center justify-between rounded-md p-2",
     onClick
   },
-  /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "flex items-center" }, /* @__PURE__ */ React43__namespace.default.createElement("span", { style: { minWidth: `${useDefaultIconSize()}px` } }, isActive && /* @__PURE__ */ React43__namespace.default.createElement(md.MdCheck, { className: "text-base-content" })), /* @__PURE__ */ React43__namespace.default.createElement("span", { className: "ml-2" }, label))
+  /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "flex items-center" }, /* @__PURE__ */ React42__namespace.default.createElement("span", { style: { minWidth: `${useDefaultIconSize()}px` } }, isActive && /* @__PURE__ */ React42__namespace.default.createElement(md.MdCheck, { className: "text-base-content" })), /* @__PURE__ */ React42__namespace.default.createElement("span", { className: "ml-2" }, label))
 );
 var SearchOptions = ({
   searchConfig,
@@ -5235,7 +5185,7 @@ var SearchOptions = ({
     onSearchConfigChanged({ ...searchConfig, [key]: value });
     setIsDropdownOpen?.(false);
   };
-  return /* @__PURE__ */ React43__namespace.default.createElement(
+  return /* @__PURE__ */ React42__namespace.default.createElement(
     "div",
     {
       tabIndex: 0,
@@ -5244,7 +5194,7 @@ var SearchOptions = ({
         menuClassName
       )
     },
-    /* @__PURE__ */ React43__namespace.default.createElement(
+    /* @__PURE__ */ React42__namespace.default.createElement(
       Option,
       {
         label: _("Book"),
@@ -5252,7 +5202,7 @@ var SearchOptions = ({
         onClick: () => updateConfig("scope", "book")
       }
     ),
-    /* @__PURE__ */ React43__namespace.default.createElement(
+    /* @__PURE__ */ React42__namespace.default.createElement(
       Option,
       {
         label: _("Chapter"),
@@ -5260,8 +5210,8 @@ var SearchOptions = ({
         onClick: () => updateConfig("scope", "section")
       }
     ),
-    /* @__PURE__ */ React43__namespace.default.createElement("hr", { className: "border-base-200 my-1" }),
-    /* @__PURE__ */ React43__namespace.default.createElement(
+    /* @__PURE__ */ React42__namespace.default.createElement("hr", { className: "border-base-200 my-1" }),
+    /* @__PURE__ */ React42__namespace.default.createElement(
       Option,
       {
         label: _("Match Case"),
@@ -5269,7 +5219,7 @@ var SearchOptions = ({
         onClick: () => updateConfig("matchCase", !searchConfig.matchCase)
       }
     ),
-    /* @__PURE__ */ React43__namespace.default.createElement(
+    /* @__PURE__ */ React42__namespace.default.createElement(
       Option,
       {
         label: _("Match Whole Words"),
@@ -5277,7 +5227,7 @@ var SearchOptions = ({
         onClick: () => updateConfig("matchWholeWords", !searchConfig.matchWholeWords)
       }
     ),
-    /* @__PURE__ */ React43__namespace.default.createElement(
+    /* @__PURE__ */ React42__namespace.default.createElement(
       Option,
       {
         label: _("Match Diacritics"),
@@ -5303,30 +5253,30 @@ var SearchBar = ({
   const { settings } = useSettingsStore();
   const { getConfig, saveConfig } = useBookDataStore();
   const { getView, getProgress } = useReaderStore();
-  const [searchTerm, setSearchTerm] = React43.useState(term);
-  const inputRef = React43.useRef(null);
+  const [searchTerm, setSearchTerm] = React42.useState(term);
+  const inputRef = React42.useRef(null);
   const view = getView(bookKey);
   const config = getConfig(bookKey);
   const progress = getProgress(bookKey);
   const searchConfig = config.searchConfig;
-  const queuedSearchTerm = React43.useRef("");
-  const isSearchPending = React43.useRef(false);
-  const searchTimeout = React43.useRef(null);
+  const queuedSearchTerm = React42.useRef("");
+  const isSearchPending = React42.useRef(false);
+  const searchTimeout = React42.useRef(null);
   const iconSize12 = useResponsiveSize(12);
   const iconSize16 = useResponsiveSize(16);
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     handleSearchTermChange(searchTerm);
   }, [bookKey]);
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     setSearchTerm(term);
     handleSearchTermChange(term);
   }, [term]);
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     if (isVisible && inputRef.current) {
       inputRef.current.focus();
     }
   }, [isVisible]);
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === "Escape" && inputRef.current) {
         inputRef.current.blur();
@@ -5400,7 +5350,7 @@ var SearchBar = ({
     onSearchResultChange([]);
     view?.clearSearch();
   };
-  return /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "relative p-2" }, /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "bg-base-100 flex h-8 items-center rounded-lg" }, /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "pl-3" }, /* @__PURE__ */ React43__namespace.default.createElement(fa.FaSearch, { size: iconSize16, className: "text-gray-500" })), /* @__PURE__ */ React43__namespace.default.createElement(
+  return /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "relative p-2" }, /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "bg-base-100 flex h-8 items-center rounded-lg" }, /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "pl-3" }, /* @__PURE__ */ React42__namespace.default.createElement(fa.FaSearch, { size: iconSize16, className: "text-gray-500" })), /* @__PURE__ */ React42__namespace.default.createElement(
     "input",
     {
       ref: inputRef,
@@ -5411,7 +5361,7 @@ var SearchBar = ({
       placeholder: _("Search..."),
       className: "w-full bg-transparent p-2 font-sans text-sm font-light focus:outline-none"
     }
-  ), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "bg-base-300 flex h-8 w-8 items-center rounded-r-lg" }, /* @__PURE__ */ React43__namespace.default.createElement(
+  ), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "bg-base-300 flex h-8 w-8 items-center rounded-r-lg" }, /* @__PURE__ */ React42__namespace.default.createElement(
     Dropdown_default,
     {
       className: clsx8__default.default(
@@ -5420,9 +5370,9 @@ var SearchBar = ({
       ),
       menuClassName: window.innerWidth < 640 ? "no-triangle mt-1" : "dropdown-center mt-3",
       buttonClassName: "btn btn-ghost h-8 min-h-8 w-8 p-0 rounded-none rounded-r-lg",
-      toggleButton: /* @__PURE__ */ React43__namespace.default.createElement(fa.FaChevronDown, { size: iconSize12, className: "text-gray-500" })
+      toggleButton: /* @__PURE__ */ React42__namespace.default.createElement(fa.FaChevronDown, { size: iconSize12, className: "text-gray-500" })
     },
-    /* @__PURE__ */ React43__namespace.default.createElement(
+    /* @__PURE__ */ React42__namespace.default.createElement(
       SearchOptions_default,
       {
         searchConfig,
@@ -5441,7 +5391,7 @@ var SearchResultItem = ({
   const { getProgress } = useReaderStore();
   const progress = getProgress(bookKey);
   const { isCurrent, viewRef } = useScrollToItem_default(cfi, progress);
-  return /* @__PURE__ */ React43__namespace.default.createElement(
+  return /* @__PURE__ */ React42__namespace.default.createElement(
     "li",
     {
       ref: viewRef,
@@ -5451,13 +5401,13 @@ var SearchResultItem = ({
       ),
       onClick: () => onSelectResult(cfi)
     },
-    /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "line-clamp-3" }, /* @__PURE__ */ React43__namespace.default.createElement("span", { className: "" }, excerpt.pre), /* @__PURE__ */ React43__namespace.default.createElement("span", { className: "font-semibold" }, excerpt.match), /* @__PURE__ */ React43__namespace.default.createElement("span", { className: "" }, excerpt.post))
+    /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "line-clamp-3" }, /* @__PURE__ */ React42__namespace.default.createElement("span", { className: "" }, excerpt.pre), /* @__PURE__ */ React42__namespace.default.createElement("span", { className: "font-semibold" }, excerpt.match), /* @__PURE__ */ React42__namespace.default.createElement("span", { className: "" }, excerpt.post))
   );
 };
 var SearchResults = ({ bookKey, results, onSelectResult }) => {
-  return /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "search-results overflow-y-auto p-2 font-sans text-sm font-light" }, /* @__PURE__ */ React43__namespace.default.createElement("ul", { className: "px-2" }, results.map((result, index) => {
+  return /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "search-results overflow-y-auto p-2 font-sans text-sm font-light" }, /* @__PURE__ */ React42__namespace.default.createElement("ul", { className: "px-2" }, results.map((result, index) => {
     if ("subitems" in result) {
-      return /* @__PURE__ */ React43__namespace.default.createElement("ul", { key: `${index}-${result.label}` }, /* @__PURE__ */ React43__namespace.default.createElement("h3", { className: "line-clamp-1 font-normal" }, result.label), /* @__PURE__ */ React43__namespace.default.createElement("ul", null, result.subitems.map((item, index2) => /* @__PURE__ */ React43__namespace.default.createElement(
+      return /* @__PURE__ */ React42__namespace.default.createElement("ul", { key: `${index}-${result.label}` }, /* @__PURE__ */ React42__namespace.default.createElement("h3", { className: "line-clamp-1 font-normal" }, result.label), /* @__PURE__ */ React42__namespace.default.createElement("ul", null, result.subitems.map((item, index2) => /* @__PURE__ */ React42__namespace.default.createElement(
         SearchResultItem,
         {
           key: `${index2}-${item.cfi}`,
@@ -5468,7 +5418,7 @@ var SearchResults = ({ bookKey, results, onSelectResult }) => {
         }
       ))));
     } else {
-      return /* @__PURE__ */ React43__namespace.default.createElement(
+      return /* @__PURE__ */ React42__namespace.default.createElement(
         SearchResultItem,
         {
           key: `${index}-${result.cfi}`,
@@ -5494,9 +5444,9 @@ var SideBar = ({ onGoToLibrary }) => {
   const { sideBarBookKey } = useSidebarStore();
   const { getBookData } = useBookDataStore();
   const { getView, getViewSettings } = useReaderStore();
-  const [isSearchBarVisible, setIsSearchBarVisible] = React43.useState(false);
-  const [searchResults, setSearchResults] = React43.useState(null);
-  const [searchTerm, setSearchTerm] = React43.useState("");
+  const [isSearchBarVisible, setIsSearchBarVisible] = React42.useState(false);
+  const [searchResults, setSearchResults] = React42.useState(null);
+  const [searchTerm, setSearchTerm] = React42.useState("");
   const isMobile = window.innerWidth < 640;
   const {
     sideBarWidth,
@@ -5522,14 +5472,14 @@ var SideBar = ({ onGoToLibrary }) => {
       setSideBarVisible(false);
     }
   };
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     if (isSideBarVisible) {
       updateAppTheme("base-200");
     } else {
       updateAppTheme("base-100");
     }
   }, [isSideBarVisible]);
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     eventDispatcher.on("search", onSearchEvent);
     eventDispatcher.on("navigate", onNavigateEvent);
     return () => {
@@ -5606,7 +5556,7 @@ var SideBar = ({ onGoToLibrary }) => {
   }
   const { book, bookDoc } = bookData;
   const languageDir = getBookDirFromLanguage(bookDoc.metadata.language);
-  return isSideBarVisible ? /* @__PURE__ */ React43__namespace.default.createElement(React43__namespace.default.Fragment, null, /* @__PURE__ */ React43__namespace.default.createElement(
+  return isSideBarVisible ? /* @__PURE__ */ React42__namespace.default.createElement(React42__namespace.default.Fragment, null, /* @__PURE__ */ React42__namespace.default.createElement(
     "div",
     {
       className: clsx8__default.default(
@@ -5623,7 +5573,7 @@ var SideBar = ({ onGoToLibrary }) => {
         position: isSideBarPinned ? "relative" : "absolute"
       }
     },
-    /* @__PURE__ */ React43__namespace.default.createElement("style", { jsx: true }, `
+    /* @__PURE__ */ React42__namespace.default.createElement("style", { jsx: true }, `
           @media (max-width: 640px) {
             .sidebar-container {
               width: 100%;
@@ -5639,15 +5589,15 @@ var SideBar = ({ onGoToLibrary }) => {
             }
           }
         `),
-    /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "flex-shrink-0" }, isMobile && /* @__PURE__ */ React43__namespace.default.createElement(
+    /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "flex-shrink-0" }, isMobile && /* @__PURE__ */ React42__namespace.default.createElement(
       "div",
       {
         className: "drag-handle flex h-10 w-full cursor-row-resize items-center justify-center",
         onMouseDown: handleVerticalDragStart,
         onTouchStart: handleVerticalDragStart
       },
-      /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "bg-base-content/50 h-1 w-10 rounded-full" })
-    ), /* @__PURE__ */ React43__namespace.default.createElement(
+      /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "bg-base-content/50 h-1 w-10 rounded-full" })
+    ), /* @__PURE__ */ React42__namespace.default.createElement(
       Header_default,
       {
         isPinned: isSideBarPinned,
@@ -5657,14 +5607,14 @@ var SideBar = ({ onGoToLibrary }) => {
         onTogglePin: handleSideBarTogglePin,
         onToggleSearchBar: handleToggleSearchBar
       }
-    ), /* @__PURE__ */ React43__namespace.default.createElement(
+    ), /* @__PURE__ */ React42__namespace.default.createElement(
       "div",
       {
         className: clsx8__default.default("search-bar", {
           "search-bar-visible": isSearchBarVisible
         })
       },
-      /* @__PURE__ */ React43__namespace.default.createElement(
+      /* @__PURE__ */ React42__namespace.default.createElement(
         SearchBar_default,
         {
           isVisible: isSearchBarVisible,
@@ -5673,23 +5623,23 @@ var SideBar = ({ onGoToLibrary }) => {
           onSearchResultChange: setSearchResults
         }
       )
-    ), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "border-base-300/50 border-b px-3" }, /* @__PURE__ */ React43__namespace.default.createElement(BookCard_default, { book }))),
-    isSearchBarVisible && searchResults ? /* @__PURE__ */ React43__namespace.default.createElement(
+    ), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "border-base-300/50 border-b px-3" }, /* @__PURE__ */ React42__namespace.default.createElement(BookCard_default, { book }))),
+    isSearchBarVisible && searchResults ? /* @__PURE__ */ React42__namespace.default.createElement(
       SearchResults_default,
       {
         bookKey: sideBarBookKey,
         results: searchResults,
         onSelectResult: handleSearchResultClick
       }
-    ) : /* @__PURE__ */ React43__namespace.default.createElement(Content_default, { bookDoc, sideBarBookKey }),
-    /* @__PURE__ */ React43__namespace.default.createElement(
+    ) : /* @__PURE__ */ React42__namespace.default.createElement(Content_default, { bookDoc, sideBarBookKey }),
+    /* @__PURE__ */ React42__namespace.default.createElement(
       "div",
       {
         className: "drag-bar absolute right-0 top-0 h-full w-0.5 cursor-col-resize",
         onMouseDown: handleHorizontalDragStart
       }
     )
-  ), !isSideBarPinned && /* @__PURE__ */ React43__namespace.default.createElement(
+  ), !isSideBarPinned && /* @__PURE__ */ React42__namespace.default.createElement(
     "div",
     {
       className: "overlay fixed inset-0 z-10 bg-black/50 sm:bg-black/20",
@@ -5703,7 +5653,7 @@ init_book();
 var NotebookHeader = ({ isPinned, handleClose: handleClose2, handleTogglePin }) => {
   const _ = useTranslation();
   const iconSize14 = useResponsiveSize(14);
-  return /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "notebook-header relative flex h-11 items-center px-3", dir: "ltr" }, /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "absolute inset-0 flex items-center justify-center space-x-2" }, /* @__PURE__ */ React43__namespace.default.createElement(lu.LuNotebookPen, null), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "notebook-title hidden text-sm font-medium sm:flex" }, _("Notebook"))), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "z-10 flex items-center gap-x-4" }, /* @__PURE__ */ React43__namespace.default.createElement(
+  return /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "notebook-header relative flex h-11 items-center px-3", dir: "ltr" }, /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "absolute inset-0 flex items-center justify-center space-x-2" }, /* @__PURE__ */ React42__namespace.default.createElement(lu.LuNotebookPen, null), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "notebook-title hidden text-sm font-medium sm:flex" }, _("Notebook"))), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "z-10 flex items-center gap-x-4" }, /* @__PURE__ */ React42__namespace.default.createElement(
     "button",
     {
       onClick: handleTogglePin,
@@ -5712,15 +5662,15 @@ var NotebookHeader = ({ isPinned, handleClose: handleClose2, handleTogglePin }) 
         isPinned ? "bg-base-300" : "bg-base-300/65"
       )
     },
-    isPinned ? /* @__PURE__ */ React43__namespace.default.createElement(md.MdPushPin, { size: iconSize14 }) : /* @__PURE__ */ React43__namespace.default.createElement(md.MdOutlinePushPin, { size: iconSize14 })
-  ), /* @__PURE__ */ React43__namespace.default.createElement(
+    isPinned ? /* @__PURE__ */ React42__namespace.default.createElement(md.MdPushPin, { size: iconSize14 }) : /* @__PURE__ */ React42__namespace.default.createElement(md.MdOutlinePushPin, { size: iconSize14 })
+  ), /* @__PURE__ */ React42__namespace.default.createElement(
     "button",
     {
       onClick: handleClose2,
       className: "btn btn-ghost btn-circle flex h-6 min-h-6 w-6 hover:bg-transparent sm:hidden"
     },
-    /* @__PURE__ */ React43__namespace.default.createElement(md.MdArrowBackIosNew, null)
-  ), /* @__PURE__ */ React43__namespace.default.createElement("button", { className: "btn btn-ghost left-0 h-8 min-h-8 w-8 p-0" }, /* @__PURE__ */ React43__namespace.default.createElement(fi.FiSearch, null))));
+    /* @__PURE__ */ React42__namespace.default.createElement(md.MdArrowBackIosNew, null)
+  ), /* @__PURE__ */ React42__namespace.default.createElement("button", { className: "btn btn-ghost left-0 h-8 min-h-8 w-8 p-0" }, /* @__PURE__ */ React42__namespace.default.createElement(fi.FiSearch, null))));
 };
 var Header_default2 = NotebookHeader;
 init_md5();
@@ -5734,14 +5684,14 @@ var NoteEditor = ({ onSave, onEdit }) => {
     saveNotebookAnnotationDraft,
     getNotebookAnnotationDraft
   } = useNotebookStore();
-  const editorRef = React43.useRef(null);
-  const [note, setNote] = React43__namespace.default.useState("");
-  React43.useEffect(() => {
+  const editorRef = React42.useRef(null);
+  const [note, setNote] = React42__namespace.default.useState("");
+  React42.useEffect(() => {
     if (editorRef.current) {
       editorRef.current.focus();
     }
   }, [editorRef]);
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     if (notebookEditAnnotation) {
       setNote(notebookEditAnnotation.note);
       if (editorRef.current) {
@@ -5806,7 +5756,7 @@ var NoteEditor = ({ onSave, onEdit }) => {
       }
     }
   });
-  return /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "content note-editor-container bg-base-100 mt-2 rounded-md p-2" }, /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "flex w-full justify-between space-x-2" }, /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "relative w-full" }, /* @__PURE__ */ React43__namespace.default.createElement(
+  return /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "content note-editor-container bg-base-100 mt-2 rounded-md p-2" }, /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "flex w-full justify-between space-x-2" }, /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "relative w-full" }, /* @__PURE__ */ React42__namespace.default.createElement(
     "textarea",
     {
       className: clsx8__default.default(
@@ -5823,7 +5773,7 @@ var NoteEditor = ({ onSave, onEdit }) => {
       onBlur: handleOnBlur,
       placeholder: _("Add your notes here...")
     }
-  ))), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "flex items-start pt-2" }, /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "mr-2 min-h-full self-stretch border-l-2 border-gray-300" }), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "content font-size-sm line-clamp-3 py-2" }, /* @__PURE__ */ React43__namespace.default.createElement("span", { className: "content font-size-xs inline text-gray-500" }, getAnnotationText()))), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "flex justify-end p-2", dir: "ltr" }, /* @__PURE__ */ React43__namespace.default.createElement(
+  ))), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "flex items-start pt-2" }, /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "mr-2 min-h-full self-stretch border-l-2 border-gray-300" }), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "content font-size-sm line-clamp-3 py-2" }, /* @__PURE__ */ React42__namespace.default.createElement("span", { className: "content font-size-xs inline text-gray-500" }, getAnnotationText()))), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "flex justify-end p-2", dir: "ltr" }, /* @__PURE__ */ React42__namespace.default.createElement(
     "button",
     {
       className: clsx8__default.default(
@@ -5833,7 +5783,7 @@ var NoteEditor = ({ onSave, onEdit }) => {
       ),
       onClick: handleSaveNote
     },
-    /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "font-size-sm pr-1 align-bottom text-blue-500" }, _("Save"))
+    /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "font-size-sm pr-1 align-bottom text-blue-500" }, _("Save"))
   )));
 };
 var NoteEditor_default = NoteEditor;
@@ -5860,14 +5810,14 @@ var Notebook = ({}) => {
       setNotebookVisible(false);
     }
   };
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     if (isNotebookVisible) {
       updateAppTheme("base-200");
     } else {
       updateAppTheme("base-100");
     }
   }, [isNotebookVisible]);
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     setNotebookWidth(settings.globalReadSettings.notebookWidth);
     setNotebookPin(settings.globalReadSettings.isNotebookPinned);
     setNotebookVisible(settings.globalReadSettings.isNotebookPinned);
@@ -5950,7 +5900,7 @@ var Notebook = ({}) => {
   const { booknotes: allNotes = [] } = config || {};
   const annotationNotes = allNotes.filter((note) => note.type === "annotation" && note.note && !note.deletedAt).sort((a, b) => b.createdAt - a.createdAt);
   const excerptNotes = allNotes.filter((note) => note.type === "excerpt" && note.text && !note.deletedAt).sort((a, b) => a.createdAt - b.createdAt);
-  return isNotebookVisible ? /* @__PURE__ */ React43__namespace.default.createElement(React43__namespace.default.Fragment, null, !isNotebookPinned && /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "overlay fixed inset-0 z-10 bg-black/20", onClick: handleClickOverlay }), /* @__PURE__ */ React43__namespace.default.createElement(
+  return isNotebookVisible ? /* @__PURE__ */ React42__namespace.default.createElement(React42__namespace.default.Fragment, null, !isNotebookPinned && /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "overlay fixed inset-0 z-10 bg-black/20", onClick: handleClickOverlay }), /* @__PURE__ */ React42__namespace.default.createElement(
     "div",
     {
       className: clsx8__default.default(
@@ -5968,7 +5918,7 @@ var Notebook = ({}) => {
         position: isNotebookPinned ? "relative" : "absolute"
       }
     },
-    /* @__PURE__ */ React43__namespace.default.createElement("style", { jsx: true }, `
+    /* @__PURE__ */ React42__namespace.default.createElement("style", { jsx: true }, `
           @media (max-width: 640px) {
             .notebook-container {
               width: 100%;
@@ -5976,14 +5926,14 @@ var Notebook = ({}) => {
             }
           }
         `),
-    /* @__PURE__ */ React43__namespace.default.createElement(
+    /* @__PURE__ */ React42__namespace.default.createElement(
       "div",
       {
         className: "drag-bar absolute left-0 top-0 h-full w-0.5 cursor-col-resize",
         onMouseDown: handleDragStart
       }
     ),
-    /* @__PURE__ */ React43__namespace.default.createElement(
+    /* @__PURE__ */ React42__namespace.default.createElement(
       Header_default2,
       {
         isPinned: isNotebookPinned,
@@ -5991,13 +5941,13 @@ var Notebook = ({}) => {
         handleTogglePin
       }
     ),
-    /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "max-h-[calc(100vh-44px)] overflow-y-auto px-3" }, /* @__PURE__ */ React43__namespace.default.createElement("div", { dir: "ltr" }, excerptNotes.length > 0 && /* @__PURE__ */ React43__namespace.default.createElement("p", { className: "content font-size-base pt-1" }, _("Excerpts"))), /* @__PURE__ */ React43__namespace.default.createElement("ul", { className: "" }, excerptNotes.map((item, index) => /* @__PURE__ */ React43__namespace.default.createElement("li", { key: `${index}-${item.id}`, className: "my-2" }, /* @__PURE__ */ React43__namespace.default.createElement(
+    /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "max-h-[calc(100vh-44px)] overflow-y-auto px-3" }, /* @__PURE__ */ React42__namespace.default.createElement("div", { dir: "ltr" }, excerptNotes.length > 0 && /* @__PURE__ */ React42__namespace.default.createElement("p", { className: "content font-size-base pt-1" }, _("Excerpts"))), /* @__PURE__ */ React42__namespace.default.createElement("ul", { className: "" }, excerptNotes.map((item, index) => /* @__PURE__ */ React42__namespace.default.createElement("li", { key: `${index}-${item.id}`, className: "my-2" }, /* @__PURE__ */ React42__namespace.default.createElement(
       "div",
       {
         tabIndex: 0,
         className: "collapse-arrow border-base-300 bg-base-100 collapse border"
       },
-      /* @__PURE__ */ React43__namespace.default.createElement(
+      /* @__PURE__ */ React42__namespace.default.createElement(
         "div",
         {
           className: "collapse-title font-size-sm h-9 min-h-9 p-2 pe-8 font-medium",
@@ -6006,9 +5956,9 @@ var Notebook = ({}) => {
             "--end-override": "0.7rem"
           }
         },
-        /* @__PURE__ */ React43__namespace.default.createElement("p", { className: "line-clamp-1" }, item.text || `Excerpt ${index + 1}`)
+        /* @__PURE__ */ React42__namespace.default.createElement("p", { className: "line-clamp-1" }, item.text || `Excerpt ${index + 1}`)
       ),
-      /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "collapse-content font-size-xs select-text px-3 pb-0" }, /* @__PURE__ */ React43__namespace.default.createElement("p", { className: "hyphens-auto text-justify" }, item.text), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "flex justify-end", dir: "ltr" }, /* @__PURE__ */ React43__namespace.default.createElement(
+      /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "collapse-content font-size-xs select-text px-3 pb-0" }, /* @__PURE__ */ React42__namespace.default.createElement("p", { className: "hyphens-auto text-justify" }, item.text), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "flex justify-end", dir: "ltr" }, /* @__PURE__ */ React42__namespace.default.createElement(
         "div",
         {
           className: "font-size-xs cursor-pointer align-bottom text-red-500 hover:text-red-600",
@@ -6016,7 +5966,7 @@ var Notebook = ({}) => {
         },
         _("Delete")
       )))
-    )))), /* @__PURE__ */ React43__namespace.default.createElement("div", { dir: "ltr" }, (notebookNewAnnotation || annotationNotes.length > 0) && /* @__PURE__ */ React43__namespace.default.createElement("p", { className: "content font-size-base pt-1" }, _("Notes"))), (notebookNewAnnotation || notebookEditAnnotation) && /* @__PURE__ */ React43__namespace.default.createElement(NoteEditor_default, { onSave: handleSaveNote, onEdit: (item) => handleEditNote(item, false) }), /* @__PURE__ */ React43__namespace.default.createElement("ul", null, annotationNotes.map((item, index) => /* @__PURE__ */ React43__namespace.default.createElement(BooknoteItem_default, { key: `${index}-${item.cfi}`, bookKey: sideBarBookKey, item }))))
+    )))), /* @__PURE__ */ React42__namespace.default.createElement("div", { dir: "ltr" }, (notebookNewAnnotation || annotationNotes.length > 0) && /* @__PURE__ */ React42__namespace.default.createElement("p", { className: "content font-size-base pt-1" }, _("Notes"))), (notebookNewAnnotation || notebookEditAnnotation) && /* @__PURE__ */ React42__namespace.default.createElement(NoteEditor_default, { onSave: handleSaveNote, onEdit: (item) => handleEditNote(item, false) }), /* @__PURE__ */ React42__namespace.default.createElement("ul", null, annotationNotes.map((item, index) => /* @__PURE__ */ React42__namespace.default.createElement(BooknoteItem_default, { key: `${index}-${item.cfi}`, bookKey: sideBarBookKey, item }))))
   )) : null;
 };
 var Notebook_default = Notebook;
@@ -6105,7 +6055,7 @@ var useClickEvent = (bookKey, viewRef, containerRef) => {
       }
     }
   };
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     window.addEventListener("message", handleTurnPage);
     return () => {
       window.removeEventListener("message", handleTurnPage);
@@ -6178,7 +6128,7 @@ var useTouchEvent = (bookKey, viewRef) => {
       }
     }
   };
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     window.addEventListener("message", handleTouch);
     return () => {
       window.removeEventListener("message", handleTouch);
@@ -6192,7 +6142,7 @@ var useFoliateEvents = (view, handlers) => {
   const onRendererRelocate = handlers?.onRendererRelocate;
   const onDrawAnnotation = handlers?.onDrawAnnotation;
   const onShowAnnotation = handlers?.onShowAnnotation;
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     if (!view) return;
     if (onLoad) view.addEventListener("load", onLoad);
     if (onRelocate) view.addEventListener("relocate", onRelocate);
@@ -6241,11 +6191,11 @@ var SyncClient = class {
 
 // src/context/SyncContext.tsx
 var syncClient = new SyncClient();
-var SyncContext = React43.createContext({ syncClient });
+var SyncContext = React42.createContext({ syncClient });
 var SyncProvider = ({ children }) => {
-  return /* @__PURE__ */ React43__namespace.default.createElement(SyncContext.Provider, { value: { syncClient } }, children);
+  return /* @__PURE__ */ React42__namespace.default.createElement(SyncContext.Provider, { value: { syncClient } }, children);
 };
-var useSyncContext = () => React43.useContext(SyncContext);
+var useSyncContext = () => React42.useContext(SyncContext);
 
 // src/utils/transform.ts
 var transformBookConfigFromDB = (dbBookConfig) => {
@@ -6331,25 +6281,25 @@ function useSync(bookKey) {
   const { settings, setSettings } = useSettingsStore();
   const { getConfig, setConfig } = useBookDataStore();
   const config = bookKey ? getConfig(bookKey) : null;
-  const [syncingBooks, setSyncingBooks] = React43.useState(false);
-  const [syncingConfigs, setSyncingConfigs] = React43.useState(false);
-  const [syncingNotes, setSyncingNotes] = React43.useState(false);
-  const [syncError, setSyncError] = React43.useState(null);
-  const [lastSyncedAtBooks, setLastSyncedAtBooks] = React43.useState(0);
-  const [lastSyncedAtConfigs, setLastSyncedAtConfigs] = React43.useState(0);
-  const [lastSyncedAtNotes, setLastSyncedAtNotes] = React43.useState(0);
-  const lastSyncedAtInited = React43.useRef(false);
-  const [syncing, setSyncing] = React43.useState(false);
-  const [syncResult, setSyncResult] = React43.useState({
+  const [syncingBooks, setSyncingBooks] = React42.useState(false);
+  const [syncingConfigs, setSyncingConfigs] = React42.useState(false);
+  const [syncingNotes, setSyncingNotes] = React42.useState(false);
+  const [syncError, setSyncError] = React42.useState(null);
+  const [lastSyncedAtBooks, setLastSyncedAtBooks] = React42.useState(0);
+  const [lastSyncedAtConfigs, setLastSyncedAtConfigs] = React42.useState(0);
+  const [lastSyncedAtNotes, setLastSyncedAtNotes] = React42.useState(0);
+  const lastSyncedAtInited = React42.useRef(false);
+  const [syncing, setSyncing] = React42.useState(false);
+  const [syncResult, setSyncResult] = React42.useState({
     books: null,
     configs: null,
     notes: null
   });
-  const [syncedBooks, setSyncedBooks] = React43.useState(null);
-  const [syncedConfigs, setSyncedConfigs] = React43.useState(null);
-  const [syncedNotes, setSyncedNotes] = React43.useState(null);
+  const [syncedBooks, setSyncedBooks] = React42.useState(null);
+  const [syncedConfigs, setSyncedConfigs] = React42.useState(null);
+  const [syncedNotes, setSyncedNotes] = React42.useState(null);
   const { syncClient: syncClient2 } = useSyncContext();
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     if (!settings || !config) return;
     if (lastSyncedAtInited.current) return;
     lastSyncedAtInited.current = true;
@@ -6453,7 +6403,7 @@ function useSync(bookKey) {
       await pullChanges("notes", lastSyncedAtNotes, setLastSyncedAtNotes, setSyncingNotes, bookId);
     }
   };
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     if (!syncing && syncResult) {
       const { books: dbBooks, configs: dbBookConfigs, notes: dbBookNotes } = syncResult;
       const books = dbBooks?.map(
@@ -6501,8 +6451,8 @@ var useProgressSync = (bookKey) => {
   const view = getView(bookKey);
   const config = getConfig(bookKey);
   const progress = getProgress(bookKey);
-  const configSynced = React43.useRef(false);
-  const firstPulled = React43.useRef(false);
+  const configSynced = React42.useRef(false);
+  const firstPulled = React42.useRef(false);
   const pushConfig = (bookKey2, config2) => {
     if (!config2) return;
     const bookHash = bookKey2.split("-")[0];
@@ -6532,13 +6482,13 @@ var useProgressSync = (bookKey) => {
       syncConfig();
     }
   };
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     eventDispatcher.on("sync-book-progress", handleSyncBookProgress);
     return () => {
       eventDispatcher.off("sync-book-progress", handleSyncBookProgress);
     };
   }, [bookKey]);
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     if (!progress || firstPulled.current) return;
     firstPulled.current = true;
     pullConfig(bookKey);
@@ -6546,9 +6496,9 @@ var useProgressSync = (bookKey) => {
       syncConfig();
     };
   }, [progress]);
-  const lastProgressSyncTime = React43.useRef(0);
-  const syncTimeoutRef = React43.useRef(null);
-  React43.useEffect(() => {
+  const lastProgressSyncTime = React42.useRef(0);
+  const syncTimeoutRef = React42.useRef(null);
+  React42.useEffect(() => {
     if (!config?.location) return;
     const now = Date.now();
     const timeSinceLastSync = now - lastProgressSyncTime.current;
@@ -6567,7 +6517,7 @@ var useProgressSync = (bookKey) => {
       );
     }
   }, [config]);
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     if (!configSynced.current && syncedConfigs) {
       configSynced.current = true;
       const syncedConfig = syncedConfigs.filter((c) => c.bookHash === bookKey.split("-")[0])[0];
@@ -6631,7 +6581,7 @@ var useProgressAutoSave = (bookKey) => {
   const { getConfig, saveConfig } = useBookDataStore();
   const { getProgress } = useReaderStore();
   const progress = getProgress(bookKey);
-  const saveBookConfig = React43.useCallback(
+  const saveBookConfig = React42.useCallback(
     throttle(async () => {
       const config = getConfig(bookKey);
       const settings = useSettingsStore.getState().settings;
@@ -6639,7 +6589,7 @@ var useProgressAutoSave = (bookKey) => {
     }, 1e4),
     []
   );
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     saveBookConfig();
   }, [progress, bookKey]);
 };
@@ -6647,8 +6597,8 @@ var useProgressAutoSave = (bookKey) => {
 // src/app/reader/components/FoliateViewer.tsx
 init_book();
 var useUICSS = (bookKey, viewSettings) => {
-  const [styleElement, setStyleElement] = React43.useState(null);
-  React43.useEffect(() => {
+  const [styleElement, setStyleElement] = React42.useState(null);
+  React42.useEffect(() => {
     if (!viewSettings) return;
     if (styleElement) {
       styleElement.remove();
@@ -6893,15 +6843,15 @@ var transformContent = async (ctx) => {
 
 // src/app/reader/components/FoliateViewer.tsx
 var FoliateViewer = ({ bookKey, bookDoc, config }) => {
-  const containerRef = React43.useRef(null);
-  const viewRef = React43.useRef(null);
-  const isViewCreated = React43.useRef(false);
+  const containerRef = React42.useRef(null);
+  const viewRef = React42.useRef(null);
+  const isViewCreated = React42.useRef(false);
   const { setView: setFoliateView, setProgress } = useReaderStore();
   const { getViewSettings, setViewSettings } = useReaderStore();
   const { themeCode, isDarkMode } = useThemeStore();
   const viewSettings = getViewSettings(bookKey);
-  const [toastMessage, setToastMessage] = React43.useState("");
-  React43.useEffect(() => {
+  const [toastMessage, setToastMessage] = React42.useState("");
+  React42.useEffect(() => {
     const timer = setTimeout(() => setToastMessage(""), 2e3);
     return () => clearTimeout(timer);
   }, [toastMessage]);
@@ -6976,13 +6926,13 @@ var FoliateViewer = ({ bookKey, bookDoc, config }) => {
     onRelocate: progressRelocateHandler,
     onRendererRelocate: docRelocateHandler
   });
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     if (viewRef.current && viewRef.current.renderer) {
       const viewSettings2 = getViewSettings(bookKey);
       viewRef.current.renderer.setStyles?.(getStyles(viewSettings2));
     }
   }, [themeCode, isDarkMode]);
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     if (isViewCreated.current) return;
     isViewCreated.current = true;
     const openBook = async () => {
@@ -7035,7 +6985,7 @@ var FoliateViewer = ({ bookKey, bookDoc, config }) => {
     };
     openBook();
   }, []);
-  return /* @__PURE__ */ React43__namespace.default.createElement(React43__namespace.default.Fragment, null, /* @__PURE__ */ React43__namespace.default.createElement(
+  return /* @__PURE__ */ React42__namespace.default.createElement(React42__namespace.default.Fragment, null, /* @__PURE__ */ React42__namespace.default.createElement(
     "div",
     {
       className: "foliate-viewer h-[100%] w-[100%]",
@@ -7067,7 +7017,7 @@ var SectionInfo = ({
   horizontalGap,
   verticalMargin
 }) => {
-  return /* @__PURE__ */ React43__namespace.default.createElement(
+  return /* @__PURE__ */ React42__namespace.default.createElement(
     "div",
     {
       className: clsx8__default.default(
@@ -7082,7 +7032,7 @@ var SectionInfo = ({
         height: `calc(100% - ${verticalMargin * 2}px)`
       } : { insetInlineStart: `${horizontalGap}%`, width: `calc(100% - ${horizontalGap * 2}%)` }
     },
-    /* @__PURE__ */ React43__namespace.default.createElement(
+    /* @__PURE__ */ React42__namespace.default.createElement(
       "h2",
       {
         className: clsx8__default.default(
@@ -7095,7 +7045,7 @@ var SectionInfo = ({
   );
 };
 var SectionInfo_default = SectionInfo;
-var WindowButton = ({ onClick, ariaLabel, id, children }) => /* @__PURE__ */ React43__namespace.default.createElement(
+var WindowButton = ({ onClick, ariaLabel, id, children }) => /* @__PURE__ */ React42__namespace.default.createElement(
   "button",
   {
     id,
@@ -7115,9 +7065,9 @@ var WindowButtons = ({
   onToggleMaximize,
   onClose
 }) => {
-  const parentRef = React43.useRef(null);
+  const parentRef = React42.useRef(null);
   const { appService } = useEnv();
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     return () => {
     };
   }, []);
@@ -7142,7 +7092,7 @@ var WindowButtons = ({
       handleClose();
     }
   };
-  return /* @__PURE__ */ React43__namespace.default.createElement(
+  return /* @__PURE__ */ React42__namespace.default.createElement(
     "div",
     {
       ref: parentRef,
@@ -7152,9 +7102,9 @@ var WindowButtons = ({
         className
       )
     },
-    showMinimize && appService?.hasWindowBar && /* @__PURE__ */ React43__namespace.default.createElement(WindowButton, { onClick: handleMinimizeClick, ariaLabel: "Minimize", id: "titlebar-minimize" }, /* @__PURE__ */ React43__namespace.default.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 24 24" }, /* @__PURE__ */ React43__namespace.default.createElement("path", { fill: "currentColor", d: "M20 14H4v-2h16" }))),
-    showMaximize && appService?.hasWindowBar && /* @__PURE__ */ React43__namespace.default.createElement(WindowButton, { onClick: handleMaximizeClick, ariaLabel: "Maximize/Restore", id: "titlebar-maximize" }, /* @__PURE__ */ React43__namespace.default.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 24 24" }, /* @__PURE__ */ React43__namespace.default.createElement("path", { fill: "currentColor", d: "M4 4h16v16H4zm2 4v10h12V8z" }))),
-    showClose && (appService?.hasWindowBar || onClose) && /* @__PURE__ */ React43__namespace.default.createElement(WindowButton, { onClick: handleCloseClick, ariaLabel: "Close", id: "titlebar-close" }, /* @__PURE__ */ React43__namespace.default.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 24 24" }, /* @__PURE__ */ React43__namespace.default.createElement(
+    showMinimize && appService?.hasWindowBar && /* @__PURE__ */ React42__namespace.default.createElement(WindowButton, { onClick: handleMinimizeClick, ariaLabel: "Minimize", id: "titlebar-minimize" }, /* @__PURE__ */ React42__namespace.default.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 24 24" }, /* @__PURE__ */ React42__namespace.default.createElement("path", { fill: "currentColor", d: "M20 14H4v-2h16" }))),
+    showMaximize && appService?.hasWindowBar && /* @__PURE__ */ React42__namespace.default.createElement(WindowButton, { onClick: handleMaximizeClick, ariaLabel: "Maximize/Restore", id: "titlebar-maximize" }, /* @__PURE__ */ React42__namespace.default.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 24 24" }, /* @__PURE__ */ React42__namespace.default.createElement("path", { fill: "currentColor", d: "M4 4h16v16H4zm2 4v10h12V8z" }))),
+    showClose && (appService?.hasWindowBar || onClose) && /* @__PURE__ */ React42__namespace.default.createElement(WindowButton, { onClick: handleCloseClick, ariaLabel: "Close", id: "titlebar-close" }, /* @__PURE__ */ React42__namespace.default.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 24 24" }, /* @__PURE__ */ React42__namespace.default.createElement(
       "path",
       {
         fill: "currentColor",
@@ -7172,7 +7122,7 @@ var Button = ({
   tooltipDirection = "top",
   className
 }) => {
-  return /* @__PURE__ */ React43__namespace.default.createElement(
+  return /* @__PURE__ */ React42__namespace.default.createElement(
     "div",
     {
       className: clsx8__default.default(
@@ -7184,7 +7134,7 @@ var Button = ({
       ),
       "data-tip": tooltip
     },
-    /* @__PURE__ */ React43__namespace.default.createElement(
+    /* @__PURE__ */ React42__namespace.default.createElement(
       "button",
       {
         className: clsx8__default.default(
@@ -7215,10 +7165,10 @@ var SidebarToggler = ({ bookKey }) => {
     }
     setHoveredBookKey("");
   };
-  return /* @__PURE__ */ React43__namespace.default.createElement(
+  return /* @__PURE__ */ React42__namespace.default.createElement(
     Button_default,
     {
-      icon: sideBarBookKey === bookKey && isSideBarVisible ? /* @__PURE__ */ React43__namespace.default.createElement(tb.TbLayoutSidebarFilled, { className: "text-base-content" }) : /* @__PURE__ */ React43__namespace.default.createElement(tb.TbLayoutSidebar, { className: "text-base-content" }),
+      icon: sideBarBookKey === bookKey && isSideBarVisible ? /* @__PURE__ */ React42__namespace.default.createElement(tb.TbLayoutSidebarFilled, { className: "text-base-content" }) : /* @__PURE__ */ React42__namespace.default.createElement(tb.TbLayoutSidebar, { className: "text-base-content" }),
       onClick: handleToggleSidebar,
       tooltip: _("Sidebar"),
       tooltipDirection: "bottom"
@@ -7237,7 +7187,7 @@ var BookmarkToggler = ({ bookKey }) => {
   const config = getConfig(bookKey);
   const progress = getProgress(bookKey);
   getBookData(bookKey);
-  const [isBookmarked, setIsBookmarked] = React43.useState(false);
+  const [isBookmarked, setIsBookmarked] = React42.useState(false);
   const toggleBookmark = () => {
     const { booknotes: bookmarks = [] } = config;
     const { location: cfi, range } = progress;
@@ -7284,7 +7234,7 @@ var BookmarkToggler = ({ bookKey }) => {
       }
     }
   };
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     const { booknotes = [] } = config || {};
     const { location: cfi } = progress || {};
     if (!cfi) return;
@@ -7294,10 +7244,10 @@ var BookmarkToggler = ({ bookKey }) => {
     setIsBookmarked(locationBookmarked);
     setBookmarkRibbonVisibility(bookKey, locationBookmarked);
   }, [config, progress]);
-  return /* @__PURE__ */ React43__namespace.default.createElement(
+  return /* @__PURE__ */ React42__namespace.default.createElement(
     Button_default,
     {
-      icon: isBookmarked ? /* @__PURE__ */ React43__namespace.default.createElement(md.MdOutlineBookmark, { className: "text-base-content" }) : /* @__PURE__ */ React43__namespace.default.createElement(md.MdOutlineBookmarkAdd, { className: "text-base-content" }),
+      icon: isBookmarked ? /* @__PURE__ */ React42__namespace.default.createElement(md.MdOutlineBookmark, { className: "text-base-content" }) : /* @__PURE__ */ React42__namespace.default.createElement(md.MdOutlineBookmarkAdd, { className: "text-base-content" }),
       onClick: toggleBookmark,
       tooltip: _("Bookmark"),
       tooltipDirection: "bottom"
@@ -7318,10 +7268,10 @@ var NotebookToggler = ({ bookKey }) => {
       if (!isNotebookVisible) toggleNotebook();
     }
   };
-  return /* @__PURE__ */ React43__namespace.default.createElement(
+  return /* @__PURE__ */ React42__namespace.default.createElement(
     Button_default,
     {
-      icon: sideBarBookKey == bookKey && isNotebookVisible ? /* @__PURE__ */ React43__namespace.default.createElement(lu.LuNotebookPen, { size: iconSize16, className: "text-base-content" }) : /* @__PURE__ */ React43__namespace.default.createElement(lu.LuNotebookPen, { size: iconSize16, className: "text-base-content" }),
+      icon: sideBarBookKey == bookKey && isNotebookVisible ? /* @__PURE__ */ React42__namespace.default.createElement(lu.LuNotebookPen, { size: iconSize16, className: "text-base-content" }) : /* @__PURE__ */ React42__namespace.default.createElement(lu.LuNotebookPen, { size: iconSize16, className: "text-base-content" }),
       onClick: handleToggleSidebar,
       tooltip: _("Notebook"),
       tooltipDirection: "bottom"
@@ -7335,10 +7285,10 @@ var SettingsToggler = () => {
   const handleToggleSettings = () => {
     setFontLayoutSettingsDialogOpen(!isFontLayoutSettingsDialogOpen);
   };
-  return /* @__PURE__ */ React43__namespace.default.createElement(
+  return /* @__PURE__ */ React42__namespace.default.createElement(
     Button_default,
     {
-      icon: /* @__PURE__ */ React43__namespace.default.createElement(ri.RiFontSize, { className: "text-base-content" }),
+      icon: /* @__PURE__ */ React42__namespace.default.createElement(ri.RiFontSize, { className: "text-base-content" }),
       onClick: handleToggleSettings,
       tooltip: _("Font & Layout"),
       tooltipDirection: "bottom"
@@ -7384,7 +7334,7 @@ var MenuItem = ({
   onClick
 }) => {
   const iconSize = useDefaultIconSize();
-  const menuButton = /* @__PURE__ */ React43__namespace.default.createElement(
+  const menuButton = /* @__PURE__ */ React42__namespace.default.createElement(
     "button",
     {
       className: clsx8__default.default(
@@ -7394,7 +7344,7 @@ var MenuItem = ({
       onClick,
       disabled
     },
-    /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "flex min-w-0 items-center" }, !noIcon && /* @__PURE__ */ React43__namespace.default.createElement("span", { style: { minWidth: `${iconSize}px` } }, icon), /* @__PURE__ */ React43__namespace.default.createElement(
+    /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "flex min-w-0 items-center" }, !noIcon && /* @__PURE__ */ React42__namespace.default.createElement("span", { style: { minWidth: `${iconSize}px` } }, icon), /* @__PURE__ */ React42__namespace.default.createElement(
       "span",
       {
         className: clsx8__default.default("mx-2 flex-1 truncate text-base sm:text-sm", labelClass),
@@ -7402,7 +7352,7 @@ var MenuItem = ({
       },
       label
     )),
-    shortcut && /* @__PURE__ */ React43__namespace.default.createElement(
+    shortcut && /* @__PURE__ */ React42__namespace.default.createElement(
       "kbd",
       {
         className: clsx8__default.default(
@@ -7414,7 +7364,7 @@ var MenuItem = ({
     )
   );
   if (children) {
-    return /* @__PURE__ */ React43__namespace.default.createElement("ul", { className: "menu rounded-box m-0 p-0" }, /* @__PURE__ */ React43__namespace.default.createElement("li", null, /* @__PURE__ */ React43__namespace.default.createElement("details", null, /* @__PURE__ */ React43__namespace.default.createElement("summary", { className: "hover:bg-base-300 p-0 pr-3" }, menuButton), children)));
+    return /* @__PURE__ */ React42__namespace.default.createElement("ul", { className: "menu rounded-box m-0 p-0" }, /* @__PURE__ */ React42__namespace.default.createElement("li", null, /* @__PURE__ */ React42__namespace.default.createElement("details", null, /* @__PURE__ */ React42__namespace.default.createElement("summary", { className: "hover:bg-base-300 p-0 pr-3" }, menuButton), children)));
   }
   return menuButton;
 };
@@ -7431,8 +7381,8 @@ var ViewMenu = ({
   const { getView, getViewSettings, setViewSettings } = useReaderStore();
   const viewSettings = getViewSettings(bookKey);
   const { themeMode, setThemeMode } = useThemeStore();
-  const [isScrolledMode, setScrolledMode] = React43.useState(viewSettings.scrolled);
-  const [zoomLevel, setZoomLevel] = React43.useState(viewSettings.zoomLevel);
+  const [isScrolledMode, setScrolledMode] = React42.useState(viewSettings.scrolled);
+  const [zoomLevel, setZoomLevel] = React42.useState(viewSettings.zoomLevel);
   const zoomIn = () => setZoomLevel((prev) => Math.min(prev + ZOOM_STEP, MAX_ZOOM_LEVEL));
   const zoomOut = () => setZoomLevel((prev) => Math.max(prev - ZOOM_STEP, MIN_ZOOM_LEVEL));
   const resetZoom = () => setZoomLevel(100);
@@ -7457,7 +7407,7 @@ var ViewMenu = ({
     }
     setIsDropdownOpen?.(false);
   };
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     if (isScrolledMode === viewSettings.scrolled) return;
     viewSettings.scrolled = isScrolledMode;
     getView(bookKey)?.renderer.setAttribute("flow", isScrolledMode ? "scrolled" : "paginated");
@@ -7468,16 +7418,16 @@ var ViewMenu = ({
     getView(bookKey)?.renderer.setStyles?.(getStyles(viewSettings));
     setViewSettings(bookKey, viewSettings);
   }, [isScrolledMode]);
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     saveViewSettings(envConfig, bookKey, "zoomLevel", zoomLevel, true, true);
   }, [zoomLevel]);
-  return /* @__PURE__ */ React43__namespace.default.createElement(
+  return /* @__PURE__ */ React42__namespace.default.createElement(
     "div",
     {
       tabIndex: 0,
       className: "view-menu dropdown-content bgcolor-base-200 dropdown-right no-triangle border-base-200 z-20 mt-1 w-72 border shadow-2xl"
     },
-    /* @__PURE__ */ React43__namespace.default.createElement("div", { className: clsx8__default.default("flex items-center justify-between rounded-md") }, /* @__PURE__ */ React43__namespace.default.createElement(
+    /* @__PURE__ */ React42__namespace.default.createElement("div", { className: clsx8__default.default("flex items-center justify-between rounded-md") }, /* @__PURE__ */ React42__namespace.default.createElement(
       "button",
       {
         onClick: zoomOut,
@@ -7486,8 +7436,8 @@ var ViewMenu = ({
           zoomLevel <= MIN_ZOOM_LEVEL && "btn-disabled text-gray-400"
         )
       },
-      /* @__PURE__ */ React43__namespace.default.createElement(md.MdZoomOut, null)
-    ), /* @__PURE__ */ React43__namespace.default.createElement(
+      /* @__PURE__ */ React42__namespace.default.createElement(md.MdZoomOut, null)
+    ), /* @__PURE__ */ React42__namespace.default.createElement(
       "button",
       {
         className: clsx8__default.default(
@@ -7497,7 +7447,7 @@ var ViewMenu = ({
       },
       zoomLevel,
       "%"
-    ), /* @__PURE__ */ React43__namespace.default.createElement(
+    ), /* @__PURE__ */ React42__namespace.default.createElement(
       "button",
       {
         onClick: zoomIn,
@@ -7506,26 +7456,26 @@ var ViewMenu = ({
           zoomLevel >= MAX_ZOOM_LEVEL && "btn-disabled text-gray-400"
         )
       },
-      /* @__PURE__ */ React43__namespace.default.createElement(md.MdZoomIn, null)
+      /* @__PURE__ */ React42__namespace.default.createElement(md.MdZoomIn, null)
     )),
-    /* @__PURE__ */ React43__namespace.default.createElement("hr", { className: "border-base-300 my-1" }),
-    /* @__PURE__ */ React43__namespace.default.createElement(MenuItem_default, { label: _("Font & Layout"), shortcut: "Shift+F", onClick: openFontLayoutMenu }),
-    /* @__PURE__ */ React43__namespace.default.createElement(
+    /* @__PURE__ */ React42__namespace.default.createElement("hr", { className: "border-base-300 my-1" }),
+    /* @__PURE__ */ React42__namespace.default.createElement(MenuItem_default, { label: _("Font & Layout"), shortcut: "Shift+F", onClick: openFontLayoutMenu }),
+    /* @__PURE__ */ React42__namespace.default.createElement(
       MenuItem_default,
       {
         label: _("Scrolled Mode"),
         shortcut: "Shift+J",
-        icon: isScrolledMode ? /* @__PURE__ */ React43__namespace.default.createElement(md.MdCheck, null) : void 0,
+        icon: isScrolledMode ? /* @__PURE__ */ React42__namespace.default.createElement(md.MdCheck, null) : void 0,
         onClick: toggleScrolledMode
       }
     ),
-    /* @__PURE__ */ React43__namespace.default.createElement("hr", { className: "border-base-300 my-1" }),
-    appService?.hasWindow && /* @__PURE__ */ React43__namespace.default.createElement(MenuItem_default, { label: _("Fullscreen"), onClick: handleFullScreen }),
-    /* @__PURE__ */ React43__namespace.default.createElement(
+    /* @__PURE__ */ React42__namespace.default.createElement("hr", { className: "border-base-300 my-1" }),
+    appService?.hasWindow && /* @__PURE__ */ React42__namespace.default.createElement(MenuItem_default, { label: _("Fullscreen"), onClick: handleFullScreen }),
+    /* @__PURE__ */ React42__namespace.default.createElement(
       MenuItem_default,
       {
         label: themeMode === "dark" ? _("Dark Mode") : themeMode === "light" ? _("Light Mode") : _("Auto Mode"),
-        icon: themeMode === "dark" ? /* @__PURE__ */ React43__namespace.default.createElement(bi.BiMoon, null) : themeMode === "light" ? /* @__PURE__ */ React43__namespace.default.createElement(bi.BiSun, null) : /* @__PURE__ */ React43__namespace.default.createElement(tb.TbSunMoon, null),
+        icon: themeMode === "dark" ? /* @__PURE__ */ React42__namespace.default.createElement(bi.BiMoon, null) : themeMode === "light" ? /* @__PURE__ */ React42__namespace.default.createElement(bi.BiSun, null) : /* @__PURE__ */ React42__namespace.default.createElement(tb.TbSunMoon, null),
         onClick: cycleThemeMode
       }
     )
@@ -7543,7 +7493,7 @@ var HeaderBar = ({
   onSetSettingsDialogOpen
 }) => {
   const { appService } = useEnv();
-  const headerRef = React43.useRef(null);
+  const headerRef = React42.useRef(null);
   const {
     isTrafficLightVisible,
     setTrafficLightVisibility,
@@ -7551,7 +7501,7 @@ var HeaderBar = ({
     initializeTrafficLightListeners,
     cleanupTrafficLightListeners
   } = useTrafficLightStore();
-  const [isDropdownOpen, setIsDropdownOpen] = React43.useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = React42.useState(false);
   const { hoveredBookKey, setHoveredBookKey, bookKeys } = useReaderStore();
   const { isSideBarVisible } = useSidebarStore();
   const iconSize16 = useResponsiveSize(16);
@@ -7559,7 +7509,7 @@ var HeaderBar = ({
     setIsDropdownOpen(isOpen);
     if (!isOpen) setHoveredBookKey("");
   };
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     if (!appService?.hasTrafficLight) return;
     initializeTrafficLightStore(appService);
     initializeTrafficLightListeners();
@@ -7568,11 +7518,11 @@ var HeaderBar = ({
       cleanupTrafficLightListeners();
     };
   }, []);
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     if (!appService?.hasTrafficLight) return;
     setTrafficLightVisibility(isSideBarVisible);
   }, [isSideBarVisible]);
-  return /* @__PURE__ */ React43__namespace.default.createElement(
+  return /* @__PURE__ */ React42__namespace.default.createElement(
     "div",
     {
       ref: headerRef,
@@ -7589,18 +7539,18 @@ var HeaderBar = ({
       onMouseEnter: () => setHoveredBookKey(bookKey),
       onMouseLeave: () => setHoveredBookKey("")
     },
-    /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "sidebar-bookmark-toggler bg-base-100 z-20 flex h-full items-center gap-x-4" }, /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "hidden sm:flex" }, /* @__PURE__ */ React43__namespace.default.createElement(SidebarToggler_default, { bookKey })), /* @__PURE__ */ React43__namespace.default.createElement(BookmarkToggler_default, { bookKey })),
-    /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "header-title z-15 pointer-events-none absolute inset-0 hidden items-center justify-center sm:flex" }, /* @__PURE__ */ React43__namespace.default.createElement("h2", { className: "line-clamp-1 max-w-[50%] text-center text-xs font-semibold" }, bookTitle)),
-    /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "bg-base-100 z-20 ml-auto flex h-full items-center space-x-4" }, /* @__PURE__ */ React43__namespace.default.createElement(SettingsToggler_default, null), /* @__PURE__ */ React43__namespace.default.createElement(NotebookToggler_default, { bookKey }), /* @__PURE__ */ React43__namespace.default.createElement(
+    /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "sidebar-bookmark-toggler bg-base-100 z-20 flex h-full items-center gap-x-4" }, /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "hidden sm:flex" }, /* @__PURE__ */ React42__namespace.default.createElement(SidebarToggler_default, { bookKey })), /* @__PURE__ */ React42__namespace.default.createElement(BookmarkToggler_default, { bookKey })),
+    /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "header-title z-15 pointer-events-none absolute inset-0 hidden items-center justify-center sm:flex" }, /* @__PURE__ */ React42__namespace.default.createElement("h2", { className: "line-clamp-1 max-w-[50%] text-center text-xs font-semibold" }, bookTitle)),
+    /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "bg-base-100 z-20 ml-auto flex h-full items-center space-x-4" }, /* @__PURE__ */ React42__namespace.default.createElement(SettingsToggler_default, null), /* @__PURE__ */ React42__namespace.default.createElement(NotebookToggler_default, { bookKey }), /* @__PURE__ */ React42__namespace.default.createElement(
       Dropdown_default,
       {
         className: "exclude-title-bar-mousedown dropdown-bottom dropdown-end",
         buttonClassName: "btn btn-ghost h-8 min-h-8 w-8 p-0",
-        toggleButton: /* @__PURE__ */ React43__namespace.default.createElement(pi.PiDotsThreeVerticalBold, { size: iconSize16 }),
+        toggleButton: /* @__PURE__ */ React42__namespace.default.createElement(pi.PiDotsThreeVerticalBold, { size: iconSize16 }),
         onToggle: handleToggleDropdown
       },
-      /* @__PURE__ */ React43__namespace.default.createElement(ViewMenu_default, { bookKey, onSetSettingsDialogOpen })
-    ), /* @__PURE__ */ React43__namespace.default.createElement(
+      /* @__PURE__ */ React42__namespace.default.createElement(ViewMenu_default, { bookKey, onSetSettingsDialogOpen })
+    ), /* @__PURE__ */ React42__namespace.default.createElement(
       WindowButtons_default,
       {
         className: "window-buttons flex h-full items-center",
@@ -7630,9 +7580,9 @@ var Slider = ({
   onChange
 }) => {
   const safeInitialValue = isNaN(initialValue) ? 50 : initialValue;
-  const [value, setValue] = React43.useState(safeInitialValue);
-  const [isRtl, setIsRtl] = React43.useState(false);
-  const sliderRef = React43.useRef(null);
+  const [value, setValue] = React42.useState(safeInitialValue);
+  const [isRtl, setIsRtl] = React42.useState(false);
+  const sliderRef = React42.useRef(null);
   const handleChange = (e) => {
     const newValue = parseInt(e.target.value, 10);
     if (!isNaN(newValue)) {
@@ -7642,7 +7592,7 @@ var Slider = ({
       }
     }
   };
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     let node = sliderRef.current;
     while (node) {
       if (node.getAttribute("dir") === "rtl") {
@@ -7652,21 +7602,21 @@ var Slider = ({
       node = node.parentElement;
     }
   }, []);
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     if (!isNaN(initialValue)) {
       setValue(initialValue);
     }
   }, [initialValue]);
   const safeValue = isNaN(value) ? min : value;
   const percentage = (safeValue - min) / (max - min) * 100;
-  return /* @__PURE__ */ React43__namespace.default.createElement(
+  return /* @__PURE__ */ React42__namespace.default.createElement(
     "div",
     {
       ref: sliderRef,
       className: `slider bg-base-200 mx-auto w-full max-w-md rounded-xl ${className}`,
       dir: isRtl ? "rtl" : void 0
     },
-    /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "relative", style: { height: `${heightPx}px` } }, /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "bg-base-300/40 absolute h-full w-full rounded-full" }), /* @__PURE__ */ React43__namespace.default.createElement(
+    /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "relative", style: { height: `${heightPx}px` } }, /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "bg-base-300/40 absolute h-full w-full rounded-full" }), /* @__PURE__ */ React42__namespace.default.createElement(
       "div",
       {
         className: "bg-base-300 absolute h-full rounded-full",
@@ -7675,7 +7625,7 @@ var Slider = ({
           [isRtl ? "right" : "left"]: 0
         }
       }
-    ), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "absolute inset-0 flex items-center justify-between px-4 text-sm" }, /* @__PURE__ */ React43__namespace.default.createElement("span", { className: `ml-2 ${minClassName}` }, minLabel), /* @__PURE__ */ React43__namespace.default.createElement("span", { className: `mr-2 ${maxClassName}` }, maxLabel)), /* @__PURE__ */ React43__namespace.default.createElement(
+    ), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "absolute inset-0 flex items-center justify-between px-4 text-sm" }, /* @__PURE__ */ React42__namespace.default.createElement("span", { className: `ml-2 ${minClassName}` }, minLabel), /* @__PURE__ */ React42__namespace.default.createElement("span", { className: `mr-2 ${maxClassName}` }, maxLabel)), /* @__PURE__ */ React42__namespace.default.createElement(
       "div",
       {
         className: "pointer-events-none absolute top-0 z-10",
@@ -7685,7 +7635,7 @@ var Slider = ({
           height: "100%"
         }
       },
-      /* @__PURE__ */ React43__namespace.default.createElement(
+      /* @__PURE__ */ React42__namespace.default.createElement(
         "div",
         {
           className: `bg-base-200 flex h-full items-center justify-center rounded-full text-sm shadow-md ${bubbleClassName}`,
@@ -7693,7 +7643,7 @@ var Slider = ({
         },
         bubbleElement || bubbleLabel
       )
-    ), /* @__PURE__ */ React43__namespace.default.createElement(
+    ), /* @__PURE__ */ React42__namespace.default.createElement(
       "input",
       {
         type: "range",
@@ -7721,7 +7671,7 @@ var FooterBar = ({
   const { envConfig, appService } = useEnv();
   const { hoveredBookKey, setHoveredBookKey, getView, getProgress, getViewSettings } = useReaderStore();
   const { isSideBarVisible, setSideBarVisible } = useSidebarStore();
-  const [actionTab, setActionTab] = React43__namespace.default.useState("");
+  const [actionTab, setActionTab] = React42__namespace.default.useState("");
   const sliderHeight = useResponsiveSize(28);
   const tocIconSize = useResponsiveSize(23);
   const fontIconSize = useResponsiveSize(18);
@@ -7797,7 +7747,7 @@ var FooterBar = ({
   const progressInfo = ["CBZ"].includes(bookFormat) ? section : pageinfo;
   const progressValid = !!progressInfo;
   const progressFraction = progressValid ? ((progressInfo.next ?? progressInfo.current) + 1) / progressInfo.total : 0;
-  return /* @__PURE__ */ React43__namespace.default.createElement(React43__namespace.default.Fragment, null, /* @__PURE__ */ React43__namespace.default.createElement(
+  return /* @__PURE__ */ React42__namespace.default.createElement(React42__namespace.default.Fragment, null, /* @__PURE__ */ React42__namespace.default.createElement(
     "div",
     {
       className: clsx8__default.default(
@@ -7808,7 +7758,7 @@ var FooterBar = ({
       onMouseEnter: () => !appService?.isMobile && setHoveredBookKey(bookKey),
       onTouchStart: () => !appService?.isMobile && setHoveredBookKey(bookKey)
     }
-  ), /* @__PURE__ */ React43__namespace.default.createElement(
+  ), /* @__PURE__ */ React42__namespace.default.createElement(
     "div",
     {
       className: clsx8__default.default(
@@ -7827,7 +7777,7 @@ var FooterBar = ({
       onMouseLeave: () => window.innerWidth >= 640 && setHoveredBookKey(""),
       "aria-hidden": !isVisible
     },
-    /* @__PURE__ */ React43__namespace.default.createElement(
+    /* @__PURE__ */ React42__namespace.default.createElement(
       "div",
       {
         className: clsx8__default.default(
@@ -7838,33 +7788,33 @@ var FooterBar = ({
           bottom: appService?.hasSafeAreaInset ? "calc(env(safe-area-inset-bottom) + 64px)" : "64px"
         }
       },
-      /* @__PURE__ */ React43__namespace.default.createElement(
+      /* @__PURE__ */ React42__namespace.default.createElement(
         Button_default,
         {
-          icon: viewSettings?.rtl ? /* @__PURE__ */ React43__namespace.default.createElement(ri.RiArrowRightWideLine, null) : /* @__PURE__ */ React43__namespace.default.createElement(ri.RiArrowLeftWideLine, null),
+          icon: viewSettings?.rtl ? /* @__PURE__ */ React42__namespace.default.createElement(ri.RiArrowRightWideLine, null) : /* @__PURE__ */ React42__namespace.default.createElement(ri.RiArrowLeftWideLine, null),
           onClick: viewSettings?.rtl ? handleGoNext : handleGoPrev,
           tooltip: viewSettings?.rtl ? _("Go Right") : _("Go Left")
         }
       ),
-      /* @__PURE__ */ React43__namespace.default.createElement(
+      /* @__PURE__ */ React42__namespace.default.createElement(
         Button_default,
         {
-          icon: viewSettings?.rtl ? /* @__PURE__ */ React43__namespace.default.createElement(ri.RiArrowGoForwardLine, null) : /* @__PURE__ */ React43__namespace.default.createElement(ri.RiArrowGoBackLine, null),
+          icon: viewSettings?.rtl ? /* @__PURE__ */ React42__namespace.default.createElement(ri.RiArrowGoForwardLine, null) : /* @__PURE__ */ React42__namespace.default.createElement(ri.RiArrowGoBackLine, null),
           onClick: handleGoBack,
           tooltip: _("Go Back"),
           disabled: !view?.history.canGoBack
         }
       ),
-      /* @__PURE__ */ React43__namespace.default.createElement(
+      /* @__PURE__ */ React42__namespace.default.createElement(
         Button_default,
         {
-          icon: viewSettings?.rtl ? /* @__PURE__ */ React43__namespace.default.createElement(ri.RiArrowGoBackLine, null) : /* @__PURE__ */ React43__namespace.default.createElement(ri.RiArrowGoForwardLine, null),
+          icon: viewSettings?.rtl ? /* @__PURE__ */ React42__namespace.default.createElement(ri.RiArrowGoBackLine, null) : /* @__PURE__ */ React42__namespace.default.createElement(ri.RiArrowGoForwardLine, null),
           onClick: handleGoForward,
           tooltip: _("Go Forward"),
           disabled: !view?.history.canGoForward
         }
       ),
-      /* @__PURE__ */ React43__namespace.default.createElement(
+      /* @__PURE__ */ React42__namespace.default.createElement(
         Slider_default,
         {
           heightPx: sliderHeight,
@@ -7873,16 +7823,16 @@ var FooterBar = ({
           onChange: (e) => handleProgressChange(e)
         }
       ),
-      /* @__PURE__ */ React43__namespace.default.createElement(
+      /* @__PURE__ */ React42__namespace.default.createElement(
         Button_default,
         {
-          icon: viewSettings?.rtl ? /* @__PURE__ */ React43__namespace.default.createElement(ri.RiArrowLeftWideLine, null) : /* @__PURE__ */ React43__namespace.default.createElement(ri.RiArrowRightWideLine, null),
+          icon: viewSettings?.rtl ? /* @__PURE__ */ React42__namespace.default.createElement(ri.RiArrowLeftWideLine, null) : /* @__PURE__ */ React42__namespace.default.createElement(ri.RiArrowRightWideLine, null),
           onClick: viewSettings?.rtl ? handleGoPrev : handleGoNext,
           tooltip: viewSettings?.rtl ? _("Go Left") : _("Go Right")
         }
       )
     ),
-    /* @__PURE__ */ React43__namespace.default.createElement(
+    /* @__PURE__ */ React42__namespace.default.createElement(
       "div",
       {
         className: clsx8__default.default(
@@ -7893,7 +7843,7 @@ var FooterBar = ({
           bottom: appService?.hasSafeAreaInset ? "calc(env(safe-area-inset-bottom) + 64px)" : "64px"
         }
       },
-      /* @__PURE__ */ React43__namespace.default.createElement(
+      /* @__PURE__ */ React42__namespace.default.createElement(
         Slider_default,
         {
           initialValue: viewSettings?.defaultFontSize && !isNaN(viewSettings.defaultFontSize) ? viewSettings.defaultFontSize : 16,
@@ -7907,7 +7857,7 @@ var FooterBar = ({
           max: 30
         }
       ),
-      /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "flex w-full items-center justify-between gap-x-6" }, /* @__PURE__ */ React43__namespace.default.createElement(
+      /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "flex w-full items-center justify-between gap-x-6" }, /* @__PURE__ */ React42__namespace.default.createElement(
         Slider_default,
         {
           initialValue: !isNaN(getMarginProgressValue(
@@ -7917,17 +7867,17 @@ var FooterBar = ({
             viewSettings?.marginPx ?? 44,
             viewSettings?.gapPercent ?? 5
           ) : 50,
-          bubbleElement: /* @__PURE__ */ React43__namespace.default.createElement(tb.TbBoxMargin, { size: marginIconSize }),
+          bubbleElement: /* @__PURE__ */ React42__namespace.default.createElement(tb.TbBoxMargin, { size: marginIconSize }),
           minLabel: _("Small"),
           maxLabel: _("Large"),
           step: 10,
           onChange: handleMarginChange
         }
-      ), /* @__PURE__ */ React43__namespace.default.createElement(
+      ), /* @__PURE__ */ React42__namespace.default.createElement(
         Slider_default,
         {
           initialValue: viewSettings?.lineHeight && !isNaN(viewSettings.lineHeight) ? Math.round(viewSettings.lineHeight * 10) : 16,
-          bubbleElement: /* @__PURE__ */ React43__namespace.default.createElement(rx.RxLineHeight, { size: marginIconSize }),
+          bubbleElement: /* @__PURE__ */ React42__namespace.default.createElement(rx.RxLineHeight, { size: marginIconSize }),
           minLabel: _("Small"),
           maxLabel: _("Large"),
           min: 8,
@@ -7936,7 +7886,7 @@ var FooterBar = ({
         }
       ))
     ),
-    /* @__PURE__ */ React43__namespace.default.createElement(
+    /* @__PURE__ */ React42__namespace.default.createElement(
       "div",
       {
         className: clsx8__default.default(
@@ -7944,25 +7894,25 @@ var FooterBar = ({
           appService?.hasSafeAreaInset && "pb-[calc(env(safe-area-inset-bottom)+16px)]"
         )
       },
-      /* @__PURE__ */ React43__namespace.default.createElement(
+      /* @__PURE__ */ React42__namespace.default.createElement(
         Button_default,
         {
-          icon: /* @__PURE__ */ React43__namespace.default.createElement(io.IoIosList, { size: tocIconSize, className: "" }),
+          icon: /* @__PURE__ */ React42__namespace.default.createElement(io.IoIosList, { size: tocIconSize, className: "" }),
           onClick: () => handleSetActionTab("toc")
         }
       ),
-      /* @__PURE__ */ React43__namespace.default.createElement(Button_default, { icon: /* @__PURE__ */ React43__namespace.default.createElement(pi.PiNotePencil, { className: "" }), onClick: () => handleSetActionTab("note") }),
-      /* @__PURE__ */ React43__namespace.default.createElement(
+      /* @__PURE__ */ React42__namespace.default.createElement(Button_default, { icon: /* @__PURE__ */ React42__namespace.default.createElement(pi.PiNotePencil, { className: "" }), onClick: () => handleSetActionTab("note") }),
+      /* @__PURE__ */ React42__namespace.default.createElement(
         Button_default,
         {
-          icon: /* @__PURE__ */ React43__namespace.default.createElement(rx.RxSlider, { className: clsx8__default.default(actionTab === "progress" && "text-blue-500") }),
+          icon: /* @__PURE__ */ React42__namespace.default.createElement(rx.RxSlider, { className: clsx8__default.default(actionTab === "progress" && "text-blue-500") }),
           onClick: () => handleSetActionTab("progress")
         }
       ),
-      /* @__PURE__ */ React43__namespace.default.createElement(
+      /* @__PURE__ */ React42__namespace.default.createElement(
         Button_default,
         {
-          icon: /* @__PURE__ */ React43__namespace.default.createElement(
+          icon: /* @__PURE__ */ React42__namespace.default.createElement(
             ri.RiFontFamily,
             {
               size: fontIconSize,
@@ -7972,32 +7922,32 @@ var FooterBar = ({
           onClick: () => handleSetActionTab("font")
         }
       ),
-      /* @__PURE__ */ React43__namespace.default.createElement(Button_default, { icon: /* @__PURE__ */ React43__namespace.default.createElement(md.MdOutlineHeadphones, { className: "" }), onClick: () => handleSetActionTab("tts") })
+      /* @__PURE__ */ React42__namespace.default.createElement(Button_default, { icon: /* @__PURE__ */ React42__namespace.default.createElement(md.MdOutlineHeadphones, { className: "" }), onClick: () => handleSetActionTab("tts") })
     ),
-    /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "hidden w-full items-center gap-x-4 px-4 sm:flex" }, /* @__PURE__ */ React43__namespace.default.createElement(
+    /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "hidden w-full items-center gap-x-4 px-4 sm:flex" }, /* @__PURE__ */ React42__namespace.default.createElement(
       Button_default,
       {
-        icon: viewSettings?.rtl ? /* @__PURE__ */ React43__namespace.default.createElement(ri.RiArrowRightWideLine, null) : /* @__PURE__ */ React43__namespace.default.createElement(ri.RiArrowLeftWideLine, null),
+        icon: viewSettings?.rtl ? /* @__PURE__ */ React42__namespace.default.createElement(ri.RiArrowRightWideLine, null) : /* @__PURE__ */ React42__namespace.default.createElement(ri.RiArrowLeftWideLine, null),
         onClick: viewSettings?.rtl ? handleGoNext : handleGoPrev,
         tooltip: viewSettings?.rtl ? _("Go Right") : _("Go Left")
       }
-    ), /* @__PURE__ */ React43__namespace.default.createElement(
+    ), /* @__PURE__ */ React42__namespace.default.createElement(
       Button_default,
       {
-        icon: viewSettings?.rtl ? /* @__PURE__ */ React43__namespace.default.createElement(ri.RiArrowGoForwardLine, null) : /* @__PURE__ */ React43__namespace.default.createElement(ri.RiArrowGoBackLine, null),
+        icon: viewSettings?.rtl ? /* @__PURE__ */ React42__namespace.default.createElement(ri.RiArrowGoForwardLine, null) : /* @__PURE__ */ React42__namespace.default.createElement(ri.RiArrowGoBackLine, null),
         onClick: handleGoBack,
         tooltip: _("Go Back"),
         disabled: !view?.history.canGoBack
       }
-    ), /* @__PURE__ */ React43__namespace.default.createElement(
+    ), /* @__PURE__ */ React42__namespace.default.createElement(
       Button_default,
       {
-        icon: viewSettings?.rtl ? /* @__PURE__ */ React43__namespace.default.createElement(ri.RiArrowGoBackLine, null) : /* @__PURE__ */ React43__namespace.default.createElement(ri.RiArrowGoForwardLine, null),
+        icon: viewSettings?.rtl ? /* @__PURE__ */ React42__namespace.default.createElement(ri.RiArrowGoBackLine, null) : /* @__PURE__ */ React42__namespace.default.createElement(ri.RiArrowGoForwardLine, null),
         onClick: handleGoForward,
         tooltip: _("Go Forward"),
         disabled: !view?.history.canGoForward
       }
-    ), /* @__PURE__ */ React43__namespace.default.createElement("span", { className: "mx-2 text-center text-sm" }, progressValid ? `${Math.round(progressFraction * 100)}%` : ""), /* @__PURE__ */ React43__namespace.default.createElement(
+    ), /* @__PURE__ */ React42__namespace.default.createElement("span", { className: "mx-2 text-center text-sm" }, progressValid ? `${Math.round(progressFraction * 100)}%` : ""), /* @__PURE__ */ React42__namespace.default.createElement(
       "input",
       {
         type: "range",
@@ -8007,10 +7957,10 @@ var FooterBar = ({
         value: progressValid && !isNaN(progressFraction) ? Math.round(progressFraction * 100) : 0,
         onChange: (e) => handleProgressChange(parseInt(e.target.value, 10))
       }
-    ), /* @__PURE__ */ React43__namespace.default.createElement(Button_default, { icon: /* @__PURE__ */ React43__namespace.default.createElement(fa6.FaHeadphones, null), onClick: handleSpeakText, tooltip: _("Speak") }), /* @__PURE__ */ React43__namespace.default.createElement(
+    ), /* @__PURE__ */ React42__namespace.default.createElement(Button_default, { icon: /* @__PURE__ */ React42__namespace.default.createElement(fa6.FaHeadphones, null), onClick: handleSpeakText, tooltip: _("Speak") }), /* @__PURE__ */ React42__namespace.default.createElement(
       Button_default,
       {
-        icon: viewSettings?.rtl ? /* @__PURE__ */ React43__namespace.default.createElement(ri.RiArrowLeftWideLine, null) : /* @__PURE__ */ React43__namespace.default.createElement(ri.RiArrowRightWideLine, null),
+        icon: viewSettings?.rtl ? /* @__PURE__ */ React42__namespace.default.createElement(ri.RiArrowLeftWideLine, null) : /* @__PURE__ */ React42__namespace.default.createElement(ri.RiArrowRightWideLine, null),
         onClick: viewSettings?.rtl ? handleGoPrev : handleGoNext,
         tooltip: viewSettings?.rtl ? _("Go Left") : _("Go Right")
       }
@@ -8035,7 +7985,7 @@ var PageInfoView = ({
     currentPage: (pageinfo.next ?? pageinfo.current) + 1,
     totalPage: pageinfo.total
   }) : "";
-  return /* @__PURE__ */ React43__namespace.default.createElement(
+  return /* @__PURE__ */ React42__namespace.default.createElement(
     "div",
     {
       className: clsx8__default.default(
@@ -8053,12 +8003,12 @@ var PageInfoView = ({
         paddingBottom: appService?.hasSafeAreaInset ? "env(safe-area-inset-bottom)" : 0
       }
     },
-    /* @__PURE__ */ React43__namespace.default.createElement("h2", { className: "text-neutral-content text-right font-sans text-xs font-extralight" }, pageInfo)
+    /* @__PURE__ */ React42__namespace.default.createElement("h2", { className: "text-neutral-content text-right font-sans text-xs font-extralight" }, pageInfo)
   );
 };
 var PageInfo_default = PageInfoView;
 var Ribbon = ({}) => {
-  return /* @__PURE__ */ React43__namespace.default.createElement(
+  return /* @__PURE__ */ React42__namespace.default.createElement(
     "div",
     {
       className: clsx8__default.default(
@@ -8066,7 +8016,7 @@ var Ribbon = ({}) => {
         "h-[calc(env(safe-area-inset-top)+44px)]"
       )
     },
-    /* @__PURE__ */ React43__namespace.default.createElement(
+    /* @__PURE__ */ React42__namespace.default.createElement(
       "svg",
       {
         width: "100%",
@@ -8077,7 +8027,7 @@ var Ribbon = ({}) => {
         shapeRendering: "geometricPrecision",
         imageRendering: "optimizeQuality"
       },
-      /* @__PURE__ */ React43__namespace.default.createElement("polygon", { fill: "#F44336", points: "100 100, 50 78, 0 100, 0 0, 100 0" })
+      /* @__PURE__ */ React42__namespace.default.createElement("polygon", { fill: "#F44336", points: "100 100, 50 78, 0 100, 0 0, 100 0" })
     )
   );
 };
@@ -8097,9 +8047,9 @@ var NumberInput = ({
   step,
   disabled
 }) => {
-  const [localValue, setLocalValue] = React43.useState(value);
+  const [localValue, setLocalValue] = React42.useState(value);
   const numberStep = step || 1;
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     setLocalValue(value);
   }, [value]);
   const handleChange = (e) => {
@@ -8130,7 +8080,7 @@ var NumberInput = ({
     setLocalValue(newValue);
     onChange(newValue);
   };
-  return /* @__PURE__ */ React43__namespace.default.createElement("div", { className: clsx8__default.default("config-item", className) }, /* @__PURE__ */ React43__namespace.default.createElement("span", { className: "text-base-content" }, label), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "text-base-content flex items-center gap-2" }, /* @__PURE__ */ React43__namespace.default.createElement(
+  return /* @__PURE__ */ React42__namespace.default.createElement("div", { className: clsx8__default.default("config-item", className) }, /* @__PURE__ */ React42__namespace.default.createElement("span", { className: "text-base-content" }, label), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "text-base-content flex items-center gap-2" }, /* @__PURE__ */ React42__namespace.default.createElement(
     "input",
     {
       type: "text",
@@ -8141,20 +8091,20 @@ var NumberInput = ({
       className: "input input-ghost settings-content text-base-content w-20 max-w-xs rounded border-0 bg-transparent px-3 py-1 text-right !outline-none",
       onFocus: (e) => e.target.select()
     }
-  ), /* @__PURE__ */ React43__namespace.default.createElement(
+  ), /* @__PURE__ */ React42__namespace.default.createElement(
     "button",
     {
       onClick: decrement,
       className: `btn btn-circle btn-sm ${value <= min || disabled ? "btn-disabled !bg-opacity-5" : ""}`
     },
-    /* @__PURE__ */ React43__namespace.default.createElement(fi.FiMinus, { className: "h-4 w-4" })
-  ), /* @__PURE__ */ React43__namespace.default.createElement(
+    /* @__PURE__ */ React42__namespace.default.createElement(fi.FiMinus, { className: "h-4 w-4" })
+  ), /* @__PURE__ */ React42__namespace.default.createElement(
     "button",
     {
       onClick: increment,
       className: `btn btn-circle btn-sm ${value >= max || disabled ? "btn-disabled !bg-opacity-5" : ""}`
     },
-    /* @__PURE__ */ React43__namespace.default.createElement(fi.FiPlus, { className: "h-4 w-4" })
+    /* @__PURE__ */ React42__namespace.default.createElement(fi.FiPlus, { className: "h-4 w-4" })
   )));
 };
 var NumberInput_default = NumberInput;
@@ -8171,16 +8121,16 @@ var FontDropdown = ({
   const defaultIconSize = useDefaultIconSize();
   const allOptions = [...options2, ...moreOptions ?? []];
   const selectedOption = allOptions.find((option) => option.option === selected) ?? allOptions[0];
-  return /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "dropdown dropdown-top" }, /* @__PURE__ */ React43__namespace.default.createElement(
+  return /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "dropdown dropdown-top" }, /* @__PURE__ */ React42__namespace.default.createElement(
     "button",
     {
       tabIndex: 0,
       className: "btn btn-sm flex items-center gap-1 px-[20px] font-normal normal-case",
       onClick: (e) => e.currentTarget.focus()
     },
-    /* @__PURE__ */ React43__namespace.default.createElement("span", { style: { fontFamily: onGetFontFamily(selectedOption.option, family ?? "") } }, selectedOption.label),
-    /* @__PURE__ */ React43__namespace.default.createElement(fi.FiChevronUp, { size: iconSize16 })
-  ), /* @__PURE__ */ React43__namespace.default.createElement(
+    /* @__PURE__ */ React42__namespace.default.createElement("span", { style: { fontFamily: onGetFontFamily(selectedOption.option, family ?? "") } }, selectedOption.label),
+    /* @__PURE__ */ React42__namespace.default.createElement(fi.FiChevronUp, { size: iconSize16 })
+  ), /* @__PURE__ */ React42__namespace.default.createElement(
     "ul",
     {
       tabIndex: 0,
@@ -8189,8 +8139,8 @@ var FontDropdown = ({
         moreOptions?.length ? "" : "inline max-h-80 overflow-y-scroll"
       )
     },
-    options2.map(({ option, label }) => /* @__PURE__ */ React43__namespace.default.createElement("li", { key: option, onClick: () => onSelect(option) }, /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "flex items-center px-0" }, /* @__PURE__ */ React43__namespace.default.createElement("span", { style: { minWidth: `${defaultIconSize}px` } }, selected === option && /* @__PURE__ */ React43__namespace.default.createElement(md.MdCheck, { className: "text-base-content" })), /* @__PURE__ */ React43__namespace.default.createElement("span", { style: { fontFamily: onGetFontFamily(option, family ?? "") } }, label || option)))),
-    moreOptions && moreOptions.length > 0 && /* @__PURE__ */ React43__namespace.default.createElement("li", { className: "dropdown dropdown-left dropdown-top" }, /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "flex items-center px-0" }, /* @__PURE__ */ React43__namespace.default.createElement("span", { style: { minWidth: `${defaultIconSize}px` } }, /* @__PURE__ */ React43__namespace.default.createElement(fi.FiChevronLeft, { size: iconSize16 })), /* @__PURE__ */ React43__namespace.default.createElement("span", null, _("System Fonts"))), /* @__PURE__ */ React43__namespace.default.createElement(
+    options2.map(({ option, label }) => /* @__PURE__ */ React42__namespace.default.createElement("li", { key: option, onClick: () => onSelect(option) }, /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "flex items-center px-0" }, /* @__PURE__ */ React42__namespace.default.createElement("span", { style: { minWidth: `${defaultIconSize}px` } }, selected === option && /* @__PURE__ */ React42__namespace.default.createElement(md.MdCheck, { className: "text-base-content" })), /* @__PURE__ */ React42__namespace.default.createElement("span", { style: { fontFamily: onGetFontFamily(option, family ?? "") } }, label || option)))),
+    moreOptions && moreOptions.length > 0 && /* @__PURE__ */ React42__namespace.default.createElement("li", { className: "dropdown dropdown-left dropdown-top" }, /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "flex items-center px-0" }, /* @__PURE__ */ React42__namespace.default.createElement("span", { style: { minWidth: `${defaultIconSize}px` } }, /* @__PURE__ */ React42__namespace.default.createElement(fi.FiChevronLeft, { size: iconSize16 })), /* @__PURE__ */ React42__namespace.default.createElement("span", null, _("System Fonts"))), /* @__PURE__ */ React42__namespace.default.createElement(
       "ul",
       {
         tabIndex: 0,
@@ -8199,7 +8149,7 @@ var FontDropdown = ({
           "!mr-5 mb-[-46px] inline max-h-80 w-[200px] overflow-y-scroll"
         )
       },
-      moreOptions.map((option, index) => /* @__PURE__ */ React43__namespace.default.createElement("li", { key: `${index}-${option.option}`, onClick: () => onSelect(option.option) }, /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "flex items-center px-2" }, /* @__PURE__ */ React43__namespace.default.createElement("span", { style: { minWidth: `${defaultIconSize}px` } }, selected === option.option && /* @__PURE__ */ React43__namespace.default.createElement(md.MdCheck, { className: "text-base-content" })), /* @__PURE__ */ React43__namespace.default.createElement("span", { style: { fontFamily: onGetFontFamily(option.option, family ?? "") } }, option.label || option.option))))
+      moreOptions.map((option, index) => /* @__PURE__ */ React42__namespace.default.createElement("li", { key: `${index}-${option.option}`, onClick: () => onSelect(option.option) }, /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "flex items-center px-2" }, /* @__PURE__ */ React42__namespace.default.createElement("span", { style: { minWidth: `${defaultIconSize}px` } }, selected === option.option && /* @__PURE__ */ React42__namespace.default.createElement(md.MdCheck, { className: "text-base-content" })), /* @__PURE__ */ React42__namespace.default.createElement("span", { style: { fontFamily: onGetFontFamily(option.option, family ?? "") } }, option.label || option.option))))
     ))
   ));
 };
@@ -8219,7 +8169,7 @@ var FontFace = ({
   onSelect
 }) => {
   const _ = useTranslation();
-  return /* @__PURE__ */ React43__namespace.default.createElement("div", { className: clsx8__default.default("config-item", className) }, /* @__PURE__ */ React43__namespace.default.createElement("span", { className: "" }, label), /* @__PURE__ */ React43__namespace.default.createElement(
+  return /* @__PURE__ */ React42__namespace.default.createElement("div", { className: clsx8__default.default("config-item", className) }, /* @__PURE__ */ React42__namespace.default.createElement("span", { className: "" }, label), /* @__PURE__ */ React42__namespace.default.createElement(
     FontDropDown_default,
     {
       family,
@@ -8266,47 +8216,47 @@ var FontPanel = ({ bookKey }) => {
       defaultSysFonts = ANDROID_FONTS;
       break;
   }
-  const [sysFonts, setSysFonts] = React43.useState(defaultSysFonts);
-  const [defaultFontSize, setDefaultFontSize] = React43.useState(viewSettings.defaultFontSize);
-  const [minFontSize, setMinFontSize] = React43.useState(viewSettings.minimumFontSize);
-  const [overrideFont, setOverrideFont] = React43.useState(viewSettings.overrideFont);
-  const [defaultFont, setDefaultFont] = React43.useState(viewSettings.defaultFont);
-  const [defaultCJKFont, setDefaultCJKFont] = React43.useState(viewSettings.defaultCJKFont);
-  const [serifFont, setSerifFont] = React43.useState(viewSettings.serifFont);
-  const [sansSerifFont, setSansSerifFont] = React43.useState(viewSettings.sansSerifFont);
-  const [monospaceFont, setMonospaceFont] = React43.useState(viewSettings.monospaceFont);
-  const [fontWeight, setFontWeight] = React43.useState(viewSettings.fontWeight);
-  const [CJKFonts] = React43.useState(() => {
+  const [sysFonts, setSysFonts] = React42.useState(defaultSysFonts);
+  const [defaultFontSize, setDefaultFontSize] = React42.useState(viewSettings.defaultFontSize);
+  const [minFontSize, setMinFontSize] = React42.useState(viewSettings.minimumFontSize);
+  const [overrideFont, setOverrideFont] = React42.useState(viewSettings.overrideFont);
+  const [defaultFont, setDefaultFont] = React42.useState(viewSettings.defaultFont);
+  const [defaultCJKFont, setDefaultCJKFont] = React42.useState(viewSettings.defaultCJKFont);
+  const [serifFont, setSerifFont] = React42.useState(viewSettings.serifFont);
+  const [sansSerifFont, setSansSerifFont] = React42.useState(viewSettings.sansSerifFont);
+  const [monospaceFont, setMonospaceFont] = React42.useState(viewSettings.monospaceFont);
+  const [fontWeight, setFontWeight] = React42.useState(viewSettings.fontWeight);
+  const [CJKFonts] = React42.useState(() => {
     return Array.from(/* @__PURE__ */ new Set([...sysFonts, ...CJK_SERIF_FONTS, ...CJK_SANS_SERIF_FONTS])).filter((font) => CJK_FONTS_PATTENS.test(font) || CJK_NAMES_PATTENS.test(font)).sort((a, b) => a.localeCompare(b));
   });
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     setSysFonts([]);
   }, []);
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     saveViewSettings(envConfig, bookKey, "defaultFont", defaultFont);
   }, [defaultFont]);
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     saveViewSettings(envConfig, bookKey, "defaultCJKFont", defaultCJKFont);
   }, [defaultCJKFont]);
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     saveViewSettings(envConfig, bookKey, "defaultFontSize", defaultFontSize);
   }, [defaultFontSize]);
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     saveViewSettings(envConfig, bookKey, "minimumFontSize", minFontSize);
   }, [minFontSize]);
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     saveViewSettings(envConfig, bookKey, "fontWeight", fontWeight);
   }, [fontWeight]);
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     saveViewSettings(envConfig, bookKey, "serifFont", serifFont);
   }, [serifFont]);
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     saveViewSettings(envConfig, bookKey, "sansSerifFont", sansSerifFont);
   }, [sansSerifFont]);
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     saveViewSettings(envConfig, bookKey, "monospaceFont", monospaceFont);
   }, [monospaceFont]);
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     saveViewSettings(envConfig, bookKey, "overrideFont", overrideFont);
   }, [overrideFont]);
   const handleFontFamilyFont = (option) => {
@@ -8321,7 +8271,7 @@ var FontPanel = ({ bookKey }) => {
         return "";
     }
   };
-  return /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "my-4 w-full space-y-6" }, /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "w-full" }, /* @__PURE__ */ React43__namespace.default.createElement("h2", { className: "mb-2 font-medium" }, _("Font Size")), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "card border-base-200 border shadow" }, /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "divide-base-200 divide-y" }, /* @__PURE__ */ React43__namespace.default.createElement(
+  return /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "my-4 w-full space-y-6" }, /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "w-full" }, /* @__PURE__ */ React42__namespace.default.createElement("h2", { className: "mb-2 font-medium" }, _("Font Size")), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "card border-base-200 border shadow" }, /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "divide-base-200 divide-y" }, /* @__PURE__ */ React42__namespace.default.createElement(
     NumberInput_default,
     {
       label: _("Default Font Size"),
@@ -8330,7 +8280,7 @@ var FontPanel = ({ bookKey }) => {
       min: minFontSize,
       max: 120
     }
-  ), /* @__PURE__ */ React43__namespace.default.createElement(
+  ), /* @__PURE__ */ React42__namespace.default.createElement(
     NumberInput_default,
     {
       label: _("Minimum Font Size"),
@@ -8339,7 +8289,7 @@ var FontPanel = ({ bookKey }) => {
       min: 1,
       max: 120
     }
-  )))), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "w-full" }, /* @__PURE__ */ React43__namespace.default.createElement("h2", { className: "mb-2 font-medium" }, _("Font Weight")), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "card border-base-200 border shadow" }, /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "divide-base-200 divide-y" }, /* @__PURE__ */ React43__namespace.default.createElement(
+  )))), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "w-full" }, /* @__PURE__ */ React42__namespace.default.createElement("h2", { className: "mb-2 font-medium" }, _("Font Weight")), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "card border-base-200 border shadow" }, /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "divide-base-200 divide-y" }, /* @__PURE__ */ React42__namespace.default.createElement(
     NumberInput_default,
     {
       label: _("Font Weight"),
@@ -8349,7 +8299,7 @@ var FontPanel = ({ bookKey }) => {
       max: 900,
       step: 100
     }
-  )))), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "w-full" }, /* @__PURE__ */ React43__namespace.default.createElement("h2", { className: "mb-2 font-medium" }, _("Font Family")), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "card border-base-200 border shadow" }, /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "divide-base-200 divide-y" }, /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "config-item" }, /* @__PURE__ */ React43__namespace.default.createElement("span", { className: "" }, _("Default Font")), /* @__PURE__ */ React43__namespace.default.createElement(
+  )))), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "w-full" }, /* @__PURE__ */ React42__namespace.default.createElement("h2", { className: "mb-2 font-medium" }, _("Font Family")), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "card border-base-200 border shadow" }, /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "divide-base-200 divide-y" }, /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "config-item" }, /* @__PURE__ */ React42__namespace.default.createElement("span", { className: "" }, _("Default Font")), /* @__PURE__ */ React42__namespace.default.createElement(
     FontDropDown_default,
     {
       options: fontFamilyOptions,
@@ -8357,7 +8307,7 @@ var FontPanel = ({ bookKey }) => {
       onSelect: setDefaultFont,
       onGetFontFamily: handleFontFamilyFont
     }
-  )), (isCJKEnv() || view?.language.isCJK) && /* @__PURE__ */ React43__namespace.default.createElement(
+  )), (isCJKEnv() || view?.language.isCJK) && /* @__PURE__ */ React42__namespace.default.createElement(
     FontFace,
     {
       className: "config-item-top",
@@ -8367,7 +8317,7 @@ var FontPanel = ({ bookKey }) => {
       selected: defaultCJKFont,
       onSelect: setDefaultCJKFont
     }
-  ), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "config-item" }, /* @__PURE__ */ React43__namespace.default.createElement("span", { className: "" }, _("Override Book Font")), /* @__PURE__ */ React43__namespace.default.createElement(
+  ), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "config-item" }, /* @__PURE__ */ React42__namespace.default.createElement("span", { className: "" }, _("Override Book Font")), /* @__PURE__ */ React42__namespace.default.createElement(
     "input",
     {
       type: "checkbox",
@@ -8375,7 +8325,7 @@ var FontPanel = ({ bookKey }) => {
       checked: overrideFont,
       onChange: () => setOverrideFont(!overrideFont)
     }
-  ))))), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "w-full" }, /* @__PURE__ */ React43__namespace.default.createElement("h2", { className: "mb-2 font-medium" }, _("Font Face")), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "card border-base-200 border shadow" }, /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "divide-base-200 divide-y" }, /* @__PURE__ */ React43__namespace.default.createElement(
+  ))))), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "w-full" }, /* @__PURE__ */ React42__namespace.default.createElement("h2", { className: "mb-2 font-medium" }, _("Font Face")), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "card border-base-200 border shadow" }, /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "divide-base-200 divide-y" }, /* @__PURE__ */ React42__namespace.default.createElement(
     FontFace,
     {
       className: "config-item-top",
@@ -8386,7 +8336,7 @@ var FontPanel = ({ bookKey }) => {
       selected: serifFont,
       onSelect: setSerifFont
     }
-  ), /* @__PURE__ */ React43__namespace.default.createElement(
+  ), /* @__PURE__ */ React42__namespace.default.createElement(
     FontFace,
     {
       family: "sans-serif",
@@ -8396,7 +8346,7 @@ var FontPanel = ({ bookKey }) => {
       selected: sansSerifFont,
       onSelect: setSansSerifFont
     }
-  ), /* @__PURE__ */ React43__namespace.default.createElement(
+  ), /* @__PURE__ */ React42__namespace.default.createElement(
     FontFace,
     {
       className: "config-item-bottom",
@@ -8422,52 +8372,52 @@ var LayoutPanel = ({ bookKey }) => {
   const view = getView(bookKey);
   const bookData = getBookData(bookKey);
   const viewSettings = getViewSettings(bookKey);
-  const [paragraphMargin, setParagraphMargin] = React43.useState(viewSettings.paragraphMargin);
-  const [lineHeight, setLineHeight] = React43.useState(viewSettings.lineHeight);
-  const [wordSpacing, setWordSpacing] = React43.useState(viewSettings.wordSpacing);
-  const [letterSpacing, setLetterSpacing] = React43.useState(viewSettings.letterSpacing);
-  const [textIndent, setTextIndent] = React43.useState(viewSettings.textIndent);
-  const [fullJustification, setFullJustification] = React43.useState(viewSettings.fullJustification);
-  const [hyphenation, setHyphenation] = React43.useState(viewSettings.hyphenation);
-  const [marginPx, setMarginPx] = React43.useState(viewSettings.marginPx);
-  const [gapPercent, setGapPercent] = React43.useState(viewSettings.gapPercent);
-  const [maxColumnCount, setMaxColumnCount] = React43.useState(viewSettings.maxColumnCount);
-  const [maxInlineSize, setMaxInlineSize] = React43.useState(viewSettings.maxInlineSize);
-  const [maxBlockSize, setMaxBlockSize] = React43.useState(viewSettings.maxBlockSize);
-  const [writingMode, setWritingMode] = React43.useState(viewSettings.writingMode);
-  const [overrideLayout, setOverrideLayout] = React43.useState(viewSettings.overrideLayout);
-  const [isScrolledMode, setScrolledMode] = React43.useState(viewSettings.scrolled);
-  const [doubleBorder, setDoubleBorder] = React43.useState(viewSettings.doubleBorder);
-  const [borderColor, setBorderColor] = React43.useState(viewSettings.borderColor);
-  const [showHeader, setShowHeader] = React43.useState(viewSettings.showHeader);
-  const [showFooter, setShowFooter] = React43.useState(viewSettings.showFooter);
-  React43.useEffect(() => {
+  const [paragraphMargin, setParagraphMargin] = React42.useState(viewSettings.paragraphMargin);
+  const [lineHeight, setLineHeight] = React42.useState(viewSettings.lineHeight);
+  const [wordSpacing, setWordSpacing] = React42.useState(viewSettings.wordSpacing);
+  const [letterSpacing, setLetterSpacing] = React42.useState(viewSettings.letterSpacing);
+  const [textIndent, setTextIndent] = React42.useState(viewSettings.textIndent);
+  const [fullJustification, setFullJustification] = React42.useState(viewSettings.fullJustification);
+  const [hyphenation, setHyphenation] = React42.useState(viewSettings.hyphenation);
+  const [marginPx, setMarginPx] = React42.useState(viewSettings.marginPx);
+  const [gapPercent, setGapPercent] = React42.useState(viewSettings.gapPercent);
+  const [maxColumnCount, setMaxColumnCount] = React42.useState(viewSettings.maxColumnCount);
+  const [maxInlineSize, setMaxInlineSize] = React42.useState(viewSettings.maxInlineSize);
+  const [maxBlockSize, setMaxBlockSize] = React42.useState(viewSettings.maxBlockSize);
+  const [writingMode, setWritingMode] = React42.useState(viewSettings.writingMode);
+  const [overrideLayout, setOverrideLayout] = React42.useState(viewSettings.overrideLayout);
+  const [isScrolledMode, setScrolledMode] = React42.useState(viewSettings.scrolled);
+  const [doubleBorder, setDoubleBorder] = React42.useState(viewSettings.doubleBorder);
+  const [borderColor, setBorderColor] = React42.useState(viewSettings.borderColor);
+  const [showHeader, setShowHeader] = React42.useState(viewSettings.showHeader);
+  const [showFooter, setShowFooter] = React42.useState(viewSettings.showFooter);
+  React42.useEffect(() => {
     saveViewSettings(envConfig, bookKey, "paragraphMargin", paragraphMargin);
   }, [paragraphMargin]);
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     saveViewSettings(envConfig, bookKey, "lineHeight", lineHeight);
   }, [lineHeight]);
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     saveViewSettings(envConfig, bookKey, "wordSpacing", wordSpacing);
   }, [wordSpacing]);
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     saveViewSettings(envConfig, bookKey, "letterSpacing", letterSpacing);
   }, [letterSpacing]);
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     saveViewSettings(envConfig, bookKey, "textIndent", textIndent);
   }, [textIndent]);
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     saveViewSettings(envConfig, bookKey, "fullJustification", fullJustification);
   }, [fullJustification]);
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     saveViewSettings(envConfig, bookKey, "hyphenation", hyphenation);
   }, [hyphenation]);
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     if (marginPx === viewSettings.marginPx) return;
     saveViewSettings(envConfig, bookKey, "marginPx", marginPx, false, false);
     view?.renderer.setAttribute("margin", `${marginPx}px`);
   }, [marginPx]);
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     if (gapPercent === viewSettings.gapPercent) return;
     saveViewSettings(envConfig, bookKey, "gapPercent", gapPercent, false, false);
     view?.renderer.setAttribute("gap", `${gapPercent}%`);
@@ -8475,23 +8425,23 @@ var LayoutPanel = ({ bookKey }) => {
       view?.renderer.setAttribute("flow", "scrolled");
     }
   }, [gapPercent]);
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     if (maxColumnCount === viewSettings.maxColumnCount) return;
     saveViewSettings(envConfig, bookKey, "maxColumnCount", maxColumnCount, false, false);
     view?.renderer.setAttribute("max-column-count", maxColumnCount);
     view?.renderer.setAttribute("max-inline-size", `${getMaxInlineSize(viewSettings)}px`);
   }, [maxColumnCount]);
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     if (maxInlineSize === viewSettings.maxInlineSize) return;
     saveViewSettings(envConfig, bookKey, "maxInlineSize", maxInlineSize, false, false);
     view?.renderer.setAttribute("max-inline-size", `${getMaxInlineSize(viewSettings)}px`);
   }, [maxInlineSize]);
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     if (maxBlockSize === viewSettings.maxBlockSize) return;
     saveViewSettings(envConfig, bookKey, "maxBlockSize", maxBlockSize, false, false);
     view?.renderer.setAttribute("max-block-size", `${maxBlockSize}px`);
   }, [maxBlockSize]);
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     if (writingMode === viewSettings.writingMode) return;
     const prevWritingMode = viewSettings.writingMode;
     if (writingMode.includes("vertical")) {
@@ -8508,10 +8458,10 @@ var LayoutPanel = ({ bookKey }) => {
       setTimeout(() => window.location.reload(), 100);
     }
   }, [writingMode]);
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     saveViewSettings(envConfig, bookKey, "overrideLayout", overrideLayout);
   }, [overrideLayout]);
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     if (isScrolledMode === viewSettings.scrolled) return;
     saveViewSettings(envConfig, bookKey, "scrolled", isScrolledMode);
     getView(bookKey)?.renderer.setAttribute("flow", isScrolledMode ? "scrolled" : "paginated");
@@ -8521,7 +8471,7 @@ var LayoutPanel = ({ bookKey }) => {
     );
     getView(bookKey)?.renderer.setStyles?.(getStyles(viewSettings));
   }, [isScrolledMode]);
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     if (doubleBorder === viewSettings.doubleBorder) return;
     if (doubleBorder && viewSettings.vertical) {
       viewSettings.gapPercent = Math.max(
@@ -8533,10 +8483,10 @@ var LayoutPanel = ({ bookKey }) => {
     }
     saveViewSettings(envConfig, bookKey, "doubleBorder", doubleBorder, false, false);
   }, [doubleBorder]);
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     saveViewSettings(envConfig, bookKey, "borderColor", borderColor, false, false);
   }, [borderColor]);
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     if (showHeader === viewSettings.showHeader) return;
     if (showHeader && !viewSettings.vertical) {
       viewSettings.marginPx = Math.max(viewSettings.marginPx, 44);
@@ -8552,7 +8502,7 @@ var LayoutPanel = ({ bookKey }) => {
     }
     saveViewSettings(envConfig, bookKey, "showHeader", showHeader, false, false);
   }, [showHeader]);
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     if (showFooter === viewSettings.showFooter) return;
     if (showFooter && !viewSettings.vertical) {
       viewSettings.marginPx = Math.max(viewSettings.marginPx, 44);
@@ -8570,7 +8520,7 @@ var LayoutPanel = ({ bookKey }) => {
   }, [showFooter]);
   const langCode = getBookLangCode(bookData.bookDoc?.metadata?.language);
   const mightBeRTLBook = MIGHT_BE_RTL_LANGS.includes(langCode) || isCJKEnv();
-  return /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "my-4 w-full space-y-6" }, /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "w-full" }, /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "flex items-center justify-between" }, /* @__PURE__ */ React43__namespace.default.createElement("h2", { className: "font-medium" }, _("Scrolled Mode")), /* @__PURE__ */ React43__namespace.default.createElement(
+  return /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "my-4 w-full space-y-6" }, /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "w-full" }, /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "flex items-center justify-between" }, /* @__PURE__ */ React42__namespace.default.createElement("h2", { className: "font-medium" }, _("Scrolled Mode")), /* @__PURE__ */ React42__namespace.default.createElement(
     "input",
     {
       type: "checkbox",
@@ -8578,35 +8528,35 @@ var LayoutPanel = ({ bookKey }) => {
       checked: isScrolledMode,
       onChange: () => setScrolledMode(!isScrolledMode)
     }
-  ))), mightBeRTLBook && /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "w-full" }, /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "flex items-center justify-between" }, /* @__PURE__ */ React43__namespace.default.createElement("h2", { className: "font-medium" }, _("Writing Mode")), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "flex gap-4" }, /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "lg:tooltip lg:tooltip-bottom", "data-tip": _("Default") }, /* @__PURE__ */ React43__namespace.default.createElement(
+  ))), mightBeRTLBook && /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "w-full" }, /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "flex items-center justify-between" }, /* @__PURE__ */ React42__namespace.default.createElement("h2", { className: "font-medium" }, _("Writing Mode")), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "flex gap-4" }, /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "lg:tooltip lg:tooltip-bottom", "data-tip": _("Default") }, /* @__PURE__ */ React42__namespace.default.createElement(
     "button",
     {
       className: `btn btn-ghost btn-circle btn-sm ${writingMode === "auto" ? "btn-active bg-base-300" : ""}`,
       onClick: () => setWritingMode("auto")
     },
-    /* @__PURE__ */ React43__namespace.default.createElement(md.MdOutlineAutoMode, null)
-  )), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "lg:tooltip lg:tooltip-bottom", "data-tip": _("Horizontal Direction") }, /* @__PURE__ */ React43__namespace.default.createElement(
+    /* @__PURE__ */ React42__namespace.default.createElement(md.MdOutlineAutoMode, null)
+  )), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "lg:tooltip lg:tooltip-bottom", "data-tip": _("Horizontal Direction") }, /* @__PURE__ */ React42__namespace.default.createElement(
     "button",
     {
       className: `btn btn-ghost btn-circle btn-sm ${writingMode === "horizontal-tb" ? "btn-active bg-base-300" : ""}`,
       onClick: () => setWritingMode("horizontal-tb")
     },
-    /* @__PURE__ */ React43__namespace.default.createElement(md.MdOutlineTextRotationNone, null)
-  )), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "lg:tooltip lg:tooltip-bottom", "data-tip": _("Vertical Direction") }, /* @__PURE__ */ React43__namespace.default.createElement(
+    /* @__PURE__ */ React42__namespace.default.createElement(md.MdOutlineTextRotationNone, null)
+  )), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "lg:tooltip lg:tooltip-bottom", "data-tip": _("Vertical Direction") }, /* @__PURE__ */ React42__namespace.default.createElement(
     "button",
     {
       className: `btn btn-ghost btn-circle btn-sm ${writingMode === "vertical-rl" ? "btn-active bg-base-300" : ""}`,
       onClick: () => setWritingMode("vertical-rl")
     },
-    /* @__PURE__ */ React43__namespace.default.createElement(md.MdTextRotateVertical, null)
-  )), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "lg:tooltip lg:tooltip-bottom", "data-tip": _("RTL Direction") }, /* @__PURE__ */ React43__namespace.default.createElement(
+    /* @__PURE__ */ React42__namespace.default.createElement(md.MdTextRotateVertical, null)
+  )), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "lg:tooltip lg:tooltip-bottom", "data-tip": _("RTL Direction") }, /* @__PURE__ */ React42__namespace.default.createElement(
     "button",
     {
       className: `btn btn-ghost btn-circle btn-sm ${writingMode === "horizontal-rl" ? "btn-active bg-base-300" : ""}`,
       onClick: () => setWritingMode("horizontal-rl")
     },
-    /* @__PURE__ */ React43__namespace.default.createElement(tb.TbTextDirectionRtl, null)
-  ))))), viewSettings.vertical && /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "w-full" }, /* @__PURE__ */ React43__namespace.default.createElement("h2", { className: "mb-2 font-medium" }, _("Border Frame")), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "card bg-base-100 border-base-200 border shadow" }, /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "divide-base-200 divide-y" }, /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "config-item" }, /* @__PURE__ */ React43__namespace.default.createElement("span", { className: "" }, _("Double Border")), /* @__PURE__ */ React43__namespace.default.createElement(
+    /* @__PURE__ */ React42__namespace.default.createElement(tb.TbTextDirectionRtl, null)
+  ))))), viewSettings.vertical && /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "w-full" }, /* @__PURE__ */ React42__namespace.default.createElement("h2", { className: "mb-2 font-medium" }, _("Border Frame")), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "card bg-base-100 border-base-200 border shadow" }, /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "divide-base-200 divide-y" }, /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "config-item" }, /* @__PURE__ */ React42__namespace.default.createElement("span", { className: "" }, _("Double Border")), /* @__PURE__ */ React42__namespace.default.createElement(
     "input",
     {
       type: "checkbox",
@@ -8614,19 +8564,19 @@ var LayoutPanel = ({ bookKey }) => {
       checked: doubleBorder,
       onChange: () => setDoubleBorder(!doubleBorder)
     }
-  )), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "config-item" }, /* @__PURE__ */ React43__namespace.default.createElement("span", { className: "" }, _("Border Color")), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "flex gap-4" }, /* @__PURE__ */ React43__namespace.default.createElement(
+  )), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "config-item" }, /* @__PURE__ */ React42__namespace.default.createElement("span", { className: "" }, _("Border Color")), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "flex gap-4" }, /* @__PURE__ */ React42__namespace.default.createElement(
     "button",
     {
       className: `btn btn-circle btn-sm bg-red-300 hover:bg-red-500 ${borderColor === "red" ? "btn-active !bg-red-500" : ""}`,
       onClick: () => setBorderColor("red")
     }
-  ), /* @__PURE__ */ React43__namespace.default.createElement(
+  ), /* @__PURE__ */ React42__namespace.default.createElement(
     "button",
     {
       className: `btn btn-circle btn-sm bg-black/50 hover:bg-black ${borderColor === "black" ? "btn-active !bg-black" : ""}`,
       onClick: () => setBorderColor("black")
     }
-  )))))), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "w-full" }, /* @__PURE__ */ React43__namespace.default.createElement("h2", { className: "mb-2 font-medium" }, _("Paragraph")), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "card bg-base-100 border-base-200 border shadow" }, /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "divide-base-200 divide-y" }, /* @__PURE__ */ React43__namespace.default.createElement(
+  )))))), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "w-full" }, /* @__PURE__ */ React42__namespace.default.createElement("h2", { className: "mb-2 font-medium" }, _("Paragraph")), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "card bg-base-100 border-base-200 border shadow" }, /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "divide-base-200 divide-y" }, /* @__PURE__ */ React42__namespace.default.createElement(
     NumberInput_default,
     {
       label: _("Paragraph Margin"),
@@ -8636,7 +8586,7 @@ var LayoutPanel = ({ bookKey }) => {
       max: 4,
       step: 0.5
     }
-  ), /* @__PURE__ */ React43__namespace.default.createElement(
+  ), /* @__PURE__ */ React42__namespace.default.createElement(
     NumberInput_default,
     {
       label: _("Line Spacing"),
@@ -8646,7 +8596,7 @@ var LayoutPanel = ({ bookKey }) => {
       max: 3,
       step: 0.1
     }
-  ), langCode !== "zh" && /* @__PURE__ */ React43__namespace.default.createElement(
+  ), langCode !== "zh" && /* @__PURE__ */ React42__namespace.default.createElement(
     NumberInput_default,
     {
       label: _("Word Spacing"),
@@ -8656,7 +8606,7 @@ var LayoutPanel = ({ bookKey }) => {
       max: 8,
       step: 0.5
     }
-  ), /* @__PURE__ */ React43__namespace.default.createElement(
+  ), /* @__PURE__ */ React42__namespace.default.createElement(
     NumberInput_default,
     {
       label: _("Letter Spacing"),
@@ -8666,7 +8616,7 @@ var LayoutPanel = ({ bookKey }) => {
       max: 4,
       step: 0.5
     }
-  ), /* @__PURE__ */ React43__namespace.default.createElement(
+  ), /* @__PURE__ */ React42__namespace.default.createElement(
     NumberInput_default,
     {
       label: _("Text Indent"),
@@ -8676,7 +8626,7 @@ var LayoutPanel = ({ bookKey }) => {
       max: 4,
       step: 1
     }
-  ), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "config-item" }, /* @__PURE__ */ React43__namespace.default.createElement("span", { className: "" }, _("Full Justification")), /* @__PURE__ */ React43__namespace.default.createElement(
+  ), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "config-item" }, /* @__PURE__ */ React42__namespace.default.createElement("span", { className: "" }, _("Full Justification")), /* @__PURE__ */ React42__namespace.default.createElement(
     "input",
     {
       type: "checkbox",
@@ -8684,7 +8634,7 @@ var LayoutPanel = ({ bookKey }) => {
       checked: fullJustification,
       onChange: () => setFullJustification(!fullJustification)
     }
-  )), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "config-item" }, /* @__PURE__ */ React43__namespace.default.createElement("span", { className: "" }, _("Hyphenation")), /* @__PURE__ */ React43__namespace.default.createElement(
+  )), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "config-item" }, /* @__PURE__ */ React42__namespace.default.createElement("span", { className: "" }, _("Hyphenation")), /* @__PURE__ */ React42__namespace.default.createElement(
     "input",
     {
       type: "checkbox",
@@ -8692,7 +8642,7 @@ var LayoutPanel = ({ bookKey }) => {
       checked: hyphenation,
       onChange: () => setHyphenation(!hyphenation)
     }
-  )), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "config-item" }, /* @__PURE__ */ React43__namespace.default.createElement("span", { className: "" }, _("Override Book Layout")), /* @__PURE__ */ React43__namespace.default.createElement(
+  )), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "config-item" }, /* @__PURE__ */ React42__namespace.default.createElement("span", { className: "" }, _("Override Book Layout")), /* @__PURE__ */ React42__namespace.default.createElement(
     "input",
     {
       type: "checkbox",
@@ -8700,7 +8650,7 @@ var LayoutPanel = ({ bookKey }) => {
       checked: overrideLayout,
       onChange: () => setOverrideLayout(!overrideLayout)
     }
-  ))))), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "w-full" }, /* @__PURE__ */ React43__namespace.default.createElement("h2", { className: "mb-2 font-medium" }, _("Page")), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "card bg-base-100 border-base-200 border shadow" }, /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "divide-base-200 divide-y" }, /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "config-item" }, /* @__PURE__ */ React43__namespace.default.createElement("span", { className: "" }, _("Show Header")), /* @__PURE__ */ React43__namespace.default.createElement(
+  ))))), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "w-full" }, /* @__PURE__ */ React42__namespace.default.createElement("h2", { className: "mb-2 font-medium" }, _("Page")), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "card bg-base-100 border-base-200 border shadow" }, /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "divide-base-200 divide-y" }, /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "config-item" }, /* @__PURE__ */ React42__namespace.default.createElement("span", { className: "" }, _("Show Header")), /* @__PURE__ */ React42__namespace.default.createElement(
     "input",
     {
       type: "checkbox",
@@ -8708,7 +8658,7 @@ var LayoutPanel = ({ bookKey }) => {
       checked: showHeader,
       onChange: () => setShowHeader(!showHeader)
     }
-  )), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "config-item" }, /* @__PURE__ */ React43__namespace.default.createElement("span", { className: "" }, _("Show Footer")), /* @__PURE__ */ React43__namespace.default.createElement(
+  )), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "config-item" }, /* @__PURE__ */ React42__namespace.default.createElement("span", { className: "" }, _("Show Footer")), /* @__PURE__ */ React42__namespace.default.createElement(
     "input",
     {
       type: "checkbox",
@@ -8716,7 +8666,7 @@ var LayoutPanel = ({ bookKey }) => {
       checked: showFooter,
       onChange: () => setShowFooter(!showFooter)
     }
-  )), /* @__PURE__ */ React43__namespace.default.createElement(
+  )), /* @__PURE__ */ React42__namespace.default.createElement(
     NumberInput_default,
     {
       label: _("Vertical Margins (px)"),
@@ -8726,7 +8676,7 @@ var LayoutPanel = ({ bookKey }) => {
       max: 88,
       step: 4
     }
-  ), /* @__PURE__ */ React43__namespace.default.createElement(
+  ), /* @__PURE__ */ React42__namespace.default.createElement(
     NumberInput_default,
     {
       label: _("Horizontal Margins (%)"),
@@ -8735,7 +8685,7 @@ var LayoutPanel = ({ bookKey }) => {
       min: viewSettings.vertical && (showFooter || showHeader) ? Math.ceil(4800 / window.innerWidth) : 0,
       max: 30
     }
-  ), /* @__PURE__ */ React43__namespace.default.createElement(
+  ), /* @__PURE__ */ React42__namespace.default.createElement(
     NumberInput_default,
     {
       label: _("Maximum Number of Columns"),
@@ -8744,7 +8694,7 @@ var LayoutPanel = ({ bookKey }) => {
       min: 1,
       max: 4
     }
-  ), /* @__PURE__ */ React43__namespace.default.createElement(
+  ), /* @__PURE__ */ React42__namespace.default.createElement(
     NumberInput_default,
     {
       label: viewSettings.vertical ? _("Maximum Column Height") : _("Maximum Column Width"),
@@ -8755,7 +8705,7 @@ var LayoutPanel = ({ bookKey }) => {
       max: 9999,
       step: 100
     }
-  ), /* @__PURE__ */ React43__namespace.default.createElement(
+  ), /* @__PURE__ */ React42__namespace.default.createElement(
     NumberInput_default,
     {
       label: viewSettings.vertical ? _("Maximum Column Width") : _("Maximum Column Height"),
@@ -8772,9 +8722,9 @@ var LayoutPanel_default = LayoutPanel;
 init_md5();
 init_constants();
 var ColorInput = ({ label, value, onChange }) => {
-  const [isOpen, setIsOpen] = React43.useState(false);
-  const pickerRef = React43.useRef(null);
-  React43.useEffect(() => {
+  const [isOpen, setIsOpen] = React42.useState(false);
+  const pickerRef = React42.useRef(null);
+  React42.useEffect(() => {
     function handleClickOutside(event) {
       if (pickerRef.current && !pickerRef.current.contains(event.target)) {
         setIsOpen(false);
@@ -8790,14 +8740,14 @@ var ColorInput = ({ label, value, onChange }) => {
   const handlePickerChange = (colorResult) => {
     onChange(colorResult.hex);
   };
-  return /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "mb-3" }, /* @__PURE__ */ React43__namespace.default.createElement("label", { className: "mb-1 block text-sm font-medium" }, label), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "flex items-center" }, /* @__PURE__ */ React43__namespace.default.createElement(
+  return /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "mb-3" }, /* @__PURE__ */ React42__namespace.default.createElement("label", { className: "mb-1 block text-sm font-medium" }, label), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "flex items-center" }, /* @__PURE__ */ React42__namespace.default.createElement(
     "div",
     {
       className: "border-base-200 relative mr-2 flex h-7 w-8 cursor-pointer items-center justify-center overflow-hidden rounded border",
       style: { backgroundColor: value },
       onClick: () => setIsOpen(!isOpen)
     }
-  ), /* @__PURE__ */ React43__namespace.default.createElement(
+  ), /* @__PURE__ */ React42__namespace.default.createElement(
     "input",
     {
       type: "text",
@@ -8805,7 +8755,7 @@ var ColorInput = ({ label, value, onChange }) => {
       onChange: (e) => onChange(e.target.value),
       className: "bg-base-100 text-base-content border-base-200 min-w-4 max-w-36 flex-1 rounded border p-1 font-mono text-sm"
     }
-  )), isOpen && /* @__PURE__ */ React43__namespace.default.createElement("div", { ref: pickerRef, className: "relative z-50 mt-2" }, /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "absolute" }, /* @__PURE__ */ React43__namespace.default.createElement(
+  )), isOpen && /* @__PURE__ */ React42__namespace.default.createElement("div", { ref: pickerRef, className: "relative z-50 mt-2" }, /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "absolute" }, /* @__PURE__ */ React42__namespace.default.createElement(
     reactColor.SketchPicker,
     {
       width: "100%",
@@ -8822,19 +8772,19 @@ var ThemeEditor = ({ customTheme, onSave, onDelete, onCancel }) => {
   const _ = useTranslation();
   const { settings } = useSettingsStore();
   const template = CUSTOM_THEME_TEMPLATES[Math.floor(Math.random() * CUSTOM_THEME_TEMPLATES.length)];
-  const [lightTextColor, setLightTextColor] = React43.useState(
+  const [lightTextColor, setLightTextColor] = React42.useState(
     customTheme?.colors.light.fg || template.light.fg
   );
-  const [lightBackgroundColor, setLightBackgroundColor] = React43.useState(
+  const [lightBackgroundColor, setLightBackgroundColor] = React42.useState(
     customTheme?.colors.light.bg || template.light.bg
   );
-  const [darkTextColor, setDarkTextColor] = React43.useState(
+  const [darkTextColor, setDarkTextColor] = React42.useState(
     customTheme?.colors.dark.fg || template.dark.fg
   );
-  const [darkBackgroundColor, setDarkBackgroundColor] = React43.useState(
+  const [darkBackgroundColor, setDarkBackgroundColor] = React42.useState(
     customTheme?.colors.dark.bg || template.dark.bg
   );
-  const [themeName, setThemeName] = React43.useState(customTheme?.label || _("Custom"));
+  const [themeName, setThemeName] = React42.useState(customTheme?.label || _("Custom"));
   const ThemePreview = ({ textColor, backgroundColor, label }) => /* @__PURE__ */ React.createElement("div", { className: "mb-2 mt-4" }, /* @__PURE__ */ React.createElement("label", { className: "mb-1 block text-sm font-medium" }, label), /* @__PURE__ */ React.createElement(
     "div",
     {
@@ -8933,10 +8883,10 @@ var ColorPanel = ({}) => {
   const { settings, setSettings } = useSettingsStore();
   const iconSize16 = useResponsiveSize(16);
   const iconSize24 = useResponsiveSize(24);
-  const [editTheme, setEditTheme] = React43.useState(null);
-  const [customThems, setCustomThemes] = React43.useState([]);
-  const [showCustomThemeEditor, setShowCustomThemeEditor] = React43.useState(false);
-  React43.useEffect(() => {
+  const [editTheme, setEditTheme] = React42.useState(null);
+  const [customThems, setCustomThemes] = React42.useState([]);
+  const [showCustomThemeEditor, setShowCustomThemeEditor] = React42.useState(false);
+  React42.useEffect(() => {
     const customThemes = settings.globalReadSettings.customThemes ?? [];
     setCustomThemes(
       customThemes.map((customTheme) => ({
@@ -8970,7 +8920,7 @@ var ColorPanel = ({}) => {
       setShowCustomThemeEditor(true);
     }
   };
-  return /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "my-4 w-full space-y-6" }, showCustomThemeEditor ? /* @__PURE__ */ React43__namespace.default.createElement(
+  return /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "my-4 w-full space-y-6" }, showCustomThemeEditor ? /* @__PURE__ */ React42__namespace.default.createElement(
     ThemeEditor_default,
     {
       customTheme: editTheme,
@@ -8978,28 +8928,28 @@ var ColorPanel = ({}) => {
       onDelete: handleDeleteCustomTheme,
       onCancel: () => setShowCustomThemeEditor(false)
     }
-  ) : /* @__PURE__ */ React43__namespace.default.createElement(React43__namespace.default.Fragment, null, /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "flex items-center justify-between" }, /* @__PURE__ */ React43__namespace.default.createElement("h2", { className: "font-medium" }, _("Theme Mode")), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "flex gap-4" }, /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "lg:tooltip lg:tooltip-bottom", "data-tip": _("Auto Mode") }, /* @__PURE__ */ React43__namespace.default.createElement(
+  ) : /* @__PURE__ */ React42__namespace.default.createElement(React42__namespace.default.Fragment, null, /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "flex items-center justify-between" }, /* @__PURE__ */ React42__namespace.default.createElement("h2", { className: "font-medium" }, _("Theme Mode")), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "flex gap-4" }, /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "lg:tooltip lg:tooltip-bottom", "data-tip": _("Auto Mode") }, /* @__PURE__ */ React42__namespace.default.createElement(
     "button",
     {
       className: `btn btn-ghost btn-circle btn-sm ${themeMode === "auto" ? "btn-active bg-base-300" : ""}`,
       onClick: () => setThemeMode("auto")
     },
-    /* @__PURE__ */ React43__namespace.default.createElement(tb.TbSunMoon, null)
-  )), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "lg:tooltip lg:tooltip-bottom", "data-tip": _("Light Mode") }, /* @__PURE__ */ React43__namespace.default.createElement(
+    /* @__PURE__ */ React42__namespace.default.createElement(tb.TbSunMoon, null)
+  )), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "lg:tooltip lg:tooltip-bottom", "data-tip": _("Light Mode") }, /* @__PURE__ */ React42__namespace.default.createElement(
     "button",
     {
       className: `btn btn-ghost btn-circle btn-sm ${themeMode === "light" ? "btn-active bg-base-300" : ""}`,
       onClick: () => setThemeMode("light")
     },
-    /* @__PURE__ */ React43__namespace.default.createElement(md.MdOutlineLightMode, null)
-  )), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "lg:tooltip lg:tooltip-bottom", "data-tip": _("Dark Mode") }, /* @__PURE__ */ React43__namespace.default.createElement(
+    /* @__PURE__ */ React42__namespace.default.createElement(md.MdOutlineLightMode, null)
+  )), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "lg:tooltip lg:tooltip-bottom", "data-tip": _("Dark Mode") }, /* @__PURE__ */ React42__namespace.default.createElement(
     "button",
     {
       className: `btn btn-ghost btn-circle btn-sm ${themeMode === "dark" ? "btn-active bg-base-300" : ""}`,
       onClick: () => setThemeMode("dark")
     },
-    /* @__PURE__ */ React43__namespace.default.createElement(md.MdOutlineDarkMode, null)
-  )))), /* @__PURE__ */ React43__namespace.default.createElement("div", null, /* @__PURE__ */ React43__namespace.default.createElement("h2", { className: "mb-2 font-medium" }, _("Theme Color")), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "grid grid-cols-3 gap-4" }, themes.concat(customThems).map(({ name, label, colors: colors2, isCustomizale }) => /* @__PURE__ */ React43__namespace.default.createElement(
+    /* @__PURE__ */ React42__namespace.default.createElement(md.MdOutlineDarkMode, null)
+  )))), /* @__PURE__ */ React42__namespace.default.createElement("div", null, /* @__PURE__ */ React42__namespace.default.createElement("h2", { className: "mb-2 font-medium" }, _("Theme Color")), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "grid grid-cols-3 gap-4" }, themes.concat(customThems).map(({ name, label, colors: colors2, isCustomizale }) => /* @__PURE__ */ React42__namespace.default.createElement(
     "label",
     {
       key: name,
@@ -9009,7 +8959,7 @@ var ColorPanel = ({}) => {
         color: isDarkMode ? colors2.dark["base-content"] : colors2.light["base-content"]
       }
     },
-    /* @__PURE__ */ React43__namespace.default.createElement(
+    /* @__PURE__ */ React42__namespace.default.createElement(
       "input",
       {
         type: "radio",
@@ -9020,17 +8970,17 @@ var ColorPanel = ({}) => {
         className: "hidden"
       }
     ),
-    themeColor === name ? /* @__PURE__ */ React43__namespace.default.createElement(md.MdRadioButtonChecked, { size: iconSize24 }) : /* @__PURE__ */ React43__namespace.default.createElement(md.MdRadioButtonUnchecked, { size: iconSize24 }),
-    /* @__PURE__ */ React43__namespace.default.createElement("span", null, _(label)),
-    isCustomizale && themeColor === name && /* @__PURE__ */ React43__namespace.default.createElement("button", { onClick: () => handleEditTheme(name) }, /* @__PURE__ */ React43__namespace.default.createElement(cg.CgColorPicker, { size: iconSize16, className: "absolute right-2 top-2" }))
-  )), /* @__PURE__ */ React43__namespace.default.createElement(
+    themeColor === name ? /* @__PURE__ */ React42__namespace.default.createElement(md.MdRadioButtonChecked, { size: iconSize24 }) : /* @__PURE__ */ React42__namespace.default.createElement(md.MdRadioButtonUnchecked, { size: iconSize24 }),
+    /* @__PURE__ */ React42__namespace.default.createElement("span", null, _(label)),
+    isCustomizale && themeColor === name && /* @__PURE__ */ React42__namespace.default.createElement("button", { onClick: () => handleEditTheme(name) }, /* @__PURE__ */ React42__namespace.default.createElement(cg.CgColorPicker, { size: iconSize16, className: "absolute right-2 top-2" }))
+  )), /* @__PURE__ */ React42__namespace.default.createElement(
     "label",
     {
       className: `relative flex cursor-pointer flex-col items-center justify-center rounded-lg border border-dashed p-4 shadow-md`,
       onClick: () => setShowCustomThemeEditor(true)
     },
-    /* @__PURE__ */ React43__namespace.default.createElement(pi.PiPlus, { size: iconSize24 }),
-    /* @__PURE__ */ React43__namespace.default.createElement("span", null, _("Custom"))
+    /* @__PURE__ */ React42__namespace.default.createElement(pi.PiPlus, { size: iconSize24 }),
+    /* @__PURE__ */ React42__namespace.default.createElement("span", null, _("Custom"))
   )))));
 };
 var ColorPanel_default = ColorPanel;
@@ -9042,25 +8992,25 @@ var DialogMenu = ({ toggleDropdown }) => {
     setFontLayoutSettingsGlobal(!isFontLayoutSettingsGlobal);
     toggleDropdown?.();
   };
-  return /* @__PURE__ */ React43__namespace.default.createElement(
+  return /* @__PURE__ */ React42__namespace.default.createElement(
     "div",
     {
       tabIndex: 0,
       className: "dropdown-content dropdown-right no-triangle border-base-200 z-20 mt-1 border shadow-2xl"
     },
-    /* @__PURE__ */ React43__namespace.default.createElement(
+    /* @__PURE__ */ React42__namespace.default.createElement(
       "button",
       {
         className: "hover:bg-base-200 text-base-content flex w-full items-center justify-between rounded-md p-2",
         onClick: handleToggleGlobal
       },
-      /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "flex items-center" }, /* @__PURE__ */ React43__namespace.default.createElement("span", { style: { minWidth: `${iconSize}px` } }, isFontLayoutSettingsGlobal && /* @__PURE__ */ React43__namespace.default.createElement(md.MdCheck, { className: "text-base-content" })), /* @__PURE__ */ React43__namespace.default.createElement(
+      /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "flex items-center" }, /* @__PURE__ */ React42__namespace.default.createElement("span", { style: { minWidth: `${iconSize}px` } }, isFontLayoutSettingsGlobal && /* @__PURE__ */ React42__namespace.default.createElement(md.MdCheck, { className: "text-base-content" })), /* @__PURE__ */ React42__namespace.default.createElement(
         "div",
         {
           className: "lg:tooltip",
           "data-tip": isFontLayoutSettingsGlobal ? _("Apply to All Books") : _("Apply to This Book")
         },
-        /* @__PURE__ */ React43__namespace.default.createElement("span", { className: "ml-2 whitespace-nowrap" }, _("Global Settings"))
+        /* @__PURE__ */ React42__namespace.default.createElement("span", { className: "ml-2 whitespace-nowrap" }, _("Global Settings"))
       ))
     )
   );
@@ -9117,16 +9067,16 @@ var css_default = cssValidate;
 var DropDown = ({ selected, options: options2, onSelect }) => {
   const iconSize16 = useResponsiveSize(16);
   const defaultIconSize = useDefaultIconSize();
-  return /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "dropdown dropdown-bottom" }, /* @__PURE__ */ React43__namespace.default.createElement(
+  return /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "dropdown dropdown-bottom" }, /* @__PURE__ */ React42__namespace.default.createElement(
     "button",
     {
       tabIndex: 0,
       className: "btn btn-sm flex items-center gap-1 px-[20px] font-normal normal-case",
       onClick: (e) => e.currentTarget.focus()
     },
-    /* @__PURE__ */ React43__namespace.default.createElement("span", null, selected.label),
-    /* @__PURE__ */ React43__namespace.default.createElement(fi.FiChevronDown, { size: iconSize16 })
-  ), /* @__PURE__ */ React43__namespace.default.createElement(
+    /* @__PURE__ */ React42__namespace.default.createElement("span", null, selected.label),
+    /* @__PURE__ */ React42__namespace.default.createElement(fi.FiChevronDown, { size: iconSize16 })
+  ), /* @__PURE__ */ React42__namespace.default.createElement(
     "ul",
     {
       tabIndex: 0,
@@ -9135,7 +9085,7 @@ var DropDown = ({ selected, options: options2, onSelect }) => {
         "menu-vertical right-[-32px] mt-2 inline max-h-80 w-44 overflow-y-scroll sm:right-0"
       )
     },
-    options2.map(({ option, label }) => /* @__PURE__ */ React43__namespace.default.createElement("li", { key: option, onClick: () => onSelect(option) }, /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "flex items-center px-0" }, /* @__PURE__ */ React43__namespace.default.createElement("span", { style: { minWidth: `${defaultIconSize}px` } }, selected.option === option && /* @__PURE__ */ React43__namespace.default.createElement(md.MdCheck, { className: "text-base-content" })), /* @__PURE__ */ React43__namespace.default.createElement("span", null, label || option))))
+    options2.map(({ option, label }) => /* @__PURE__ */ React42__namespace.default.createElement("li", { key: option, onClick: () => onSelect(option) }, /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "flex items-center px-0" }, /* @__PURE__ */ React42__namespace.default.createElement("span", { style: { minWidth: `${defaultIconSize}px` } }, selected.option === option && /* @__PURE__ */ React42__namespace.default.createElement(md.MdCheck, { className: "text-base-content" })), /* @__PURE__ */ React42__namespace.default.createElement("span", null, label || option))))
   ));
 };
 var DropDown_default = DropDown;
@@ -9147,15 +9097,15 @@ var MiscPanel = ({ bookKey }) => {
   const { settings, isFontLayoutSettingsGlobal, setSettings } = useSettingsStore();
   const { getView, getViewSettings, setViewSettings } = useReaderStore();
   const viewSettings = getViewSettings(bookKey);
-  const [animated, setAnimated] = React43.useState(viewSettings.animated);
-  const [isDisableClick, setIsDisableClick] = React43.useState(viewSettings.disableClick);
-  const [swapClickArea, setSwapClickArea] = React43.useState(viewSettings.swapClickArea);
-  const [isContinuousScroll, setIsContinuousScroll] = React43.useState(viewSettings.continuousScroll);
-  const [draftStylesheet, setDraftStylesheet] = React43.useState(viewSettings.userStylesheet);
-  const [draftStylesheetSaved, setDraftStylesheetSaved] = React43.useState(true);
-  const [error, setError] = React43.useState(null);
-  const [inputFocusInAndroid, setInputFocusInAndroid] = React43.useState(false);
-  const textareaRef = React43.useRef(null);
+  const [animated, setAnimated] = React42.useState(viewSettings.animated);
+  const [isDisableClick, setIsDisableClick] = React42.useState(viewSettings.disableClick);
+  const [swapClickArea, setSwapClickArea] = React42.useState(viewSettings.swapClickArea);
+  const [isContinuousScroll, setIsContinuousScroll] = React42.useState(viewSettings.continuousScroll);
+  const [draftStylesheet, setDraftStylesheet] = React42.useState(viewSettings.userStylesheet);
+  const [draftStylesheetSaved, setDraftStylesheetSaved] = React42.useState(true);
+  const [error, setError] = React42.useState(null);
+  const [inputFocusInAndroid, setInputFocusInAndroid] = React42.useState(false);
+  const textareaRef = React42.useRef(null);
   const handleUserStylesheetChange = (e) => {
     const cssInput = e.target.value;
     setDraftStylesheet(cssInput);
@@ -9231,7 +9181,7 @@ var MiscPanel = ({ bookKey }) => {
     saveViewSettings(envConfig, bookKey, "uiLanguage", option, false, false);
     i18n__default.default.changeLanguage(option ? option : navigator.language);
   };
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     saveViewSettings(envConfig, bookKey, "animated", animated, false, false);
     if (animated) {
       getView(bookKey)?.renderer.setAttribute("animated", "");
@@ -9239,16 +9189,16 @@ var MiscPanel = ({ bookKey }) => {
       getView(bookKey)?.renderer.removeAttribute("animated");
     }
   }, [animated]);
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     saveViewSettings(envConfig, bookKey, "disableClick", isDisableClick, false, false);
   }, [isDisableClick]);
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     saveViewSettings(envConfig, bookKey, "swapClickArea", swapClickArea, false, false);
   }, [swapClickArea]);
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     saveViewSettings(envConfig, bookKey, "continuousScroll", isContinuousScroll, false, false);
   }, [isContinuousScroll]);
-  return /* @__PURE__ */ React43__namespace.default.createElement(
+  return /* @__PURE__ */ React42__namespace.default.createElement(
     "div",
     {
       className: clsx8__default.default(
@@ -9256,7 +9206,7 @@ var MiscPanel = ({ bookKey }) => {
         inputFocusInAndroid && "h-[50%] overflow-y-auto pb-[200px]"
       )
     },
-    /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "w-full" }, /* @__PURE__ */ React43__namespace.default.createElement("h2", { className: "mb-2 font-medium" }, _("Language")), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "card border-base-200 bg-base-100 border shadow" }, /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "divide-base-200 divide-y" }, /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "config-item" }, /* @__PURE__ */ React43__namespace.default.createElement("span", { className: "" }, _("Language")), /* @__PURE__ */ React43__namespace.default.createElement(
+    /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "w-full" }, /* @__PURE__ */ React42__namespace.default.createElement("h2", { className: "mb-2 font-medium" }, _("Language")), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "card border-base-200 bg-base-100 border shadow" }, /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "divide-base-200 divide-y" }, /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "config-item" }, /* @__PURE__ */ React42__namespace.default.createElement("span", { className: "" }, _("Language")), /* @__PURE__ */ React42__namespace.default.createElement(
       DropDown_default,
       {
         selected: getCurrentUILangOption(),
@@ -9264,7 +9214,7 @@ var MiscPanel = ({ bookKey }) => {
         onSelect: handleSelectUILang
       }
     ))))),
-    /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "w-full" }, /* @__PURE__ */ React43__namespace.default.createElement("h2", { className: "mb-2 font-medium" }, _("Animation")), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "card border-base-200 bg-base-100 border shadow" }, /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "divide-base-200 divide-y" }, /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "config-item" }, /* @__PURE__ */ React43__namespace.default.createElement("span", { className: "" }, _("Paging Animation")), /* @__PURE__ */ React43__namespace.default.createElement(
+    /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "w-full" }, /* @__PURE__ */ React42__namespace.default.createElement("h2", { className: "mb-2 font-medium" }, _("Animation")), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "card border-base-200 bg-base-100 border shadow" }, /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "divide-base-200 divide-y" }, /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "config-item" }, /* @__PURE__ */ React42__namespace.default.createElement("span", { className: "" }, _("Paging Animation")), /* @__PURE__ */ React42__namespace.default.createElement(
       "input",
       {
         type: "checkbox",
@@ -9273,7 +9223,7 @@ var MiscPanel = ({ bookKey }) => {
         onChange: () => setAnimated(!animated)
       }
     ))))),
-    /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "w-full" }, /* @__PURE__ */ React43__namespace.default.createElement("h2", { className: "mb-2 font-medium" }, _("Behavior")), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "card border-base-200 bg-base-100 border shadow" }, /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "divide-base-200 divide-y" }, /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "config-item" }, /* @__PURE__ */ React43__namespace.default.createElement("span", { className: "" }, _("Continuous Scroll")), /* @__PURE__ */ React43__namespace.default.createElement(
+    /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "w-full" }, /* @__PURE__ */ React42__namespace.default.createElement("h2", { className: "mb-2 font-medium" }, _("Behavior")), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "card border-base-200 bg-base-100 border shadow" }, /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "divide-base-200 divide-y" }, /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "config-item" }, /* @__PURE__ */ React42__namespace.default.createElement("span", { className: "" }, _("Continuous Scroll")), /* @__PURE__ */ React42__namespace.default.createElement(
       "input",
       {
         type: "checkbox",
@@ -9281,7 +9231,7 @@ var MiscPanel = ({ bookKey }) => {
         checked: isContinuousScroll,
         onChange: () => setIsContinuousScroll(!isContinuousScroll)
       }
-    )), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "config-item" }, /* @__PURE__ */ React43__namespace.default.createElement("span", { className: "" }, _("Disable Click-to-Flip")), /* @__PURE__ */ React43__namespace.default.createElement(
+    )), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "config-item" }, /* @__PURE__ */ React42__namespace.default.createElement("span", { className: "" }, _("Disable Click-to-Flip")), /* @__PURE__ */ React42__namespace.default.createElement(
       "input",
       {
         type: "checkbox",
@@ -9289,7 +9239,7 @@ var MiscPanel = ({ bookKey }) => {
         checked: isDisableClick,
         onChange: () => setIsDisableClick(!isDisableClick)
       }
-    )), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "config-item" }, /* @__PURE__ */ React43__namespace.default.createElement("span", { className: "" }, _("Swap Click-to-Flip Area")), /* @__PURE__ */ React43__namespace.default.createElement(
+    )), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "config-item" }, /* @__PURE__ */ React42__namespace.default.createElement("span", { className: "" }, _("Swap Click-to-Flip Area")), /* @__PURE__ */ React42__namespace.default.createElement(
       "input",
       {
         type: "checkbox",
@@ -9299,12 +9249,12 @@ var MiscPanel = ({ bookKey }) => {
         onChange: () => setSwapClickArea(!swapClickArea)
       }
     ))))),
-    /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "w-full" }, /* @__PURE__ */ React43__namespace.default.createElement("h2", { className: "mb-2 font-medium" }, _("Custom CSS")), /* @__PURE__ */ React43__namespace.default.createElement(
+    /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "w-full" }, /* @__PURE__ */ React42__namespace.default.createElement("h2", { className: "mb-2 font-medium" }, _("Custom CSS")), /* @__PURE__ */ React42__namespace.default.createElement(
       "div",
       {
         className: `card border-base-200 bg-base-100 border shadow ${error ? "border-red-500" : ""}`
       },
-      /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "relative p-1" }, /* @__PURE__ */ React43__namespace.default.createElement(
+      /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "relative p-1" }, /* @__PURE__ */ React42__namespace.default.createElement(
         "textarea",
         {
           ref: textareaRef,
@@ -9322,7 +9272,7 @@ var MiscPanel = ({ bookKey }) => {
           onKeyUp: handleInput,
           onChange: handleUserStylesheetChange
         }
-      ), /* @__PURE__ */ React43__namespace.default.createElement(
+      ), /* @__PURE__ */ React42__namespace.default.createElement(
         "button",
         {
           className: clsx8__default.default(
@@ -9335,7 +9285,7 @@ var MiscPanel = ({ bookKey }) => {
         },
         _("Apply")
       ))
-    ), error && /* @__PURE__ */ React43__namespace.default.createElement("p", { className: "mt-1 text-sm text-red-500" }, error))
+    ), error && /* @__PURE__ */ React42__namespace.default.createElement("p", { className: "mt-1 text-sm text-red-500" }, error))
   );
 };
 var MiscPanel_default = MiscPanel;
@@ -9343,8 +9293,8 @@ var MiscPanel_default = MiscPanel;
 // src/app/reader/components/settings/SettingsDialog.tsx
 var SettingsDialog = ({ bookKey }) => {
   const _ = useTranslation();
-  const [isRtl] = React43.useState(() => getDirFromUILanguage() === "rtl");
-  const [activePanel, setActivePanel] = React43.useState(
+  const [isRtl] = React42.useState(() => getDirFromUILanguage() === "rtl");
+  const [activePanel, setActivePanel] = React42.useState(
     localStorage.getItem("lastConfigPanel") || "Font"
   );
   const { setFontLayoutSettingsDialogOpen } = useSettingsStore();
@@ -9377,7 +9327,7 @@ var SettingsDialog = ({ bookKey }) => {
   const handleClose2 = () => {
     setFontLayoutSettingsDialogOpen(false);
   };
-  return /* @__PURE__ */ React43__namespace.default.createElement(React43__namespace.default.Fragment, null, /* @__PURE__ */ React43__namespace.default.createElement(
+  return /* @__PURE__ */ React42__namespace.default.createElement(React42__namespace.default.Fragment, null, /* @__PURE__ */ React42__namespace.default.createElement(
     Dialog_default,
     {
       isOpen: true,
@@ -9385,15 +9335,15 @@ var SettingsDialog = ({ bookKey }) => {
       className: "modal-open",
       boxClassName: "sm:min-w-[520px]",
       snapHeight: window.innerWidth < 640 ? 0.7 : void 0,
-      header: /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "flex w-full items-center justify-between" }, /* @__PURE__ */ React43__namespace.default.createElement(
+      header: /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "flex w-full items-center justify-between" }, /* @__PURE__ */ React42__namespace.default.createElement(
         "button",
         {
           tabIndex: -1,
           onClick: handleClose2,
           className: "btn btn-ghost btn-circle flex h-8 min-h-8 w-8 hover:bg-transparent focus:outline-none sm:hidden"
         },
-        isRtl ? /* @__PURE__ */ React43__namespace.default.createElement(md.MdArrowForwardIos, null) : /* @__PURE__ */ React43__namespace.default.createElement(md.MdArrowBackIosNew, null)
-      ), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "dialog-tabs flex h-10 max-w-[100%] flex-grow items-center gap-2 pl-4" }, tabConfig.map(({ tab, icon: Icon, label }) => /* @__PURE__ */ React43__namespace.default.createElement(
+        isRtl ? /* @__PURE__ */ React42__namespace.default.createElement(md.MdArrowForwardIos, null) : /* @__PURE__ */ React42__namespace.default.createElement(md.MdArrowBackIosNew, null)
+      ), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "dialog-tabs flex h-10 max-w-[100%] flex-grow items-center gap-2 pl-4" }, tabConfig.map(({ tab, icon: Icon, label }) => /* @__PURE__ */ React42__namespace.default.createElement(
         "button",
         {
           key: tab,
@@ -9403,23 +9353,23 @@ var SettingsDialog = ({ bookKey }) => {
           ),
           onClick: () => handleSetActivePanel(tab)
         },
-        /* @__PURE__ */ React43__namespace.default.createElement(Icon, { className: "mr-0" }),
+        /* @__PURE__ */ React42__namespace.default.createElement(Icon, { className: "mr-0" }),
         window.innerWidth >= 500 ? label : ""
-      ))), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "flex h-full items-center justify-end gap-x-2" }, /* @__PURE__ */ React43__namespace.default.createElement(
+      ))), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "flex h-full items-center justify-end gap-x-2" }, /* @__PURE__ */ React42__namespace.default.createElement(
         Dropdown_default,
         {
           className: "dropdown-bottom dropdown-end",
           buttonClassName: "btn btn-ghost h-8 min-h-8 w-8 p-0",
-          toggleButton: /* @__PURE__ */ React43__namespace.default.createElement(pi.PiDotsThreeVerticalBold, null)
+          toggleButton: /* @__PURE__ */ React42__namespace.default.createElement(pi.PiDotsThreeVerticalBold, null)
         },
-        /* @__PURE__ */ React43__namespace.default.createElement(DialogMenu_default, null)
-      ), /* @__PURE__ */ React43__namespace.default.createElement(
+        /* @__PURE__ */ React42__namespace.default.createElement(DialogMenu_default, null)
+      ), /* @__PURE__ */ React42__namespace.default.createElement(
         "button",
         {
           onClick: handleClose2,
           className: "bg-base-300/65 btn btn-ghost btn-circle hidden h-6 min-h-6 w-6 sm:flex"
         },
-        /* @__PURE__ */ React43__namespace.default.createElement(
+        /* @__PURE__ */ React42__namespace.default.createElement(
           "svg",
           {
             xmlns: "http://www.w3.org/2000/svg",
@@ -9427,7 +9377,7 @@ var SettingsDialog = ({ bookKey }) => {
             height: "1em",
             viewBox: "0 0 24 24"
           },
-          /* @__PURE__ */ React43__namespace.default.createElement(
+          /* @__PURE__ */ React42__namespace.default.createElement(
             "path",
             {
               fill: "currentColor",
@@ -9437,10 +9387,10 @@ var SettingsDialog = ({ bookKey }) => {
         )
       )))
     },
-    activePanel === "Font" && /* @__PURE__ */ React43__namespace.default.createElement(FontPanel_default, { bookKey }),
-    activePanel === "Layout" && /* @__PURE__ */ React43__namespace.default.createElement(LayoutPanel_default, { bookKey }),
-    activePanel === "Color" && /* @__PURE__ */ React43__namespace.default.createElement(ColorPanel_default, { bookKey }),
-    activePanel === "Misc" && /* @__PURE__ */ React43__namespace.default.createElement(MiscPanel_default, { bookKey })
+    activePanel === "Font" && /* @__PURE__ */ React42__namespace.default.createElement(FontPanel_default, { bookKey }),
+    activePanel === "Layout" && /* @__PURE__ */ React42__namespace.default.createElement(LayoutPanel_default, { bookKey }),
+    activePanel === "Color" && /* @__PURE__ */ React42__namespace.default.createElement(ColorPanel_default, { bookKey }),
+    activePanel === "Misc" && /* @__PURE__ */ React42__namespace.default.createElement(MiscPanel_default, { bookKey })
   ));
 };
 var SettingsDialog_default = SettingsDialog;
@@ -9451,8 +9401,8 @@ var useNotesSync = (bookKey) => {
   const { getConfig, setConfig } = useBookDataStore();
   const config = getConfig(bookKey);
   const bookHash = bookKey.split("-")[0];
-  const lastSyncTime = React43.useRef(0);
-  const syncTimeoutRef = React43.useRef(null);
+  const lastSyncTime = React42.useRef(0);
+  const syncTimeoutRef = React42.useRef(null);
   const getNewNotes = () => {
     if (!config?.location) return [];
     const bookNotes = config.booknotes ?? [];
@@ -9464,7 +9414,7 @@ var useNotesSync = (bookKey) => {
     });
     return newNotes;
   };
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     if (!config?.location) return;
     const now = Date.now();
     const timeSinceLastSync = now - lastSyncTime.current;
@@ -9485,7 +9435,7 @@ var useNotesSync = (bookKey) => {
       );
     }
   }, [config]);
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     const processNewNote = (note) => {
       const oldNotes = config?.booknotes ?? [];
       const existingNote = oldNotes.find((oldNote) => oldNote.id === note.id);
@@ -9662,24 +9612,24 @@ var Popup = ({
 ));
 var Popup_default = Popup;
 var PopupButton = ({ showTooltip, tooltipText, Icon, onClick }) => {
-  const [buttonClicked, setButtonClicked] = React43.useState(false);
+  const [buttonClicked, setButtonClicked] = React42.useState(false);
   const handleClick2 = () => {
     setButtonClicked(true);
     onClick();
   };
-  return /* @__PURE__ */ React43__namespace.default.createElement(
+  return /* @__PURE__ */ React42__namespace.default.createElement(
     "div",
     {
       className: "lg:tooltip lg:tooltip-bottom",
       "data-tip": !buttonClicked && showTooltip ? tooltipText : null
     },
-    /* @__PURE__ */ React43__namespace.default.createElement(
+    /* @__PURE__ */ React42__namespace.default.createElement(
       "button",
       {
         onClick: handleClick2,
         className: "flex h-8 min-h-8 w-8 items-center justify-center p-0"
       },
-      /* @__PURE__ */ React43__namespace.default.createElement(Icon, null)
+      /* @__PURE__ */ React42__namespace.default.createElement(Icon, null)
     )
   );
 };
@@ -9695,8 +9645,8 @@ var HighlightOptions = ({
 }) => {
   const { settings, setSettings } = useSettingsStore();
   const globalReadSettings = settings.globalReadSettings;
-  const [selectedStyle, setSelectedStyle] = React43__namespace.default.useState(_selectedStyle);
-  const [selectedColor, setSelectedColor] = React43__namespace.default.useState(_selectedColor);
+  const [selectedStyle, setSelectedStyle] = React42__namespace.default.useState(_selectedStyle);
+  const [selectedColor, setSelectedColor] = React42__namespace.default.useState(_selectedColor);
   const size16 = useResponsiveSize(16);
   const size18 = useResponsiveSize(18);
   const size28 = useResponsiveSize(28);
@@ -9714,7 +9664,7 @@ var HighlightOptions = ({
     setSelectedColor(color);
     onHandleHighlight(true);
   };
-  return /* @__PURE__ */ React43__namespace.default.createElement(
+  return /* @__PURE__ */ React42__namespace.default.createElement(
     "div",
     {
       className: clsx8__default.default(
@@ -9723,13 +9673,13 @@ var HighlightOptions = ({
       ),
       style
     },
-    /* @__PURE__ */ React43__namespace.default.createElement(
+    /* @__PURE__ */ React42__namespace.default.createElement(
       "div",
       {
         className: clsx8__default.default("flex gap-2", isVertical ? "flex-col" : "flex-row"),
         style: isVertical ? { width: size28 } : { height: size28 }
       },
-      styles.map((style2) => /* @__PURE__ */ React43__namespace.default.createElement(
+      styles.map((style2) => /* @__PURE__ */ React42__namespace.default.createElement(
         "button",
         {
           key: style2,
@@ -9737,7 +9687,7 @@ var HighlightOptions = ({
           className: "flex items-center justify-center rounded-full bg-gray-700 p-0",
           style: { width: size28, height: size28, minHeight: size28 }
         },
-        /* @__PURE__ */ React43__namespace.default.createElement(
+        /* @__PURE__ */ React42__namespace.default.createElement(
           "div",
           {
             style: { width: size16, height: style2 === "squiggly" ? size18 : size16 },
@@ -9753,7 +9703,7 @@ var HighlightOptions = ({
         )
       ))
     ),
-    /* @__PURE__ */ React43__namespace.default.createElement(
+    /* @__PURE__ */ React42__namespace.default.createElement(
       "div",
       {
         className: clsx8__default.default(
@@ -9762,7 +9712,7 @@ var HighlightOptions = ({
         ),
         style: isVertical ? { width: size28 } : { height: size28 }
       },
-      colors.map((color) => /* @__PURE__ */ React43__namespace.default.createElement(
+      colors.map((color) => /* @__PURE__ */ React42__namespace.default.createElement(
         "button",
         {
           key: color,
@@ -9770,7 +9720,7 @@ var HighlightOptions = ({
           style: { width: size16, height: size16 },
           className: clsx8__default.default(`rounded-full p-0`, selectedColor !== color && `bg-${color}-400`)
         },
-        selectedColor === color && /* @__PURE__ */ React43__namespace.default.createElement(fa.FaCheckCircle, { size: size16, className: clsx8__default.default(`fill-${color}-400`) })
+        selectedColor === color && /* @__PURE__ */ React42__namespace.default.createElement(fa.FaCheckCircle, { size: size16, className: clsx8__default.default(`fill-${color}-400`) })
       ))
     )
   );
@@ -9795,7 +9745,7 @@ var AnnotationPopup = ({
 }) => {
   const highlightOptionsHeightPx = useResponsiveSize(OPTIONS_HEIGHT_PIX);
   const highlightOptionsPaddingPx = useResponsiveSize(OPTIONS_PADDING_PIX);
-  return /* @__PURE__ */ React43__namespace.default.createElement("div", { dir }, /* @__PURE__ */ React43__namespace.default.createElement(
+  return /* @__PURE__ */ React42__namespace.default.createElement("div", { dir }, /* @__PURE__ */ React42__namespace.default.createElement(
     Popup_default,
     {
       width: isVertical ? popupHeight2 : popupWidth2,
@@ -9805,7 +9755,7 @@ var AnnotationPopup = ({
       className: "selection-popup bg-gray-600 text-white",
       triangleClassName: "text-gray-600"
     },
-    /* @__PURE__ */ React43__namespace.default.createElement(
+    /* @__PURE__ */ React42__namespace.default.createElement(
       "div",
       {
         className: clsx8__default.default(
@@ -9816,7 +9766,7 @@ var AnnotationPopup = ({
           height: isVertical ? popupWidth2 : popupHeight2
         }
       },
-      buttons.map((button, index) => /* @__PURE__ */ React43__namespace.default.createElement(
+      buttons.map((button, index) => /* @__PURE__ */ React42__namespace.default.createElement(
         PopupButton_default,
         {
           key: index,
@@ -9827,7 +9777,7 @@ var AnnotationPopup = ({
         }
       ))
     )
-  ), highlightOptionsVisible && /* @__PURE__ */ React43__namespace.default.createElement(
+  ), highlightOptionsVisible && /* @__PURE__ */ React42__namespace.default.createElement(
     HighlightOptions_default,
     {
       isVertical,
@@ -9857,8 +9807,8 @@ var WiktionaryPopup = ({
   popupWidth: popupWidth2,
   popupHeight: popupHeight2
 }) => {
-  const [lookupWord, setLookupWord] = React43.useState(word);
-  const isLookingUp = React43.useRef(false);
+  const [lookupWord, setLookupWord] = React42.useState(word);
+  const isLookingUp = React42.useRef(false);
   const interceptDictLinks = (definition) => {
     const container = document.createElement("div");
     container.innerHTML = definition;
@@ -9876,7 +9826,7 @@ var WiktionaryPopup = ({
     });
     return Array.from(container.childNodes);
   };
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     if (isLookingUp.current) {
       return;
     }
@@ -9953,7 +9903,7 @@ var WiktionaryPopup = ({
     const langCode = typeof lang === "string" ? lang : lang?.[0];
     fetchDefinitions(lookupWord, langCode);
   }, [lookupWord, lang]);
-  return /* @__PURE__ */ React43__namespace.default.createElement("div", null, /* @__PURE__ */ React43__namespace.default.createElement(
+  return /* @__PURE__ */ React42__namespace.default.createElement("div", null, /* @__PURE__ */ React42__namespace.default.createElement(
     Popup_default,
     {
       trianglePosition,
@@ -9962,7 +9912,7 @@ var WiktionaryPopup = ({
       position,
       className: "select-text"
     },
-    /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "flex h-full flex-col" }, /* @__PURE__ */ React43__namespace.default.createElement("main", { className: "flex-grow overflow-y-auto p-4 font-sans" }), /* @__PURE__ */ React43__namespace.default.createElement("footer", { className: "mt-auto hidden data-[state=loaded]:block data-[state=error]:hidden data-[state=loading]:hidden" }, /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "flex items-center px-4 py-2 text-sm opacity-60" }, "Source: Wiktionary (CC BY-SA)")))
+    /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "flex h-full flex-col" }, /* @__PURE__ */ React42__namespace.default.createElement("main", { className: "flex-grow overflow-y-auto p-4 font-sans" }), /* @__PURE__ */ React42__namespace.default.createElement("footer", { className: "mt-auto hidden data-[state=loaded]:block data-[state=error]:hidden data-[state=loading]:hidden" }, /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "flex items-center px-4 py-2 text-sm opacity-60" }, "Source: Wiktionary (CC BY-SA)")))
   ));
 };
 var WiktionaryPopup_default = WiktionaryPopup;
@@ -9974,8 +9924,8 @@ var WikipediaPopup = ({
   popupWidth: popupWidth2,
   popupHeight: popupHeight2
 }) => {
-  const isLoading = React43.useRef(false);
-  React43.useEffect(() => {
+  const isLoading = React42.useRef(false);
+  React42.useEffect(() => {
     if (isLoading.current) {
       return;
     }
@@ -10039,7 +9989,7 @@ var WikipediaPopup = ({
     const langCode = bookLang ? bookLang.split("-")[0] : "en";
     fetchSummary(text, langCode);
   }, [text, lang]);
-  return /* @__PURE__ */ React43__namespace.default.createElement("div", null, /* @__PURE__ */ React43__namespace.default.createElement(
+  return /* @__PURE__ */ React42__namespace.default.createElement("div", null, /* @__PURE__ */ React42__namespace.default.createElement(
     Popup_default,
     {
       width: popupWidth2,
@@ -10048,7 +9998,7 @@ var WikipediaPopup = ({
       trianglePosition,
       className: "select-text"
     },
-    /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "text-base-content flex h-full flex-col pt-2" }, /* @__PURE__ */ React43__namespace.default.createElement("main", { className: "flex-grow overflow-y-auto px-2 font-sans" }), /* @__PURE__ */ React43__namespace.default.createElement("footer", { className: "mt-auto hidden data-[state=loaded]:block data-[state=error]:hidden data-[state=loading]:hidden" }, /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "flex items-center px-4 py-2 text-sm opacity-60" }, "Source: Wikipedia (CC BY-SA)")))
+    /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "text-base-content flex h-full flex-col pt-2" }, /* @__PURE__ */ React42__namespace.default.createElement("main", { className: "flex-grow overflow-y-auto px-2 font-sans" }), /* @__PURE__ */ React42__namespace.default.createElement("footer", { className: "mt-auto hidden data-[state=loaded]:block data-[state=error]:hidden data-[state=loading]:hidden" }, /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "flex items-center px-4 py-2 text-sm opacity-60" }, "Source: Wikipedia (CC BY-SA)")))
   ));
 };
 var WikipediaPopup_default = WikipediaPopup;
@@ -10083,12 +10033,12 @@ var DeepLPopup = ({
 }) => {
   const _ = useTranslation();
   const { settings, setSettings } = useSettingsStore();
-  const [sourceLang, setSourceLang] = React43.useState("AUTO");
-  const [targetLang, setTargetLang] = React43.useState(settings.globalReadSettings.translateTargetLang);
-  const [translation, setTranslation] = React43.useState(null);
-  const [detectedSourceLang, setDetectedSourceLang] = React43.useState(null);
-  const [loading, setLoading] = React43.useState(false);
-  const [error, setError] = React43.useState(null);
+  const [sourceLang, setSourceLang] = React42.useState("AUTO");
+  const [targetLang, setTargetLang] = React42.useState(settings.globalReadSettings.translateTargetLang);
+  const [translation, setTranslation] = React42.useState(null);
+  const [detectedSourceLang, setDetectedSourceLang] = React42.useState(null);
+  const [loading, setLoading] = React42.useState(false);
+  const [error, setError] = React42.useState(null);
   const handleSourceLangChange = (event) => {
     setSourceLang(event.target.value);
   };
@@ -10097,7 +10047,7 @@ var DeepLPopup = ({
     setSettings(settings);
     setTargetLang(event.target.value);
   };
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     const fetchTranslation = async () => {
       setLoading(true);
       setError(null);
@@ -10136,7 +10086,7 @@ var DeepLPopup = ({
     };
     fetchTranslation();
   }, [text, sourceLang, targetLang]);
-  return /* @__PURE__ */ React43__namespace.default.createElement("div", null, /* @__PURE__ */ React43__namespace.default.createElement(
+  return /* @__PURE__ */ React42__namespace.default.createElement("div", null, /* @__PURE__ */ React42__namespace.default.createElement(
     Popup_default,
     {
       trianglePosition,
@@ -10145,7 +10095,7 @@ var DeepLPopup = ({
       position,
       className: "select-text"
     },
-    /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "text-neutral-content relative h-[50%] overflow-y-auto border-b border-neutral-400/75 p-4 font-sans" }, /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "mb-2 flex items-center justify-between" }, /* @__PURE__ */ React43__namespace.default.createElement("h1", { className: "text-base font-semibold" }, _("Original Text")), /* @__PURE__ */ React43__namespace.default.createElement(
+    /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "text-neutral-content relative h-[50%] overflow-y-auto border-b border-neutral-400/75 p-4 font-sans" }, /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "mb-2 flex items-center justify-between" }, /* @__PURE__ */ React42__namespace.default.createElement("h1", { className: "text-base font-semibold" }, _("Original Text")), /* @__PURE__ */ React42__namespace.default.createElement(
       "select",
       {
         value: sourceLang,
@@ -10153,18 +10103,18 @@ var DeepLPopup = ({
         className: "select text-neutral-content h-8 min-h-8 rounded-md border-none bg-neutral-200/50 text-sm focus:outline-none focus:ring-0"
       },
       Object.entries(LANGUAGES).map(([code, name]) => {
-        return /* @__PURE__ */ React43__namespace.default.createElement("option", { key: code, value: code }, detectedSourceLang && sourceLang === "AUTO" && code === "AUTO" ? `${LANGUAGES[detectedSourceLang] || detectedSourceLang} ` + _("(detected)") : name);
+        return /* @__PURE__ */ React42__namespace.default.createElement("option", { key: code, value: code }, detectedSourceLang && sourceLang === "AUTO" && code === "AUTO" ? `${LANGUAGES[detectedSourceLang] || detectedSourceLang} ` + _("(detected)") : name);
       })
-    )), /* @__PURE__ */ React43__namespace.default.createElement("p", { className: "text-base" }, text)),
-    /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "text-neutral-content relative h-[50%] overflow-y-auto p-4 font-sans" }, /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "mb-2 flex items-center justify-between" }, /* @__PURE__ */ React43__namespace.default.createElement("h2", { className: "text-base font-semibold" }, _("Translated Text")), /* @__PURE__ */ React43__namespace.default.createElement(
+    )), /* @__PURE__ */ React42__namespace.default.createElement("p", { className: "text-base" }, text)),
+    /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "text-neutral-content relative h-[50%] overflow-y-auto p-4 font-sans" }, /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "mb-2 flex items-center justify-between" }, /* @__PURE__ */ React42__namespace.default.createElement("h2", { className: "text-base font-semibold" }, _("Translated Text")), /* @__PURE__ */ React42__namespace.default.createElement(
       "select",
       {
         value: targetLang,
         onChange: handleTargetLangChange,
         className: "select text-neutral-content h-8 min-h-8 rounded-md border-none bg-neutral-200/50 text-sm focus:outline-none focus:ring-0"
       },
-      Object.entries(LANGUAGES).filter(([code]) => code !== "AUTO").map(([code, name]) => /* @__PURE__ */ React43__namespace.default.createElement("option", { key: code, value: code }, name))
-    )), loading ? /* @__PURE__ */ React43__namespace.default.createElement("p", { className: "text-base italic text-gray-500" }, _("Loading...")) : error ? /* @__PURE__ */ React43__namespace.default.createElement("p", { className: "text-base text-red-600" }, error) : /* @__PURE__ */ React43__namespace.default.createElement("div", null, /* @__PURE__ */ React43__namespace.default.createElement("p", { className: "text-base" }, translation || "No translation available."), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "pt-4 text-sm opacity-60" }, "Translated by DeepL.")))
+      Object.entries(LANGUAGES).filter(([code]) => code !== "AUTO").map(([code, name]) => /* @__PURE__ */ React42__namespace.default.createElement("option", { key: code, value: code }, name))
+    )), loading ? /* @__PURE__ */ React42__namespace.default.createElement("p", { className: "text-base italic text-gray-500" }, _("Loading...")) : error ? /* @__PURE__ */ React42__namespace.default.createElement("p", { className: "text-base text-red-600" }, error) : /* @__PURE__ */ React42__namespace.default.createElement("div", null, /* @__PURE__ */ React42__namespace.default.createElement("p", { className: "text-base" }, translation || "No translation available."), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "pt-4 text-sm opacity-60" }, "Translated by DeepL.")))
   ));
 };
 var DeepLPopup_default = DeepLPopup;
@@ -10184,24 +10134,24 @@ var Annotator = ({ bookKey }) => {
   const bookData = getBookData(bookKey);
   const view = getView(bookKey);
   const viewSettings = getViewSettings(bookKey);
-  const isShowingPopup = React43.useRef(false);
-  const isTextSelected = React43.useRef(false);
-  const isUpToShowPopup = React43.useRef(false);
-  const isTouchstarted = React43.useRef(false);
-  const [selection, setSelection] = React43.useState();
-  const [showAnnotPopup, setShowAnnotPopup] = React43.useState(false);
-  const [showWiktionaryPopup, setShowWiktionaryPopup] = React43.useState(false);
-  const [showWikipediaPopup, setShowWikipediaPopup] = React43.useState(false);
-  const [showDeepLPopup, setShowDeepLPopup] = React43.useState(false);
-  const [trianglePosition, setTrianglePosition] = React43.useState();
-  const [annotPopupPosition, setAnnotPopupPosition] = React43.useState();
-  const [dictPopupPosition, setDictPopupPosition] = React43.useState();
-  const [translatorPopupPosition, setTranslatorPopupPosition] = React43.useState();
-  const [highlightOptionsVisible, setHighlightOptionsVisible] = React43.useState(false);
-  const [selectedStyle, setSelectedStyle] = React43.useState(
+  const isShowingPopup = React42.useRef(false);
+  const isTextSelected = React42.useRef(false);
+  const isUpToShowPopup = React42.useRef(false);
+  const isTouchstarted = React42.useRef(false);
+  const [selection, setSelection] = React42.useState();
+  const [showAnnotPopup, setShowAnnotPopup] = React42.useState(false);
+  const [showWiktionaryPopup, setShowWiktionaryPopup] = React42.useState(false);
+  const [showWikipediaPopup, setShowWikipediaPopup] = React42.useState(false);
+  const [showDeepLPopup, setShowDeepLPopup] = React42.useState(false);
+  const [trianglePosition, setTrianglePosition] = React42.useState();
+  const [annotPopupPosition, setAnnotPopupPosition] = React42.useState();
+  const [dictPopupPosition, setDictPopupPosition] = React42.useState();
+  const [translatorPopupPosition, setTranslatorPopupPosition] = React42.useState();
+  const [highlightOptionsVisible, setHighlightOptionsVisible] = React42.useState(false);
+  const [selectedStyle, setSelectedStyle] = React42.useState(
     settings.globalReadSettings.highlightStyle
   );
-  const [selectedColor, setSelectedColor] = React43.useState(
+  const [selectedColor, setSelectedColor] = React42.useState(
     settings.globalReadSettings.highlightStyles[selectedStyle]
   );
   const popupPadding2 = useResponsiveSize(10);
@@ -10337,7 +10287,7 @@ var Annotator = ({ bookKey }) => {
     view?.deselect();
     isTextSelected.current = false;
   };
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     const handleSingleClick = () => {
       if (isUpToShowPopup.current) {
         isUpToShowPopup.current = false;
@@ -10360,7 +10310,7 @@ var Annotator = ({ bookKey }) => {
       eventDispatcher.off("export-annotations", handleExportMarkdown);
     };
   }, []);
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     setHighlightOptionsVisible(!!(selection && selection.annotated));
     if (selection && selection.text.trim().length > 0) {
       const gridFrame = document.querySelector(`#gridcell-${bookKey}`);
@@ -10401,7 +10351,7 @@ var Annotator = ({ bookKey }) => {
       isShowingPopup.current = true;
     }
   }, [selection, bookKey]);
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     if (!progress) return;
     const { location } = progress;
     const start = CFI4__namespace.collapse(location);
@@ -10622,7 +10572,7 @@ var Annotator = ({ bookKey }) => {
     { tooltipText: _("Translate"), Icon: bs.BsTranslate, onClick: handleTranslation },
     { tooltipText: _("Speak"), Icon: fa6.FaHeadphones, onClick: handleSpeakText }
   ];
-  return /* @__PURE__ */ React43__namespace.default.createElement("div", null, showWiktionaryPopup && trianglePosition && dictPopupPosition && /* @__PURE__ */ React43__namespace.default.createElement(
+  return /* @__PURE__ */ React42__namespace.default.createElement("div", null, showWiktionaryPopup && trianglePosition && dictPopupPosition && /* @__PURE__ */ React42__namespace.default.createElement(
     WiktionaryPopup_default,
     {
       word: selection?.text,
@@ -10632,7 +10582,7 @@ var Annotator = ({ bookKey }) => {
       popupWidth: dictPopupWidth,
       popupHeight: dictPopupHeight
     }
-  ), showWikipediaPopup && trianglePosition && dictPopupPosition && /* @__PURE__ */ React43__namespace.default.createElement(
+  ), showWikipediaPopup && trianglePosition && dictPopupPosition && /* @__PURE__ */ React42__namespace.default.createElement(
     WikipediaPopup_default,
     {
       text: selection?.text,
@@ -10642,7 +10592,7 @@ var Annotator = ({ bookKey }) => {
       popupWidth: dictPopupWidth,
       popupHeight: dictPopupHeight
     }
-  ), showDeepLPopup && trianglePosition && translatorPopupPosition && /* @__PURE__ */ React43__namespace.default.createElement(
+  ), showDeepLPopup && trianglePosition && translatorPopupPosition && /* @__PURE__ */ React42__namespace.default.createElement(
     DeepLPopup_default,
     {
       text: selection?.text,
@@ -10651,7 +10601,7 @@ var Annotator = ({ bookKey }) => {
       popupWidth: transPopupWidth,
       popupHeight: transPopupHeight
     }
-  ), showAnnotPopup && trianglePosition && annotPopupPosition && /* @__PURE__ */ React43__namespace.default.createElement(
+  ), showAnnotPopup && trianglePosition && annotPopupPosition && /* @__PURE__ */ React42__namespace.default.createElement(
     AnnotationPopup_default,
     {
       dir: viewSettings.rtl ? "rtl" : "ltr",
@@ -10673,23 +10623,23 @@ var popupWidth = 360;
 var popupHeight = 88;
 var popupPadding = 10;
 var FootnotePopup = ({ bookKey, bookDoc }) => {
-  const footnoteRef = React43.useRef(null);
-  const footnoteViewRef = React43.useRef(null);
-  const [trianglePosition, setTrianglePosition] = React43.useState();
-  const [popupPosition, setPopupPosition] = React43.useState();
-  const [showPopup, setShowPopup] = React43.useState(false);
+  const footnoteRef = React42.useRef(null);
+  const footnoteViewRef = React42.useRef(null);
+  const [trianglePosition, setTrianglePosition] = React42.useState();
+  const [popupPosition, setPopupPosition] = React42.useState();
+  const [showPopup, setShowPopup] = React42.useState(false);
   const { getView, getViewSettings } = useReaderStore();
   const view = getView(bookKey);
   const viewSettings = getViewSettings(bookKey);
   const footnoteHandler = new footnotes_js.FootnoteHandler();
-  const [gridRect, setGridRect] = React43.useState(null);
-  const [responsiveWidth, setResponsiveWidth] = React43.useState(popupWidth);
-  const [responsiveHeight, setResponsiveHeight] = React43.useState(popupHeight);
+  const [gridRect, setGridRect] = React42.useState(null);
+  const [responsiveWidth, setResponsiveWidth] = React42.useState(popupWidth);
+  const [responsiveHeight, setResponsiveHeight] = React42.useState(popupHeight);
   const getResponsivePopupSize = (size, isVertical) => {
     const maxSize = isVertical ? window.innerWidth / 2 : window.innerHeight / 2;
     return Math.min(size, maxSize - popupPadding - 12);
   };
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     const handleBeforeRender = (e) => {
       const detail = e.detail;
       const { view: view2 } = detail;
@@ -10742,7 +10692,7 @@ ${footnoteStyles}`);
       footnoteHandler.removeEventListener("render", handleRender);
     };
   }, [view]);
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     if (viewSettings.vertical) {
       setResponsiveWidth(popupHeight);
       setResponsiveHeight(Math.max(popupWidth, window.innerHeight / 4));
@@ -10751,7 +10701,7 @@ ${footnoteStyles}`);
       setResponsiveHeight(popupHeight);
     }
   }, [viewSettings]);
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     if (trianglePosition && gridRect) {
       const popupPos = getPopupPosition(
         trianglePosition,
@@ -10825,7 +10775,7 @@ ${footnoteStyles}`);
   useFoliateEvents(view, {
     onLinkClick: docLinkHandler
   });
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     window.addEventListener("resize", handleDismissPopup);
     eventDispatcher.on("footnote-popup", handleFootnotePopupEvent);
     return () => {
@@ -10833,19 +10783,19 @@ ${footnoteStyles}`);
       eventDispatcher.off("footnote-popup", handleFootnotePopupEvent);
     };
   }, []);
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     if (footnoteViewRef.current) {
       footnoteRef.current?.replaceChildren(footnoteViewRef.current);
     }
   }, [footnoteRef]);
-  return /* @__PURE__ */ React43__namespace.default.createElement("div", null, showPopup && /* @__PURE__ */ React43__namespace.default.createElement(
+  return /* @__PURE__ */ React42__namespace.default.createElement("div", null, showPopup && /* @__PURE__ */ React42__namespace.default.createElement(
     "div",
     {
       className: "fixed inset-0",
       onClick: handleDismissPopup,
       onContextMenu: handleDismissPopup
     }
-  ), /* @__PURE__ */ React43__namespace.default.createElement(
+  ), /* @__PURE__ */ React42__namespace.default.createElement(
     Popup_default,
     {
       width: responsiveWidth,
@@ -10854,7 +10804,7 @@ ${footnoteStyles}`);
       trianglePosition: showPopup ? trianglePosition : void 0,
       className: "select-text overflow-y-auto"
     },
-    /* @__PURE__ */ React43__namespace.default.createElement(
+    /* @__PURE__ */ React42__namespace.default.createElement(
       "div",
       {
         className: "",
@@ -10875,29 +10825,29 @@ var HintInfo = ({
   horizontalGap,
   verticalMargin
 }) => {
-  const [hintMessage, setHintMessage] = React43__namespace.default.useState(null);
-  const hintTimeout = React43.useRef(2e3);
-  const dismissTimeout = React43.useRef(null);
+  const [hintMessage, setHintMessage] = React42__namespace.default.useState(null);
+  const hintTimeout = React42.useRef(2e3);
+  const dismissTimeout = React42.useRef(null);
   const handleShowHint = (event) => {
     const { message, bookKey: hintBookKey, timeout = 2e3 } = event.detail;
     if (hintBookKey !== bookKey) return;
     setHintMessage(message);
     hintTimeout.current = timeout;
   };
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     eventDispatcher.on("hint", handleShowHint);
     return () => {
       eventDispatcher.off("hint", handleShowHint);
     };
   }, []);
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     if (dismissTimeout.current) clearTimeout(dismissTimeout.current);
     dismissTimeout.current = setTimeout(() => setHintMessage(""), hintTimeout.current);
     return () => {
       if (dismissTimeout.current) clearTimeout(dismissTimeout.current);
     };
   }, [hintMessage]);
-  return /* @__PURE__ */ React43__namespace.default.createElement(
+  return /* @__PURE__ */ React42__namespace.default.createElement(
     "div",
     {
       className: clsx8__default.default(
@@ -10911,7 +10861,7 @@ var HintInfo = ({
         width: showDoubleBorder ? "30px" : `${horizontalGap}%`
       } : { insetInlineEnd: `${horizontalGap}%` }
     },
-    /* @__PURE__ */ React43__namespace.default.createElement("h2", { className: clsx8__default.default("text-neutral-content text-center font-sans text-xs font-light") }, hintMessage || "")
+    /* @__PURE__ */ React42__namespace.default.createElement("h2", { className: clsx8__default.default("text-neutral-content text-center font-sans text-xs font-light") }, hintMessage || "")
   );
 };
 var HintInfo_default = HintInfo;
@@ -10989,13 +10939,13 @@ var BooksGrid = ({ bookKeys, onCloseBook }) => {
   const { isSideBarVisible, sideBarBookKey } = useSidebarStore();
   const { isFontLayoutSettingsDialogOpen, setFontLayoutSettingsDialogOpen } = useSettingsStore();
   const gridTemplate = grid_default(bookKeys.length, window.innerWidth / window.innerHeight);
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     if (!sideBarBookKey) return;
     const bookData = getBookData(sideBarBookKey);
     if (!bookData || !bookData.book) return;
     document.title = bookData.book.title;
   }, [sideBarBookKey]);
-  return /* @__PURE__ */ React43__namespace.default.createElement(
+  return /* @__PURE__ */ React42__namespace.default.createElement(
     "div",
     {
       className: clsx8__default.default(
@@ -11018,7 +10968,7 @@ var BooksGrid = ({ bookKeys, onCloseBook }) => {
       const isBookmarked = getViewState(bookKey)?.ribbonVisible;
       const horizontalGapPercent = viewSettings.gapPercent;
       const verticalMarginPixels = viewSettings.marginPx;
-      return /* @__PURE__ */ React43__namespace.default.createElement(
+      return /* @__PURE__ */ React42__namespace.default.createElement(
         "div",
         {
           id: `gridcell-${bookKey}`,
@@ -11028,8 +10978,8 @@ var BooksGrid = ({ bookKeys, onCloseBook }) => {
             !isSideBarVisible && appService?.hasRoundedWindow && "rounded-window"
           )
         },
-        isBookmarked && !hoveredBookKey && /* @__PURE__ */ React43__namespace.default.createElement(Ribbon_default, { width: `${horizontalGapPercent}%` }),
-        /* @__PURE__ */ React43__namespace.default.createElement(
+        isBookmarked && !hoveredBookKey && /* @__PURE__ */ React42__namespace.default.createElement(Ribbon_default, { width: `${horizontalGapPercent}%` }),
+        /* @__PURE__ */ React42__namespace.default.createElement(
           HeaderBar_default,
           {
             bookKey,
@@ -11040,8 +10990,8 @@ var BooksGrid = ({ bookKeys, onCloseBook }) => {
             onSetSettingsDialogOpen: setFontLayoutSettingsDialogOpen
           }
         ),
-        /* @__PURE__ */ React43__namespace.default.createElement(FoliateViewer_default, { bookKey, bookDoc, config }),
-        viewSettings.vertical && viewSettings.scrolled && /* @__PURE__ */ React43__namespace.default.createElement(React43__namespace.default.Fragment, null, /* @__PURE__ */ React43__namespace.default.createElement(
+        /* @__PURE__ */ React42__namespace.default.createElement(FoliateViewer_default, { bookKey, bookDoc, config }),
+        viewSettings.vertical && viewSettings.scrolled && /* @__PURE__ */ React42__namespace.default.createElement(React42__namespace.default.Fragment, null, /* @__PURE__ */ React42__namespace.default.createElement(
           "div",
           {
             className: "bg-base-100 absolute left-0 top-0 h-full",
@@ -11050,7 +11000,7 @@ var BooksGrid = ({ bookKeys, onCloseBook }) => {
               height: `calc(100% - ${verticalMarginPixels}px)`
             }
           }
-        ), /* @__PURE__ */ React43__namespace.default.createElement(
+        ), /* @__PURE__ */ React42__namespace.default.createElement(
           "div",
           {
             className: "bg-base-100 absolute right-0 top-0 h-full",
@@ -11060,7 +11010,7 @@ var BooksGrid = ({ bookKeys, onCloseBook }) => {
             }
           }
         )),
-        viewSettings.vertical && viewSettings.doubleBorder && /* @__PURE__ */ React43__namespace.default.createElement(
+        viewSettings.vertical && viewSettings.doubleBorder && /* @__PURE__ */ React42__namespace.default.createElement(
           DoubleBorder_default,
           {
             showHeader: viewSettings.showHeader,
@@ -11070,7 +11020,7 @@ var BooksGrid = ({ bookKeys, onCloseBook }) => {
             verticalMargin: verticalMarginPixels
           }
         ),
-        viewSettings.showHeader && /* @__PURE__ */ React43__namespace.default.createElement(
+        viewSettings.showHeader && /* @__PURE__ */ React42__namespace.default.createElement(
           SectionInfo_default,
           {
             section: sectionLabel,
@@ -11081,7 +11031,7 @@ var BooksGrid = ({ bookKeys, onCloseBook }) => {
             verticalMargin: verticalMarginPixels
           }
         ),
-        /* @__PURE__ */ React43__namespace.default.createElement(
+        /* @__PURE__ */ React42__namespace.default.createElement(
           HintInfo_default,
           {
             bookKey,
@@ -11091,7 +11041,7 @@ var BooksGrid = ({ bookKeys, onCloseBook }) => {
             verticalMargin: verticalMarginPixels
           }
         ),
-        viewSettings.showFooter && /* @__PURE__ */ React43__namespace.default.createElement(
+        viewSettings.showFooter && /* @__PURE__ */ React42__namespace.default.createElement(
           PageInfo_default,
           {
             bookFormat: book.format,
@@ -11104,9 +11054,9 @@ var BooksGrid = ({ bookKeys, onCloseBook }) => {
             verticalMargin: verticalMarginPixels
           }
         ),
-        /* @__PURE__ */ React43__namespace.default.createElement(Annotator_default, { bookKey }),
-        /* @__PURE__ */ React43__namespace.default.createElement(FootnotePopup_default, { bookKey, bookDoc }),
-        /* @__PURE__ */ React43__namespace.default.createElement(
+        /* @__PURE__ */ React42__namespace.default.createElement(Annotator_default, { bookKey }),
+        /* @__PURE__ */ React42__namespace.default.createElement(FootnotePopup_default, { bookKey, bookDoc }),
+        /* @__PURE__ */ React42__namespace.default.createElement(
           FooterBar_default,
           {
             bookKey,
@@ -11116,7 +11066,7 @@ var BooksGrid = ({ bookKeys, onCloseBook }) => {
             isHoveredAnim: false
           }
         ),
-        isFontLayoutSettingsDialogOpen && /* @__PURE__ */ React43__namespace.default.createElement(SettingsDialog_default, { bookKey, config })
+        isFontLayoutSettingsDialogOpen && /* @__PURE__ */ React42__namespace.default.createElement(SettingsDialog_default, { bookKey, config })
       );
     })
   );
@@ -12351,10 +12301,10 @@ var TTSPanel = ({
   const { getViewSettings, setViewSettings } = useReaderStore();
   const { settings, setSettings, saveSettings } = useSettingsStore();
   const viewSettings = getViewSettings(bookKey);
-  const [voices, setVoices] = React43.useState([]);
-  const [rate, setRate] = React43.useState(viewSettings?.ttsRate ?? 1);
-  const [selectedVoice, setSelectedVoice] = React43.useState(viewSettings?.ttsVoice ?? "");
-  const [timeoutCountdown, setTimeoutCountdown] = React43.useState(() => {
+  const [voices, setVoices] = React42.useState([]);
+  const [rate, setRate] = React42.useState(viewSettings?.ttsRate ?? 1);
+  const [selectedVoice, setSelectedVoice] = React42.useState(viewSettings?.ttsVoice ?? "");
+  const [timeoutCountdown, setTimeoutCountdown] = React42.useState(() => {
     return getCountdownTime(timeoutTimestamp);
   });
   const defaultIconSize = useDefaultIconSize();
@@ -12388,16 +12338,16 @@ var TTSPanel = ({
       setTimeoutCountdown(getCountdownTime(timeout));
     }
   };
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     setTimeout(() => {
       updateTimeout(timeoutTimestamp);
     }, 1e3);
   }, [timeoutTimestamp, timeoutCountdown]);
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     const voiceId = onGetVoiceId();
     setSelectedVoice(voiceId);
   }, []);
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     const fetchVoices = async () => {
       const voices2 = await onGetVoices(ttsLang);
       setVoices(voices2);
@@ -12405,7 +12355,7 @@ var TTSPanel = ({
     fetchVoices();
   }, [ttsLang]);
   const timeoutOptions = getTTSTimeoutOptions(_);
-  return /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "flex w-full flex-col items-center justify-center gap-2 rounded-2xl p-4" }, /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "flex w-full flex-col items-center gap-0.5" }, /* @__PURE__ */ React43__namespace.default.createElement(
+  return /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "flex w-full flex-col items-center justify-center gap-2 rounded-2xl p-4" }, /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "flex w-full flex-col items-center gap-0.5" }, /* @__PURE__ */ React42__namespace.default.createElement(
     "input",
     {
       className: "range",
@@ -12416,7 +12366,7 @@ var TTSPanel = ({
       value: rate,
       onChange: handleSetRate
     }
-  ), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "grid w-full grid-cols-7 text-xs" }, /* @__PURE__ */ React43__namespace.default.createElement("span", { className: "text-center" }, "|"), /* @__PURE__ */ React43__namespace.default.createElement("span", { className: "text-center" }, "|"), /* @__PURE__ */ React43__namespace.default.createElement("span", { className: "text-center" }, "|"), /* @__PURE__ */ React43__namespace.default.createElement("span", { className: "text-center" }, "|"), /* @__PURE__ */ React43__namespace.default.createElement("span", { className: "text-center" }, "|"), /* @__PURE__ */ React43__namespace.default.createElement("span", { className: "text-center" }, "|"), /* @__PURE__ */ React43__namespace.default.createElement("span", { className: "text-center" }, "|")), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "grid w-full grid-cols-7 text-xs" }, /* @__PURE__ */ React43__namespace.default.createElement("span", { className: "text-center" }, _("Slow")), /* @__PURE__ */ React43__namespace.default.createElement("span", { className: "text-center" }), /* @__PURE__ */ React43__namespace.default.createElement("span", { className: "text-center" }, "1.0"), /* @__PURE__ */ React43__namespace.default.createElement("span", { className: "text-center" }, "1.5"), /* @__PURE__ */ React43__namespace.default.createElement("span", { className: "text-center" }, "2.0"), /* @__PURE__ */ React43__namespace.default.createElement("span", { className: "text-center" }), /* @__PURE__ */ React43__namespace.default.createElement("span", { className: "text-center" }, _("Fast")))), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "flex items-center justify-between space-x-2" }, /* @__PURE__ */ React43__namespace.default.createElement("button", { onClick: onBackward, className: "rounded-full p-1" }, /* @__PURE__ */ React43__namespace.default.createElement(md.MdFastRewind, { size: iconSize32 })), /* @__PURE__ */ React43__namespace.default.createElement("button", { onClick: onTogglePlay, className: "rounded-full p-1" }, isPlaying ? /* @__PURE__ */ React43__namespace.default.createElement(md.MdPauseCircle, { size: iconSize48, className: "fill-primary" }) : /* @__PURE__ */ React43__namespace.default.createElement(md.MdPlayCircle, { size: iconSize48, className: "fill-primary" })), /* @__PURE__ */ React43__namespace.default.createElement("button", { onClick: onForward, className: "rounded-full p-1" }, /* @__PURE__ */ React43__namespace.default.createElement(md.MdFastForward, { size: iconSize32 })), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "dropdown dropdown-top" }, /* @__PURE__ */ React43__namespace.default.createElement("button", { className: "flex flex-col items-center justify-center rounded-full p-1" }, /* @__PURE__ */ React43__namespace.default.createElement(md.MdAlarm, { size: iconSize32 }), timeoutCountdown && /* @__PURE__ */ React43__namespace.default.createElement(
+  ), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "grid w-full grid-cols-7 text-xs" }, /* @__PURE__ */ React42__namespace.default.createElement("span", { className: "text-center" }, "|"), /* @__PURE__ */ React42__namespace.default.createElement("span", { className: "text-center" }, "|"), /* @__PURE__ */ React42__namespace.default.createElement("span", { className: "text-center" }, "|"), /* @__PURE__ */ React42__namespace.default.createElement("span", { className: "text-center" }, "|"), /* @__PURE__ */ React42__namespace.default.createElement("span", { className: "text-center" }, "|"), /* @__PURE__ */ React42__namespace.default.createElement("span", { className: "text-center" }, "|"), /* @__PURE__ */ React42__namespace.default.createElement("span", { className: "text-center" }, "|")), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "grid w-full grid-cols-7 text-xs" }, /* @__PURE__ */ React42__namespace.default.createElement("span", { className: "text-center" }, _("Slow")), /* @__PURE__ */ React42__namespace.default.createElement("span", { className: "text-center" }), /* @__PURE__ */ React42__namespace.default.createElement("span", { className: "text-center" }, "1.0"), /* @__PURE__ */ React42__namespace.default.createElement("span", { className: "text-center" }, "1.5"), /* @__PURE__ */ React42__namespace.default.createElement("span", { className: "text-center" }, "2.0"), /* @__PURE__ */ React42__namespace.default.createElement("span", { className: "text-center" }), /* @__PURE__ */ React42__namespace.default.createElement("span", { className: "text-center" }, _("Fast")))), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "flex items-center justify-between space-x-2" }, /* @__PURE__ */ React42__namespace.default.createElement("button", { onClick: onBackward, className: "rounded-full p-1" }, /* @__PURE__ */ React42__namespace.default.createElement(md.MdFastRewind, { size: iconSize32 })), /* @__PURE__ */ React42__namespace.default.createElement("button", { onClick: onTogglePlay, className: "rounded-full p-1" }, isPlaying ? /* @__PURE__ */ React42__namespace.default.createElement(md.MdPauseCircle, { size: iconSize48, className: "fill-primary" }) : /* @__PURE__ */ React42__namespace.default.createElement(md.MdPlayCircle, { size: iconSize48, className: "fill-primary" })), /* @__PURE__ */ React42__namespace.default.createElement("button", { onClick: onForward, className: "rounded-full p-1" }, /* @__PURE__ */ React42__namespace.default.createElement(md.MdFastForward, { size: iconSize32 })), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "dropdown dropdown-top" }, /* @__PURE__ */ React42__namespace.default.createElement("button", { className: "flex flex-col items-center justify-center rounded-full p-1" }, /* @__PURE__ */ React42__namespace.default.createElement(md.MdAlarm, { size: iconSize32 }), timeoutCountdown && /* @__PURE__ */ React42__namespace.default.createElement(
     "span",
     {
       className: clsx8__default.default(
@@ -12425,7 +12375,7 @@ var TTSPanel = ({
       )
     },
     timeoutCountdown
-  )), /* @__PURE__ */ React43__namespace.default.createElement(
+  )), /* @__PURE__ */ React42__namespace.default.createElement(
     "ul",
     {
       tabIndex: 0,
@@ -12434,8 +12384,8 @@ var TTSPanel = ({
         "mt-4 inline max-h-96 w-[200px] overflow-y-scroll"
       )
     },
-    timeoutOptions.map((option, index) => /* @__PURE__ */ React43__namespace.default.createElement("li", { key: `${index}-${option.value}`, onClick: () => onSelectTimeout(option.value) }, /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "flex items-center px-2" }, /* @__PURE__ */ React43__namespace.default.createElement("span", { style: { minWidth: `${defaultIconSize}px` } }, timeoutOption === option.value && /* @__PURE__ */ React43__namespace.default.createElement(md.MdCheck, { className: "text-base-content" })), /* @__PURE__ */ React43__namespace.default.createElement("span", { className: clsx8__default.default("text-base sm:text-sm") }, option.label))))
-  )), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "dropdown dropdown-top" }, /* @__PURE__ */ React43__namespace.default.createElement("button", { tabIndex: 0, className: "rounded-full p-1" }, /* @__PURE__ */ React43__namespace.default.createElement(ri.RiVoiceAiFill, { size: iconSize32 })), /* @__PURE__ */ React43__namespace.default.createElement(
+    timeoutOptions.map((option, index) => /* @__PURE__ */ React42__namespace.default.createElement("li", { key: `${index}-${option.value}`, onClick: () => onSelectTimeout(option.value) }, /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "flex items-center px-2" }, /* @__PURE__ */ React42__namespace.default.createElement("span", { style: { minWidth: `${defaultIconSize}px` } }, timeoutOption === option.value && /* @__PURE__ */ React42__namespace.default.createElement(md.MdCheck, { className: "text-base-content" })), /* @__PURE__ */ React42__namespace.default.createElement("span", { className: clsx8__default.default("text-base sm:text-sm") }, option.label))))
+  )), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "dropdown dropdown-top" }, /* @__PURE__ */ React42__namespace.default.createElement("button", { tabIndex: 0, className: "rounded-full p-1" }, /* @__PURE__ */ React42__namespace.default.createElement(ri.RiVoiceAiFill, { size: iconSize32 })), /* @__PURE__ */ React42__namespace.default.createElement(
     "ul",
     {
       tabIndex: 0,
@@ -12444,20 +12394,20 @@ var TTSPanel = ({
         "mt-4 inline max-h-96 w-[250px] overflow-y-scroll"
       )
     },
-    voices.map((voice, index) => /* @__PURE__ */ React43__namespace.default.createElement(
+    voices.map((voice, index) => /* @__PURE__ */ React42__namespace.default.createElement(
       "li",
       {
         key: `${index}-${voice.id}`,
         onClick: () => !voice.disabled && handleSelectVoice(voice.id)
       },
-      /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "flex items-center px-2" }, /* @__PURE__ */ React43__namespace.default.createElement("span", { style: { minWidth: `${defaultIconSize}px` } }, selectedVoice === voice.id && /* @__PURE__ */ React43__namespace.default.createElement(md.MdCheck, { className: "text-base-content" })), /* @__PURE__ */ React43__namespace.default.createElement("span", { className: clsx8__default.default("text-base sm:text-sm", voice.disabled && "text-gray-400") }, voice.name))
+      /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "flex items-center px-2" }, /* @__PURE__ */ React42__namespace.default.createElement("span", { style: { minWidth: `${defaultIconSize}px` } }, selectedVoice === voice.id && /* @__PURE__ */ React42__namespace.default.createElement(md.MdCheck, { className: "text-base-content" })), /* @__PURE__ */ React42__namespace.default.createElement("span", { className: clsx8__default.default("text-base sm:text-sm", voice.disabled && "text-gray-400") }, voice.name))
     ))
   ))));
 };
 var TTSPanel_default = TTSPanel;
 var TTSIcon2 = ({ isPlaying, onClick }) => {
   const bars = [1, 2, 3, 4];
-  return /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "relative h-full w-full cursor-pointer", onClick }, /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "absolute inset-0 overflow-hidden rounded-full bg-gradient-to-r from-blue-500 via-emerald-500 to-violet-500" }, /* @__PURE__ */ React43__namespace.default.createElement(
+  return /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "relative h-full w-full cursor-pointer", onClick }, /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "absolute inset-0 overflow-hidden rounded-full bg-gradient-to-r from-blue-500 via-emerald-500 to-violet-500" }, /* @__PURE__ */ React42__namespace.default.createElement(
     "div",
     {
       className: "absolute -inset-full bg-gradient-to-r from-blue-500 via-emerald-500 to-violet-500",
@@ -12465,7 +12415,7 @@ var TTSIcon2 = ({ isPlaying, onClick }) => {
         animation: isPlaying ? "moveGradient 2s alternate infinite" : "none"
       }
     }
-  )), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "absolute inset-0 flex items-center justify-center" }, /* @__PURE__ */ React43__namespace.default.createElement("style", null, `
+  )), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "absolute inset-0 flex items-center justify-center" }, /* @__PURE__ */ React42__namespace.default.createElement("style", null, `
           @keyframes moveGradient {
             0% { transform: translate(0, 0); }
             100% { transform: translate(25%, 25%); }
@@ -12474,7 +12424,7 @@ var TTSIcon2 = ({ isPlaying, onClick }) => {
             0%, 100% { transform: scaleY(1); }
             50% { transform: scaleY(0.6); }
           }
-        `), /* @__PURE__ */ React43__namespace.default.createElement("div", { className: "flex items-end space-x-1" }, bars.map((bar) => /* @__PURE__ */ React43__namespace.default.createElement(
+        `), /* @__PURE__ */ React42__namespace.default.createElement("div", { className: "flex items-end space-x-1" }, bars.map((bar) => /* @__PURE__ */ React42__namespace.default.createElement(
     "div",
     {
       key: bar,
@@ -12501,23 +12451,23 @@ var TTSControl = () => {
   const { appService } = useEnv();
   const { getBookData } = useBookDataStore();
   const { getView, getViewSettings } = useReaderStore();
-  const [bookKey, setBookKey] = React43.useState("");
-  const [ttsLang, setTtsLang] = React43.useState("en");
-  const [isPlaying, setIsPlaying] = React43.useState(false);
-  const [isPaused, setIsPaused] = React43.useState(false);
-  const [showIndicator, setShowIndicator] = React43.useState(false);
-  const [showPanel, setShowPanel] = React43.useState(false);
-  const [panelPosition, setPanelPosition] = React43.useState();
-  const [trianglePosition, setTrianglePosition] = React43.useState();
-  const [timeoutOption, setTimeoutOption] = React43.useState(0);
-  const [timeoutTimestamp, setTimeoutTimestamp] = React43.useState(0);
-  const [timeoutFunc, setTimeoutFunc] = React43.useState(null);
+  const [bookKey, setBookKey] = React42.useState("");
+  const [ttsLang, setTtsLang] = React42.useState("en");
+  const [isPlaying, setIsPlaying] = React42.useState(false);
+  const [isPaused, setIsPaused] = React42.useState(false);
+  const [showIndicator, setShowIndicator] = React42.useState(false);
+  const [showPanel, setShowPanel] = React42.useState(false);
+  const [panelPosition, setPanelPosition] = React42.useState();
+  const [trianglePosition, setTrianglePosition] = React42.useState();
+  const [timeoutOption, setTimeoutOption] = React42.useState(0);
+  const [timeoutTimestamp, setTimeoutTimestamp] = React42.useState(0);
+  const [timeoutFunc, setTimeoutFunc] = React42.useState(null);
   const popupWidth2 = useResponsiveSize(POPUP_WIDTH);
   const popupHeight2 = useResponsiveSize(POPUP_HEIGHT);
   const popupPadding2 = useResponsiveSize(POPUP_PADDING);
-  const iconRef = React43.useRef(null);
-  const ttsControllerRef = React43.useRef(null);
-  const unblockerAudioRef = React43.useRef(null);
+  const iconRef = React42.useRef(null);
+  const ttsControllerRef = React42.useRef(null);
+  const unblockerAudioRef = React42.useRef(null);
   const unblockAudio = () => {
     if (unblockerAudioRef.current) return;
     unblockerAudioRef.current = document.createElement("audio");
@@ -12541,7 +12491,7 @@ var TTSControl = () => {
       console.warn("Error releasing unblock audio:", err);
     }
   };
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     return () => {
       if (ttsControllerRef.current) {
         ttsControllerRef.current.kill();
@@ -12549,7 +12499,7 @@ var TTSControl = () => {
       }
     };
   }, []);
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     eventDispatcher.on("tts-speak", handleTTSSpeak);
     eventDispatcher.on("tts-stop", handleTTSStop);
     eventDispatcher.onSync("tts-is-speaking", handleQueryIsSpeaking);
@@ -12652,7 +12602,7 @@ var TTSControl = () => {
       releaseUnblockAudio();
     }
   };
-  const handleSetRate = React43.useCallback(
+  const handleSetRate = React42.useCallback(
     throttle(async (rate) => {
       const ttsController = ttsControllerRef.current;
       if (ttsController) {
@@ -12667,7 +12617,7 @@ var TTSControl = () => {
     }, 3e3),
     []
   );
-  const handleSetVoice = React43.useCallback(
+  const handleSetVoice = React42.useCallback(
     throttle(async (voice) => {
       const ttsController = ttsControllerRef.current;
       if (ttsController) {
@@ -12738,14 +12688,14 @@ var TTSControl = () => {
   const handleDismissPopup = () => {
     setShowPanel(false);
   };
-  return /* @__PURE__ */ React43__namespace.default.createElement("div", null, showPanel && /* @__PURE__ */ React43__namespace.default.createElement(
+  return /* @__PURE__ */ React42__namespace.default.createElement("div", null, showPanel && /* @__PURE__ */ React42__namespace.default.createElement(
     "div",
     {
       className: "fixed inset-0",
       onClick: handleDismissPopup,
       onContextMenu: handleDismissPopup
     }
-  ), showIndicator && /* @__PURE__ */ React43__namespace.default.createElement(
+  ), showIndicator && /* @__PURE__ */ React42__namespace.default.createElement(
     "div",
     {
       ref: iconRef,
@@ -12754,8 +12704,8 @@ var TTSControl = () => {
         appService?.hasSafeAreaInset ? "bottom-[calc(env(safe-area-inset-bottom)+70px)]" : "bottom-[70px] sm:bottom-14"
       )
     },
-    /* @__PURE__ */ React43__namespace.default.createElement(TTSIcon_default, { isPlaying, onClick: togglePopup })
-  ), showPanel && panelPosition && trianglePosition && /* @__PURE__ */ React43__namespace.default.createElement(
+    /* @__PURE__ */ React42__namespace.default.createElement(TTSIcon_default, { isPlaying, onClick: togglePopup })
+  ), showPanel && panelPosition && trianglePosition && /* @__PURE__ */ React42__namespace.default.createElement(
     Popup_default,
     {
       width: popupWidth2,
@@ -12764,7 +12714,7 @@ var TTSControl = () => {
       trianglePosition,
       className: "bg-base-200 absolute flex shadow-lg"
     },
-    /* @__PURE__ */ React43__namespace.default.createElement(
+    /* @__PURE__ */ React42__namespace.default.createElement(
       TTSPanel_default,
       {
         bookKey,
@@ -12787,8 +12737,13 @@ var TTSControl = () => {
 var TTSControl_default = TTSControl;
 
 // src/app/reader/components/ReaderContent.tsx
+var getSearchParam = (key) => {
+  if (typeof window === "undefined") return null;
+  const params = new URLSearchParams(window.location.search);
+  return params.get(key);
+};
 var ReaderContent = ({ ids }) => {
-  const searchParams = useSearchParams();
+  const idFromUrl = getSearchParam("ids");
   const { envConfig, appService } = useEnv();
   const { bookKeys, dismissBook, getNextBookKey } = useBooksManager_default();
   const { sideBarBookKey, setSideBarBookKey } = useSidebarStore();
@@ -12796,17 +12751,17 @@ var ReaderContent = ({ ids }) => {
   const { getConfig, getBookData, saveConfig } = useBookDataStore();
   const { getView, setBookKeys } = useReaderStore();
   const { initViewState, getViewState, clearViewState } = useReaderStore();
-  const [showDetailsBook, setShowDetailsBook] = React43.useState(null);
-  const isInitiating = React43.useRef(false);
-  const [loading, setLoading] = React43.useState(false);
+  const [showDetailsBook, setShowDetailsBook] = React42.useState(null);
+  const isInitiating = React42.useRef(false);
+  const [loading, setLoading] = React42.useState(false);
   useBookShortcuts_default({ sideBarBookKey, bookKeys });
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     isInitiating.current = false;
   }, [ids]);
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     if (isInitiating.current) return;
     isInitiating.current = true;
-    const bookIds = ids || searchParams?.get("ids") || "";
+    const bookIds = ids || idFromUrl || "";
     const initialIds = bookIds.split(BOOK_IDS_SEPARATOR).filter(Boolean);
     if (initialIds.length === 0) {
       console.log("No book IDs provided, skipping initialization");
@@ -12833,8 +12788,8 @@ var ReaderContent = ({ ids }) => {
       return true;
     };
     eventDispatcher.onSync("show-book-details", handleShowBookDetails);
-  }, [ids, searchParams]);
-  React43.useEffect(() => {
+  }, [ids, idFromUrl]);
+  React42.useEffect(() => {
     const unlisten = handleOnCloseWindow(handleCloseBooks);
     window.addEventListener("beforeunload", handleCloseBooks);
     eventDispatcher.on("quit-app", handleCloseBooks);
@@ -12889,9 +12844,9 @@ var ReaderContent = ({ ids }) => {
   const bookData = getBookData(bookKeys[0]);
   if (!bookData || !bookData.book || !bookData.bookDoc) {
     setTimeout(() => setLoading(true), 300);
-    return loading && /* @__PURE__ */ React43__namespace.createElement("div", { className: clsx8__default.default("hero hero-content", appService?.isIOSApp ? "h-[100vh]" : "h-dvh") }, /* @__PURE__ */ React43__namespace.createElement(Spinner_default, { loading: true }));
+    return loading && /* @__PURE__ */ React42__namespace.createElement("div", { className: clsx8__default.default("hero hero-content", appService?.isIOSApp ? "h-[100vh]" : "h-dvh") }, /* @__PURE__ */ React42__namespace.createElement(Spinner_default, { loading: true }));
   }
-  return /* @__PURE__ */ React43__namespace.createElement("div", { className: clsx8__default.default("flex", appService?.isIOSApp ? "h-[100vh]" : "h-dvh") }, /* @__PURE__ */ React43__namespace.createElement(SideBar_default, { onGoToLibrary: handleCloseBooksAndReload }), /* @__PURE__ */ React43__namespace.createElement(BooksGrid_default, { bookKeys, onCloseBook: handleCloseBook }), /* @__PURE__ */ React43__namespace.createElement(TTSControl_default, null), /* @__PURE__ */ React43__namespace.createElement(Notebook_default, null), showDetailsBook && /* @__PURE__ */ React43__namespace.createElement(
+  return /* @__PURE__ */ React42__namespace.createElement("div", { className: clsx8__default.default("flex", appService?.isIOSApp ? "h-[100vh]" : "h-dvh") }, /* @__PURE__ */ React42__namespace.createElement(SideBar_default, { onGoToLibrary: handleCloseBooksAndReload }), /* @__PURE__ */ React42__namespace.createElement(BooksGrid_default, { bookKeys, onCloseBook: handleCloseBook }), /* @__PURE__ */ React42__namespace.createElement(TTSControl_default, null), /* @__PURE__ */ React42__namespace.createElement(Notebook_default, null), showDetailsBook && /* @__PURE__ */ React42__namespace.createElement(
     BookDetailModal_default,
     {
       isOpen: !!showDetailsBook,
@@ -12907,14 +12862,14 @@ var Reader = ({ bookUrl = "https://cdn.readest.com/books/the-scarlet-letter.epub
   const { envConfig, appService } = useEnv();
   const { settings, setSettings } = useSettingsStore();
   const { isSideBarVisible } = useSidebarStore();
-  const isInitiating = React43.useRef(false);
-  const [loading, setLoading] = React43.useState(true);
-  const [error, setError] = React43.useState(null);
-  const [bookHash, setBookHash] = React43.useState(null);
+  const isInitiating = React42.useRef(false);
+  const [loading, setLoading] = React42.useState(true);
+  const [error, setError] = React42.useState(null);
+  const [bookHash, setBookHash] = React42.useState(null);
   const { updateAppTheme } = useThemeStore();
   useTheme();
   useScreenWakeLock(settings.screenWakeLock);
-  React43.useEffect(() => {
+  React42.useEffect(() => {
     updateAppTheme("base-100");
     if (isInitiating.current) return;
     isInitiating.current = true;
@@ -12981,10 +12936,10 @@ var Reader = ({ bookUrl = "https://cdn.readest.com/books/the-scarlet-letter.epub
     initSettings();
   }, [bookUrl]);
   if (loading) {
-    return /* @__PURE__ */ React43__namespace.createElement("div", { className: "hero h-dvh bg-base-100" }, /* @__PURE__ */ React43__namespace.createElement("div", { className: "hero-content text-center" }, /* @__PURE__ */ React43__namespace.createElement("div", null, /* @__PURE__ */ React43__namespace.createElement(Spinner_default, { loading: true }), /* @__PURE__ */ React43__namespace.createElement("div", { className: "mt-4 text-base-content" }, "Loading book from URL..."))));
+    return /* @__PURE__ */ React42__namespace.createElement("div", { className: "hero h-dvh bg-base-100" }, /* @__PURE__ */ React42__namespace.createElement("div", { className: "hero-content text-center" }, /* @__PURE__ */ React42__namespace.createElement("div", null, /* @__PURE__ */ React42__namespace.createElement(Spinner_default, { loading: true }), /* @__PURE__ */ React42__namespace.createElement("div", { className: "mt-4 text-base-content" }, "Loading book from URL..."))));
   }
   if (error) {
-    return /* @__PURE__ */ React43__namespace.createElement("div", { className: "hero h-dvh bg-base-100" }, /* @__PURE__ */ React43__namespace.createElement("div", { className: "hero-content text-center" }, /* @__PURE__ */ React43__namespace.createElement("div", { className: "max-w-md" }, /* @__PURE__ */ React43__namespace.createElement("h1", { className: "text-2xl font-bold text-error" }, "Error"), /* @__PURE__ */ React43__namespace.createElement("p", { className: "py-4 text-base-content" }, error), /* @__PURE__ */ React43__namespace.createElement(
+    return /* @__PURE__ */ React42__namespace.createElement("div", { className: "hero h-dvh bg-base-100" }, /* @__PURE__ */ React42__namespace.createElement("div", { className: "hero-content text-center" }, /* @__PURE__ */ React42__namespace.createElement("div", { className: "max-w-md" }, /* @__PURE__ */ React42__namespace.createElement("h1", { className: "text-2xl font-bold text-error" }, "Error"), /* @__PURE__ */ React42__namespace.createElement("p", { className: "py-4 text-base-content" }, error), /* @__PURE__ */ React42__namespace.createElement(
       "button",
       {
         className: "btn btn-primary",
@@ -12993,7 +12948,7 @@ var Reader = ({ bookUrl = "https://cdn.readest.com/books/the-scarlet-letter.epub
       "Try Again"
     ))));
   }
-  return settings?.globalReadSettings && /* @__PURE__ */ React43__namespace.createElement(
+  return settings?.globalReadSettings && /* @__PURE__ */ React42__namespace.createElement(
     "div",
     {
       className: clsx8__default.default(
@@ -13001,7 +12956,7 @@ var Reader = ({ bookUrl = "https://cdn.readest.com/books/the-scarlet-letter.epub
         !isSideBarVisible && appService?.hasRoundedWindow && "rounded-window"
       )
     },
-    /* @__PURE__ */ React43__namespace.createElement(React43.Suspense, null, /* @__PURE__ */ React43__namespace.createElement(ReaderContent_default, { key: bookHash || "default", ids: bookHash || void 0 }), /* @__PURE__ */ React43__namespace.createElement(Toast, null))
+    /* @__PURE__ */ React42__namespace.createElement(React42.Suspense, null, /* @__PURE__ */ React42__namespace.createElement(ReaderContent_default, { key: bookHash || "default", ids: bookHash || void 0 }), /* @__PURE__ */ React42__namespace.createElement(Toast, null))
   );
 };
 var Reader_default = Reader;
@@ -13009,26 +12964,19 @@ var Reader_default = Reader;
 // src/index.ts
 var index_default = Reader_default;
 
-exports.AppRouterContext = AppRouterContext;
 exports.EnvProvider = EnvProvider;
 exports.FoliateViewer = FoliateViewer_default;
 exports.FooterBar = FooterBar_default;
 exports.HeaderBar = HeaderBar_default;
-exports.MockNextNavigation = MockNextNavigation;
-exports.PathnameContext = PathnameContext;
 exports.Reader = Reader_default;
 exports.ReaderContent = ReaderContent_default;
-exports.SearchParamsContext = SearchParamsContext;
 exports.SettingsDialog = SettingsDialog_default;
 exports.SideBar = SideBar_default;
 exports.SyncProvider = SyncProvider;
 exports.TOCView = TOCView_default;
 exports.default = index_default;
 exports.useEnv = useEnv;
-exports.usePathname = usePathname;
-exports.useRouter = useRouter;
 exports.useScreenWakeLock = useScreenWakeLock;
-exports.useSearchParams = useSearchParams;
 exports.useSettingsStore = useSettingsStore;
 exports.useSidebarStore = useSidebarStore;
 exports.useSyncContext = useSyncContext;

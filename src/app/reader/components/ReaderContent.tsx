@@ -3,7 +3,13 @@
 import clsx from 'clsx';
 import * as React from 'react';
 import { useState, useRef, useEffect } from 'react';
-import { useSearchParams } from '@/context/RouterContext';
+
+// Simple helper to get search params from URL
+const getSearchParam = (key: string): string | null => {
+  if (typeof window === 'undefined') return null;
+  const params = new URLSearchParams(window.location.search);
+  return params.get(key);
+};
 
 import { useEnv } from '@/context/EnvContext';
 import { useSettingsStore } from '@/store/settingsStore';
@@ -27,7 +33,8 @@ import BooksGrid from './BooksGrid';
 import TTSControl from './tts/TTSControl';
 
 const ReaderContent: React.FC<{ ids?: string }> = ({ ids }) => {
-  const searchParams = useSearchParams();
+  // Use the IDs passed as prop or from URL
+  const idFromUrl = getSearchParam('ids');
   const { envConfig, appService } = useEnv();
   const { bookKeys, dismissBook, getNextBookKey } = useBooksManager();
   const { sideBarBookKey, setSideBarBookKey } = useSidebarStore();
@@ -51,7 +58,7 @@ const ReaderContent: React.FC<{ ids?: string }> = ({ ids }) => {
     if (isInitiating.current) return;
     isInitiating.current = true;
 
-    const bookIds = ids || searchParams?.get('ids') || '';
+    const bookIds = ids || idFromUrl || '';
     const initialIds = bookIds.split(BOOK_IDS_SEPARATOR).filter(Boolean);
     
     // If there are no IDs, don't proceed with setting empty book keys
@@ -85,7 +92,7 @@ const ReaderContent: React.FC<{ ids?: string }> = ({ ids }) => {
     };
     eventDispatcher.onSync('show-book-details', handleShowBookDetails);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ids, searchParams]);
+  }, [ids, idFromUrl]);
 
   useEffect(() => {
     const unlisten = handleOnCloseWindow(handleCloseBooks);
