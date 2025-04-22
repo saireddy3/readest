@@ -34,6 +34,7 @@
     "clsx": "^2.1.1",
     "cors": "^2.8.5",
     "cssbeautify": "^0.3.1",
+    "foliate-js": "1.0.1",
     "i18next": "^24.2.0",
     "i18next-browser-languagedetector": "^8.0.2",
     "i18next-http-backend": "^3.0.1",
@@ -46,7 +47,7 @@
     "zustand": "5.0.1"
   },
   "peerDependencies": {
-    "@shmandadi/foliate-js": "^1.0.0",
+    "foliate-js": "1.0.1",
     "next": ">=14.0.0",
     "react": ">=18.0.0",
     "react-dom": ">=18.0.0"
@@ -54,7 +55,6 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
     "@eslint/js": "^9.24.0",
-    "@shmandadi/foliate-js": "^1.0.0",
     "@sindresorhus/tsconfig": "^7.0.0",
     "@types/cors": "^2.8.17",
     "@types/cssbeautify": "^0.3.5",
@@ -81,13 +81,10 @@
     "react-dom": "19.0.0",
     "tailwindcss": "^3.4.17",
     "tsup": "^8.0.1",
-    "typescript": "^5.7.2"
+    "typescript": "^5.8.3"
   },
   "publishConfig": {
     "access": "public"
-  },
-  "browser": {
-    "foliate-js": "@shmandadi/foliate-js"
   },
   "keywords": [
     "ebook",

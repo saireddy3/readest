@@ -753,7 +753,6 @@ var init_document = __esm({
     CFI = CFI4__namespace;
     EXTS = {
       EPUB: "epub",
-      PDF: "pdf",
       MOBI: "mobi",
       CBZ: "cbz",
       FB2: "fb2",
@@ -1017,10 +1016,9 @@ var init_book = __esm({
       if (!subject) return "";
       return Array.isArray(subject) ? subject.join(", ") : subject;
     };
-    getCurrentPage = (book, progress) => {
-      const bookFormat = book.format;
+    getCurrentPage = (progress) => {
       const { section, pageinfo } = progress;
-      return bookFormat === "PDF" ? section ? section.current + 1 : 0 : pageinfo ? pageinfo.current + 1 : 0;
+      return pageinfo ? pageinfo.current + 1 : section ? section.current + 1 : 0;
     };
     getBookDirFromWritingMode = (writingMode) => {
       switch (writingMode) {
@@ -7182,7 +7180,7 @@ var BookmarkToggler = ({ bookKey }) => {
   const { getProgress, setBookmarkRibbonVisibility } = useReaderStore();
   const config = getConfig(bookKey);
   const progress = getProgress(bookKey);
-  const bookData = getBookData(bookKey);
+  getBookData(bookKey);
   const [isBookmarked, setIsBookmarked] = React42.useState(false);
   const toggleBookmark = () => {
     const { booknotes: bookmarks = [] } = config;
@@ -7196,7 +7194,7 @@ var BookmarkToggler = ({ bookKey }) => {
         id: uniqueId(),
         type: "bookmark",
         cfi,
-        text: truncatedText ? truncatedText : `${getCurrentPage(bookData.book, progress)}`,
+        text: truncatedText ? truncatedText : `${getCurrentPage(progress)}`,
         note: "",
         createdAt: Date.now(),
         updatedAt: Date.now()
@@ -12733,7 +12731,7 @@ var TTSControl = () => {
 var TTSControl_default = TTSControl;
 
 // src/app/reader/components/ReaderContent.tsx
-var ReaderContent = ({ ids, settings }) => {
+var ReaderContent = ({ ids }) => {
   const searchParams = navigation.useSearchParams();
   const { envConfig, appService } = useEnv();
   const { bookKeys, dismissBook, getNextBookKey } = useBooksManager_default();
@@ -12796,8 +12794,8 @@ var ReaderContent = ({ ids, settings }) => {
     const { isPrimary } = getViewState(bookKey) || {};
     if (isPrimary && book && config) {
       eventDispatcher.dispatch("sync-book-progress", { bookKey });
-      const settings2 = useSettingsStore.getState().settings;
-      await saveConfig(envConfig, bookKey, config, settings2);
+      const settings = useSettingsStore.getState().settings;
+      await saveConfig(envConfig, bookKey, config, settings);
     }
   };
   const saveConfigAndCloseBook = async (bookKey) => {
@@ -12813,9 +12811,9 @@ var ReaderContent = ({ ids, settings }) => {
     clearViewState(bookKey);
   };
   const handleCloseBooks = async () => {
-    const settings2 = useSettingsStore.getState().settings;
+    const settings = useSettingsStore.getState().settings;
     await Promise.all(bookKeys.map((key) => saveConfigAndCloseBook(key)));
-    await saveSettings(envConfig, settings2);
+    await saveSettings(envConfig, settings);
   };
   const handleCloseBooksAndReload = () => {
     handleCloseBooks();
@@ -12947,7 +12945,7 @@ var Reader = ({ bookUrl = "https://cdn.readest.com/books/the-scarlet-letter.epub
         !isSideBarVisible && appService?.hasRoundedWindow && "rounded-window"
       )
     },
-    /* @__PURE__ */ React42__namespace.createElement(React42.Suspense, null, /* @__PURE__ */ React42__namespace.createElement(ReaderContent_default, { key: bookHash || "default", ids: bookHash || void 0, settings }), /* @__PURE__ */ React42__namespace.createElement(Toast, null))
+    /* @__PURE__ */ React42__namespace.createElement(React42.Suspense, null, /* @__PURE__ */ React42__namespace.createElement(ReaderContent_default, { key: bookHash || "default", ids: bookHash || void 0 }), /* @__PURE__ */ React42__namespace.createElement(Toast, null))
   );
 };
 var Reader_default = Reader;

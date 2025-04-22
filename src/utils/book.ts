@@ -134,15 +134,12 @@ export const formatSubject = (subject: string | string[] | undefined) => {
   return Array.isArray(subject) ? subject.join(', ') : subject;
 };
 
-export const getCurrentPage = (book: Book, progress: BookProgress) => {
-  const bookFormat = book.format;
+export const getCurrentPage = (progress: BookProgress) => {
   const { section, pageinfo } = progress;
-  return bookFormat === 'PDF'
-    ? section
+  return pageinfo
+    ? pageinfo.current + 1
+    : section
       ? section.current + 1
-      : 0
-    : pageinfo
-      ? pageinfo.current + 1
       : 0;
 };
 

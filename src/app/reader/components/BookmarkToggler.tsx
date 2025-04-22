@@ -40,7 +40,7 @@ const BookmarkToggler: React.FC<BookmarkTogglerProps> = ({ bookKey }) => {
         id: uniqueId(),
         type: 'bookmark',
         cfi,
-        text: truncatedText ? truncatedText : `${getCurrentPage(bookData.book!, progress)}`,
+        text: truncatedText ? truncatedText : `${getCurrentPage(progress)}`,
         note: '',
         createdAt: Date.now(),
         updatedAt: Date.now(),

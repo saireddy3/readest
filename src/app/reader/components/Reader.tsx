@@ -166,7 +166,7 @@ const Reader: React.FC<ReaderProps> = ({ bookUrl = 'https://cdn.readest.com/book
         )}
       >
         <Suspense>
-          <ReaderContent key={bookHash || 'default'} ids={bookHash || undefined} settings={settings} />
+          <ReaderContent key={bookHash || 'default'} ids={bookHash || undefined} />
           <Toast />
         </Suspense>
       </div>

@@ -81,7 +81,6 @@ export enum SupportedFileFormats {
 
 export const EXTS: Record<BookFormat, string> = {
   EPUB: 'epub',
-  PDF: 'pdf',
   MOBI: 'mobi',
   CBZ: 'cbz',
   FB2: 'fb2',

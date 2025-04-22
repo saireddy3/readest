@@ -11,7 +11,6 @@ import { useBookDataStore } from '@/store/bookDataStore';
 import { useReaderStore } from '@/store/readerStore';
 import { useSidebarStore } from '@/store/sidebarStore';
 import { Book } from '@/types/book';
-import { SystemSettings } from '@/types/settings';
 import { handleOnCloseWindow } from '@/utils/webWindow';
 import { uniqueId } from '@/utils/misc';
 import { eventDispatcher } from '@/utils/event';
@@ -27,7 +26,7 @@ import Notebook from './notebook/Notebook';
 import BooksGrid from './BooksGrid';
 import TTSControl from './tts/TTSControl';
 
-const ReaderContent: React.FC<{ ids?: string; settings: SystemSettings }> = ({ ids, settings }) => {
+const ReaderContent: React.FC<{ ids?: string }> = ({ ids }) => {
   const searchParams = useSearchParams();
   const { envConfig, appService } = useEnv();
   const { bookKeys, dismissBook, getNextBookKey } = useBooksManager();

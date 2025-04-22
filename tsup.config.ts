@@ -3,9 +3,7 @@ import { defineConfig } from 'tsup';
 export default defineConfig({
   entry: ['src/index.ts'],
   format: ['cjs', 'esm'],
-  dts: {
-    resolve: true,
-  },
+  dts: true,
   sourcemap: true,
   clean: true,
   minify: false,
@@ -13,7 +11,7 @@ export default defineConfig({
   treeshake: true,
   skipNodeModulesBundle: true,
   outDir: 'dist',
-  outExtension({ format }) {
+  outExtension({ format }: { format: string }) {
     return {
       js: format === 'cjs' ? '.js' : '.mjs',
     };
@@ -35,17 +33,6 @@ export default defineConfig({
     'react',
     'react-dom',
     'next',
-    '@shmandadi/foliate-js',
-    '@shmandadi/foliate-js/epubcfi.js',
-    '@shmandadi/foliate-js/comic-book.js',
-    '@shmandadi/foliate-js/fb2.js',
-    '@shmandadi/foliate-js/epub.js',
-    '@shmandadi/foliate-js/mobi.js',
-    '@shmandadi/foliate-js/vendor/fflate.js',
-    '@shmandadi/foliate-js/view.js',
-    '@shmandadi/foliate-js/overlayer.js',
-    '@shmandadi/foliate-js/footnotes.js',
-    // Also include original paths for backward compatibility
     'foliate-js',
     'foliate-js/epubcfi.js',
     'foliate-js/comic-book.js',
@@ -62,22 +49,11 @@ export default defineConfig({
     'i18next-http-backend',
     /^!!raw-loader/,
   ],
-  esbuildOptions(options) {
-    options.alias = {
-      // Add alias to map foliate-js to @shmandadi/foliate-js
-      'foliate-js': '@shmandadi/foliate-js',
-    };
-    // Ensure we handle all file types
-    options.loader = {
-      ...options.loader,
-      '.png': 'file',
-      '.jpg': 'file',
-      '.svg': 'file',
-    };
+  esbuildOptions(options: Record<string, unknown>) {
     // Preserve path structure for imported assets
-    options.assetNames = 'assets/[name]-[hash]';
+    options['assetNames'] = 'assets/[name]-[hash]';
     // Increase bundle size limit
-    options.chunkNames = 'chunks/[name]-[hash]';
+    options['chunkNames'] = 'chunks/[name]-[hash]';
   },
   onSuccess: 'echo ✅ Build completed successfully!',
-}); 
+});
