@@ -11,7 +11,7 @@ import FooterBar from './app/reader/components/FooterBar';
 // Export utilities and hooks
 import { useTheme } from './hooks/useTheme';
 import { useScreenWakeLock } from './hooks/useScreenWakeLock';
-import { useEnv } from './context/EnvContext';
+import { useEnv, EnvProvider } from './context/EnvContext';
 
 // Export contexts
 export * from './context/EnvContext';
@@ -41,7 +41,8 @@ export {
   FooterBar,
   useTheme,
   useScreenWakeLock,
-  useEnv
+  useEnv,
+  EnvProvider
 };
 
 // Default export for backward compatibility
