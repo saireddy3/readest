@@ -12,10 +12,12 @@ import FooterBar from './app/reader/components/FooterBar';
 import { useTheme } from './hooks/useTheme';
 import { useScreenWakeLock } from './hooks/useScreenWakeLock';
 import { useEnv, EnvProvider } from './context/EnvContext';
+import { MockNextNavigation } from './context/RouterContext';
 
 // Export contexts
 export * from './context/EnvContext';
 export * from './context/SyncContext';
+export * from './context/RouterContext';
 
 // Export store
 export * from './store/settingsStore';
@@ -42,7 +44,8 @@ export {
   useTheme,
   useScreenWakeLock,
   useEnv,
-  EnvProvider
+  EnvProvider,
+  MockNextNavigation
 };
 
 // Default export for backward compatibility

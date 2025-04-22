@@ -4,8 +4,8 @@ import { S3Client } from '@aws-sdk/client-s3';
 import '@aws-sdk/s3-request-presigner';
 import 'aws4fetch';
 import clsx8 from 'clsx';
-import * as React42 from 'react';
-import React42__default, { createContext, useContext, useState, useEffect, useRef, Suspense, useCallback, isValidElement } from 'react';
+import * as React43 from 'react';
+import React43__default, { createContext, useContext, useState, useEffect, useRef, Suspense, useCallback, isValidElement } from 'react';
 import { create } from 'zustand';
 import tinycolor2 from 'tinycolor2';
 import Image from 'next/image';
@@ -2385,10 +2385,10 @@ var EnvContext = createContext(void 0);
 var EnvProvider = ({ children }) => {
   const [envConfig] = useState(environment_default);
   const [appService, setAppService] = useState(null);
-  React42__default.useEffect(() => {
+  React43__default.useEffect(() => {
     envConfig.getAppService().then((service) => setAppService(service));
   }, [envConfig]);
-  return /* @__PURE__ */ React42__default.createElement(EnvContext.Provider, { value: { envConfig, appService } }, children);
+  return /* @__PURE__ */ React43__default.createElement(EnvContext.Provider, { value: { envConfig, appService } }, children);
 };
 var useEnv = () => {
   const context = useContext(EnvContext);
@@ -3277,7 +3277,7 @@ var Toast = () => {
       eventDispatcher.off("toast", handleShowToast);
     };
   }, []);
-  return toastMessage && /* @__PURE__ */ React42__default.createElement(
+  return toastMessage && /* @__PURE__ */ React43__default.createElement(
     "div",
     {
       className: clsx8(
@@ -3286,7 +3286,7 @@ var Toast = () => {
         toastClassMap[toastType.current].includes("toast-top") && "pt-[calc(44px+env(safe-area-inset-top))]"
       )
     },
-    /* @__PURE__ */ React42__default.createElement(
+    /* @__PURE__ */ React43__default.createElement(
       "div",
       {
         className: clsx8(
@@ -3294,7 +3294,7 @@ var Toast = () => {
           alertClassMap[toastType.current]
         )
       },
-      /* @__PURE__ */ React42__default.createElement(
+      /* @__PURE__ */ React43__default.createElement(
         "span",
         {
           className: clsx8(
@@ -3303,11 +3303,69 @@ var Toast = () => {
             messageClass.current
           )
         },
-        toastMessage.split("\n").map((line, idx) => /* @__PURE__ */ React42__default.createElement(React42__default.Fragment, { key: idx }, line || /* @__PURE__ */ React42__default.createElement(React42__default.Fragment, null, "\xA0"), /* @__PURE__ */ React42__default.createElement("br", null)))
+        toastMessage.split("\n").map((line, idx) => /* @__PURE__ */ React43__default.createElement(React43__default.Fragment, { key: idx }, line || /* @__PURE__ */ React43__default.createElement(React43__default.Fragment, null, "\xA0"), /* @__PURE__ */ React43__default.createElement("br", null)))
       )
     )
   );
 };
+
+// src/utils/nav.ts
+init_environment();
+init_constants();
+var createMockRouter = () => {
+  return {
+    back: () => console.log("Mock router: back called"),
+    forward: () => console.log("Mock router: forward called"),
+    refresh: () => console.log("Mock router: refresh called"),
+    push: (url) => console.log(`Mock router: push called with url ${url}`),
+    replace: (url) => console.log(`Mock router: replace called with url ${url}`),
+    prefetch: (url) => console.log(`Mock router: prefetch called with url ${url}`)
+  };
+};
+var navigateToReader = (router, bookIds, queryParams, navOptions) => {
+  const ids = bookIds.join(BOOK_IDS_SEPARATOR);
+  if (isWebAppPlatform() && !isPWA()) {
+    router.push(`/reader/${ids}${queryParams ? `?${queryParams}` : ""}`, navOptions);
+  } else {
+    const params = new URLSearchParams(queryParams || "");
+    params.set("ids", ids);
+    router.push(`/reader?${params.toString()}`, navOptions);
+  }
+};
+var redirectToDirectReader = () => {
+  window.location.href = "/reader";
+  window.location.reload();
+};
+
+// src/context/RouterContext.tsx
+var AppRouterContext = createContext(null);
+var PathnameContext = createContext("/");
+var SearchParamsContext = createContext(new URLSearchParams());
+function MockNextNavigation({ children }) {
+  const mockRouter = createMockRouter();
+  return /* @__PURE__ */ React43__default.createElement(AppRouterContext.Provider, { value: mockRouter }, /* @__PURE__ */ React43__default.createElement(PathnameContext.Provider, { value: "/" }, /* @__PURE__ */ React43__default.createElement(SearchParamsContext.Provider, { value: new URLSearchParams() }, children)));
+}
+function useRouter() {
+  const router = useContext(AppRouterContext);
+  if (router === null) {
+    throw new Error("useRouter must be used within MockNextNavigation");
+  }
+  return router;
+}
+function usePathname() {
+  const pathname = useContext(PathnameContext);
+  if (pathname === null) {
+    throw new Error("usePathname must be used within MockNextNavigation");
+  }
+  return pathname;
+}
+function useSearchParams() {
+  const searchParams = useContext(SearchParamsContext);
+  if (searchParams === null) {
+    throw new Error("useSearchParams must be used within MockNextNavigation");
+  }
+  return searchParams;
+}
 var useBookDataStore = create((set, get) => ({
   booksData: {},
   getBookData: (keyOrId) => {
@@ -3704,48 +3762,11 @@ var handleToggleMaximize = () => {
 
 // src/app/reader/components/ReaderContent.tsx
 init_misc();
-
-// src/utils/nav.ts
-init_environment();
-init_constants();
-var createMockRouter = () => {
-  return {
-    back: () => console.log("Mock router: back called"),
-    forward: () => console.log("Mock router: forward called"),
-    refresh: () => console.log("Mock router: refresh called"),
-    push: (url) => console.log(`Mock router: push called with url ${url}`),
-    replace: (url) => console.log(`Mock router: replace called with url ${url}`),
-    prefetch: (url) => console.log(`Mock router: prefetch called with url ${url}`)
-  };
-};
-var navigateToReader = (router, bookIds, queryParams, navOptions) => {
-  const ids = bookIds.join(BOOK_IDS_SEPARATOR);
-  if (isWebAppPlatform() && !isPWA()) {
-    router.push(`/reader/${ids}${queryParams ? `?${queryParams}` : ""}`, navOptions);
-  } else {
-    const params = new URLSearchParams(queryParams || "");
-    params.set("ids", ids);
-    router.push(`/reader?${params.toString()}`, navOptions);
-  }
-};
-var redirectToDirectReader = () => {
-  window.location.href = "/reader";
-  window.location.reload();
-};
-
-// src/app/reader/components/ReaderContent.tsx
 init_constants();
 init_misc();
-var createMockSearchParams = () => {
-  const params = new URLSearchParams(window.location.search);
-  return {
-    get: (key) => params.get(key),
-    toString: () => params.toString()
-  };
-};
 var useBooksManager = () => {
-  const router = createMockRouter();
-  const searchParams = createMockSearchParams();
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const { envConfig } = useEnv();
   const { bookKeys } = useReaderStore();
   const { setBookKeys, initViewState } = useReaderStore();
@@ -4077,7 +4098,7 @@ var useTranslation = (namespace = "translation") => {
 init_book();
 var Alert = ({ title, message, onCancel, onConfirm }) => {
   const _ = useTranslation();
-  return /* @__PURE__ */ React42__default.createElement("div", { className: clsx8("z-[100] flex justify-center px-4") }, /* @__PURE__ */ React42__default.createElement(
+  return /* @__PURE__ */ React43__default.createElement("div", { className: clsx8("z-[100] flex justify-center px-4") }, /* @__PURE__ */ React43__default.createElement(
     "div",
     {
       role: "alert",
@@ -4087,7 +4108,7 @@ var Alert = ({ title, message, onCancel, onConfirm }) => {
         "w-full max-w-[90vw] sm:max-w-[70vw] md:max-w-[50vw] lg:max-w-[40vw] xl:max-w-[40vw]"
       )
     },
-    /* @__PURE__ */ React42__default.createElement("div", { className: "flex items-center space-x-2" }, /* @__PURE__ */ React42__default.createElement(
+    /* @__PURE__ */ React43__default.createElement("div", { className: "flex items-center space-x-2" }, /* @__PURE__ */ React43__default.createElement(
       "svg",
       {
         xmlns: "http://www.w3.org/2000/svg",
@@ -4095,7 +4116,7 @@ var Alert = ({ title, message, onCancel, onConfirm }) => {
         viewBox: "0 0 24 24",
         className: "stroke-info h-6 w-6 shrink-0"
       },
-      /* @__PURE__ */ React42__default.createElement(
+      /* @__PURE__ */ React43__default.createElement(
         "path",
         {
           strokeLinecap: "round",
@@ -4104,15 +4125,15 @@ var Alert = ({ title, message, onCancel, onConfirm }) => {
           d: "M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
         }
       )
-    ), /* @__PURE__ */ React42__default.createElement("div", { className: "" }, /* @__PURE__ */ React42__default.createElement("h3", { className: "font-sm text-base" }, title), /* @__PURE__ */ React42__default.createElement("div", { className: "text-xs" }, message))),
-    /* @__PURE__ */ React42__default.createElement("div", { className: "flex flex-wrap items-center justify-center gap-2" }, /* @__PURE__ */ React42__default.createElement("button", { className: "btn btn-sm", onClick: onCancel }, _("Cancel")), /* @__PURE__ */ React42__default.createElement("button", { className: "btn btn-sm btn-warning", onClick: onConfirm }, _("Confirm")))
+    ), /* @__PURE__ */ React43__default.createElement("div", { className: "" }, /* @__PURE__ */ React43__default.createElement("h3", { className: "font-sm text-base" }, title), /* @__PURE__ */ React43__default.createElement("div", { className: "text-xs" }, message))),
+    /* @__PURE__ */ React43__default.createElement("div", { className: "flex flex-wrap items-center justify-center gap-2" }, /* @__PURE__ */ React43__default.createElement("button", { className: "btn btn-sm", onClick: onCancel }, _("Cancel")), /* @__PURE__ */ React43__default.createElement("button", { className: "btn btn-sm btn-warning", onClick: onConfirm }, _("Confirm")))
   ));
 };
 var Alert_default = Alert;
 var Spinner = ({ loading }) => {
   const _ = useTranslation();
   if (!loading) return null;
-  return /* @__PURE__ */ React42__default.createElement(
+  return /* @__PURE__ */ React43__default.createElement(
     "div",
     {
       className: clsx8(
@@ -4121,8 +4142,8 @@ var Spinner = ({ loading }) => {
       ),
       role: "status"
     },
-    /* @__PURE__ */ React42__default.createElement("span", { className: "loading loading-dots loading-lg" }),
-    /* @__PURE__ */ React42__default.createElement("span", { className: "hidden" }, _("Loading..."))
+    /* @__PURE__ */ React43__default.createElement("span", { className: "loading loading-dots loading-lg" }),
+    /* @__PURE__ */ React43__default.createElement("span", { className: "hidden" }, _("Loading..."))
   );
 };
 var Spinner_default = Spinner;
@@ -4250,7 +4271,7 @@ var Dialog = ({
   onClose
 }) => {
   const { appService } = useEnv();
-  const [isFullHeightInMobile, setIsFullHeightInMobile] = React42__default.useState(!snapHeight);
+  const [isFullHeightInMobile, setIsFullHeightInMobile] = React43__default.useState(!snapHeight);
   const [isRtl] = useState(() => getDirFromUILanguage() === "rtl");
   const iconSize22 = useResponsiveSize(22);
   const isMobile = window.innerWidth < 640;
@@ -4320,7 +4341,7 @@ var Dialog = ({
     }
   };
   const { handleDragStart } = useDrag(handleDragMove, handleDragEnd);
-  return /* @__PURE__ */ React42__default.createElement(
+  return /* @__PURE__ */ React43__default.createElement(
     "dialog",
     {
       id: id ?? "dialog",
@@ -4331,14 +4352,14 @@ var Dialog = ({
       ),
       dir: isRtl ? "rtl" : void 0
     },
-    /* @__PURE__ */ React42__default.createElement(
+    /* @__PURE__ */ React43__default.createElement(
       "div",
       {
         className: clsx8("overlay fixed inset-0 z-10 bg-black/50 sm:bg-black/20", bgClassName),
         onClick: onClose
       }
     ),
-    /* @__PURE__ */ React42__default.createElement(
+    /* @__PURE__ */ React43__default.createElement(
       "div",
       {
         className: clsx8(
@@ -4353,31 +4374,31 @@ var Dialog = ({
           transform: `translateY(${(1 - snapHeight) * window.innerHeight}px)`
         } : {}
       },
-      window.innerWidth < 640 && /* @__PURE__ */ React42__default.createElement(
+      window.innerWidth < 640 && /* @__PURE__ */ React43__default.createElement(
         "div",
         {
           className: "drag-handle flex h-10 max-h-10 min-h-10 w-full cursor-row-resize items-center justify-center",
           onMouseDown: handleDragStart,
           onTouchStart: handleDragStart
         },
-        /* @__PURE__ */ React42__default.createElement("div", { className: "bg-base-content/50 h-1 w-10 rounded-full" })
+        /* @__PURE__ */ React43__default.createElement("div", { className: "bg-base-content/50 h-1 w-10 rounded-full" })
       ),
-      /* @__PURE__ */ React42__default.createElement("div", { className: "dialog-header bg-base-100 sticky top-1 z-10 flex items-center justify-between px-4" }, header ? header : /* @__PURE__ */ React42__default.createElement("div", { className: "flex h-11 w-full items-center justify-between" }, /* @__PURE__ */ React42__default.createElement(
+      /* @__PURE__ */ React43__default.createElement("div", { className: "dialog-header bg-base-100 sticky top-1 z-10 flex items-center justify-between px-4" }, header ? header : /* @__PURE__ */ React43__default.createElement("div", { className: "flex h-11 w-full items-center justify-between" }, /* @__PURE__ */ React43__default.createElement(
         "button",
         {
           tabIndex: -1,
           onClick: onClose,
           className: "btn btn-ghost btn-circle flex h-8 min-h-8 w-8 hover:bg-transparent focus:outline-none sm:hidden"
         },
-        isRtl ? /* @__PURE__ */ React42__default.createElement(MdArrowForwardIos, { size: iconSize22 }) : /* @__PURE__ */ React42__default.createElement(MdArrowBackIosNew, { size: iconSize22 })
-      ), /* @__PURE__ */ React42__default.createElement("div", { className: "z-15 pointer-events-none absolute inset-0 flex h-11 items-center justify-center" }, /* @__PURE__ */ React42__default.createElement("span", { className: "line-clamp-1 text-center font-bold" }, title ?? "")), /* @__PURE__ */ React42__default.createElement(
+        isRtl ? /* @__PURE__ */ React43__default.createElement(MdArrowForwardIos, { size: iconSize22 }) : /* @__PURE__ */ React43__default.createElement(MdArrowBackIosNew, { size: iconSize22 })
+      ), /* @__PURE__ */ React43__default.createElement("div", { className: "z-15 pointer-events-none absolute inset-0 flex h-11 items-center justify-center" }, /* @__PURE__ */ React43__default.createElement("span", { className: "line-clamp-1 text-center font-bold" }, title ?? "")), /* @__PURE__ */ React43__default.createElement(
         "button",
         {
           tabIndex: -1,
           onClick: onClose,
           className: "bg-base-300/65 btn btn-ghost btn-circle ml-auto hidden h-6 min-h-6 w-6 focus:outline-none sm:flex"
         },
-        /* @__PURE__ */ React42__default.createElement(
+        /* @__PURE__ */ React43__default.createElement(
           "svg",
           {
             xmlns: "http://www.w3.org/2000/svg",
@@ -4385,7 +4406,7 @@ var Dialog = ({
             height: "1em",
             viewBox: "0 0 24 24"
           },
-          /* @__PURE__ */ React42__default.createElement(
+          /* @__PURE__ */ React43__default.createElement(
             "path",
             {
               fill: "currentColor",
@@ -4394,7 +4415,7 @@ var Dialog = ({
           )
         )
       ))),
-      /* @__PURE__ */ React42__default.createElement(
+      /* @__PURE__ */ React43__default.createElement(
         "div",
         {
           className: clsx8(
@@ -4450,8 +4471,8 @@ var BookDetailModal = ({ book, isOpen, onClose }) => {
     setShowDeleteAlert(false);
   };
   if (!bookMeta)
-    return loading && /* @__PURE__ */ React42__default.createElement("div", { className: "fixed inset-0 z-50 flex items-center justify-center" }, /* @__PURE__ */ React42__default.createElement(Spinner_default, { loading: true }));
-  return /* @__PURE__ */ React42__default.createElement("div", { className: "fixed inset-0 z-50 flex items-center justify-center" }, /* @__PURE__ */ React42__default.createElement(
+    return loading && /* @__PURE__ */ React43__default.createElement("div", { className: "fixed inset-0 z-50 flex items-center justify-center" }, /* @__PURE__ */ React43__default.createElement(Spinner_default, { loading: true }));
+  return /* @__PURE__ */ React43__default.createElement("div", { className: "fixed inset-0 z-50 flex items-center justify-center" }, /* @__PURE__ */ React43__default.createElement(
     Dialog_default,
     {
       title: _("Book Details"),
@@ -4461,7 +4482,7 @@ var BookDetailModal = ({ book, isOpen, onClose }) => {
       boxClassName: "sm:min-w-[480px] sm:h-auto",
       contentClassName: "!px-6 !py-2"
     },
-    /* @__PURE__ */ React42__default.createElement("div", { className: "flex w-full select-text items-center justify-center" }, /* @__PURE__ */ React42__default.createElement("div", { className: "relative w-full rounded-lg" }, /* @__PURE__ */ React42__default.createElement("div", { className: "mb-10 flex h-40 items-start" }, /* @__PURE__ */ React42__default.createElement("div", { className: "book-cover relative mr-10 aspect-[28/41] h-40 items-end shadow-lg" }, /* @__PURE__ */ React42__default.createElement(
+    /* @__PURE__ */ React43__default.createElement("div", { className: "flex w-full select-text items-center justify-center" }, /* @__PURE__ */ React43__default.createElement("div", { className: "relative w-full rounded-lg" }, /* @__PURE__ */ React43__default.createElement("div", { className: "mb-10 flex h-40 items-start" }, /* @__PURE__ */ React43__default.createElement("div", { className: "book-cover relative mr-10 aspect-[28/41] h-40 items-end shadow-lg" }, /* @__PURE__ */ React43__default.createElement(
       Image,
       {
         src: book.coverImageUrl,
@@ -4475,7 +4496,7 @@ var BookDetailModal = ({ book, isOpen, onClose }) => {
           );
         }
       }
-    ), /* @__PURE__ */ React42__default.createElement(
+    ), /* @__PURE__ */ React43__default.createElement(
       "div",
       {
         className: clsx8(
@@ -4484,22 +4505,22 @@ var BookDetailModal = ({ book, isOpen, onClose }) => {
         )
       },
       formatTitle(book.title)
-    )), /* @__PURE__ */ React42__default.createElement("div", { className: "title-author flex h-40 flex-col justify-between" }, /* @__PURE__ */ React42__default.createElement("div", null, /* @__PURE__ */ React42__default.createElement("p", { className: "text-base-content mb-2 line-clamp-2 break-all text-2xl font-bold" }, formatTitle(book.title) || _("Untitled")), /* @__PURE__ */ React42__default.createElement("p", { className: "text-neutral-content line-clamp-1" }, formatAuthors(book.author, bookMeta.language) || _("Unknown"))), window.innerWidth >= 400 && /* @__PURE__ */ React42__default.createElement("div", { className: "flex flex-wrap items-center gap-x-4 gap-y-2 py-2" }, /* @__PURE__ */ React42__default.createElement(
+    )), /* @__PURE__ */ React43__default.createElement("div", { className: "title-author flex h-40 flex-col justify-between" }, /* @__PURE__ */ React43__default.createElement("div", null, /* @__PURE__ */ React43__default.createElement("p", { className: "text-base-content mb-2 line-clamp-2 break-all text-2xl font-bold" }, formatTitle(book.title) || _("Untitled")), /* @__PURE__ */ React43__default.createElement("p", { className: "text-neutral-content line-clamp-1" }, formatAuthors(book.author, bookMeta.language) || _("Unknown"))), window.innerWidth >= 400 && /* @__PURE__ */ React43__default.createElement("div", { className: "flex flex-wrap items-center gap-x-4 gap-y-2 py-2" }, /* @__PURE__ */ React43__default.createElement(
       "button",
       {
         className: "btn rounded-xl bg-red-600 px-4 text-white hover:bg-red-700",
         onClick: handleDelete
       },
       _("Delete")
-    ), /* @__PURE__ */ React42__default.createElement("button", { className: "btn btn-disabled bg-primary/25 hover:bg-primary/85 rounded-xl px-4 text-white" }, _("More Info"))))), window.innerWidth < 400 && /* @__PURE__ */ React42__default.createElement("div", { className: "flex flex-wrap items-center gap-x-4 gap-y-2 py-2" }, /* @__PURE__ */ React42__default.createElement(
+    ), /* @__PURE__ */ React43__default.createElement("button", { className: "btn btn-disabled bg-primary/25 hover:bg-primary/85 rounded-xl px-4 text-white" }, _("More Info"))))), window.innerWidth < 400 && /* @__PURE__ */ React43__default.createElement("div", { className: "flex flex-wrap items-center gap-x-4 gap-y-2 py-2" }, /* @__PURE__ */ React43__default.createElement(
       "button",
       {
         className: "btn rounded bg-red-600 text-white hover:bg-red-700",
         onClick: handleDelete
       },
       _("Delete")
-    ), /* @__PURE__ */ React42__default.createElement("button", { className: "btn btn-disabled bg-primary/25 hover:bg-primary/85 rounded px-4 text-white" }, _("More Info"))), /* @__PURE__ */ React42__default.createElement("div", { className: "text-base-content my-4" }, /* @__PURE__ */ React42__default.createElement("div", { className: "mb-4 grid grid-cols-2 gap-4 sm:grid-cols-3" }, /* @__PURE__ */ React42__default.createElement("div", { className: "overflow-hidden" }, /* @__PURE__ */ React42__default.createElement("span", { className: "font-bold" }, _("Publisher:")), /* @__PURE__ */ React42__default.createElement("p", { className: "text-neutral-content line-clamp-1 text-sm" }, formatPublisher(bookMeta.publisher || "") || _("Unknown"))), /* @__PURE__ */ React42__default.createElement("div", { className: "overflow-hidden" }, /* @__PURE__ */ React42__default.createElement("span", { className: "font-bold" }, _("Published:")), /* @__PURE__ */ React42__default.createElement("p", { className: "text-neutral-content max-w-28 text-ellipsis text-sm" }, formatDate(bookMeta.published) || _("Unknown"))), /* @__PURE__ */ React42__default.createElement("div", { className: "overflow-hidden" }, /* @__PURE__ */ React42__default.createElement("span", { className: "font-bold" }, _("Updated:")), /* @__PURE__ */ React42__default.createElement("p", { className: "text-neutral-content text-sm" }, formatDate(book.lastUpdated) || "")), /* @__PURE__ */ React42__default.createElement("div", { className: "overflow-hidden" }, /* @__PURE__ */ React42__default.createElement("span", { className: "font-bold" }, _("Language:")), /* @__PURE__ */ React42__default.createElement("p", { className: "text-neutral-content text-sm" }, formatLanguage(bookMeta.language) || _("Unknown"))), /* @__PURE__ */ React42__default.createElement("div", { className: "overflow-hidden" }, /* @__PURE__ */ React42__default.createElement("span", { className: "font-bold" }, _("Identifier:")), /* @__PURE__ */ React42__default.createElement("p", { className: "text-neutral-content line-clamp-1 text-sm" }, bookMeta.identifier || "N/A")), /* @__PURE__ */ React42__default.createElement("div", { className: "overflow-hidden" }, /* @__PURE__ */ React42__default.createElement("span", { className: "font-bold" }, _("Subjects:")), /* @__PURE__ */ React42__default.createElement("p", { className: "text-neutral-content line-clamp-1 text-sm" }, formatSubject(bookMeta.subject) || _("Unknown")))))))
-  ), showDeleteAlert && /* @__PURE__ */ React42__default.createElement(
+    ), /* @__PURE__ */ React43__default.createElement("button", { className: "btn btn-disabled bg-primary/25 hover:bg-primary/85 rounded px-4 text-white" }, _("More Info"))), /* @__PURE__ */ React43__default.createElement("div", { className: "text-base-content my-4" }, /* @__PURE__ */ React43__default.createElement("div", { className: "mb-4 grid grid-cols-2 gap-4 sm:grid-cols-3" }, /* @__PURE__ */ React43__default.createElement("div", { className: "overflow-hidden" }, /* @__PURE__ */ React43__default.createElement("span", { className: "font-bold" }, _("Publisher:")), /* @__PURE__ */ React43__default.createElement("p", { className: "text-neutral-content line-clamp-1 text-sm" }, formatPublisher(bookMeta.publisher || "") || _("Unknown"))), /* @__PURE__ */ React43__default.createElement("div", { className: "overflow-hidden" }, /* @__PURE__ */ React43__default.createElement("span", { className: "font-bold" }, _("Published:")), /* @__PURE__ */ React43__default.createElement("p", { className: "text-neutral-content max-w-28 text-ellipsis text-sm" }, formatDate(bookMeta.published) || _("Unknown"))), /* @__PURE__ */ React43__default.createElement("div", { className: "overflow-hidden" }, /* @__PURE__ */ React43__default.createElement("span", { className: "font-bold" }, _("Updated:")), /* @__PURE__ */ React43__default.createElement("p", { className: "text-neutral-content text-sm" }, formatDate(book.lastUpdated) || "")), /* @__PURE__ */ React43__default.createElement("div", { className: "overflow-hidden" }, /* @__PURE__ */ React43__default.createElement("span", { className: "font-bold" }, _("Language:")), /* @__PURE__ */ React43__default.createElement("p", { className: "text-neutral-content text-sm" }, formatLanguage(bookMeta.language) || _("Unknown"))), /* @__PURE__ */ React43__default.createElement("div", { className: "overflow-hidden" }, /* @__PURE__ */ React43__default.createElement("span", { className: "font-bold" }, _("Identifier:")), /* @__PURE__ */ React43__default.createElement("p", { className: "text-neutral-content line-clamp-1 text-sm" }, bookMeta.identifier || "N/A")), /* @__PURE__ */ React43__default.createElement("div", { className: "overflow-hidden" }, /* @__PURE__ */ React43__default.createElement("span", { className: "font-bold" }, _("Subjects:")), /* @__PURE__ */ React43__default.createElement("p", { className: "text-neutral-content line-clamp-1 text-sm" }, formatSubject(bookMeta.subject) || _("Unknown")))))))
+  ), showDeleteAlert && /* @__PURE__ */ React43__default.createElement(
     "div",
     {
       className: clsx8(
@@ -4507,7 +4528,7 @@ var BookDetailModal = ({ book, isOpen, onClose }) => {
         "pb-[calc(env(safe-area-inset-bottom)+16px)]"
       )
     },
-    /* @__PURE__ */ React42__default.createElement(
+    /* @__PURE__ */ React43__default.createElement(
       Alert_default,
       {
         title: _("Confirm Deletion"),
@@ -4576,7 +4597,7 @@ var SidebarHeader = ({ isPinned, isSearchBarVisible, onGoToLibrary, onClose, onT
   const iconSize14 = useResponsiveSize(14);
   const iconSize18 = useResponsiveSize(18);
   const iconSize22 = useResponsiveSize(22);
-  return /* @__PURE__ */ React42__default.createElement(
+  return /* @__PURE__ */ React43__default.createElement(
     "div",
     {
       className: clsx8(
@@ -4585,23 +4606,23 @@ var SidebarHeader = ({ isPinned, isSearchBarVisible, onGoToLibrary, onClose, onT
       ),
       dir: "ltr"
     },
-    /* @__PURE__ */ React42__default.createElement("div", { className: "flex items-center gap-x-8" }, /* @__PURE__ */ React42__default.createElement(
+    /* @__PURE__ */ React43__default.createElement("div", { className: "flex items-center gap-x-8" }, /* @__PURE__ */ React43__default.createElement(
       "button",
       {
         onClick: onClose,
         className: "btn btn-ghost btn-circle flex h-6 min-h-6 w-6 hover:bg-transparent sm:hidden"
       },
-      /* @__PURE__ */ React42__default.createElement(MdArrowBackIosNew, { size: iconSize22 })
-    ), /* @__PURE__ */ React42__default.createElement(
+      /* @__PURE__ */ React43__default.createElement(MdArrowBackIosNew, { size: iconSize22 })
+    ), /* @__PURE__ */ React43__default.createElement(
       "button",
       {
         className: "btn btn-ghost hidden h-8 min-h-8 w-8 p-0 sm:flex",
         onClick: onGoToLibrary,
         title: "Reload Book"
       },
-      /* @__PURE__ */ React42__default.createElement(IoReload, { className: "fill-base-content" })
+      /* @__PURE__ */ React43__default.createElement(IoReload, { className: "fill-base-content" })
     )),
-    /* @__PURE__ */ React42__default.createElement("div", { className: "flex min-w-24 max-w-32 items-center justify-between sm:size-[70%]" }, /* @__PURE__ */ React42__default.createElement(
+    /* @__PURE__ */ React43__default.createElement("div", { className: "flex min-w-24 max-w-32 items-center justify-between sm:size-[70%]" }, /* @__PURE__ */ React43__default.createElement(
       "button",
       {
         onClick: onToggleSearchBar,
@@ -4610,8 +4631,8 @@ var SidebarHeader = ({ isPinned, isSearchBarVisible, onGoToLibrary, onClose, onT
           isSearchBarVisible ? "bg-base-300" : ""
         )
       },
-      /* @__PURE__ */ React42__default.createElement(FiSearch, { size: iconSize18, className: "text-base-content" })
-    ), /* @__PURE__ */ React42__default.createElement("div", { className: "right-0 hidden h-8 w-8 items-center justify-center sm:flex" }, /* @__PURE__ */ React42__default.createElement(
+      /* @__PURE__ */ React43__default.createElement(FiSearch, { size: iconSize18, className: "text-base-content" })
+    ), /* @__PURE__ */ React43__default.createElement("div", { className: "right-0 hidden h-8 w-8 items-center justify-center sm:flex" }, /* @__PURE__ */ React43__default.createElement(
       "button",
       {
         onClick: onTogglePin,
@@ -4620,14 +4641,14 @@ var SidebarHeader = ({ isPinned, isSearchBarVisible, onGoToLibrary, onClose, onT
           isPinned ? "bg-base-300" : "bg-base-300/65"
         )
       },
-      isPinned ? /* @__PURE__ */ React42__default.createElement(MdPushPin, { size: iconSize14 }) : /* @__PURE__ */ React42__default.createElement(MdOutlinePushPin, { size: iconSize14 })
+      isPinned ? /* @__PURE__ */ React43__default.createElement(MdPushPin, { size: iconSize14 }) : /* @__PURE__ */ React43__default.createElement(MdOutlinePushPin, { size: iconSize14 })
     )))
   );
 };
 var Header_default = SidebarHeader;
 init_misc();
 var createExpanderIcon = (isExpanded) => {
-  return /* @__PURE__ */ React42__default.createElement(
+  return /* @__PURE__ */ React43__default.createElement(
     "svg",
     {
       viewBox: "0 0 8 10",
@@ -4640,7 +4661,7 @@ var createExpanderIcon = (isExpanded) => {
       style: { transformOrigin: "center" },
       fill: "currentColor"
     },
-    /* @__PURE__ */ React42__default.createElement("polygon", { points: "0 0, 8 5, 0 10" })
+    /* @__PURE__ */ React43__default.createElement("polygon", { points: "0 0, 8 5, 0 10" })
   );
 };
 var TOCItemView = ({ bookKey, item, depth, expandedItems }) => {
@@ -4663,7 +4684,7 @@ var TOCItemView = ({ bookKey, item, depth, expandedItems }) => {
   useEffect(() => {
     setIsExpanded(expandedItems.includes(item.href || ""));
   }, [expandedItems, item.href]);
-  return /* @__PURE__ */ React42__default.createElement("li", { className: "w-full", style: { paddingTop: "1px" } }, /* @__PURE__ */ React42__default.createElement(
+  return /* @__PURE__ */ React43__default.createElement("li", { className: "w-full", style: { paddingTop: "1px" } }, /* @__PURE__ */ React43__default.createElement(
     "span",
     {
       role: "treeitem",
@@ -4675,8 +4696,8 @@ var TOCItemView = ({ bookKey, item, depth, expandedItems }) => {
       "data-href": item.href ? getContentMd5(item.href) : void 0,
       className: `flex w-full cursor-pointer items-center rounded-md py-2 ${isActive ? "bg-base-300/85 hover:bg-base-300" : "sm:hover:bg-base-300/85"}`
     },
-    item.subitems && /* @__PURE__ */ React42__default.createElement("span", { onClick: handleToggleExpand, className: "inline-block cursor-pointer" }, createExpanderIcon(isExpanded)),
-    /* @__PURE__ */ React42__default.createElement(
+    item.subitems && /* @__PURE__ */ React43__default.createElement("span", { onClick: handleToggleExpand, className: "inline-block cursor-pointer" }, createExpanderIcon(isExpanded)),
+    /* @__PURE__ */ React43__default.createElement(
       "span",
       {
         className: "ml-2 truncate text-ellipsis",
@@ -4688,7 +4709,7 @@ var TOCItemView = ({ bookKey, item, depth, expandedItems }) => {
       },
       item.label
     )
-  ), item.subitems && isExpanded && /* @__PURE__ */ React42__default.createElement("ol", { role: "group" }, item.subitems.map((subitem, index) => /* @__PURE__ */ React42__default.createElement(
+  ), item.subitems && isExpanded && /* @__PURE__ */ React43__default.createElement("ol", { role: "group" }, item.subitems.map((subitem, index) => /* @__PURE__ */ React43__default.createElement(
     TOCItemView,
     {
       bookKey,
@@ -4742,7 +4763,7 @@ var TOCView = ({ bookKey, toc }) => {
     if (!progress || eventDispatcher.dispatchSync("tts-is-speaking")) return;
     scrollToProgress(progress);
   }, [toc, progress, sideBarBookKey]);
-  return /* @__PURE__ */ React42__default.createElement("div", { className: "rounded pt-2" }, /* @__PURE__ */ React42__default.createElement("ul", { role: "tree", ref: viewRef, className: "px-2" }, toc && toc.map((item, index) => /* @__PURE__ */ React42__default.createElement(
+  return /* @__PURE__ */ React43__default.createElement("div", { className: "rounded pt-2" }, /* @__PURE__ */ React43__default.createElement("ul", { role: "tree", ref: viewRef, className: "px-2" }, toc && toc.map((item, index) => /* @__PURE__ */ React43__default.createElement(
     TOCItemView,
     {
       bookKey,
@@ -4818,7 +4839,7 @@ var BooknoteItem = ({ bookKey, item }) => {
     setNotebookVisible(true);
     setNotebookEditAnnotation(note2);
   };
-  return /* @__PURE__ */ React42__default.createElement(
+  return /* @__PURE__ */ React43__default.createElement(
     "li",
     {
       ref: viewRef,
@@ -4830,7 +4851,7 @@ var BooknoteItem = ({ bookKey, item }) => {
       tabIndex: 0,
       onClick: handleClickItem
     },
-    /* @__PURE__ */ React42__default.createElement(
+    /* @__PURE__ */ React43__default.createElement(
       "div",
       {
         className: clsx8("min-h-4 p-0 transition-all duration-300 ease-in-out"),
@@ -4839,8 +4860,8 @@ var BooknoteItem = ({ bookKey, item }) => {
           "--end-override": "0.3rem"
         }
       },
-      item.note && /* @__PURE__ */ React42__default.createElement("span", { className: "content font-size-sm font-normal", dir: "auto" }, item.note),
-      /* @__PURE__ */ React42__default.createElement("div", { className: "flex items-start" }, item.note && /* @__PURE__ */ React42__default.createElement("div", { className: "my-1 me-2 min-h-full self-stretch border-l-2 border-gray-300" }), /* @__PURE__ */ React42__default.createElement("div", { className: clsx8("content font-size-sm line-clamp-3", item.note && "my-2") }, /* @__PURE__ */ React42__default.createElement(
+      item.note && /* @__PURE__ */ React43__default.createElement("span", { className: "content font-size-sm font-normal", dir: "auto" }, item.note),
+      /* @__PURE__ */ React43__default.createElement("div", { className: "flex items-start" }, item.note && /* @__PURE__ */ React43__default.createElement("div", { className: "my-1 me-2 min-h-full self-stretch border-l-2 border-gray-300" }), /* @__PURE__ */ React43__default.createElement("div", { className: clsx8("content font-size-sm line-clamp-3", item.note && "my-2") }, /* @__PURE__ */ React43__default.createElement(
         "span",
         {
           className: clsx8(
@@ -4855,7 +4876,7 @@ var BooknoteItem = ({ bookKey, item }) => {
         text || ""
       )))
     ),
-    /* @__PURE__ */ React42__default.createElement(
+    /* @__PURE__ */ React43__default.createElement(
       "div",
       {
         className: clsx8(
@@ -4868,7 +4889,7 @@ var BooknoteItem = ({ bookKey, item }) => {
         },
         onClick: (e) => e.stopPropagation()
       },
-      /* @__PURE__ */ React42__default.createElement("div", { className: "flex justify-end space-x-3 p-2", dir: "ltr" }, item.note && /* @__PURE__ */ React42__default.createElement(
+      /* @__PURE__ */ React43__default.createElement("div", { className: "flex justify-end space-x-3 p-2", dir: "ltr" }, item.note && /* @__PURE__ */ React43__default.createElement(
         "button",
         {
           className: clsx8(
@@ -4877,7 +4898,7 @@ var BooknoteItem = ({ bookKey, item }) => {
           ),
           onClick: editNote.bind(null, item)
         },
-        /* @__PURE__ */ React42__default.createElement(
+        /* @__PURE__ */ React43__default.createElement(
           "div",
           {
             className: clsx8(
@@ -4890,7 +4911,7 @@ var BooknoteItem = ({ bookKey, item }) => {
           },
           _("Edit")
         )
-      ), /* @__PURE__ */ React42__default.createElement(
+      ), /* @__PURE__ */ React43__default.createElement(
         "button",
         {
           className: clsx8(
@@ -4899,7 +4920,7 @@ var BooknoteItem = ({ bookKey, item }) => {
           ),
           onClick: deleteNote.bind(null, item)
         },
-        /* @__PURE__ */ React42__default.createElement(
+        /* @__PURE__ */ React43__default.createElement(
           "div",
           {
             className: clsx8(
@@ -4943,19 +4964,19 @@ var BooknoteView = ({ type, bookKey, toc }) => {
   const sortedGroups = Object.values(booknoteGroups).sort((a, b) => {
     return a.id - b.id;
   });
-  return /* @__PURE__ */ React42__default.createElement("div", { className: "rounded pt-2" }, /* @__PURE__ */ React42__default.createElement("ul", { role: "tree", className: "px-2" }, sortedGroups.map((group) => /* @__PURE__ */ React42__default.createElement("li", { key: group.href, className: "p-2" }, /* @__PURE__ */ React42__default.createElement("h3", { className: "content font-size-base line-clamp-1 font-normal" }, group.label), /* @__PURE__ */ React42__default.createElement("ul", null, group.booknotes.map((item, index) => /* @__PURE__ */ React42__default.createElement(BooknoteItem_default, { key: `${index}-${item.cfi}`, bookKey, item })))))));
+  return /* @__PURE__ */ React43__default.createElement("div", { className: "rounded pt-2" }, /* @__PURE__ */ React43__default.createElement("ul", { role: "tree", className: "px-2" }, sortedGroups.map((group) => /* @__PURE__ */ React43__default.createElement("li", { key: group.href, className: "p-2" }, /* @__PURE__ */ React43__default.createElement("h3", { className: "content font-size-base line-clamp-1 font-normal" }, group.label), /* @__PURE__ */ React43__default.createElement("ul", null, group.booknotes.map((item, index) => /* @__PURE__ */ React43__default.createElement(BooknoteItem_default, { key: `${index}-${item.cfi}`, bookKey, item })))))));
 };
 var BooknoteView_default = BooknoteView;
 var TabNavigation = ({ activeTab, onTabChange }) => {
   const _ = useTranslation();
   const tabs = ["toc", "annotations", "bookmarks"];
-  return /* @__PURE__ */ React42__default.createElement(
+  return /* @__PURE__ */ React43__default.createElement(
     "div",
     {
       className: clsx8("bottom-tab border-base-300/50 bg-base-200 relative flex w-full border-t"),
       dir: "ltr"
     },
-    /* @__PURE__ */ React42__default.createElement(
+    /* @__PURE__ */ React43__default.createElement(
       "div",
       {
         className: clsx8(
@@ -4967,14 +4988,14 @@ var TabNavigation = ({ activeTab, onTabChange }) => {
         )
       }
     ),
-    tabs.map((tab) => /* @__PURE__ */ React42__default.createElement(
+    tabs.map((tab) => /* @__PURE__ */ React43__default.createElement(
       "div",
       {
         key: tab,
         className: "lg:tooltip lg:tooltip-top z-50 m-1.5 flex-1 cursor-pointer rounded-md p-2",
         "data-tip": tab === "toc" ? _("TOC") : tab === "annotations" ? _("Annotate") : _("Bookmark")
       },
-      /* @__PURE__ */ React42__default.createElement("div", { className: clsx8("flex h-6 items-center"), onClick: () => onTabChange(tab) }, tab === "toc" ? /* @__PURE__ */ React42__default.createElement(IoIosList, { className: "mx-auto" }) : tab === "annotations" ? /* @__PURE__ */ React42__default.createElement(PiNotePencil, { className: "mx-auto" }) : /* @__PURE__ */ React42__default.createElement(MdBookmarkBorder, { className: "mx-auto" }))
+      /* @__PURE__ */ React43__default.createElement("div", { className: clsx8("flex h-6 items-center"), onClick: () => onTabChange(tab) }, tab === "toc" ? /* @__PURE__ */ React43__default.createElement(IoIosList, { className: "mx-auto" }) : tab === "annotations" ? /* @__PURE__ */ React43__default.createElement(PiNotePencil, { className: "mx-auto" }) : /* @__PURE__ */ React43__default.createElement(MdBookmarkBorder, { className: "mx-auto" }))
     ))
   );
 };
@@ -5028,7 +5049,7 @@ var SidebarContent = ({ bookDoc, sideBarBookKey }) => {
     const config2 = getConfig(sideBarBookKey);
     config2.viewSettings.sideBarTab = tab;
   };
-  return /* @__PURE__ */ React42__default.createElement(React42__default.Fragment, null, /* @__PURE__ */ React42__default.createElement(
+  return /* @__PURE__ */ React43__default.createElement(React43__default.Fragment, null, /* @__PURE__ */ React43__default.createElement(
     "div",
     {
       className: clsx8(
@@ -5036,7 +5057,7 @@ var SidebarContent = ({ bookDoc, sideBarBookKey }) => {
         "font-sans text-base font-normal sm:text-sm"
       )
     },
-    /* @__PURE__ */ React42__default.createElement(
+    /* @__PURE__ */ React43__default.createElement(
       "div",
       {
         ref: scrollContainerRef,
@@ -5045,11 +5066,11 @@ var SidebarContent = ({ bookDoc, sideBarBookKey }) => {
           { "opacity-0": fade, "opacity-100": !fade }
         )
       },
-      targetTab === "toc" && bookDoc.toc && /* @__PURE__ */ React42__default.createElement(TOCView_default, { toc: bookDoc.toc, bookKey: sideBarBookKey }),
-      targetTab === "annotations" && /* @__PURE__ */ React42__default.createElement(BooknoteView_default, { type: "annotation", toc: bookDoc.toc ?? [], bookKey: sideBarBookKey }),
-      targetTab === "bookmarks" && /* @__PURE__ */ React42__default.createElement(BooknoteView_default, { type: "bookmark", toc: bookDoc.toc ?? [], bookKey: sideBarBookKey })
+      targetTab === "toc" && bookDoc.toc && /* @__PURE__ */ React43__default.createElement(TOCView_default, { toc: bookDoc.toc, bookKey: sideBarBookKey }),
+      targetTab === "annotations" && /* @__PURE__ */ React43__default.createElement(BooknoteView_default, { type: "annotation", toc: bookDoc.toc ?? [], bookKey: sideBarBookKey }),
+      targetTab === "bookmarks" && /* @__PURE__ */ React43__default.createElement(BooknoteView_default, { type: "bookmark", toc: bookDoc.toc ?? [], bookKey: sideBarBookKey })
     )
-  ), /* @__PURE__ */ React42__default.createElement(
+  ), /* @__PURE__ */ React43__default.createElement(
     "div",
     {
       className: clsx8(
@@ -5057,7 +5078,7 @@ var SidebarContent = ({ bookDoc, sideBarBookKey }) => {
         appService?.hasSafeAreaInset && "pb-[calc(env(safe-area-inset-bottom)/2)]"
       )
     },
-    /* @__PURE__ */ React42__default.createElement(TabNavigation_default, { activeTab, onTabChange: handleTabChange })
+    /* @__PURE__ */ React43__default.createElement(TabNavigation_default, { activeTab, onTabChange: handleTabChange })
   ));
 };
 var Content_default = SidebarContent;
@@ -5070,7 +5091,7 @@ var BookCard = ({ book }) => {
   const showBookDetails = () => {
     eventDispatcher.dispatchSync("show-book-details", book);
   };
-  return /* @__PURE__ */ React42__default.createElement("div", { className: "flex h-20 w-full items-center" }, /* @__PURE__ */ React42__default.createElement(
+  return /* @__PURE__ */ React43__default.createElement("div", { className: "flex h-20 w-full items-center" }, /* @__PURE__ */ React43__default.createElement(
     Image,
     {
       src: coverImageUrl,
@@ -5085,13 +5106,13 @@ var BookCard = ({ book }) => {
         e.target.style.display = "none";
       }
     }
-  ), /* @__PURE__ */ React42__default.createElement("div", { className: "min-w-0 flex-1" }, /* @__PURE__ */ React42__default.createElement("h4", { className: "line-clamp-2 w-[90%] text-sm font-semibold" }, formatTitle(title)), /* @__PURE__ */ React42__default.createElement("p", { className: "truncate text-xs opacity-75" }, formatAuthors(author))), /* @__PURE__ */ React42__default.createElement(
+  ), /* @__PURE__ */ React43__default.createElement("div", { className: "min-w-0 flex-1" }, /* @__PURE__ */ React43__default.createElement("h4", { className: "line-clamp-2 w-[90%] text-sm font-semibold" }, formatTitle(title)), /* @__PURE__ */ React43__default.createElement("p", { className: "truncate text-xs opacity-75" }, formatAuthors(author))), /* @__PURE__ */ React43__default.createElement(
     "button",
     {
       className: "btn btn-ghost hover:bg-base-300 h-6 min-h-6 w-6 rounded-full p-0 transition-colors",
       "aria-label": _("More Info")
     },
-    /* @__PURE__ */ React42__default.createElement(MdInfoOutline, { size: iconSize18, className: "fill-base-content", onClick: showBookDetails })
+    /* @__PURE__ */ React43__default.createElement(MdInfoOutline, { size: iconSize18, className: "fill-base-content", onClick: showBookDetails })
   ));
 };
 var BookCard_default = BookCard;
@@ -5150,8 +5171,8 @@ var Dropdown = ({
     setIsOpen(isOpen2);
     onToggle?.(isOpen2);
   };
-  const childrenWithToggle = isValidElement(children) ? React42__default.cloneElement(children, { setIsDropdownOpen, menuClassName }) : children;
-  return /* @__PURE__ */ React42__default.createElement("div", { className: "dropdown-container" }, isOpen && /* @__PURE__ */ React42__default.createElement("div", { className: "fixed inset-0 bg-transparent", onClick: () => setIsDropdownOpen(false) }), /* @__PURE__ */ React42__default.createElement("div", { className: clsx8("dropdown", className) }, /* @__PURE__ */ React42__default.createElement(
+  const childrenWithToggle = isValidElement(children) ? React43__default.cloneElement(children, { setIsDropdownOpen, menuClassName }) : children;
+  return /* @__PURE__ */ React43__default.createElement("div", { className: "dropdown-container" }, isOpen && /* @__PURE__ */ React43__default.createElement("div", { className: "fixed inset-0 bg-transparent", onClick: () => setIsDropdownOpen(false) }), /* @__PURE__ */ React43__default.createElement("div", { className: clsx8("dropdown", className) }, /* @__PURE__ */ React43__default.createElement(
     "div",
     {
       tabIndex: -1,
@@ -5162,13 +5183,13 @@ var Dropdown = ({
   ), isOpen && childrenWithToggle));
 };
 var Dropdown_default = Dropdown;
-var Option = ({ label, isActive, onClick }) => /* @__PURE__ */ React42__default.createElement(
+var Option = ({ label, isActive, onClick }) => /* @__PURE__ */ React43__default.createElement(
   "button",
   {
     className: "hover:bg-base-300 flex w-full items-center justify-between rounded-md p-2",
     onClick
   },
-  /* @__PURE__ */ React42__default.createElement("div", { className: "flex items-center" }, /* @__PURE__ */ React42__default.createElement("span", { style: { minWidth: `${useDefaultIconSize()}px` } }, isActive && /* @__PURE__ */ React42__default.createElement(MdCheck, { className: "text-base-content" })), /* @__PURE__ */ React42__default.createElement("span", { className: "ml-2" }, label))
+  /* @__PURE__ */ React43__default.createElement("div", { className: "flex items-center" }, /* @__PURE__ */ React43__default.createElement("span", { style: { minWidth: `${useDefaultIconSize()}px` } }, isActive && /* @__PURE__ */ React43__default.createElement(MdCheck, { className: "text-base-content" })), /* @__PURE__ */ React43__default.createElement("span", { className: "ml-2" }, label))
 );
 var SearchOptions = ({
   searchConfig,
@@ -5181,7 +5202,7 @@ var SearchOptions = ({
     onSearchConfigChanged({ ...searchConfig, [key]: value });
     setIsDropdownOpen?.(false);
   };
-  return /* @__PURE__ */ React42__default.createElement(
+  return /* @__PURE__ */ React43__default.createElement(
     "div",
     {
       tabIndex: 0,
@@ -5190,7 +5211,7 @@ var SearchOptions = ({
         menuClassName
       )
     },
-    /* @__PURE__ */ React42__default.createElement(
+    /* @__PURE__ */ React43__default.createElement(
       Option,
       {
         label: _("Book"),
@@ -5198,7 +5219,7 @@ var SearchOptions = ({
         onClick: () => updateConfig("scope", "book")
       }
     ),
-    /* @__PURE__ */ React42__default.createElement(
+    /* @__PURE__ */ React43__default.createElement(
       Option,
       {
         label: _("Chapter"),
@@ -5206,8 +5227,8 @@ var SearchOptions = ({
         onClick: () => updateConfig("scope", "section")
       }
     ),
-    /* @__PURE__ */ React42__default.createElement("hr", { className: "border-base-200 my-1" }),
-    /* @__PURE__ */ React42__default.createElement(
+    /* @__PURE__ */ React43__default.createElement("hr", { className: "border-base-200 my-1" }),
+    /* @__PURE__ */ React43__default.createElement(
       Option,
       {
         label: _("Match Case"),
@@ -5215,7 +5236,7 @@ var SearchOptions = ({
         onClick: () => updateConfig("matchCase", !searchConfig.matchCase)
       }
     ),
-    /* @__PURE__ */ React42__default.createElement(
+    /* @__PURE__ */ React43__default.createElement(
       Option,
       {
         label: _("Match Whole Words"),
@@ -5223,7 +5244,7 @@ var SearchOptions = ({
         onClick: () => updateConfig("matchWholeWords", !searchConfig.matchWholeWords)
       }
     ),
-    /* @__PURE__ */ React42__default.createElement(
+    /* @__PURE__ */ React43__default.createElement(
       Option,
       {
         label: _("Match Diacritics"),
@@ -5346,7 +5367,7 @@ var SearchBar = ({
     onSearchResultChange([]);
     view?.clearSearch();
   };
-  return /* @__PURE__ */ React42__default.createElement("div", { className: "relative p-2" }, /* @__PURE__ */ React42__default.createElement("div", { className: "bg-base-100 flex h-8 items-center rounded-lg" }, /* @__PURE__ */ React42__default.createElement("div", { className: "pl-3" }, /* @__PURE__ */ React42__default.createElement(FaSearch, { size: iconSize16, className: "text-gray-500" })), /* @__PURE__ */ React42__default.createElement(
+  return /* @__PURE__ */ React43__default.createElement("div", { className: "relative p-2" }, /* @__PURE__ */ React43__default.createElement("div", { className: "bg-base-100 flex h-8 items-center rounded-lg" }, /* @__PURE__ */ React43__default.createElement("div", { className: "pl-3" }, /* @__PURE__ */ React43__default.createElement(FaSearch, { size: iconSize16, className: "text-gray-500" })), /* @__PURE__ */ React43__default.createElement(
     "input",
     {
       ref: inputRef,
@@ -5357,7 +5378,7 @@ var SearchBar = ({
       placeholder: _("Search..."),
       className: "w-full bg-transparent p-2 font-sans text-sm font-light focus:outline-none"
     }
-  ), /* @__PURE__ */ React42__default.createElement("div", { className: "bg-base-300 flex h-8 w-8 items-center rounded-r-lg" }, /* @__PURE__ */ React42__default.createElement(
+  ), /* @__PURE__ */ React43__default.createElement("div", { className: "bg-base-300 flex h-8 w-8 items-center rounded-r-lg" }, /* @__PURE__ */ React43__default.createElement(
     Dropdown_default,
     {
       className: clsx8(
@@ -5366,9 +5387,9 @@ var SearchBar = ({
       ),
       menuClassName: window.innerWidth < 640 ? "no-triangle mt-1" : "dropdown-center mt-3",
       buttonClassName: "btn btn-ghost h-8 min-h-8 w-8 p-0 rounded-none rounded-r-lg",
-      toggleButton: /* @__PURE__ */ React42__default.createElement(FaChevronDown, { size: iconSize12, className: "text-gray-500" })
+      toggleButton: /* @__PURE__ */ React43__default.createElement(FaChevronDown, { size: iconSize12, className: "text-gray-500" })
     },
-    /* @__PURE__ */ React42__default.createElement(
+    /* @__PURE__ */ React43__default.createElement(
       SearchOptions_default,
       {
         searchConfig,
@@ -5387,7 +5408,7 @@ var SearchResultItem = ({
   const { getProgress } = useReaderStore();
   const progress = getProgress(bookKey);
   const { isCurrent, viewRef } = useScrollToItem_default(cfi, progress);
-  return /* @__PURE__ */ React42__default.createElement(
+  return /* @__PURE__ */ React43__default.createElement(
     "li",
     {
       ref: viewRef,
@@ -5397,13 +5418,13 @@ var SearchResultItem = ({
       ),
       onClick: () => onSelectResult(cfi)
     },
-    /* @__PURE__ */ React42__default.createElement("div", { className: "line-clamp-3" }, /* @__PURE__ */ React42__default.createElement("span", { className: "" }, excerpt.pre), /* @__PURE__ */ React42__default.createElement("span", { className: "font-semibold" }, excerpt.match), /* @__PURE__ */ React42__default.createElement("span", { className: "" }, excerpt.post))
+    /* @__PURE__ */ React43__default.createElement("div", { className: "line-clamp-3" }, /* @__PURE__ */ React43__default.createElement("span", { className: "" }, excerpt.pre), /* @__PURE__ */ React43__default.createElement("span", { className: "font-semibold" }, excerpt.match), /* @__PURE__ */ React43__default.createElement("span", { className: "" }, excerpt.post))
   );
 };
 var SearchResults = ({ bookKey, results, onSelectResult }) => {
-  return /* @__PURE__ */ React42__default.createElement("div", { className: "search-results overflow-y-auto p-2 font-sans text-sm font-light" }, /* @__PURE__ */ React42__default.createElement("ul", { className: "px-2" }, results.map((result, index) => {
+  return /* @__PURE__ */ React43__default.createElement("div", { className: "search-results overflow-y-auto p-2 font-sans text-sm font-light" }, /* @__PURE__ */ React43__default.createElement("ul", { className: "px-2" }, results.map((result, index) => {
     if ("subitems" in result) {
-      return /* @__PURE__ */ React42__default.createElement("ul", { key: `${index}-${result.label}` }, /* @__PURE__ */ React42__default.createElement("h3", { className: "line-clamp-1 font-normal" }, result.label), /* @__PURE__ */ React42__default.createElement("ul", null, result.subitems.map((item, index2) => /* @__PURE__ */ React42__default.createElement(
+      return /* @__PURE__ */ React43__default.createElement("ul", { key: `${index}-${result.label}` }, /* @__PURE__ */ React43__default.createElement("h3", { className: "line-clamp-1 font-normal" }, result.label), /* @__PURE__ */ React43__default.createElement("ul", null, result.subitems.map((item, index2) => /* @__PURE__ */ React43__default.createElement(
         SearchResultItem,
         {
           key: `${index2}-${item.cfi}`,
@@ -5414,7 +5435,7 @@ var SearchResults = ({ bookKey, results, onSelectResult }) => {
         }
       ))));
     } else {
-      return /* @__PURE__ */ React42__default.createElement(
+      return /* @__PURE__ */ React43__default.createElement(
         SearchResultItem,
         {
           key: `${index}-${result.cfi}`,
@@ -5552,7 +5573,7 @@ var SideBar = ({ onGoToLibrary }) => {
   }
   const { book, bookDoc } = bookData;
   const languageDir = getBookDirFromLanguage(bookDoc.metadata.language);
-  return isSideBarVisible ? /* @__PURE__ */ React42__default.createElement(React42__default.Fragment, null, /* @__PURE__ */ React42__default.createElement(
+  return isSideBarVisible ? /* @__PURE__ */ React43__default.createElement(React43__default.Fragment, null, /* @__PURE__ */ React43__default.createElement(
     "div",
     {
       className: clsx8(
@@ -5569,7 +5590,7 @@ var SideBar = ({ onGoToLibrary }) => {
         position: isSideBarPinned ? "relative" : "absolute"
       }
     },
-    /* @__PURE__ */ React42__default.createElement("style", { jsx: true }, `
+    /* @__PURE__ */ React43__default.createElement("style", { jsx: true }, `
           @media (max-width: 640px) {
             .sidebar-container {
               width: 100%;
@@ -5585,15 +5606,15 @@ var SideBar = ({ onGoToLibrary }) => {
             }
           }
         `),
-    /* @__PURE__ */ React42__default.createElement("div", { className: "flex-shrink-0" }, isMobile && /* @__PURE__ */ React42__default.createElement(
+    /* @__PURE__ */ React43__default.createElement("div", { className: "flex-shrink-0" }, isMobile && /* @__PURE__ */ React43__default.createElement(
       "div",
       {
         className: "drag-handle flex h-10 w-full cursor-row-resize items-center justify-center",
         onMouseDown: handleVerticalDragStart,
         onTouchStart: handleVerticalDragStart
       },
-      /* @__PURE__ */ React42__default.createElement("div", { className: "bg-base-content/50 h-1 w-10 rounded-full" })
-    ), /* @__PURE__ */ React42__default.createElement(
+      /* @__PURE__ */ React43__default.createElement("div", { className: "bg-base-content/50 h-1 w-10 rounded-full" })
+    ), /* @__PURE__ */ React43__default.createElement(
       Header_default,
       {
         isPinned: isSideBarPinned,
@@ -5603,14 +5624,14 @@ var SideBar = ({ onGoToLibrary }) => {
         onTogglePin: handleSideBarTogglePin,
         onToggleSearchBar: handleToggleSearchBar
       }
-    ), /* @__PURE__ */ React42__default.createElement(
+    ), /* @__PURE__ */ React43__default.createElement(
       "div",
       {
         className: clsx8("search-bar", {
           "search-bar-visible": isSearchBarVisible
         })
       },
-      /* @__PURE__ */ React42__default.createElement(
+      /* @__PURE__ */ React43__default.createElement(
         SearchBar_default,
         {
           isVisible: isSearchBarVisible,
@@ -5619,23 +5640,23 @@ var SideBar = ({ onGoToLibrary }) => {
           onSearchResultChange: setSearchResults
         }
       )
-    ), /* @__PURE__ */ React42__default.createElement("div", { className: "border-base-300/50 border-b px-3" }, /* @__PURE__ */ React42__default.createElement(BookCard_default, { book }))),
-    isSearchBarVisible && searchResults ? /* @__PURE__ */ React42__default.createElement(
+    ), /* @__PURE__ */ React43__default.createElement("div", { className: "border-base-300/50 border-b px-3" }, /* @__PURE__ */ React43__default.createElement(BookCard_default, { book }))),
+    isSearchBarVisible && searchResults ? /* @__PURE__ */ React43__default.createElement(
       SearchResults_default,
       {
         bookKey: sideBarBookKey,
         results: searchResults,
         onSelectResult: handleSearchResultClick
       }
-    ) : /* @__PURE__ */ React42__default.createElement(Content_default, { bookDoc, sideBarBookKey }),
-    /* @__PURE__ */ React42__default.createElement(
+    ) : /* @__PURE__ */ React43__default.createElement(Content_default, { bookDoc, sideBarBookKey }),
+    /* @__PURE__ */ React43__default.createElement(
       "div",
       {
         className: "drag-bar absolute right-0 top-0 h-full w-0.5 cursor-col-resize",
         onMouseDown: handleHorizontalDragStart
       }
     )
-  ), !isSideBarPinned && /* @__PURE__ */ React42__default.createElement(
+  ), !isSideBarPinned && /* @__PURE__ */ React43__default.createElement(
     "div",
     {
       className: "overlay fixed inset-0 z-10 bg-black/50 sm:bg-black/20",
@@ -5649,7 +5670,7 @@ init_book();
 var NotebookHeader = ({ isPinned, handleClose: handleClose2, handleTogglePin }) => {
   const _ = useTranslation();
   const iconSize14 = useResponsiveSize(14);
-  return /* @__PURE__ */ React42__default.createElement("div", { className: "notebook-header relative flex h-11 items-center px-3", dir: "ltr" }, /* @__PURE__ */ React42__default.createElement("div", { className: "absolute inset-0 flex items-center justify-center space-x-2" }, /* @__PURE__ */ React42__default.createElement(LuNotebookPen, null), /* @__PURE__ */ React42__default.createElement("div", { className: "notebook-title hidden text-sm font-medium sm:flex" }, _("Notebook"))), /* @__PURE__ */ React42__default.createElement("div", { className: "z-10 flex items-center gap-x-4" }, /* @__PURE__ */ React42__default.createElement(
+  return /* @__PURE__ */ React43__default.createElement("div", { className: "notebook-header relative flex h-11 items-center px-3", dir: "ltr" }, /* @__PURE__ */ React43__default.createElement("div", { className: "absolute inset-0 flex items-center justify-center space-x-2" }, /* @__PURE__ */ React43__default.createElement(LuNotebookPen, null), /* @__PURE__ */ React43__default.createElement("div", { className: "notebook-title hidden text-sm font-medium sm:flex" }, _("Notebook"))), /* @__PURE__ */ React43__default.createElement("div", { className: "z-10 flex items-center gap-x-4" }, /* @__PURE__ */ React43__default.createElement(
     "button",
     {
       onClick: handleTogglePin,
@@ -5658,15 +5679,15 @@ var NotebookHeader = ({ isPinned, handleClose: handleClose2, handleTogglePin }) 
         isPinned ? "bg-base-300" : "bg-base-300/65"
       )
     },
-    isPinned ? /* @__PURE__ */ React42__default.createElement(MdPushPin, { size: iconSize14 }) : /* @__PURE__ */ React42__default.createElement(MdOutlinePushPin, { size: iconSize14 })
-  ), /* @__PURE__ */ React42__default.createElement(
+    isPinned ? /* @__PURE__ */ React43__default.createElement(MdPushPin, { size: iconSize14 }) : /* @__PURE__ */ React43__default.createElement(MdOutlinePushPin, { size: iconSize14 })
+  ), /* @__PURE__ */ React43__default.createElement(
     "button",
     {
       onClick: handleClose2,
       className: "btn btn-ghost btn-circle flex h-6 min-h-6 w-6 hover:bg-transparent sm:hidden"
     },
-    /* @__PURE__ */ React42__default.createElement(MdArrowBackIosNew, null)
-  ), /* @__PURE__ */ React42__default.createElement("button", { className: "btn btn-ghost left-0 h-8 min-h-8 w-8 p-0" }, /* @__PURE__ */ React42__default.createElement(FiSearch, null))));
+    /* @__PURE__ */ React43__default.createElement(MdArrowBackIosNew, null)
+  ), /* @__PURE__ */ React43__default.createElement("button", { className: "btn btn-ghost left-0 h-8 min-h-8 w-8 p-0" }, /* @__PURE__ */ React43__default.createElement(FiSearch, null))));
 };
 var Header_default2 = NotebookHeader;
 init_md5();
@@ -5681,7 +5702,7 @@ var NoteEditor = ({ onSave, onEdit }) => {
     getNotebookAnnotationDraft
   } = useNotebookStore();
   const editorRef = useRef(null);
-  const [note, setNote] = React42__default.useState("");
+  const [note, setNote] = React43__default.useState("");
   useEffect(() => {
     if (editorRef.current) {
       editorRef.current.focus();
@@ -5752,7 +5773,7 @@ var NoteEditor = ({ onSave, onEdit }) => {
       }
     }
   });
-  return /* @__PURE__ */ React42__default.createElement("div", { className: "content note-editor-container bg-base-100 mt-2 rounded-md p-2" }, /* @__PURE__ */ React42__default.createElement("div", { className: "flex w-full justify-between space-x-2" }, /* @__PURE__ */ React42__default.createElement("div", { className: "relative w-full" }, /* @__PURE__ */ React42__default.createElement(
+  return /* @__PURE__ */ React43__default.createElement("div", { className: "content note-editor-container bg-base-100 mt-2 rounded-md p-2" }, /* @__PURE__ */ React43__default.createElement("div", { className: "flex w-full justify-between space-x-2" }, /* @__PURE__ */ React43__default.createElement("div", { className: "relative w-full" }, /* @__PURE__ */ React43__default.createElement(
     "textarea",
     {
       className: clsx8(
@@ -5769,7 +5790,7 @@ var NoteEditor = ({ onSave, onEdit }) => {
       onBlur: handleOnBlur,
       placeholder: _("Add your notes here...")
     }
-  ))), /* @__PURE__ */ React42__default.createElement("div", { className: "flex items-start pt-2" }, /* @__PURE__ */ React42__default.createElement("div", { className: "mr-2 min-h-full self-stretch border-l-2 border-gray-300" }), /* @__PURE__ */ React42__default.createElement("div", { className: "content font-size-sm line-clamp-3 py-2" }, /* @__PURE__ */ React42__default.createElement("span", { className: "content font-size-xs inline text-gray-500" }, getAnnotationText()))), /* @__PURE__ */ React42__default.createElement("div", { className: "flex justify-end p-2", dir: "ltr" }, /* @__PURE__ */ React42__default.createElement(
+  ))), /* @__PURE__ */ React43__default.createElement("div", { className: "flex items-start pt-2" }, /* @__PURE__ */ React43__default.createElement("div", { className: "mr-2 min-h-full self-stretch border-l-2 border-gray-300" }), /* @__PURE__ */ React43__default.createElement("div", { className: "content font-size-sm line-clamp-3 py-2" }, /* @__PURE__ */ React43__default.createElement("span", { className: "content font-size-xs inline text-gray-500" }, getAnnotationText()))), /* @__PURE__ */ React43__default.createElement("div", { className: "flex justify-end p-2", dir: "ltr" }, /* @__PURE__ */ React43__default.createElement(
     "button",
     {
       className: clsx8(
@@ -5779,7 +5800,7 @@ var NoteEditor = ({ onSave, onEdit }) => {
       ),
       onClick: handleSaveNote
     },
-    /* @__PURE__ */ React42__default.createElement("div", { className: "font-size-sm pr-1 align-bottom text-blue-500" }, _("Save"))
+    /* @__PURE__ */ React43__default.createElement("div", { className: "font-size-sm pr-1 align-bottom text-blue-500" }, _("Save"))
   )));
 };
 var NoteEditor_default = NoteEditor;
@@ -5896,7 +5917,7 @@ var Notebook = ({}) => {
   const { booknotes: allNotes = [] } = config || {};
   const annotationNotes = allNotes.filter((note) => note.type === "annotation" && note.note && !note.deletedAt).sort((a, b) => b.createdAt - a.createdAt);
   const excerptNotes = allNotes.filter((note) => note.type === "excerpt" && note.text && !note.deletedAt).sort((a, b) => a.createdAt - b.createdAt);
-  return isNotebookVisible ? /* @__PURE__ */ React42__default.createElement(React42__default.Fragment, null, !isNotebookPinned && /* @__PURE__ */ React42__default.createElement("div", { className: "overlay fixed inset-0 z-10 bg-black/20", onClick: handleClickOverlay }), /* @__PURE__ */ React42__default.createElement(
+  return isNotebookVisible ? /* @__PURE__ */ React43__default.createElement(React43__default.Fragment, null, !isNotebookPinned && /* @__PURE__ */ React43__default.createElement("div", { className: "overlay fixed inset-0 z-10 bg-black/20", onClick: handleClickOverlay }), /* @__PURE__ */ React43__default.createElement(
     "div",
     {
       className: clsx8(
@@ -5914,7 +5935,7 @@ var Notebook = ({}) => {
         position: isNotebookPinned ? "relative" : "absolute"
       }
     },
-    /* @__PURE__ */ React42__default.createElement("style", { jsx: true }, `
+    /* @__PURE__ */ React43__default.createElement("style", { jsx: true }, `
           @media (max-width: 640px) {
             .notebook-container {
               width: 100%;
@@ -5922,14 +5943,14 @@ var Notebook = ({}) => {
             }
           }
         `),
-    /* @__PURE__ */ React42__default.createElement(
+    /* @__PURE__ */ React43__default.createElement(
       "div",
       {
         className: "drag-bar absolute left-0 top-0 h-full w-0.5 cursor-col-resize",
         onMouseDown: handleDragStart
       }
     ),
-    /* @__PURE__ */ React42__default.createElement(
+    /* @__PURE__ */ React43__default.createElement(
       Header_default2,
       {
         isPinned: isNotebookPinned,
@@ -5937,13 +5958,13 @@ var Notebook = ({}) => {
         handleTogglePin
       }
     ),
-    /* @__PURE__ */ React42__default.createElement("div", { className: "max-h-[calc(100vh-44px)] overflow-y-auto px-3" }, /* @__PURE__ */ React42__default.createElement("div", { dir: "ltr" }, excerptNotes.length > 0 && /* @__PURE__ */ React42__default.createElement("p", { className: "content font-size-base pt-1" }, _("Excerpts"))), /* @__PURE__ */ React42__default.createElement("ul", { className: "" }, excerptNotes.map((item, index) => /* @__PURE__ */ React42__default.createElement("li", { key: `${index}-${item.id}`, className: "my-2" }, /* @__PURE__ */ React42__default.createElement(
+    /* @__PURE__ */ React43__default.createElement("div", { className: "max-h-[calc(100vh-44px)] overflow-y-auto px-3" }, /* @__PURE__ */ React43__default.createElement("div", { dir: "ltr" }, excerptNotes.length > 0 && /* @__PURE__ */ React43__default.createElement("p", { className: "content font-size-base pt-1" }, _("Excerpts"))), /* @__PURE__ */ React43__default.createElement("ul", { className: "" }, excerptNotes.map((item, index) => /* @__PURE__ */ React43__default.createElement("li", { key: `${index}-${item.id}`, className: "my-2" }, /* @__PURE__ */ React43__default.createElement(
       "div",
       {
         tabIndex: 0,
         className: "collapse-arrow border-base-300 bg-base-100 collapse border"
       },
-      /* @__PURE__ */ React42__default.createElement(
+      /* @__PURE__ */ React43__default.createElement(
         "div",
         {
           className: "collapse-title font-size-sm h-9 min-h-9 p-2 pe-8 font-medium",
@@ -5952,9 +5973,9 @@ var Notebook = ({}) => {
             "--end-override": "0.7rem"
           }
         },
-        /* @__PURE__ */ React42__default.createElement("p", { className: "line-clamp-1" }, item.text || `Excerpt ${index + 1}`)
+        /* @__PURE__ */ React43__default.createElement("p", { className: "line-clamp-1" }, item.text || `Excerpt ${index + 1}`)
       ),
-      /* @__PURE__ */ React42__default.createElement("div", { className: "collapse-content font-size-xs select-text px-3 pb-0" }, /* @__PURE__ */ React42__default.createElement("p", { className: "hyphens-auto text-justify" }, item.text), /* @__PURE__ */ React42__default.createElement("div", { className: "flex justify-end", dir: "ltr" }, /* @__PURE__ */ React42__default.createElement(
+      /* @__PURE__ */ React43__default.createElement("div", { className: "collapse-content font-size-xs select-text px-3 pb-0" }, /* @__PURE__ */ React43__default.createElement("p", { className: "hyphens-auto text-justify" }, item.text), /* @__PURE__ */ React43__default.createElement("div", { className: "flex justify-end", dir: "ltr" }, /* @__PURE__ */ React43__default.createElement(
         "div",
         {
           className: "font-size-xs cursor-pointer align-bottom text-red-500 hover:text-red-600",
@@ -5962,7 +5983,7 @@ var Notebook = ({}) => {
         },
         _("Delete")
       )))
-    )))), /* @__PURE__ */ React42__default.createElement("div", { dir: "ltr" }, (notebookNewAnnotation || annotationNotes.length > 0) && /* @__PURE__ */ React42__default.createElement("p", { className: "content font-size-base pt-1" }, _("Notes"))), (notebookNewAnnotation || notebookEditAnnotation) && /* @__PURE__ */ React42__default.createElement(NoteEditor_default, { onSave: handleSaveNote, onEdit: (item) => handleEditNote(item, false) }), /* @__PURE__ */ React42__default.createElement("ul", null, annotationNotes.map((item, index) => /* @__PURE__ */ React42__default.createElement(BooknoteItem_default, { key: `${index}-${item.cfi}`, bookKey: sideBarBookKey, item }))))
+    )))), /* @__PURE__ */ React43__default.createElement("div", { dir: "ltr" }, (notebookNewAnnotation || annotationNotes.length > 0) && /* @__PURE__ */ React43__default.createElement("p", { className: "content font-size-base pt-1" }, _("Notes"))), (notebookNewAnnotation || notebookEditAnnotation) && /* @__PURE__ */ React43__default.createElement(NoteEditor_default, { onSave: handleSaveNote, onEdit: (item) => handleEditNote(item, false) }), /* @__PURE__ */ React43__default.createElement("ul", null, annotationNotes.map((item, index) => /* @__PURE__ */ React43__default.createElement(BooknoteItem_default, { key: `${index}-${item.cfi}`, bookKey: sideBarBookKey, item }))))
   )) : null;
 };
 var Notebook_default = Notebook;
@@ -6189,7 +6210,7 @@ var SyncClient = class {
 var syncClient = new SyncClient();
 var SyncContext = createContext({ syncClient });
 var SyncProvider = ({ children }) => {
-  return /* @__PURE__ */ React42__default.createElement(SyncContext.Provider, { value: { syncClient } }, children);
+  return /* @__PURE__ */ React43__default.createElement(SyncContext.Provider, { value: { syncClient } }, children);
 };
 var useSyncContext = () => useContext(SyncContext);
 
@@ -6981,7 +7002,7 @@ var FoliateViewer = ({ bookKey, bookDoc, config }) => {
     };
     openBook();
   }, []);
-  return /* @__PURE__ */ React42__default.createElement(React42__default.Fragment, null, /* @__PURE__ */ React42__default.createElement(
+  return /* @__PURE__ */ React43__default.createElement(React43__default.Fragment, null, /* @__PURE__ */ React43__default.createElement(
     "div",
     {
       className: "foliate-viewer h-[100%] w-[100%]",
@@ -7013,7 +7034,7 @@ var SectionInfo = ({
   horizontalGap,
   verticalMargin
 }) => {
-  return /* @__PURE__ */ React42__default.createElement(
+  return /* @__PURE__ */ React43__default.createElement(
     "div",
     {
       className: clsx8(
@@ -7028,7 +7049,7 @@ var SectionInfo = ({
         height: `calc(100% - ${verticalMargin * 2}px)`
       } : { insetInlineStart: `${horizontalGap}%`, width: `calc(100% - ${horizontalGap * 2}%)` }
     },
-    /* @__PURE__ */ React42__default.createElement(
+    /* @__PURE__ */ React43__default.createElement(
       "h2",
       {
         className: clsx8(
@@ -7041,7 +7062,7 @@ var SectionInfo = ({
   );
 };
 var SectionInfo_default = SectionInfo;
-var WindowButton = ({ onClick, ariaLabel, id, children }) => /* @__PURE__ */ React42__default.createElement(
+var WindowButton = ({ onClick, ariaLabel, id, children }) => /* @__PURE__ */ React43__default.createElement(
   "button",
   {
     id,
@@ -7088,7 +7109,7 @@ var WindowButtons = ({
       handleClose();
     }
   };
-  return /* @__PURE__ */ React42__default.createElement(
+  return /* @__PURE__ */ React43__default.createElement(
     "div",
     {
       ref: parentRef,
@@ -7098,9 +7119,9 @@ var WindowButtons = ({
         className
       )
     },
-    showMinimize && appService?.hasWindowBar && /* @__PURE__ */ React42__default.createElement(WindowButton, { onClick: handleMinimizeClick, ariaLabel: "Minimize", id: "titlebar-minimize" }, /* @__PURE__ */ React42__default.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 24 24" }, /* @__PURE__ */ React42__default.createElement("path", { fill: "currentColor", d: "M20 14H4v-2h16" }))),
-    showMaximize && appService?.hasWindowBar && /* @__PURE__ */ React42__default.createElement(WindowButton, { onClick: handleMaximizeClick, ariaLabel: "Maximize/Restore", id: "titlebar-maximize" }, /* @__PURE__ */ React42__default.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 24 24" }, /* @__PURE__ */ React42__default.createElement("path", { fill: "currentColor", d: "M4 4h16v16H4zm2 4v10h12V8z" }))),
-    showClose && (appService?.hasWindowBar || onClose) && /* @__PURE__ */ React42__default.createElement(WindowButton, { onClick: handleCloseClick, ariaLabel: "Close", id: "titlebar-close" }, /* @__PURE__ */ React42__default.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 24 24" }, /* @__PURE__ */ React42__default.createElement(
+    showMinimize && appService?.hasWindowBar && /* @__PURE__ */ React43__default.createElement(WindowButton, { onClick: handleMinimizeClick, ariaLabel: "Minimize", id: "titlebar-minimize" }, /* @__PURE__ */ React43__default.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 24 24" }, /* @__PURE__ */ React43__default.createElement("path", { fill: "currentColor", d: "M20 14H4v-2h16" }))),
+    showMaximize && appService?.hasWindowBar && /* @__PURE__ */ React43__default.createElement(WindowButton, { onClick: handleMaximizeClick, ariaLabel: "Maximize/Restore", id: "titlebar-maximize" }, /* @__PURE__ */ React43__default.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 24 24" }, /* @__PURE__ */ React43__default.createElement("path", { fill: "currentColor", d: "M4 4h16v16H4zm2 4v10h12V8z" }))),
+    showClose && (appService?.hasWindowBar || onClose) && /* @__PURE__ */ React43__default.createElement(WindowButton, { onClick: handleCloseClick, ariaLabel: "Close", id: "titlebar-close" }, /* @__PURE__ */ React43__default.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", width: "1em", height: "1em", viewBox: "0 0 24 24" }, /* @__PURE__ */ React43__default.createElement(
       "path",
       {
         fill: "currentColor",
@@ -7118,7 +7139,7 @@ var Button = ({
   tooltipDirection = "top",
   className
 }) => {
-  return /* @__PURE__ */ React42__default.createElement(
+  return /* @__PURE__ */ React43__default.createElement(
     "div",
     {
       className: clsx8(
@@ -7130,7 +7151,7 @@ var Button = ({
       ),
       "data-tip": tooltip
     },
-    /* @__PURE__ */ React42__default.createElement(
+    /* @__PURE__ */ React43__default.createElement(
       "button",
       {
         className: clsx8(
@@ -7161,10 +7182,10 @@ var SidebarToggler = ({ bookKey }) => {
     }
     setHoveredBookKey("");
   };
-  return /* @__PURE__ */ React42__default.createElement(
+  return /* @__PURE__ */ React43__default.createElement(
     Button_default,
     {
-      icon: sideBarBookKey === bookKey && isSideBarVisible ? /* @__PURE__ */ React42__default.createElement(TbLayoutSidebarFilled, { className: "text-base-content" }) : /* @__PURE__ */ React42__default.createElement(TbLayoutSidebar, { className: "text-base-content" }),
+      icon: sideBarBookKey === bookKey && isSideBarVisible ? /* @__PURE__ */ React43__default.createElement(TbLayoutSidebarFilled, { className: "text-base-content" }) : /* @__PURE__ */ React43__default.createElement(TbLayoutSidebar, { className: "text-base-content" }),
       onClick: handleToggleSidebar,
       tooltip: _("Sidebar"),
       tooltipDirection: "bottom"
@@ -7240,10 +7261,10 @@ var BookmarkToggler = ({ bookKey }) => {
     setIsBookmarked(locationBookmarked);
     setBookmarkRibbonVisibility(bookKey, locationBookmarked);
   }, [config, progress]);
-  return /* @__PURE__ */ React42__default.createElement(
+  return /* @__PURE__ */ React43__default.createElement(
     Button_default,
     {
-      icon: isBookmarked ? /* @__PURE__ */ React42__default.createElement(MdOutlineBookmark, { className: "text-base-content" }) : /* @__PURE__ */ React42__default.createElement(MdOutlineBookmarkAdd, { className: "text-base-content" }),
+      icon: isBookmarked ? /* @__PURE__ */ React43__default.createElement(MdOutlineBookmark, { className: "text-base-content" }) : /* @__PURE__ */ React43__default.createElement(MdOutlineBookmarkAdd, { className: "text-base-content" }),
       onClick: toggleBookmark,
       tooltip: _("Bookmark"),
       tooltipDirection: "bottom"
@@ -7264,10 +7285,10 @@ var NotebookToggler = ({ bookKey }) => {
       if (!isNotebookVisible) toggleNotebook();
     }
   };
-  return /* @__PURE__ */ React42__default.createElement(
+  return /* @__PURE__ */ React43__default.createElement(
     Button_default,
     {
-      icon: sideBarBookKey == bookKey && isNotebookVisible ? /* @__PURE__ */ React42__default.createElement(LuNotebookPen, { size: iconSize16, className: "text-base-content" }) : /* @__PURE__ */ React42__default.createElement(LuNotebookPen, { size: iconSize16, className: "text-base-content" }),
+      icon: sideBarBookKey == bookKey && isNotebookVisible ? /* @__PURE__ */ React43__default.createElement(LuNotebookPen, { size: iconSize16, className: "text-base-content" }) : /* @__PURE__ */ React43__default.createElement(LuNotebookPen, { size: iconSize16, className: "text-base-content" }),
       onClick: handleToggleSidebar,
       tooltip: _("Notebook"),
       tooltipDirection: "bottom"
@@ -7281,10 +7302,10 @@ var SettingsToggler = () => {
   const handleToggleSettings = () => {
     setFontLayoutSettingsDialogOpen(!isFontLayoutSettingsDialogOpen);
   };
-  return /* @__PURE__ */ React42__default.createElement(
+  return /* @__PURE__ */ React43__default.createElement(
     Button_default,
     {
-      icon: /* @__PURE__ */ React42__default.createElement(RiFontSize, { className: "text-base-content" }),
+      icon: /* @__PURE__ */ React43__default.createElement(RiFontSize, { className: "text-base-content" }),
       onClick: handleToggleSettings,
       tooltip: _("Font & Layout"),
       tooltipDirection: "bottom"
@@ -7330,7 +7351,7 @@ var MenuItem = ({
   onClick
 }) => {
   const iconSize = useDefaultIconSize();
-  const menuButton = /* @__PURE__ */ React42__default.createElement(
+  const menuButton = /* @__PURE__ */ React43__default.createElement(
     "button",
     {
       className: clsx8(
@@ -7340,7 +7361,7 @@ var MenuItem = ({
       onClick,
       disabled
     },
-    /* @__PURE__ */ React42__default.createElement("div", { className: "flex min-w-0 items-center" }, !noIcon && /* @__PURE__ */ React42__default.createElement("span", { style: { minWidth: `${iconSize}px` } }, icon), /* @__PURE__ */ React42__default.createElement(
+    /* @__PURE__ */ React43__default.createElement("div", { className: "flex min-w-0 items-center" }, !noIcon && /* @__PURE__ */ React43__default.createElement("span", { style: { minWidth: `${iconSize}px` } }, icon), /* @__PURE__ */ React43__default.createElement(
       "span",
       {
         className: clsx8("mx-2 flex-1 truncate text-base sm:text-sm", labelClass),
@@ -7348,7 +7369,7 @@ var MenuItem = ({
       },
       label
     )),
-    shortcut && /* @__PURE__ */ React42__default.createElement(
+    shortcut && /* @__PURE__ */ React43__default.createElement(
       "kbd",
       {
         className: clsx8(
@@ -7360,7 +7381,7 @@ var MenuItem = ({
     )
   );
   if (children) {
-    return /* @__PURE__ */ React42__default.createElement("ul", { className: "menu rounded-box m-0 p-0" }, /* @__PURE__ */ React42__default.createElement("li", null, /* @__PURE__ */ React42__default.createElement("details", null, /* @__PURE__ */ React42__default.createElement("summary", { className: "hover:bg-base-300 p-0 pr-3" }, menuButton), children)));
+    return /* @__PURE__ */ React43__default.createElement("ul", { className: "menu rounded-box m-0 p-0" }, /* @__PURE__ */ React43__default.createElement("li", null, /* @__PURE__ */ React43__default.createElement("details", null, /* @__PURE__ */ React43__default.createElement("summary", { className: "hover:bg-base-300 p-0 pr-3" }, menuButton), children)));
   }
   return menuButton;
 };
@@ -7417,13 +7438,13 @@ var ViewMenu = ({
   useEffect(() => {
     saveViewSettings(envConfig, bookKey, "zoomLevel", zoomLevel, true, true);
   }, [zoomLevel]);
-  return /* @__PURE__ */ React42__default.createElement(
+  return /* @__PURE__ */ React43__default.createElement(
     "div",
     {
       tabIndex: 0,
       className: "view-menu dropdown-content bgcolor-base-200 dropdown-right no-triangle border-base-200 z-20 mt-1 w-72 border shadow-2xl"
     },
-    /* @__PURE__ */ React42__default.createElement("div", { className: clsx8("flex items-center justify-between rounded-md") }, /* @__PURE__ */ React42__default.createElement(
+    /* @__PURE__ */ React43__default.createElement("div", { className: clsx8("flex items-center justify-between rounded-md") }, /* @__PURE__ */ React43__default.createElement(
       "button",
       {
         onClick: zoomOut,
@@ -7432,8 +7453,8 @@ var ViewMenu = ({
           zoomLevel <= MIN_ZOOM_LEVEL && "btn-disabled text-gray-400"
         )
       },
-      /* @__PURE__ */ React42__default.createElement(MdZoomOut, null)
-    ), /* @__PURE__ */ React42__default.createElement(
+      /* @__PURE__ */ React43__default.createElement(MdZoomOut, null)
+    ), /* @__PURE__ */ React43__default.createElement(
       "button",
       {
         className: clsx8(
@@ -7443,7 +7464,7 @@ var ViewMenu = ({
       },
       zoomLevel,
       "%"
-    ), /* @__PURE__ */ React42__default.createElement(
+    ), /* @__PURE__ */ React43__default.createElement(
       "button",
       {
         onClick: zoomIn,
@@ -7452,26 +7473,26 @@ var ViewMenu = ({
           zoomLevel >= MAX_ZOOM_LEVEL && "btn-disabled text-gray-400"
         )
       },
-      /* @__PURE__ */ React42__default.createElement(MdZoomIn, null)
+      /* @__PURE__ */ React43__default.createElement(MdZoomIn, null)
     )),
-    /* @__PURE__ */ React42__default.createElement("hr", { className: "border-base-300 my-1" }),
-    /* @__PURE__ */ React42__default.createElement(MenuItem_default, { label: _("Font & Layout"), shortcut: "Shift+F", onClick: openFontLayoutMenu }),
-    /* @__PURE__ */ React42__default.createElement(
+    /* @__PURE__ */ React43__default.createElement("hr", { className: "border-base-300 my-1" }),
+    /* @__PURE__ */ React43__default.createElement(MenuItem_default, { label: _("Font & Layout"), shortcut: "Shift+F", onClick: openFontLayoutMenu }),
+    /* @__PURE__ */ React43__default.createElement(
       MenuItem_default,
       {
         label: _("Scrolled Mode"),
         shortcut: "Shift+J",
-        icon: isScrolledMode ? /* @__PURE__ */ React42__default.createElement(MdCheck, null) : void 0,
+        icon: isScrolledMode ? /* @__PURE__ */ React43__default.createElement(MdCheck, null) : void 0,
         onClick: toggleScrolledMode
       }
     ),
-    /* @__PURE__ */ React42__default.createElement("hr", { className: "border-base-300 my-1" }),
-    appService?.hasWindow && /* @__PURE__ */ React42__default.createElement(MenuItem_default, { label: _("Fullscreen"), onClick: handleFullScreen }),
-    /* @__PURE__ */ React42__default.createElement(
+    /* @__PURE__ */ React43__default.createElement("hr", { className: "border-base-300 my-1" }),
+    appService?.hasWindow && /* @__PURE__ */ React43__default.createElement(MenuItem_default, { label: _("Fullscreen"), onClick: handleFullScreen }),
+    /* @__PURE__ */ React43__default.createElement(
       MenuItem_default,
       {
         label: themeMode === "dark" ? _("Dark Mode") : themeMode === "light" ? _("Light Mode") : _("Auto Mode"),
-        icon: themeMode === "dark" ? /* @__PURE__ */ React42__default.createElement(BiMoon, null) : themeMode === "light" ? /* @__PURE__ */ React42__default.createElement(BiSun, null) : /* @__PURE__ */ React42__default.createElement(TbSunMoon, null),
+        icon: themeMode === "dark" ? /* @__PURE__ */ React43__default.createElement(BiMoon, null) : themeMode === "light" ? /* @__PURE__ */ React43__default.createElement(BiSun, null) : /* @__PURE__ */ React43__default.createElement(TbSunMoon, null),
         onClick: cycleThemeMode
       }
     )
@@ -7518,7 +7539,7 @@ var HeaderBar = ({
     if (!appService?.hasTrafficLight) return;
     setTrafficLightVisibility(isSideBarVisible);
   }, [isSideBarVisible]);
-  return /* @__PURE__ */ React42__default.createElement(
+  return /* @__PURE__ */ React43__default.createElement(
     "div",
     {
       ref: headerRef,
@@ -7535,18 +7556,18 @@ var HeaderBar = ({
       onMouseEnter: () => setHoveredBookKey(bookKey),
       onMouseLeave: () => setHoveredBookKey("")
     },
-    /* @__PURE__ */ React42__default.createElement("div", { className: "sidebar-bookmark-toggler bg-base-100 z-20 flex h-full items-center gap-x-4" }, /* @__PURE__ */ React42__default.createElement("div", { className: "hidden sm:flex" }, /* @__PURE__ */ React42__default.createElement(SidebarToggler_default, { bookKey })), /* @__PURE__ */ React42__default.createElement(BookmarkToggler_default, { bookKey })),
-    /* @__PURE__ */ React42__default.createElement("div", { className: "header-title z-15 pointer-events-none absolute inset-0 hidden items-center justify-center sm:flex" }, /* @__PURE__ */ React42__default.createElement("h2", { className: "line-clamp-1 max-w-[50%] text-center text-xs font-semibold" }, bookTitle)),
-    /* @__PURE__ */ React42__default.createElement("div", { className: "bg-base-100 z-20 ml-auto flex h-full items-center space-x-4" }, /* @__PURE__ */ React42__default.createElement(SettingsToggler_default, null), /* @__PURE__ */ React42__default.createElement(NotebookToggler_default, { bookKey }), /* @__PURE__ */ React42__default.createElement(
+    /* @__PURE__ */ React43__default.createElement("div", { className: "sidebar-bookmark-toggler bg-base-100 z-20 flex h-full items-center gap-x-4" }, /* @__PURE__ */ React43__default.createElement("div", { className: "hidden sm:flex" }, /* @__PURE__ */ React43__default.createElement(SidebarToggler_default, { bookKey })), /* @__PURE__ */ React43__default.createElement(BookmarkToggler_default, { bookKey })),
+    /* @__PURE__ */ React43__default.createElement("div", { className: "header-title z-15 pointer-events-none absolute inset-0 hidden items-center justify-center sm:flex" }, /* @__PURE__ */ React43__default.createElement("h2", { className: "line-clamp-1 max-w-[50%] text-center text-xs font-semibold" }, bookTitle)),
+    /* @__PURE__ */ React43__default.createElement("div", { className: "bg-base-100 z-20 ml-auto flex h-full items-center space-x-4" }, /* @__PURE__ */ React43__default.createElement(SettingsToggler_default, null), /* @__PURE__ */ React43__default.createElement(NotebookToggler_default, { bookKey }), /* @__PURE__ */ React43__default.createElement(
       Dropdown_default,
       {
         className: "exclude-title-bar-mousedown dropdown-bottom dropdown-end",
         buttonClassName: "btn btn-ghost h-8 min-h-8 w-8 p-0",
-        toggleButton: /* @__PURE__ */ React42__default.createElement(PiDotsThreeVerticalBold, { size: iconSize16 }),
+        toggleButton: /* @__PURE__ */ React43__default.createElement(PiDotsThreeVerticalBold, { size: iconSize16 }),
         onToggle: handleToggleDropdown
       },
-      /* @__PURE__ */ React42__default.createElement(ViewMenu_default, { bookKey, onSetSettingsDialogOpen })
-    ), /* @__PURE__ */ React42__default.createElement(
+      /* @__PURE__ */ React43__default.createElement(ViewMenu_default, { bookKey, onSetSettingsDialogOpen })
+    ), /* @__PURE__ */ React43__default.createElement(
       WindowButtons_default,
       {
         className: "window-buttons flex h-full items-center",
@@ -7605,14 +7626,14 @@ var Slider = ({
   }, [initialValue]);
   const safeValue = isNaN(value) ? min : value;
   const percentage = (safeValue - min) / (max - min) * 100;
-  return /* @__PURE__ */ React42__default.createElement(
+  return /* @__PURE__ */ React43__default.createElement(
     "div",
     {
       ref: sliderRef,
       className: `slider bg-base-200 mx-auto w-full max-w-md rounded-xl ${className}`,
       dir: isRtl ? "rtl" : void 0
     },
-    /* @__PURE__ */ React42__default.createElement("div", { className: "relative", style: { height: `${heightPx}px` } }, /* @__PURE__ */ React42__default.createElement("div", { className: "bg-base-300/40 absolute h-full w-full rounded-full" }), /* @__PURE__ */ React42__default.createElement(
+    /* @__PURE__ */ React43__default.createElement("div", { className: "relative", style: { height: `${heightPx}px` } }, /* @__PURE__ */ React43__default.createElement("div", { className: "bg-base-300/40 absolute h-full w-full rounded-full" }), /* @__PURE__ */ React43__default.createElement(
       "div",
       {
         className: "bg-base-300 absolute h-full rounded-full",
@@ -7621,7 +7642,7 @@ var Slider = ({
           [isRtl ? "right" : "left"]: 0
         }
       }
-    ), /* @__PURE__ */ React42__default.createElement("div", { className: "absolute inset-0 flex items-center justify-between px-4 text-sm" }, /* @__PURE__ */ React42__default.createElement("span", { className: `ml-2 ${minClassName}` }, minLabel), /* @__PURE__ */ React42__default.createElement("span", { className: `mr-2 ${maxClassName}` }, maxLabel)), /* @__PURE__ */ React42__default.createElement(
+    ), /* @__PURE__ */ React43__default.createElement("div", { className: "absolute inset-0 flex items-center justify-between px-4 text-sm" }, /* @__PURE__ */ React43__default.createElement("span", { className: `ml-2 ${minClassName}` }, minLabel), /* @__PURE__ */ React43__default.createElement("span", { className: `mr-2 ${maxClassName}` }, maxLabel)), /* @__PURE__ */ React43__default.createElement(
       "div",
       {
         className: "pointer-events-none absolute top-0 z-10",
@@ -7631,7 +7652,7 @@ var Slider = ({
           height: "100%"
         }
       },
-      /* @__PURE__ */ React42__default.createElement(
+      /* @__PURE__ */ React43__default.createElement(
         "div",
         {
           className: `bg-base-200 flex h-full items-center justify-center rounded-full text-sm shadow-md ${bubbleClassName}`,
@@ -7639,7 +7660,7 @@ var Slider = ({
         },
         bubbleElement || bubbleLabel
       )
-    ), /* @__PURE__ */ React42__default.createElement(
+    ), /* @__PURE__ */ React43__default.createElement(
       "input",
       {
         type: "range",
@@ -7667,7 +7688,7 @@ var FooterBar = ({
   const { envConfig, appService } = useEnv();
   const { hoveredBookKey, setHoveredBookKey, getView, getProgress, getViewSettings } = useReaderStore();
   const { isSideBarVisible, setSideBarVisible } = useSidebarStore();
-  const [actionTab, setActionTab] = React42__default.useState("");
+  const [actionTab, setActionTab] = React43__default.useState("");
   const sliderHeight = useResponsiveSize(28);
   const tocIconSize = useResponsiveSize(23);
   const fontIconSize = useResponsiveSize(18);
@@ -7743,7 +7764,7 @@ var FooterBar = ({
   const progressInfo = ["CBZ"].includes(bookFormat) ? section : pageinfo;
   const progressValid = !!progressInfo;
   const progressFraction = progressValid ? ((progressInfo.next ?? progressInfo.current) + 1) / progressInfo.total : 0;
-  return /* @__PURE__ */ React42__default.createElement(React42__default.Fragment, null, /* @__PURE__ */ React42__default.createElement(
+  return /* @__PURE__ */ React43__default.createElement(React43__default.Fragment, null, /* @__PURE__ */ React43__default.createElement(
     "div",
     {
       className: clsx8(
@@ -7754,7 +7775,7 @@ var FooterBar = ({
       onMouseEnter: () => !appService?.isMobile && setHoveredBookKey(bookKey),
       onTouchStart: () => !appService?.isMobile && setHoveredBookKey(bookKey)
     }
-  ), /* @__PURE__ */ React42__default.createElement(
+  ), /* @__PURE__ */ React43__default.createElement(
     "div",
     {
       className: clsx8(
@@ -7773,7 +7794,7 @@ var FooterBar = ({
       onMouseLeave: () => window.innerWidth >= 640 && setHoveredBookKey(""),
       "aria-hidden": !isVisible
     },
-    /* @__PURE__ */ React42__default.createElement(
+    /* @__PURE__ */ React43__default.createElement(
       "div",
       {
         className: clsx8(
@@ -7784,33 +7805,33 @@ var FooterBar = ({
           bottom: appService?.hasSafeAreaInset ? "calc(env(safe-area-inset-bottom) + 64px)" : "64px"
         }
       },
-      /* @__PURE__ */ React42__default.createElement(
+      /* @__PURE__ */ React43__default.createElement(
         Button_default,
         {
-          icon: viewSettings?.rtl ? /* @__PURE__ */ React42__default.createElement(RiArrowRightWideLine, null) : /* @__PURE__ */ React42__default.createElement(RiArrowLeftWideLine, null),
+          icon: viewSettings?.rtl ? /* @__PURE__ */ React43__default.createElement(RiArrowRightWideLine, null) : /* @__PURE__ */ React43__default.createElement(RiArrowLeftWideLine, null),
           onClick: viewSettings?.rtl ? handleGoNext : handleGoPrev,
           tooltip: viewSettings?.rtl ? _("Go Right") : _("Go Left")
         }
       ),
-      /* @__PURE__ */ React42__default.createElement(
+      /* @__PURE__ */ React43__default.createElement(
         Button_default,
         {
-          icon: viewSettings?.rtl ? /* @__PURE__ */ React42__default.createElement(RiArrowGoForwardLine, null) : /* @__PURE__ */ React42__default.createElement(RiArrowGoBackLine, null),
+          icon: viewSettings?.rtl ? /* @__PURE__ */ React43__default.createElement(RiArrowGoForwardLine, null) : /* @__PURE__ */ React43__default.createElement(RiArrowGoBackLine, null),
           onClick: handleGoBack,
           tooltip: _("Go Back"),
           disabled: !view?.history.canGoBack
         }
       ),
-      /* @__PURE__ */ React42__default.createElement(
+      /* @__PURE__ */ React43__default.createElement(
         Button_default,
         {
-          icon: viewSettings?.rtl ? /* @__PURE__ */ React42__default.createElement(RiArrowGoBackLine, null) : /* @__PURE__ */ React42__default.createElement(RiArrowGoForwardLine, null),
+          icon: viewSettings?.rtl ? /* @__PURE__ */ React43__default.createElement(RiArrowGoBackLine, null) : /* @__PURE__ */ React43__default.createElement(RiArrowGoForwardLine, null),
           onClick: handleGoForward,
           tooltip: _("Go Forward"),
           disabled: !view?.history.canGoForward
         }
       ),
-      /* @__PURE__ */ React42__default.createElement(
+      /* @__PURE__ */ React43__default.createElement(
         Slider_default,
         {
           heightPx: sliderHeight,
@@ -7819,16 +7840,16 @@ var FooterBar = ({
           onChange: (e) => handleProgressChange(e)
         }
       ),
-      /* @__PURE__ */ React42__default.createElement(
+      /* @__PURE__ */ React43__default.createElement(
         Button_default,
         {
-          icon: viewSettings?.rtl ? /* @__PURE__ */ React42__default.createElement(RiArrowLeftWideLine, null) : /* @__PURE__ */ React42__default.createElement(RiArrowRightWideLine, null),
+          icon: viewSettings?.rtl ? /* @__PURE__ */ React43__default.createElement(RiArrowLeftWideLine, null) : /* @__PURE__ */ React43__default.createElement(RiArrowRightWideLine, null),
           onClick: viewSettings?.rtl ? handleGoPrev : handleGoNext,
           tooltip: viewSettings?.rtl ? _("Go Left") : _("Go Right")
         }
       )
     ),
-    /* @__PURE__ */ React42__default.createElement(
+    /* @__PURE__ */ React43__default.createElement(
       "div",
       {
         className: clsx8(
@@ -7839,7 +7860,7 @@ var FooterBar = ({
           bottom: appService?.hasSafeAreaInset ? "calc(env(safe-area-inset-bottom) + 64px)" : "64px"
         }
       },
-      /* @__PURE__ */ React42__default.createElement(
+      /* @__PURE__ */ React43__default.createElement(
         Slider_default,
         {
           initialValue: viewSettings?.defaultFontSize && !isNaN(viewSettings.defaultFontSize) ? viewSettings.defaultFontSize : 16,
@@ -7853,7 +7874,7 @@ var FooterBar = ({
           max: 30
         }
       ),
-      /* @__PURE__ */ React42__default.createElement("div", { className: "flex w-full items-center justify-between gap-x-6" }, /* @__PURE__ */ React42__default.createElement(
+      /* @__PURE__ */ React43__default.createElement("div", { className: "flex w-full items-center justify-between gap-x-6" }, /* @__PURE__ */ React43__default.createElement(
         Slider_default,
         {
           initialValue: !isNaN(getMarginProgressValue(
@@ -7863,17 +7884,17 @@ var FooterBar = ({
             viewSettings?.marginPx ?? 44,
             viewSettings?.gapPercent ?? 5
           ) : 50,
-          bubbleElement: /* @__PURE__ */ React42__default.createElement(TbBoxMargin, { size: marginIconSize }),
+          bubbleElement: /* @__PURE__ */ React43__default.createElement(TbBoxMargin, { size: marginIconSize }),
           minLabel: _("Small"),
           maxLabel: _("Large"),
           step: 10,
           onChange: handleMarginChange
         }
-      ), /* @__PURE__ */ React42__default.createElement(
+      ), /* @__PURE__ */ React43__default.createElement(
         Slider_default,
         {
           initialValue: viewSettings?.lineHeight && !isNaN(viewSettings.lineHeight) ? Math.round(viewSettings.lineHeight * 10) : 16,
-          bubbleElement: /* @__PURE__ */ React42__default.createElement(RxLineHeight, { size: marginIconSize }),
+          bubbleElement: /* @__PURE__ */ React43__default.createElement(RxLineHeight, { size: marginIconSize }),
           minLabel: _("Small"),
           maxLabel: _("Large"),
           min: 8,
@@ -7882,7 +7903,7 @@ var FooterBar = ({
         }
       ))
     ),
-    /* @__PURE__ */ React42__default.createElement(
+    /* @__PURE__ */ React43__default.createElement(
       "div",
       {
         className: clsx8(
@@ -7890,25 +7911,25 @@ var FooterBar = ({
           appService?.hasSafeAreaInset && "pb-[calc(env(safe-area-inset-bottom)+16px)]"
         )
       },
-      /* @__PURE__ */ React42__default.createElement(
+      /* @__PURE__ */ React43__default.createElement(
         Button_default,
         {
-          icon: /* @__PURE__ */ React42__default.createElement(IoIosList, { size: tocIconSize, className: "" }),
+          icon: /* @__PURE__ */ React43__default.createElement(IoIosList, { size: tocIconSize, className: "" }),
           onClick: () => handleSetActionTab("toc")
         }
       ),
-      /* @__PURE__ */ React42__default.createElement(Button_default, { icon: /* @__PURE__ */ React42__default.createElement(PiNotePencil, { className: "" }), onClick: () => handleSetActionTab("note") }),
-      /* @__PURE__ */ React42__default.createElement(
+      /* @__PURE__ */ React43__default.createElement(Button_default, { icon: /* @__PURE__ */ React43__default.createElement(PiNotePencil, { className: "" }), onClick: () => handleSetActionTab("note") }),
+      /* @__PURE__ */ React43__default.createElement(
         Button_default,
         {
-          icon: /* @__PURE__ */ React42__default.createElement(RxSlider, { className: clsx8(actionTab === "progress" && "text-blue-500") }),
+          icon: /* @__PURE__ */ React43__default.createElement(RxSlider, { className: clsx8(actionTab === "progress" && "text-blue-500") }),
           onClick: () => handleSetActionTab("progress")
         }
       ),
-      /* @__PURE__ */ React42__default.createElement(
+      /* @__PURE__ */ React43__default.createElement(
         Button_default,
         {
-          icon: /* @__PURE__ */ React42__default.createElement(
+          icon: /* @__PURE__ */ React43__default.createElement(
             RiFontFamily,
             {
               size: fontIconSize,
@@ -7918,32 +7939,32 @@ var FooterBar = ({
           onClick: () => handleSetActionTab("font")
         }
       ),
-      /* @__PURE__ */ React42__default.createElement(Button_default, { icon: /* @__PURE__ */ React42__default.createElement(MdOutlineHeadphones, { className: "" }), onClick: () => handleSetActionTab("tts") })
+      /* @__PURE__ */ React43__default.createElement(Button_default, { icon: /* @__PURE__ */ React43__default.createElement(MdOutlineHeadphones, { className: "" }), onClick: () => handleSetActionTab("tts") })
     ),
-    /* @__PURE__ */ React42__default.createElement("div", { className: "hidden w-full items-center gap-x-4 px-4 sm:flex" }, /* @__PURE__ */ React42__default.createElement(
+    /* @__PURE__ */ React43__default.createElement("div", { className: "hidden w-full items-center gap-x-4 px-4 sm:flex" }, /* @__PURE__ */ React43__default.createElement(
       Button_default,
       {
-        icon: viewSettings?.rtl ? /* @__PURE__ */ React42__default.createElement(RiArrowRightWideLine, null) : /* @__PURE__ */ React42__default.createElement(RiArrowLeftWideLine, null),
+        icon: viewSettings?.rtl ? /* @__PURE__ */ React43__default.createElement(RiArrowRightWideLine, null) : /* @__PURE__ */ React43__default.createElement(RiArrowLeftWideLine, null),
         onClick: viewSettings?.rtl ? handleGoNext : handleGoPrev,
         tooltip: viewSettings?.rtl ? _("Go Right") : _("Go Left")
       }
-    ), /* @__PURE__ */ React42__default.createElement(
+    ), /* @__PURE__ */ React43__default.createElement(
       Button_default,
       {
-        icon: viewSettings?.rtl ? /* @__PURE__ */ React42__default.createElement(RiArrowGoForwardLine, null) : /* @__PURE__ */ React42__default.createElement(RiArrowGoBackLine, null),
+        icon: viewSettings?.rtl ? /* @__PURE__ */ React43__default.createElement(RiArrowGoForwardLine, null) : /* @__PURE__ */ React43__default.createElement(RiArrowGoBackLine, null),
         onClick: handleGoBack,
         tooltip: _("Go Back"),
         disabled: !view?.history.canGoBack
       }
-    ), /* @__PURE__ */ React42__default.createElement(
+    ), /* @__PURE__ */ React43__default.createElement(
       Button_default,
       {
-        icon: viewSettings?.rtl ? /* @__PURE__ */ React42__default.createElement(RiArrowGoBackLine, null) : /* @__PURE__ */ React42__default.createElement(RiArrowGoForwardLine, null),
+        icon: viewSettings?.rtl ? /* @__PURE__ */ React43__default.createElement(RiArrowGoBackLine, null) : /* @__PURE__ */ React43__default.createElement(RiArrowGoForwardLine, null),
         onClick: handleGoForward,
         tooltip: _("Go Forward"),
         disabled: !view?.history.canGoForward
       }
-    ), /* @__PURE__ */ React42__default.createElement("span", { className: "mx-2 text-center text-sm" }, progressValid ? `${Math.round(progressFraction * 100)}%` : ""), /* @__PURE__ */ React42__default.createElement(
+    ), /* @__PURE__ */ React43__default.createElement("span", { className: "mx-2 text-center text-sm" }, progressValid ? `${Math.round(progressFraction * 100)}%` : ""), /* @__PURE__ */ React43__default.createElement(
       "input",
       {
         type: "range",
@@ -7953,10 +7974,10 @@ var FooterBar = ({
         value: progressValid && !isNaN(progressFraction) ? Math.round(progressFraction * 100) : 0,
         onChange: (e) => handleProgressChange(parseInt(e.target.value, 10))
       }
-    ), /* @__PURE__ */ React42__default.createElement(Button_default, { icon: /* @__PURE__ */ React42__default.createElement(FaHeadphones, null), onClick: handleSpeakText, tooltip: _("Speak") }), /* @__PURE__ */ React42__default.createElement(
+    ), /* @__PURE__ */ React43__default.createElement(Button_default, { icon: /* @__PURE__ */ React43__default.createElement(FaHeadphones, null), onClick: handleSpeakText, tooltip: _("Speak") }), /* @__PURE__ */ React43__default.createElement(
       Button_default,
       {
-        icon: viewSettings?.rtl ? /* @__PURE__ */ React42__default.createElement(RiArrowLeftWideLine, null) : /* @__PURE__ */ React42__default.createElement(RiArrowRightWideLine, null),
+        icon: viewSettings?.rtl ? /* @__PURE__ */ React43__default.createElement(RiArrowLeftWideLine, null) : /* @__PURE__ */ React43__default.createElement(RiArrowRightWideLine, null),
         onClick: viewSettings?.rtl ? handleGoPrev : handleGoNext,
         tooltip: viewSettings?.rtl ? _("Go Left") : _("Go Right")
       }
@@ -7981,7 +8002,7 @@ var PageInfoView = ({
     currentPage: (pageinfo.next ?? pageinfo.current) + 1,
     totalPage: pageinfo.total
   }) : "";
-  return /* @__PURE__ */ React42__default.createElement(
+  return /* @__PURE__ */ React43__default.createElement(
     "div",
     {
       className: clsx8(
@@ -7999,12 +8020,12 @@ var PageInfoView = ({
         paddingBottom: appService?.hasSafeAreaInset ? "env(safe-area-inset-bottom)" : 0
       }
     },
-    /* @__PURE__ */ React42__default.createElement("h2", { className: "text-neutral-content text-right font-sans text-xs font-extralight" }, pageInfo)
+    /* @__PURE__ */ React43__default.createElement("h2", { className: "text-neutral-content text-right font-sans text-xs font-extralight" }, pageInfo)
   );
 };
 var PageInfo_default = PageInfoView;
 var Ribbon = ({}) => {
-  return /* @__PURE__ */ React42__default.createElement(
+  return /* @__PURE__ */ React43__default.createElement(
     "div",
     {
       className: clsx8(
@@ -8012,7 +8033,7 @@ var Ribbon = ({}) => {
         "h-[calc(env(safe-area-inset-top)+44px)]"
       )
     },
-    /* @__PURE__ */ React42__default.createElement(
+    /* @__PURE__ */ React43__default.createElement(
       "svg",
       {
         width: "100%",
@@ -8023,7 +8044,7 @@ var Ribbon = ({}) => {
         shapeRendering: "geometricPrecision",
         imageRendering: "optimizeQuality"
       },
-      /* @__PURE__ */ React42__default.createElement("polygon", { fill: "#F44336", points: "100 100, 50 78, 0 100, 0 0, 100 0" })
+      /* @__PURE__ */ React43__default.createElement("polygon", { fill: "#F44336", points: "100 100, 50 78, 0 100, 0 0, 100 0" })
     )
   );
 };
@@ -8076,7 +8097,7 @@ var NumberInput = ({
     setLocalValue(newValue);
     onChange(newValue);
   };
-  return /* @__PURE__ */ React42__default.createElement("div", { className: clsx8("config-item", className) }, /* @__PURE__ */ React42__default.createElement("span", { className: "text-base-content" }, label), /* @__PURE__ */ React42__default.createElement("div", { className: "text-base-content flex items-center gap-2" }, /* @__PURE__ */ React42__default.createElement(
+  return /* @__PURE__ */ React43__default.createElement("div", { className: clsx8("config-item", className) }, /* @__PURE__ */ React43__default.createElement("span", { className: "text-base-content" }, label), /* @__PURE__ */ React43__default.createElement("div", { className: "text-base-content flex items-center gap-2" }, /* @__PURE__ */ React43__default.createElement(
     "input",
     {
       type: "text",
@@ -8087,20 +8108,20 @@ var NumberInput = ({
       className: "input input-ghost settings-content text-base-content w-20 max-w-xs rounded border-0 bg-transparent px-3 py-1 text-right !outline-none",
       onFocus: (e) => e.target.select()
     }
-  ), /* @__PURE__ */ React42__default.createElement(
+  ), /* @__PURE__ */ React43__default.createElement(
     "button",
     {
       onClick: decrement,
       className: `btn btn-circle btn-sm ${value <= min || disabled ? "btn-disabled !bg-opacity-5" : ""}`
     },
-    /* @__PURE__ */ React42__default.createElement(FiMinus, { className: "h-4 w-4" })
-  ), /* @__PURE__ */ React42__default.createElement(
+    /* @__PURE__ */ React43__default.createElement(FiMinus, { className: "h-4 w-4" })
+  ), /* @__PURE__ */ React43__default.createElement(
     "button",
     {
       onClick: increment,
       className: `btn btn-circle btn-sm ${value >= max || disabled ? "btn-disabled !bg-opacity-5" : ""}`
     },
-    /* @__PURE__ */ React42__default.createElement(FiPlus, { className: "h-4 w-4" })
+    /* @__PURE__ */ React43__default.createElement(FiPlus, { className: "h-4 w-4" })
   )));
 };
 var NumberInput_default = NumberInput;
@@ -8117,16 +8138,16 @@ var FontDropdown = ({
   const defaultIconSize = useDefaultIconSize();
   const allOptions = [...options2, ...moreOptions ?? []];
   const selectedOption = allOptions.find((option) => option.option === selected) ?? allOptions[0];
-  return /* @__PURE__ */ React42__default.createElement("div", { className: "dropdown dropdown-top" }, /* @__PURE__ */ React42__default.createElement(
+  return /* @__PURE__ */ React43__default.createElement("div", { className: "dropdown dropdown-top" }, /* @__PURE__ */ React43__default.createElement(
     "button",
     {
       tabIndex: 0,
       className: "btn btn-sm flex items-center gap-1 px-[20px] font-normal normal-case",
       onClick: (e) => e.currentTarget.focus()
     },
-    /* @__PURE__ */ React42__default.createElement("span", { style: { fontFamily: onGetFontFamily(selectedOption.option, family ?? "") } }, selectedOption.label),
-    /* @__PURE__ */ React42__default.createElement(FiChevronUp, { size: iconSize16 })
-  ), /* @__PURE__ */ React42__default.createElement(
+    /* @__PURE__ */ React43__default.createElement("span", { style: { fontFamily: onGetFontFamily(selectedOption.option, family ?? "") } }, selectedOption.label),
+    /* @__PURE__ */ React43__default.createElement(FiChevronUp, { size: iconSize16 })
+  ), /* @__PURE__ */ React43__default.createElement(
     "ul",
     {
       tabIndex: 0,
@@ -8135,8 +8156,8 @@ var FontDropdown = ({
         moreOptions?.length ? "" : "inline max-h-80 overflow-y-scroll"
       )
     },
-    options2.map(({ option, label }) => /* @__PURE__ */ React42__default.createElement("li", { key: option, onClick: () => onSelect(option) }, /* @__PURE__ */ React42__default.createElement("div", { className: "flex items-center px-0" }, /* @__PURE__ */ React42__default.createElement("span", { style: { minWidth: `${defaultIconSize}px` } }, selected === option && /* @__PURE__ */ React42__default.createElement(MdCheck, { className: "text-base-content" })), /* @__PURE__ */ React42__default.createElement("span", { style: { fontFamily: onGetFontFamily(option, family ?? "") } }, label || option)))),
-    moreOptions && moreOptions.length > 0 && /* @__PURE__ */ React42__default.createElement("li", { className: "dropdown dropdown-left dropdown-top" }, /* @__PURE__ */ React42__default.createElement("div", { className: "flex items-center px-0" }, /* @__PURE__ */ React42__default.createElement("span", { style: { minWidth: `${defaultIconSize}px` } }, /* @__PURE__ */ React42__default.createElement(FiChevronLeft, { size: iconSize16 })), /* @__PURE__ */ React42__default.createElement("span", null, _("System Fonts"))), /* @__PURE__ */ React42__default.createElement(
+    options2.map(({ option, label }) => /* @__PURE__ */ React43__default.createElement("li", { key: option, onClick: () => onSelect(option) }, /* @__PURE__ */ React43__default.createElement("div", { className: "flex items-center px-0" }, /* @__PURE__ */ React43__default.createElement("span", { style: { minWidth: `${defaultIconSize}px` } }, selected === option && /* @__PURE__ */ React43__default.createElement(MdCheck, { className: "text-base-content" })), /* @__PURE__ */ React43__default.createElement("span", { style: { fontFamily: onGetFontFamily(option, family ?? "") } }, label || option)))),
+    moreOptions && moreOptions.length > 0 && /* @__PURE__ */ React43__default.createElement("li", { className: "dropdown dropdown-left dropdown-top" }, /* @__PURE__ */ React43__default.createElement("div", { className: "flex items-center px-0" }, /* @__PURE__ */ React43__default.createElement("span", { style: { minWidth: `${defaultIconSize}px` } }, /* @__PURE__ */ React43__default.createElement(FiChevronLeft, { size: iconSize16 })), /* @__PURE__ */ React43__default.createElement("span", null, _("System Fonts"))), /* @__PURE__ */ React43__default.createElement(
       "ul",
       {
         tabIndex: 0,
@@ -8145,7 +8166,7 @@ var FontDropdown = ({
           "!mr-5 mb-[-46px] inline max-h-80 w-[200px] overflow-y-scroll"
         )
       },
-      moreOptions.map((option, index) => /* @__PURE__ */ React42__default.createElement("li", { key: `${index}-${option.option}`, onClick: () => onSelect(option.option) }, /* @__PURE__ */ React42__default.createElement("div", { className: "flex items-center px-2" }, /* @__PURE__ */ React42__default.createElement("span", { style: { minWidth: `${defaultIconSize}px` } }, selected === option.option && /* @__PURE__ */ React42__default.createElement(MdCheck, { className: "text-base-content" })), /* @__PURE__ */ React42__default.createElement("span", { style: { fontFamily: onGetFontFamily(option.option, family ?? "") } }, option.label || option.option))))
+      moreOptions.map((option, index) => /* @__PURE__ */ React43__default.createElement("li", { key: `${index}-${option.option}`, onClick: () => onSelect(option.option) }, /* @__PURE__ */ React43__default.createElement("div", { className: "flex items-center px-2" }, /* @__PURE__ */ React43__default.createElement("span", { style: { minWidth: `${defaultIconSize}px` } }, selected === option.option && /* @__PURE__ */ React43__default.createElement(MdCheck, { className: "text-base-content" })), /* @__PURE__ */ React43__default.createElement("span", { style: { fontFamily: onGetFontFamily(option.option, family ?? "") } }, option.label || option.option))))
     ))
   ));
 };
@@ -8165,7 +8186,7 @@ var FontFace = ({
   onSelect
 }) => {
   const _ = useTranslation();
-  return /* @__PURE__ */ React42__default.createElement("div", { className: clsx8("config-item", className) }, /* @__PURE__ */ React42__default.createElement("span", { className: "" }, label), /* @__PURE__ */ React42__default.createElement(
+  return /* @__PURE__ */ React43__default.createElement("div", { className: clsx8("config-item", className) }, /* @__PURE__ */ React43__default.createElement("span", { className: "" }, label), /* @__PURE__ */ React43__default.createElement(
     FontDropDown_default,
     {
       family,
@@ -8267,7 +8288,7 @@ var FontPanel = ({ bookKey }) => {
         return "";
     }
   };
-  return /* @__PURE__ */ React42__default.createElement("div", { className: "my-4 w-full space-y-6" }, /* @__PURE__ */ React42__default.createElement("div", { className: "w-full" }, /* @__PURE__ */ React42__default.createElement("h2", { className: "mb-2 font-medium" }, _("Font Size")), /* @__PURE__ */ React42__default.createElement("div", { className: "card border-base-200 border shadow" }, /* @__PURE__ */ React42__default.createElement("div", { className: "divide-base-200 divide-y" }, /* @__PURE__ */ React42__default.createElement(
+  return /* @__PURE__ */ React43__default.createElement("div", { className: "my-4 w-full space-y-6" }, /* @__PURE__ */ React43__default.createElement("div", { className: "w-full" }, /* @__PURE__ */ React43__default.createElement("h2", { className: "mb-2 font-medium" }, _("Font Size")), /* @__PURE__ */ React43__default.createElement("div", { className: "card border-base-200 border shadow" }, /* @__PURE__ */ React43__default.createElement("div", { className: "divide-base-200 divide-y" }, /* @__PURE__ */ React43__default.createElement(
     NumberInput_default,
     {
       label: _("Default Font Size"),
@@ -8276,7 +8297,7 @@ var FontPanel = ({ bookKey }) => {
       min: minFontSize,
       max: 120
     }
-  ), /* @__PURE__ */ React42__default.createElement(
+  ), /* @__PURE__ */ React43__default.createElement(
     NumberInput_default,
     {
       label: _("Minimum Font Size"),
@@ -8285,7 +8306,7 @@ var FontPanel = ({ bookKey }) => {
       min: 1,
       max: 120
     }
-  )))), /* @__PURE__ */ React42__default.createElement("div", { className: "w-full" }, /* @__PURE__ */ React42__default.createElement("h2", { className: "mb-2 font-medium" }, _("Font Weight")), /* @__PURE__ */ React42__default.createElement("div", { className: "card border-base-200 border shadow" }, /* @__PURE__ */ React42__default.createElement("div", { className: "divide-base-200 divide-y" }, /* @__PURE__ */ React42__default.createElement(
+  )))), /* @__PURE__ */ React43__default.createElement("div", { className: "w-full" }, /* @__PURE__ */ React43__default.createElement("h2", { className: "mb-2 font-medium" }, _("Font Weight")), /* @__PURE__ */ React43__default.createElement("div", { className: "card border-base-200 border shadow" }, /* @__PURE__ */ React43__default.createElement("div", { className: "divide-base-200 divide-y" }, /* @__PURE__ */ React43__default.createElement(
     NumberInput_default,
     {
       label: _("Font Weight"),
@@ -8295,7 +8316,7 @@ var FontPanel = ({ bookKey }) => {
       max: 900,
       step: 100
     }
-  )))), /* @__PURE__ */ React42__default.createElement("div", { className: "w-full" }, /* @__PURE__ */ React42__default.createElement("h2", { className: "mb-2 font-medium" }, _("Font Family")), /* @__PURE__ */ React42__default.createElement("div", { className: "card border-base-200 border shadow" }, /* @__PURE__ */ React42__default.createElement("div", { className: "divide-base-200 divide-y" }, /* @__PURE__ */ React42__default.createElement("div", { className: "config-item" }, /* @__PURE__ */ React42__default.createElement("span", { className: "" }, _("Default Font")), /* @__PURE__ */ React42__default.createElement(
+  )))), /* @__PURE__ */ React43__default.createElement("div", { className: "w-full" }, /* @__PURE__ */ React43__default.createElement("h2", { className: "mb-2 font-medium" }, _("Font Family")), /* @__PURE__ */ React43__default.createElement("div", { className: "card border-base-200 border shadow" }, /* @__PURE__ */ React43__default.createElement("div", { className: "divide-base-200 divide-y" }, /* @__PURE__ */ React43__default.createElement("div", { className: "config-item" }, /* @__PURE__ */ React43__default.createElement("span", { className: "" }, _("Default Font")), /* @__PURE__ */ React43__default.createElement(
     FontDropDown_default,
     {
       options: fontFamilyOptions,
@@ -8303,7 +8324,7 @@ var FontPanel = ({ bookKey }) => {
       onSelect: setDefaultFont,
       onGetFontFamily: handleFontFamilyFont
     }
-  )), (isCJKEnv() || view?.language.isCJK) && /* @__PURE__ */ React42__default.createElement(
+  )), (isCJKEnv() || view?.language.isCJK) && /* @__PURE__ */ React43__default.createElement(
     FontFace,
     {
       className: "config-item-top",
@@ -8313,7 +8334,7 @@ var FontPanel = ({ bookKey }) => {
       selected: defaultCJKFont,
       onSelect: setDefaultCJKFont
     }
-  ), /* @__PURE__ */ React42__default.createElement("div", { className: "config-item" }, /* @__PURE__ */ React42__default.createElement("span", { className: "" }, _("Override Book Font")), /* @__PURE__ */ React42__default.createElement(
+  ), /* @__PURE__ */ React43__default.createElement("div", { className: "config-item" }, /* @__PURE__ */ React43__default.createElement("span", { className: "" }, _("Override Book Font")), /* @__PURE__ */ React43__default.createElement(
     "input",
     {
       type: "checkbox",
@@ -8321,7 +8342,7 @@ var FontPanel = ({ bookKey }) => {
       checked: overrideFont,
       onChange: () => setOverrideFont(!overrideFont)
     }
-  ))))), /* @__PURE__ */ React42__default.createElement("div", { className: "w-full" }, /* @__PURE__ */ React42__default.createElement("h2", { className: "mb-2 font-medium" }, _("Font Face")), /* @__PURE__ */ React42__default.createElement("div", { className: "card border-base-200 border shadow" }, /* @__PURE__ */ React42__default.createElement("div", { className: "divide-base-200 divide-y" }, /* @__PURE__ */ React42__default.createElement(
+  ))))), /* @__PURE__ */ React43__default.createElement("div", { className: "w-full" }, /* @__PURE__ */ React43__default.createElement("h2", { className: "mb-2 font-medium" }, _("Font Face")), /* @__PURE__ */ React43__default.createElement("div", { className: "card border-base-200 border shadow" }, /* @__PURE__ */ React43__default.createElement("div", { className: "divide-base-200 divide-y" }, /* @__PURE__ */ React43__default.createElement(
     FontFace,
     {
       className: "config-item-top",
@@ -8332,7 +8353,7 @@ var FontPanel = ({ bookKey }) => {
       selected: serifFont,
       onSelect: setSerifFont
     }
-  ), /* @__PURE__ */ React42__default.createElement(
+  ), /* @__PURE__ */ React43__default.createElement(
     FontFace,
     {
       family: "sans-serif",
@@ -8342,7 +8363,7 @@ var FontPanel = ({ bookKey }) => {
       selected: sansSerifFont,
       onSelect: setSansSerifFont
     }
-  ), /* @__PURE__ */ React42__default.createElement(
+  ), /* @__PURE__ */ React43__default.createElement(
     FontFace,
     {
       className: "config-item-bottom",
@@ -8516,7 +8537,7 @@ var LayoutPanel = ({ bookKey }) => {
   }, [showFooter]);
   const langCode = getBookLangCode(bookData.bookDoc?.metadata?.language);
   const mightBeRTLBook = MIGHT_BE_RTL_LANGS.includes(langCode) || isCJKEnv();
-  return /* @__PURE__ */ React42__default.createElement("div", { className: "my-4 w-full space-y-6" }, /* @__PURE__ */ React42__default.createElement("div", { className: "w-full" }, /* @__PURE__ */ React42__default.createElement("div", { className: "flex items-center justify-between" }, /* @__PURE__ */ React42__default.createElement("h2", { className: "font-medium" }, _("Scrolled Mode")), /* @__PURE__ */ React42__default.createElement(
+  return /* @__PURE__ */ React43__default.createElement("div", { className: "my-4 w-full space-y-6" }, /* @__PURE__ */ React43__default.createElement("div", { className: "w-full" }, /* @__PURE__ */ React43__default.createElement("div", { className: "flex items-center justify-between" }, /* @__PURE__ */ React43__default.createElement("h2", { className: "font-medium" }, _("Scrolled Mode")), /* @__PURE__ */ React43__default.createElement(
     "input",
     {
       type: "checkbox",
@@ -8524,35 +8545,35 @@ var LayoutPanel = ({ bookKey }) => {
       checked: isScrolledMode,
       onChange: () => setScrolledMode(!isScrolledMode)
     }
-  ))), mightBeRTLBook && /* @__PURE__ */ React42__default.createElement("div", { className: "w-full" }, /* @__PURE__ */ React42__default.createElement("div", { className: "flex items-center justify-between" }, /* @__PURE__ */ React42__default.createElement("h2", { className: "font-medium" }, _("Writing Mode")), /* @__PURE__ */ React42__default.createElement("div", { className: "flex gap-4" }, /* @__PURE__ */ React42__default.createElement("div", { className: "lg:tooltip lg:tooltip-bottom", "data-tip": _("Default") }, /* @__PURE__ */ React42__default.createElement(
+  ))), mightBeRTLBook && /* @__PURE__ */ React43__default.createElement("div", { className: "w-full" }, /* @__PURE__ */ React43__default.createElement("div", { className: "flex items-center justify-between" }, /* @__PURE__ */ React43__default.createElement("h2", { className: "font-medium" }, _("Writing Mode")), /* @__PURE__ */ React43__default.createElement("div", { className: "flex gap-4" }, /* @__PURE__ */ React43__default.createElement("div", { className: "lg:tooltip lg:tooltip-bottom", "data-tip": _("Default") }, /* @__PURE__ */ React43__default.createElement(
     "button",
     {
       className: `btn btn-ghost btn-circle btn-sm ${writingMode === "auto" ? "btn-active bg-base-300" : ""}`,
       onClick: () => setWritingMode("auto")
     },
-    /* @__PURE__ */ React42__default.createElement(MdOutlineAutoMode, null)
-  )), /* @__PURE__ */ React42__default.createElement("div", { className: "lg:tooltip lg:tooltip-bottom", "data-tip": _("Horizontal Direction") }, /* @__PURE__ */ React42__default.createElement(
+    /* @__PURE__ */ React43__default.createElement(MdOutlineAutoMode, null)
+  )), /* @__PURE__ */ React43__default.createElement("div", { className: "lg:tooltip lg:tooltip-bottom", "data-tip": _("Horizontal Direction") }, /* @__PURE__ */ React43__default.createElement(
     "button",
     {
       className: `btn btn-ghost btn-circle btn-sm ${writingMode === "horizontal-tb" ? "btn-active bg-base-300" : ""}`,
       onClick: () => setWritingMode("horizontal-tb")
     },
-    /* @__PURE__ */ React42__default.createElement(MdOutlineTextRotationNone, null)
-  )), /* @__PURE__ */ React42__default.createElement("div", { className: "lg:tooltip lg:tooltip-bottom", "data-tip": _("Vertical Direction") }, /* @__PURE__ */ React42__default.createElement(
+    /* @__PURE__ */ React43__default.createElement(MdOutlineTextRotationNone, null)
+  )), /* @__PURE__ */ React43__default.createElement("div", { className: "lg:tooltip lg:tooltip-bottom", "data-tip": _("Vertical Direction") }, /* @__PURE__ */ React43__default.createElement(
     "button",
     {
       className: `btn btn-ghost btn-circle btn-sm ${writingMode === "vertical-rl" ? "btn-active bg-base-300" : ""}`,
       onClick: () => setWritingMode("vertical-rl")
     },
-    /* @__PURE__ */ React42__default.createElement(MdTextRotateVertical, null)
-  )), /* @__PURE__ */ React42__default.createElement("div", { className: "lg:tooltip lg:tooltip-bottom", "data-tip": _("RTL Direction") }, /* @__PURE__ */ React42__default.createElement(
+    /* @__PURE__ */ React43__default.createElement(MdTextRotateVertical, null)
+  )), /* @__PURE__ */ React43__default.createElement("div", { className: "lg:tooltip lg:tooltip-bottom", "data-tip": _("RTL Direction") }, /* @__PURE__ */ React43__default.createElement(
     "button",
     {
       className: `btn btn-ghost btn-circle btn-sm ${writingMode === "horizontal-rl" ? "btn-active bg-base-300" : ""}`,
       onClick: () => setWritingMode("horizontal-rl")
     },
-    /* @__PURE__ */ React42__default.createElement(TbTextDirectionRtl, null)
-  ))))), viewSettings.vertical && /* @__PURE__ */ React42__default.createElement("div", { className: "w-full" }, /* @__PURE__ */ React42__default.createElement("h2", { className: "mb-2 font-medium" }, _("Border Frame")), /* @__PURE__ */ React42__default.createElement("div", { className: "card bg-base-100 border-base-200 border shadow" }, /* @__PURE__ */ React42__default.createElement("div", { className: "divide-base-200 divide-y" }, /* @__PURE__ */ React42__default.createElement("div", { className: "config-item" }, /* @__PURE__ */ React42__default.createElement("span", { className: "" }, _("Double Border")), /* @__PURE__ */ React42__default.createElement(
+    /* @__PURE__ */ React43__default.createElement(TbTextDirectionRtl, null)
+  ))))), viewSettings.vertical && /* @__PURE__ */ React43__default.createElement("div", { className: "w-full" }, /* @__PURE__ */ React43__default.createElement("h2", { className: "mb-2 font-medium" }, _("Border Frame")), /* @__PURE__ */ React43__default.createElement("div", { className: "card bg-base-100 border-base-200 border shadow" }, /* @__PURE__ */ React43__default.createElement("div", { className: "divide-base-200 divide-y" }, /* @__PURE__ */ React43__default.createElement("div", { className: "config-item" }, /* @__PURE__ */ React43__default.createElement("span", { className: "" }, _("Double Border")), /* @__PURE__ */ React43__default.createElement(
     "input",
     {
       type: "checkbox",
@@ -8560,19 +8581,19 @@ var LayoutPanel = ({ bookKey }) => {
       checked: doubleBorder,
       onChange: () => setDoubleBorder(!doubleBorder)
     }
-  )), /* @__PURE__ */ React42__default.createElement("div", { className: "config-item" }, /* @__PURE__ */ React42__default.createElement("span", { className: "" }, _("Border Color")), /* @__PURE__ */ React42__default.createElement("div", { className: "flex gap-4" }, /* @__PURE__ */ React42__default.createElement(
+  )), /* @__PURE__ */ React43__default.createElement("div", { className: "config-item" }, /* @__PURE__ */ React43__default.createElement("span", { className: "" }, _("Border Color")), /* @__PURE__ */ React43__default.createElement("div", { className: "flex gap-4" }, /* @__PURE__ */ React43__default.createElement(
     "button",
     {
       className: `btn btn-circle btn-sm bg-red-300 hover:bg-red-500 ${borderColor === "red" ? "btn-active !bg-red-500" : ""}`,
       onClick: () => setBorderColor("red")
     }
-  ), /* @__PURE__ */ React42__default.createElement(
+  ), /* @__PURE__ */ React43__default.createElement(
     "button",
     {
       className: `btn btn-circle btn-sm bg-black/50 hover:bg-black ${borderColor === "black" ? "btn-active !bg-black" : ""}`,
       onClick: () => setBorderColor("black")
     }
-  )))))), /* @__PURE__ */ React42__default.createElement("div", { className: "w-full" }, /* @__PURE__ */ React42__default.createElement("h2", { className: "mb-2 font-medium" }, _("Paragraph")), /* @__PURE__ */ React42__default.createElement("div", { className: "card bg-base-100 border-base-200 border shadow" }, /* @__PURE__ */ React42__default.createElement("div", { className: "divide-base-200 divide-y" }, /* @__PURE__ */ React42__default.createElement(
+  )))))), /* @__PURE__ */ React43__default.createElement("div", { className: "w-full" }, /* @__PURE__ */ React43__default.createElement("h2", { className: "mb-2 font-medium" }, _("Paragraph")), /* @__PURE__ */ React43__default.createElement("div", { className: "card bg-base-100 border-base-200 border shadow" }, /* @__PURE__ */ React43__default.createElement("div", { className: "divide-base-200 divide-y" }, /* @__PURE__ */ React43__default.createElement(
     NumberInput_default,
     {
       label: _("Paragraph Margin"),
@@ -8582,7 +8603,7 @@ var LayoutPanel = ({ bookKey }) => {
       max: 4,
       step: 0.5
     }
-  ), /* @__PURE__ */ React42__default.createElement(
+  ), /* @__PURE__ */ React43__default.createElement(
     NumberInput_default,
     {
       label: _("Line Spacing"),
@@ -8592,7 +8613,7 @@ var LayoutPanel = ({ bookKey }) => {
       max: 3,
       step: 0.1
     }
-  ), langCode !== "zh" && /* @__PURE__ */ React42__default.createElement(
+  ), langCode !== "zh" && /* @__PURE__ */ React43__default.createElement(
     NumberInput_default,
     {
       label: _("Word Spacing"),
@@ -8602,7 +8623,7 @@ var LayoutPanel = ({ bookKey }) => {
       max: 8,
       step: 0.5
     }
-  ), /* @__PURE__ */ React42__default.createElement(
+  ), /* @__PURE__ */ React43__default.createElement(
     NumberInput_default,
     {
       label: _("Letter Spacing"),
@@ -8612,7 +8633,7 @@ var LayoutPanel = ({ bookKey }) => {
       max: 4,
       step: 0.5
     }
-  ), /* @__PURE__ */ React42__default.createElement(
+  ), /* @__PURE__ */ React43__default.createElement(
     NumberInput_default,
     {
       label: _("Text Indent"),
@@ -8622,7 +8643,7 @@ var LayoutPanel = ({ bookKey }) => {
       max: 4,
       step: 1
     }
-  ), /* @__PURE__ */ React42__default.createElement("div", { className: "config-item" }, /* @__PURE__ */ React42__default.createElement("span", { className: "" }, _("Full Justification")), /* @__PURE__ */ React42__default.createElement(
+  ), /* @__PURE__ */ React43__default.createElement("div", { className: "config-item" }, /* @__PURE__ */ React43__default.createElement("span", { className: "" }, _("Full Justification")), /* @__PURE__ */ React43__default.createElement(
     "input",
     {
       type: "checkbox",
@@ -8630,7 +8651,7 @@ var LayoutPanel = ({ bookKey }) => {
       checked: fullJustification,
       onChange: () => setFullJustification(!fullJustification)
     }
-  )), /* @__PURE__ */ React42__default.createElement("div", { className: "config-item" }, /* @__PURE__ */ React42__default.createElement("span", { className: "" }, _("Hyphenation")), /* @__PURE__ */ React42__default.createElement(
+  )), /* @__PURE__ */ React43__default.createElement("div", { className: "config-item" }, /* @__PURE__ */ React43__default.createElement("span", { className: "" }, _("Hyphenation")), /* @__PURE__ */ React43__default.createElement(
     "input",
     {
       type: "checkbox",
@@ -8638,7 +8659,7 @@ var LayoutPanel = ({ bookKey }) => {
       checked: hyphenation,
       onChange: () => setHyphenation(!hyphenation)
     }
-  )), /* @__PURE__ */ React42__default.createElement("div", { className: "config-item" }, /* @__PURE__ */ React42__default.createElement("span", { className: "" }, _("Override Book Layout")), /* @__PURE__ */ React42__default.createElement(
+  )), /* @__PURE__ */ React43__default.createElement("div", { className: "config-item" }, /* @__PURE__ */ React43__default.createElement("span", { className: "" }, _("Override Book Layout")), /* @__PURE__ */ React43__default.createElement(
     "input",
     {
       type: "checkbox",
@@ -8646,7 +8667,7 @@ var LayoutPanel = ({ bookKey }) => {
       checked: overrideLayout,
       onChange: () => setOverrideLayout(!overrideLayout)
     }
-  ))))), /* @__PURE__ */ React42__default.createElement("div", { className: "w-full" }, /* @__PURE__ */ React42__default.createElement("h2", { className: "mb-2 font-medium" }, _("Page")), /* @__PURE__ */ React42__default.createElement("div", { className: "card bg-base-100 border-base-200 border shadow" }, /* @__PURE__ */ React42__default.createElement("div", { className: "divide-base-200 divide-y" }, /* @__PURE__ */ React42__default.createElement("div", { className: "config-item" }, /* @__PURE__ */ React42__default.createElement("span", { className: "" }, _("Show Header")), /* @__PURE__ */ React42__default.createElement(
+  ))))), /* @__PURE__ */ React43__default.createElement("div", { className: "w-full" }, /* @__PURE__ */ React43__default.createElement("h2", { className: "mb-2 font-medium" }, _("Page")), /* @__PURE__ */ React43__default.createElement("div", { className: "card bg-base-100 border-base-200 border shadow" }, /* @__PURE__ */ React43__default.createElement("div", { className: "divide-base-200 divide-y" }, /* @__PURE__ */ React43__default.createElement("div", { className: "config-item" }, /* @__PURE__ */ React43__default.createElement("span", { className: "" }, _("Show Header")), /* @__PURE__ */ React43__default.createElement(
     "input",
     {
       type: "checkbox",
@@ -8654,7 +8675,7 @@ var LayoutPanel = ({ bookKey }) => {
       checked: showHeader,
       onChange: () => setShowHeader(!showHeader)
     }
-  )), /* @__PURE__ */ React42__default.createElement("div", { className: "config-item" }, /* @__PURE__ */ React42__default.createElement("span", { className: "" }, _("Show Footer")), /* @__PURE__ */ React42__default.createElement(
+  )), /* @__PURE__ */ React43__default.createElement("div", { className: "config-item" }, /* @__PURE__ */ React43__default.createElement("span", { className: "" }, _("Show Footer")), /* @__PURE__ */ React43__default.createElement(
     "input",
     {
       type: "checkbox",
@@ -8662,7 +8683,7 @@ var LayoutPanel = ({ bookKey }) => {
       checked: showFooter,
       onChange: () => setShowFooter(!showFooter)
     }
-  )), /* @__PURE__ */ React42__default.createElement(
+  )), /* @__PURE__ */ React43__default.createElement(
     NumberInput_default,
     {
       label: _("Vertical Margins (px)"),
@@ -8672,7 +8693,7 @@ var LayoutPanel = ({ bookKey }) => {
       max: 88,
       step: 4
     }
-  ), /* @__PURE__ */ React42__default.createElement(
+  ), /* @__PURE__ */ React43__default.createElement(
     NumberInput_default,
     {
       label: _("Horizontal Margins (%)"),
@@ -8681,7 +8702,7 @@ var LayoutPanel = ({ bookKey }) => {
       min: viewSettings.vertical && (showFooter || showHeader) ? Math.ceil(4800 / window.innerWidth) : 0,
       max: 30
     }
-  ), /* @__PURE__ */ React42__default.createElement(
+  ), /* @__PURE__ */ React43__default.createElement(
     NumberInput_default,
     {
       label: _("Maximum Number of Columns"),
@@ -8690,7 +8711,7 @@ var LayoutPanel = ({ bookKey }) => {
       min: 1,
       max: 4
     }
-  ), /* @__PURE__ */ React42__default.createElement(
+  ), /* @__PURE__ */ React43__default.createElement(
     NumberInput_default,
     {
       label: viewSettings.vertical ? _("Maximum Column Height") : _("Maximum Column Width"),
@@ -8701,7 +8722,7 @@ var LayoutPanel = ({ bookKey }) => {
       max: 9999,
       step: 100
     }
-  ), /* @__PURE__ */ React42__default.createElement(
+  ), /* @__PURE__ */ React43__default.createElement(
     NumberInput_default,
     {
       label: viewSettings.vertical ? _("Maximum Column Width") : _("Maximum Column Height"),
@@ -8736,14 +8757,14 @@ var ColorInput = ({ label, value, onChange }) => {
   const handlePickerChange = (colorResult) => {
     onChange(colorResult.hex);
   };
-  return /* @__PURE__ */ React42__default.createElement("div", { className: "mb-3" }, /* @__PURE__ */ React42__default.createElement("label", { className: "mb-1 block text-sm font-medium" }, label), /* @__PURE__ */ React42__default.createElement("div", { className: "flex items-center" }, /* @__PURE__ */ React42__default.createElement(
+  return /* @__PURE__ */ React43__default.createElement("div", { className: "mb-3" }, /* @__PURE__ */ React43__default.createElement("label", { className: "mb-1 block text-sm font-medium" }, label), /* @__PURE__ */ React43__default.createElement("div", { className: "flex items-center" }, /* @__PURE__ */ React43__default.createElement(
     "div",
     {
       className: "border-base-200 relative mr-2 flex h-7 w-8 cursor-pointer items-center justify-center overflow-hidden rounded border",
       style: { backgroundColor: value },
       onClick: () => setIsOpen(!isOpen)
     }
-  ), /* @__PURE__ */ React42__default.createElement(
+  ), /* @__PURE__ */ React43__default.createElement(
     "input",
     {
       type: "text",
@@ -8751,7 +8772,7 @@ var ColorInput = ({ label, value, onChange }) => {
       onChange: (e) => onChange(e.target.value),
       className: "bg-base-100 text-base-content border-base-200 min-w-4 max-w-36 flex-1 rounded border p-1 font-mono text-sm"
     }
-  )), isOpen && /* @__PURE__ */ React42__default.createElement("div", { ref: pickerRef, className: "relative z-50 mt-2" }, /* @__PURE__ */ React42__default.createElement("div", { className: "absolute" }, /* @__PURE__ */ React42__default.createElement(
+  )), isOpen && /* @__PURE__ */ React43__default.createElement("div", { ref: pickerRef, className: "relative z-50 mt-2" }, /* @__PURE__ */ React43__default.createElement("div", { className: "absolute" }, /* @__PURE__ */ React43__default.createElement(
     SketchPicker,
     {
       width: "100%",
@@ -8916,7 +8937,7 @@ var ColorPanel = ({}) => {
       setShowCustomThemeEditor(true);
     }
   };
-  return /* @__PURE__ */ React42__default.createElement("div", { className: "my-4 w-full space-y-6" }, showCustomThemeEditor ? /* @__PURE__ */ React42__default.createElement(
+  return /* @__PURE__ */ React43__default.createElement("div", { className: "my-4 w-full space-y-6" }, showCustomThemeEditor ? /* @__PURE__ */ React43__default.createElement(
     ThemeEditor_default,
     {
       customTheme: editTheme,
@@ -8924,28 +8945,28 @@ var ColorPanel = ({}) => {
       onDelete: handleDeleteCustomTheme,
       onCancel: () => setShowCustomThemeEditor(false)
     }
-  ) : /* @__PURE__ */ React42__default.createElement(React42__default.Fragment, null, /* @__PURE__ */ React42__default.createElement("div", { className: "flex items-center justify-between" }, /* @__PURE__ */ React42__default.createElement("h2", { className: "font-medium" }, _("Theme Mode")), /* @__PURE__ */ React42__default.createElement("div", { className: "flex gap-4" }, /* @__PURE__ */ React42__default.createElement("div", { className: "lg:tooltip lg:tooltip-bottom", "data-tip": _("Auto Mode") }, /* @__PURE__ */ React42__default.createElement(
+  ) : /* @__PURE__ */ React43__default.createElement(React43__default.Fragment, null, /* @__PURE__ */ React43__default.createElement("div", { className: "flex items-center justify-between" }, /* @__PURE__ */ React43__default.createElement("h2", { className: "font-medium" }, _("Theme Mode")), /* @__PURE__ */ React43__default.createElement("div", { className: "flex gap-4" }, /* @__PURE__ */ React43__default.createElement("div", { className: "lg:tooltip lg:tooltip-bottom", "data-tip": _("Auto Mode") }, /* @__PURE__ */ React43__default.createElement(
     "button",
     {
       className: `btn btn-ghost btn-circle btn-sm ${themeMode === "auto" ? "btn-active bg-base-300" : ""}`,
       onClick: () => setThemeMode("auto")
     },
-    /* @__PURE__ */ React42__default.createElement(TbSunMoon, null)
-  )), /* @__PURE__ */ React42__default.createElement("div", { className: "lg:tooltip lg:tooltip-bottom", "data-tip": _("Light Mode") }, /* @__PURE__ */ React42__default.createElement(
+    /* @__PURE__ */ React43__default.createElement(TbSunMoon, null)
+  )), /* @__PURE__ */ React43__default.createElement("div", { className: "lg:tooltip lg:tooltip-bottom", "data-tip": _("Light Mode") }, /* @__PURE__ */ React43__default.createElement(
     "button",
     {
       className: `btn btn-ghost btn-circle btn-sm ${themeMode === "light" ? "btn-active bg-base-300" : ""}`,
       onClick: () => setThemeMode("light")
     },
-    /* @__PURE__ */ React42__default.createElement(MdOutlineLightMode, null)
-  )), /* @__PURE__ */ React42__default.createElement("div", { className: "lg:tooltip lg:tooltip-bottom", "data-tip": _("Dark Mode") }, /* @__PURE__ */ React42__default.createElement(
+    /* @__PURE__ */ React43__default.createElement(MdOutlineLightMode, null)
+  )), /* @__PURE__ */ React43__default.createElement("div", { className: "lg:tooltip lg:tooltip-bottom", "data-tip": _("Dark Mode") }, /* @__PURE__ */ React43__default.createElement(
     "button",
     {
       className: `btn btn-ghost btn-circle btn-sm ${themeMode === "dark" ? "btn-active bg-base-300" : ""}`,
       onClick: () => setThemeMode("dark")
     },
-    /* @__PURE__ */ React42__default.createElement(MdOutlineDarkMode, null)
-  )))), /* @__PURE__ */ React42__default.createElement("div", null, /* @__PURE__ */ React42__default.createElement("h2", { className: "mb-2 font-medium" }, _("Theme Color")), /* @__PURE__ */ React42__default.createElement("div", { className: "grid grid-cols-3 gap-4" }, themes.concat(customThems).map(({ name, label, colors: colors2, isCustomizale }) => /* @__PURE__ */ React42__default.createElement(
+    /* @__PURE__ */ React43__default.createElement(MdOutlineDarkMode, null)
+  )))), /* @__PURE__ */ React43__default.createElement("div", null, /* @__PURE__ */ React43__default.createElement("h2", { className: "mb-2 font-medium" }, _("Theme Color")), /* @__PURE__ */ React43__default.createElement("div", { className: "grid grid-cols-3 gap-4" }, themes.concat(customThems).map(({ name, label, colors: colors2, isCustomizale }) => /* @__PURE__ */ React43__default.createElement(
     "label",
     {
       key: name,
@@ -8955,7 +8976,7 @@ var ColorPanel = ({}) => {
         color: isDarkMode ? colors2.dark["base-content"] : colors2.light["base-content"]
       }
     },
-    /* @__PURE__ */ React42__default.createElement(
+    /* @__PURE__ */ React43__default.createElement(
       "input",
       {
         type: "radio",
@@ -8966,17 +8987,17 @@ var ColorPanel = ({}) => {
         className: "hidden"
       }
     ),
-    themeColor === name ? /* @__PURE__ */ React42__default.createElement(MdRadioButtonChecked, { size: iconSize24 }) : /* @__PURE__ */ React42__default.createElement(MdRadioButtonUnchecked, { size: iconSize24 }),
-    /* @__PURE__ */ React42__default.createElement("span", null, _(label)),
-    isCustomizale && themeColor === name && /* @__PURE__ */ React42__default.createElement("button", { onClick: () => handleEditTheme(name) }, /* @__PURE__ */ React42__default.createElement(CgColorPicker, { size: iconSize16, className: "absolute right-2 top-2" }))
-  )), /* @__PURE__ */ React42__default.createElement(
+    themeColor === name ? /* @__PURE__ */ React43__default.createElement(MdRadioButtonChecked, { size: iconSize24 }) : /* @__PURE__ */ React43__default.createElement(MdRadioButtonUnchecked, { size: iconSize24 }),
+    /* @__PURE__ */ React43__default.createElement("span", null, _(label)),
+    isCustomizale && themeColor === name && /* @__PURE__ */ React43__default.createElement("button", { onClick: () => handleEditTheme(name) }, /* @__PURE__ */ React43__default.createElement(CgColorPicker, { size: iconSize16, className: "absolute right-2 top-2" }))
+  )), /* @__PURE__ */ React43__default.createElement(
     "label",
     {
       className: `relative flex cursor-pointer flex-col items-center justify-center rounded-lg border border-dashed p-4 shadow-md`,
       onClick: () => setShowCustomThemeEditor(true)
     },
-    /* @__PURE__ */ React42__default.createElement(PiPlus, { size: iconSize24 }),
-    /* @__PURE__ */ React42__default.createElement("span", null, _("Custom"))
+    /* @__PURE__ */ React43__default.createElement(PiPlus, { size: iconSize24 }),
+    /* @__PURE__ */ React43__default.createElement("span", null, _("Custom"))
   )))));
 };
 var ColorPanel_default = ColorPanel;
@@ -8988,25 +9009,25 @@ var DialogMenu = ({ toggleDropdown }) => {
     setFontLayoutSettingsGlobal(!isFontLayoutSettingsGlobal);
     toggleDropdown?.();
   };
-  return /* @__PURE__ */ React42__default.createElement(
+  return /* @__PURE__ */ React43__default.createElement(
     "div",
     {
       tabIndex: 0,
       className: "dropdown-content dropdown-right no-triangle border-base-200 z-20 mt-1 border shadow-2xl"
     },
-    /* @__PURE__ */ React42__default.createElement(
+    /* @__PURE__ */ React43__default.createElement(
       "button",
       {
         className: "hover:bg-base-200 text-base-content flex w-full items-center justify-between rounded-md p-2",
         onClick: handleToggleGlobal
       },
-      /* @__PURE__ */ React42__default.createElement("div", { className: "flex items-center" }, /* @__PURE__ */ React42__default.createElement("span", { style: { minWidth: `${iconSize}px` } }, isFontLayoutSettingsGlobal && /* @__PURE__ */ React42__default.createElement(MdCheck, { className: "text-base-content" })), /* @__PURE__ */ React42__default.createElement(
+      /* @__PURE__ */ React43__default.createElement("div", { className: "flex items-center" }, /* @__PURE__ */ React43__default.createElement("span", { style: { minWidth: `${iconSize}px` } }, isFontLayoutSettingsGlobal && /* @__PURE__ */ React43__default.createElement(MdCheck, { className: "text-base-content" })), /* @__PURE__ */ React43__default.createElement(
         "div",
         {
           className: "lg:tooltip",
           "data-tip": isFontLayoutSettingsGlobal ? _("Apply to All Books") : _("Apply to This Book")
         },
-        /* @__PURE__ */ React42__default.createElement("span", { className: "ml-2 whitespace-nowrap" }, _("Global Settings"))
+        /* @__PURE__ */ React43__default.createElement("span", { className: "ml-2 whitespace-nowrap" }, _("Global Settings"))
       ))
     )
   );
@@ -9063,16 +9084,16 @@ var css_default = cssValidate;
 var DropDown = ({ selected, options: options2, onSelect }) => {
   const iconSize16 = useResponsiveSize(16);
   const defaultIconSize = useDefaultIconSize();
-  return /* @__PURE__ */ React42__default.createElement("div", { className: "dropdown dropdown-bottom" }, /* @__PURE__ */ React42__default.createElement(
+  return /* @__PURE__ */ React43__default.createElement("div", { className: "dropdown dropdown-bottom" }, /* @__PURE__ */ React43__default.createElement(
     "button",
     {
       tabIndex: 0,
       className: "btn btn-sm flex items-center gap-1 px-[20px] font-normal normal-case",
       onClick: (e) => e.currentTarget.focus()
     },
-    /* @__PURE__ */ React42__default.createElement("span", null, selected.label),
-    /* @__PURE__ */ React42__default.createElement(FiChevronDown, { size: iconSize16 })
-  ), /* @__PURE__ */ React42__default.createElement(
+    /* @__PURE__ */ React43__default.createElement("span", null, selected.label),
+    /* @__PURE__ */ React43__default.createElement(FiChevronDown, { size: iconSize16 })
+  ), /* @__PURE__ */ React43__default.createElement(
     "ul",
     {
       tabIndex: 0,
@@ -9081,7 +9102,7 @@ var DropDown = ({ selected, options: options2, onSelect }) => {
         "menu-vertical right-[-32px] mt-2 inline max-h-80 w-44 overflow-y-scroll sm:right-0"
       )
     },
-    options2.map(({ option, label }) => /* @__PURE__ */ React42__default.createElement("li", { key: option, onClick: () => onSelect(option) }, /* @__PURE__ */ React42__default.createElement("div", { className: "flex items-center px-0" }, /* @__PURE__ */ React42__default.createElement("span", { style: { minWidth: `${defaultIconSize}px` } }, selected.option === option && /* @__PURE__ */ React42__default.createElement(MdCheck, { className: "text-base-content" })), /* @__PURE__ */ React42__default.createElement("span", null, label || option))))
+    options2.map(({ option, label }) => /* @__PURE__ */ React43__default.createElement("li", { key: option, onClick: () => onSelect(option) }, /* @__PURE__ */ React43__default.createElement("div", { className: "flex items-center px-0" }, /* @__PURE__ */ React43__default.createElement("span", { style: { minWidth: `${defaultIconSize}px` } }, selected.option === option && /* @__PURE__ */ React43__default.createElement(MdCheck, { className: "text-base-content" })), /* @__PURE__ */ React43__default.createElement("span", null, label || option))))
   ));
 };
 var DropDown_default = DropDown;
@@ -9194,7 +9215,7 @@ var MiscPanel = ({ bookKey }) => {
   useEffect(() => {
     saveViewSettings(envConfig, bookKey, "continuousScroll", isContinuousScroll, false, false);
   }, [isContinuousScroll]);
-  return /* @__PURE__ */ React42__default.createElement(
+  return /* @__PURE__ */ React43__default.createElement(
     "div",
     {
       className: clsx8(
@@ -9202,7 +9223,7 @@ var MiscPanel = ({ bookKey }) => {
         inputFocusInAndroid && "h-[50%] overflow-y-auto pb-[200px]"
       )
     },
-    /* @__PURE__ */ React42__default.createElement("div", { className: "w-full" }, /* @__PURE__ */ React42__default.createElement("h2", { className: "mb-2 font-medium" }, _("Language")), /* @__PURE__ */ React42__default.createElement("div", { className: "card border-base-200 bg-base-100 border shadow" }, /* @__PURE__ */ React42__default.createElement("div", { className: "divide-base-200 divide-y" }, /* @__PURE__ */ React42__default.createElement("div", { className: "config-item" }, /* @__PURE__ */ React42__default.createElement("span", { className: "" }, _("Language")), /* @__PURE__ */ React42__default.createElement(
+    /* @__PURE__ */ React43__default.createElement("div", { className: "w-full" }, /* @__PURE__ */ React43__default.createElement("h2", { className: "mb-2 font-medium" }, _("Language")), /* @__PURE__ */ React43__default.createElement("div", { className: "card border-base-200 bg-base-100 border shadow" }, /* @__PURE__ */ React43__default.createElement("div", { className: "divide-base-200 divide-y" }, /* @__PURE__ */ React43__default.createElement("div", { className: "config-item" }, /* @__PURE__ */ React43__default.createElement("span", { className: "" }, _("Language")), /* @__PURE__ */ React43__default.createElement(
       DropDown_default,
       {
         selected: getCurrentUILangOption(),
@@ -9210,7 +9231,7 @@ var MiscPanel = ({ bookKey }) => {
         onSelect: handleSelectUILang
       }
     ))))),
-    /* @__PURE__ */ React42__default.createElement("div", { className: "w-full" }, /* @__PURE__ */ React42__default.createElement("h2", { className: "mb-2 font-medium" }, _("Animation")), /* @__PURE__ */ React42__default.createElement("div", { className: "card border-base-200 bg-base-100 border shadow" }, /* @__PURE__ */ React42__default.createElement("div", { className: "divide-base-200 divide-y" }, /* @__PURE__ */ React42__default.createElement("div", { className: "config-item" }, /* @__PURE__ */ React42__default.createElement("span", { className: "" }, _("Paging Animation")), /* @__PURE__ */ React42__default.createElement(
+    /* @__PURE__ */ React43__default.createElement("div", { className: "w-full" }, /* @__PURE__ */ React43__default.createElement("h2", { className: "mb-2 font-medium" }, _("Animation")), /* @__PURE__ */ React43__default.createElement("div", { className: "card border-base-200 bg-base-100 border shadow" }, /* @__PURE__ */ React43__default.createElement("div", { className: "divide-base-200 divide-y" }, /* @__PURE__ */ React43__default.createElement("div", { className: "config-item" }, /* @__PURE__ */ React43__default.createElement("span", { className: "" }, _("Paging Animation")), /* @__PURE__ */ React43__default.createElement(
       "input",
       {
         type: "checkbox",
@@ -9219,7 +9240,7 @@ var MiscPanel = ({ bookKey }) => {
         onChange: () => setAnimated(!animated)
       }
     ))))),
-    /* @__PURE__ */ React42__default.createElement("div", { className: "w-full" }, /* @__PURE__ */ React42__default.createElement("h2", { className: "mb-2 font-medium" }, _("Behavior")), /* @__PURE__ */ React42__default.createElement("div", { className: "card border-base-200 bg-base-100 border shadow" }, /* @__PURE__ */ React42__default.createElement("div", { className: "divide-base-200 divide-y" }, /* @__PURE__ */ React42__default.createElement("div", { className: "config-item" }, /* @__PURE__ */ React42__default.createElement("span", { className: "" }, _("Continuous Scroll")), /* @__PURE__ */ React42__default.createElement(
+    /* @__PURE__ */ React43__default.createElement("div", { className: "w-full" }, /* @__PURE__ */ React43__default.createElement("h2", { className: "mb-2 font-medium" }, _("Behavior")), /* @__PURE__ */ React43__default.createElement("div", { className: "card border-base-200 bg-base-100 border shadow" }, /* @__PURE__ */ React43__default.createElement("div", { className: "divide-base-200 divide-y" }, /* @__PURE__ */ React43__default.createElement("div", { className: "config-item" }, /* @__PURE__ */ React43__default.createElement("span", { className: "" }, _("Continuous Scroll")), /* @__PURE__ */ React43__default.createElement(
       "input",
       {
         type: "checkbox",
@@ -9227,7 +9248,7 @@ var MiscPanel = ({ bookKey }) => {
         checked: isContinuousScroll,
         onChange: () => setIsContinuousScroll(!isContinuousScroll)
       }
-    )), /* @__PURE__ */ React42__default.createElement("div", { className: "config-item" }, /* @__PURE__ */ React42__default.createElement("span", { className: "" }, _("Disable Click-to-Flip")), /* @__PURE__ */ React42__default.createElement(
+    )), /* @__PURE__ */ React43__default.createElement("div", { className: "config-item" }, /* @__PURE__ */ React43__default.createElement("span", { className: "" }, _("Disable Click-to-Flip")), /* @__PURE__ */ React43__default.createElement(
       "input",
       {
         type: "checkbox",
@@ -9235,7 +9256,7 @@ var MiscPanel = ({ bookKey }) => {
         checked: isDisableClick,
         onChange: () => setIsDisableClick(!isDisableClick)
       }
-    )), /* @__PURE__ */ React42__default.createElement("div", { className: "config-item" }, /* @__PURE__ */ React42__default.createElement("span", { className: "" }, _("Swap Click-to-Flip Area")), /* @__PURE__ */ React42__default.createElement(
+    )), /* @__PURE__ */ React43__default.createElement("div", { className: "config-item" }, /* @__PURE__ */ React43__default.createElement("span", { className: "" }, _("Swap Click-to-Flip Area")), /* @__PURE__ */ React43__default.createElement(
       "input",
       {
         type: "checkbox",
@@ -9245,12 +9266,12 @@ var MiscPanel = ({ bookKey }) => {
         onChange: () => setSwapClickArea(!swapClickArea)
       }
     ))))),
-    /* @__PURE__ */ React42__default.createElement("div", { className: "w-full" }, /* @__PURE__ */ React42__default.createElement("h2", { className: "mb-2 font-medium" }, _("Custom CSS")), /* @__PURE__ */ React42__default.createElement(
+    /* @__PURE__ */ React43__default.createElement("div", { className: "w-full" }, /* @__PURE__ */ React43__default.createElement("h2", { className: "mb-2 font-medium" }, _("Custom CSS")), /* @__PURE__ */ React43__default.createElement(
       "div",
       {
         className: `card border-base-200 bg-base-100 border shadow ${error ? "border-red-500" : ""}`
       },
-      /* @__PURE__ */ React42__default.createElement("div", { className: "relative p-1" }, /* @__PURE__ */ React42__default.createElement(
+      /* @__PURE__ */ React43__default.createElement("div", { className: "relative p-1" }, /* @__PURE__ */ React43__default.createElement(
         "textarea",
         {
           ref: textareaRef,
@@ -9268,7 +9289,7 @@ var MiscPanel = ({ bookKey }) => {
           onKeyUp: handleInput,
           onChange: handleUserStylesheetChange
         }
-      ), /* @__PURE__ */ React42__default.createElement(
+      ), /* @__PURE__ */ React43__default.createElement(
         "button",
         {
           className: clsx8(
@@ -9281,7 +9302,7 @@ var MiscPanel = ({ bookKey }) => {
         },
         _("Apply")
       ))
-    ), error && /* @__PURE__ */ React42__default.createElement("p", { className: "mt-1 text-sm text-red-500" }, error))
+    ), error && /* @__PURE__ */ React43__default.createElement("p", { className: "mt-1 text-sm text-red-500" }, error))
   );
 };
 var MiscPanel_default = MiscPanel;
@@ -9323,7 +9344,7 @@ var SettingsDialog = ({ bookKey }) => {
   const handleClose2 = () => {
     setFontLayoutSettingsDialogOpen(false);
   };
-  return /* @__PURE__ */ React42__default.createElement(React42__default.Fragment, null, /* @__PURE__ */ React42__default.createElement(
+  return /* @__PURE__ */ React43__default.createElement(React43__default.Fragment, null, /* @__PURE__ */ React43__default.createElement(
     Dialog_default,
     {
       isOpen: true,
@@ -9331,15 +9352,15 @@ var SettingsDialog = ({ bookKey }) => {
       className: "modal-open",
       boxClassName: "sm:min-w-[520px]",
       snapHeight: window.innerWidth < 640 ? 0.7 : void 0,
-      header: /* @__PURE__ */ React42__default.createElement("div", { className: "flex w-full items-center justify-between" }, /* @__PURE__ */ React42__default.createElement(
+      header: /* @__PURE__ */ React43__default.createElement("div", { className: "flex w-full items-center justify-between" }, /* @__PURE__ */ React43__default.createElement(
         "button",
         {
           tabIndex: -1,
           onClick: handleClose2,
           className: "btn btn-ghost btn-circle flex h-8 min-h-8 w-8 hover:bg-transparent focus:outline-none sm:hidden"
         },
-        isRtl ? /* @__PURE__ */ React42__default.createElement(MdArrowForwardIos, null) : /* @__PURE__ */ React42__default.createElement(MdArrowBackIosNew, null)
-      ), /* @__PURE__ */ React42__default.createElement("div", { className: "dialog-tabs flex h-10 max-w-[100%] flex-grow items-center gap-2 pl-4" }, tabConfig.map(({ tab, icon: Icon, label }) => /* @__PURE__ */ React42__default.createElement(
+        isRtl ? /* @__PURE__ */ React43__default.createElement(MdArrowForwardIos, null) : /* @__PURE__ */ React43__default.createElement(MdArrowBackIosNew, null)
+      ), /* @__PURE__ */ React43__default.createElement("div", { className: "dialog-tabs flex h-10 max-w-[100%] flex-grow items-center gap-2 pl-4" }, tabConfig.map(({ tab, icon: Icon, label }) => /* @__PURE__ */ React43__default.createElement(
         "button",
         {
           key: tab,
@@ -9349,23 +9370,23 @@ var SettingsDialog = ({ bookKey }) => {
           ),
           onClick: () => handleSetActivePanel(tab)
         },
-        /* @__PURE__ */ React42__default.createElement(Icon, { className: "mr-0" }),
+        /* @__PURE__ */ React43__default.createElement(Icon, { className: "mr-0" }),
         window.innerWidth >= 500 ? label : ""
-      ))), /* @__PURE__ */ React42__default.createElement("div", { className: "flex h-full items-center justify-end gap-x-2" }, /* @__PURE__ */ React42__default.createElement(
+      ))), /* @__PURE__ */ React43__default.createElement("div", { className: "flex h-full items-center justify-end gap-x-2" }, /* @__PURE__ */ React43__default.createElement(
         Dropdown_default,
         {
           className: "dropdown-bottom dropdown-end",
           buttonClassName: "btn btn-ghost h-8 min-h-8 w-8 p-0",
-          toggleButton: /* @__PURE__ */ React42__default.createElement(PiDotsThreeVerticalBold, null)
+          toggleButton: /* @__PURE__ */ React43__default.createElement(PiDotsThreeVerticalBold, null)
         },
-        /* @__PURE__ */ React42__default.createElement(DialogMenu_default, null)
-      ), /* @__PURE__ */ React42__default.createElement(
+        /* @__PURE__ */ React43__default.createElement(DialogMenu_default, null)
+      ), /* @__PURE__ */ React43__default.createElement(
         "button",
         {
           onClick: handleClose2,
           className: "bg-base-300/65 btn btn-ghost btn-circle hidden h-6 min-h-6 w-6 sm:flex"
         },
-        /* @__PURE__ */ React42__default.createElement(
+        /* @__PURE__ */ React43__default.createElement(
           "svg",
           {
             xmlns: "http://www.w3.org/2000/svg",
@@ -9373,7 +9394,7 @@ var SettingsDialog = ({ bookKey }) => {
             height: "1em",
             viewBox: "0 0 24 24"
           },
-          /* @__PURE__ */ React42__default.createElement(
+          /* @__PURE__ */ React43__default.createElement(
             "path",
             {
               fill: "currentColor",
@@ -9383,10 +9404,10 @@ var SettingsDialog = ({ bookKey }) => {
         )
       )))
     },
-    activePanel === "Font" && /* @__PURE__ */ React42__default.createElement(FontPanel_default, { bookKey }),
-    activePanel === "Layout" && /* @__PURE__ */ React42__default.createElement(LayoutPanel_default, { bookKey }),
-    activePanel === "Color" && /* @__PURE__ */ React42__default.createElement(ColorPanel_default, { bookKey }),
-    activePanel === "Misc" && /* @__PURE__ */ React42__default.createElement(MiscPanel_default, { bookKey })
+    activePanel === "Font" && /* @__PURE__ */ React43__default.createElement(FontPanel_default, { bookKey }),
+    activePanel === "Layout" && /* @__PURE__ */ React43__default.createElement(LayoutPanel_default, { bookKey }),
+    activePanel === "Color" && /* @__PURE__ */ React43__default.createElement(ColorPanel_default, { bookKey }),
+    activePanel === "Misc" && /* @__PURE__ */ React43__default.createElement(MiscPanel_default, { bookKey })
   ));
 };
 var SettingsDialog_default = SettingsDialog;
@@ -9613,19 +9634,19 @@ var PopupButton = ({ showTooltip, tooltipText, Icon, onClick }) => {
     setButtonClicked(true);
     onClick();
   };
-  return /* @__PURE__ */ React42__default.createElement(
+  return /* @__PURE__ */ React43__default.createElement(
     "div",
     {
       className: "lg:tooltip lg:tooltip-bottom",
       "data-tip": !buttonClicked && showTooltip ? tooltipText : null
     },
-    /* @__PURE__ */ React42__default.createElement(
+    /* @__PURE__ */ React43__default.createElement(
       "button",
       {
         onClick: handleClick2,
         className: "flex h-8 min-h-8 w-8 items-center justify-center p-0"
       },
-      /* @__PURE__ */ React42__default.createElement(Icon, null)
+      /* @__PURE__ */ React43__default.createElement(Icon, null)
     )
   );
 };
@@ -9641,8 +9662,8 @@ var HighlightOptions = ({
 }) => {
   const { settings, setSettings } = useSettingsStore();
   const globalReadSettings = settings.globalReadSettings;
-  const [selectedStyle, setSelectedStyle] = React42__default.useState(_selectedStyle);
-  const [selectedColor, setSelectedColor] = React42__default.useState(_selectedColor);
+  const [selectedStyle, setSelectedStyle] = React43__default.useState(_selectedStyle);
+  const [selectedColor, setSelectedColor] = React43__default.useState(_selectedColor);
   const size16 = useResponsiveSize(16);
   const size18 = useResponsiveSize(18);
   const size28 = useResponsiveSize(28);
@@ -9660,7 +9681,7 @@ var HighlightOptions = ({
     setSelectedColor(color);
     onHandleHighlight(true);
   };
-  return /* @__PURE__ */ React42__default.createElement(
+  return /* @__PURE__ */ React43__default.createElement(
     "div",
     {
       className: clsx8(
@@ -9669,13 +9690,13 @@ var HighlightOptions = ({
       ),
       style
     },
-    /* @__PURE__ */ React42__default.createElement(
+    /* @__PURE__ */ React43__default.createElement(
       "div",
       {
         className: clsx8("flex gap-2", isVertical ? "flex-col" : "flex-row"),
         style: isVertical ? { width: size28 } : { height: size28 }
       },
-      styles.map((style2) => /* @__PURE__ */ React42__default.createElement(
+      styles.map((style2) => /* @__PURE__ */ React43__default.createElement(
         "button",
         {
           key: style2,
@@ -9683,7 +9704,7 @@ var HighlightOptions = ({
           className: "flex items-center justify-center rounded-full bg-gray-700 p-0",
           style: { width: size28, height: size28, minHeight: size28 }
         },
-        /* @__PURE__ */ React42__default.createElement(
+        /* @__PURE__ */ React43__default.createElement(
           "div",
           {
             style: { width: size16, height: style2 === "squiggly" ? size18 : size16 },
@@ -9699,7 +9720,7 @@ var HighlightOptions = ({
         )
       ))
     ),
-    /* @__PURE__ */ React42__default.createElement(
+    /* @__PURE__ */ React43__default.createElement(
       "div",
       {
         className: clsx8(
@@ -9708,7 +9729,7 @@ var HighlightOptions = ({
         ),
         style: isVertical ? { width: size28 } : { height: size28 }
       },
-      colors.map((color) => /* @__PURE__ */ React42__default.createElement(
+      colors.map((color) => /* @__PURE__ */ React43__default.createElement(
         "button",
         {
           key: color,
@@ -9716,7 +9737,7 @@ var HighlightOptions = ({
           style: { width: size16, height: size16 },
           className: clsx8(`rounded-full p-0`, selectedColor !== color && `bg-${color}-400`)
         },
-        selectedColor === color && /* @__PURE__ */ React42__default.createElement(FaCheckCircle, { size: size16, className: clsx8(`fill-${color}-400`) })
+        selectedColor === color && /* @__PURE__ */ React43__default.createElement(FaCheckCircle, { size: size16, className: clsx8(`fill-${color}-400`) })
       ))
     )
   );
@@ -9741,7 +9762,7 @@ var AnnotationPopup = ({
 }) => {
   const highlightOptionsHeightPx = useResponsiveSize(OPTIONS_HEIGHT_PIX);
   const highlightOptionsPaddingPx = useResponsiveSize(OPTIONS_PADDING_PIX);
-  return /* @__PURE__ */ React42__default.createElement("div", { dir }, /* @__PURE__ */ React42__default.createElement(
+  return /* @__PURE__ */ React43__default.createElement("div", { dir }, /* @__PURE__ */ React43__default.createElement(
     Popup_default,
     {
       width: isVertical ? popupHeight2 : popupWidth2,
@@ -9751,7 +9772,7 @@ var AnnotationPopup = ({
       className: "selection-popup bg-gray-600 text-white",
       triangleClassName: "text-gray-600"
     },
-    /* @__PURE__ */ React42__default.createElement(
+    /* @__PURE__ */ React43__default.createElement(
       "div",
       {
         className: clsx8(
@@ -9762,7 +9783,7 @@ var AnnotationPopup = ({
           height: isVertical ? popupWidth2 : popupHeight2
         }
       },
-      buttons.map((button, index) => /* @__PURE__ */ React42__default.createElement(
+      buttons.map((button, index) => /* @__PURE__ */ React43__default.createElement(
         PopupButton_default,
         {
           key: index,
@@ -9773,7 +9794,7 @@ var AnnotationPopup = ({
         }
       ))
     )
-  ), highlightOptionsVisible && /* @__PURE__ */ React42__default.createElement(
+  ), highlightOptionsVisible && /* @__PURE__ */ React43__default.createElement(
     HighlightOptions_default,
     {
       isVertical,
@@ -9899,7 +9920,7 @@ var WiktionaryPopup = ({
     const langCode = typeof lang === "string" ? lang : lang?.[0];
     fetchDefinitions(lookupWord, langCode);
   }, [lookupWord, lang]);
-  return /* @__PURE__ */ React42__default.createElement("div", null, /* @__PURE__ */ React42__default.createElement(
+  return /* @__PURE__ */ React43__default.createElement("div", null, /* @__PURE__ */ React43__default.createElement(
     Popup_default,
     {
       trianglePosition,
@@ -9908,7 +9929,7 @@ var WiktionaryPopup = ({
       position,
       className: "select-text"
     },
-    /* @__PURE__ */ React42__default.createElement("div", { className: "flex h-full flex-col" }, /* @__PURE__ */ React42__default.createElement("main", { className: "flex-grow overflow-y-auto p-4 font-sans" }), /* @__PURE__ */ React42__default.createElement("footer", { className: "mt-auto hidden data-[state=loaded]:block data-[state=error]:hidden data-[state=loading]:hidden" }, /* @__PURE__ */ React42__default.createElement("div", { className: "flex items-center px-4 py-2 text-sm opacity-60" }, "Source: Wiktionary (CC BY-SA)")))
+    /* @__PURE__ */ React43__default.createElement("div", { className: "flex h-full flex-col" }, /* @__PURE__ */ React43__default.createElement("main", { className: "flex-grow overflow-y-auto p-4 font-sans" }), /* @__PURE__ */ React43__default.createElement("footer", { className: "mt-auto hidden data-[state=loaded]:block data-[state=error]:hidden data-[state=loading]:hidden" }, /* @__PURE__ */ React43__default.createElement("div", { className: "flex items-center px-4 py-2 text-sm opacity-60" }, "Source: Wiktionary (CC BY-SA)")))
   ));
 };
 var WiktionaryPopup_default = WiktionaryPopup;
@@ -9985,7 +10006,7 @@ var WikipediaPopup = ({
     const langCode = bookLang ? bookLang.split("-")[0] : "en";
     fetchSummary(text, langCode);
   }, [text, lang]);
-  return /* @__PURE__ */ React42__default.createElement("div", null, /* @__PURE__ */ React42__default.createElement(
+  return /* @__PURE__ */ React43__default.createElement("div", null, /* @__PURE__ */ React43__default.createElement(
     Popup_default,
     {
       width: popupWidth2,
@@ -9994,7 +10015,7 @@ var WikipediaPopup = ({
       trianglePosition,
       className: "select-text"
     },
-    /* @__PURE__ */ React42__default.createElement("div", { className: "text-base-content flex h-full flex-col pt-2" }, /* @__PURE__ */ React42__default.createElement("main", { className: "flex-grow overflow-y-auto px-2 font-sans" }), /* @__PURE__ */ React42__default.createElement("footer", { className: "mt-auto hidden data-[state=loaded]:block data-[state=error]:hidden data-[state=loading]:hidden" }, /* @__PURE__ */ React42__default.createElement("div", { className: "flex items-center px-4 py-2 text-sm opacity-60" }, "Source: Wikipedia (CC BY-SA)")))
+    /* @__PURE__ */ React43__default.createElement("div", { className: "text-base-content flex h-full flex-col pt-2" }, /* @__PURE__ */ React43__default.createElement("main", { className: "flex-grow overflow-y-auto px-2 font-sans" }), /* @__PURE__ */ React43__default.createElement("footer", { className: "mt-auto hidden data-[state=loaded]:block data-[state=error]:hidden data-[state=loading]:hidden" }, /* @__PURE__ */ React43__default.createElement("div", { className: "flex items-center px-4 py-2 text-sm opacity-60" }, "Source: Wikipedia (CC BY-SA)")))
   ));
 };
 var WikipediaPopup_default = WikipediaPopup;
@@ -10082,7 +10103,7 @@ var DeepLPopup = ({
     };
     fetchTranslation();
   }, [text, sourceLang, targetLang]);
-  return /* @__PURE__ */ React42__default.createElement("div", null, /* @__PURE__ */ React42__default.createElement(
+  return /* @__PURE__ */ React43__default.createElement("div", null, /* @__PURE__ */ React43__default.createElement(
     Popup_default,
     {
       trianglePosition,
@@ -10091,7 +10112,7 @@ var DeepLPopup = ({
       position,
       className: "select-text"
     },
-    /* @__PURE__ */ React42__default.createElement("div", { className: "text-neutral-content relative h-[50%] overflow-y-auto border-b border-neutral-400/75 p-4 font-sans" }, /* @__PURE__ */ React42__default.createElement("div", { className: "mb-2 flex items-center justify-between" }, /* @__PURE__ */ React42__default.createElement("h1", { className: "text-base font-semibold" }, _("Original Text")), /* @__PURE__ */ React42__default.createElement(
+    /* @__PURE__ */ React43__default.createElement("div", { className: "text-neutral-content relative h-[50%] overflow-y-auto border-b border-neutral-400/75 p-4 font-sans" }, /* @__PURE__ */ React43__default.createElement("div", { className: "mb-2 flex items-center justify-between" }, /* @__PURE__ */ React43__default.createElement("h1", { className: "text-base font-semibold" }, _("Original Text")), /* @__PURE__ */ React43__default.createElement(
       "select",
       {
         value: sourceLang,
@@ -10099,18 +10120,18 @@ var DeepLPopup = ({
         className: "select text-neutral-content h-8 min-h-8 rounded-md border-none bg-neutral-200/50 text-sm focus:outline-none focus:ring-0"
       },
       Object.entries(LANGUAGES).map(([code, name]) => {
-        return /* @__PURE__ */ React42__default.createElement("option", { key: code, value: code }, detectedSourceLang && sourceLang === "AUTO" && code === "AUTO" ? `${LANGUAGES[detectedSourceLang] || detectedSourceLang} ` + _("(detected)") : name);
+        return /* @__PURE__ */ React43__default.createElement("option", { key: code, value: code }, detectedSourceLang && sourceLang === "AUTO" && code === "AUTO" ? `${LANGUAGES[detectedSourceLang] || detectedSourceLang} ` + _("(detected)") : name);
       })
-    )), /* @__PURE__ */ React42__default.createElement("p", { className: "text-base" }, text)),
-    /* @__PURE__ */ React42__default.createElement("div", { className: "text-neutral-content relative h-[50%] overflow-y-auto p-4 font-sans" }, /* @__PURE__ */ React42__default.createElement("div", { className: "mb-2 flex items-center justify-between" }, /* @__PURE__ */ React42__default.createElement("h2", { className: "text-base font-semibold" }, _("Translated Text")), /* @__PURE__ */ React42__default.createElement(
+    )), /* @__PURE__ */ React43__default.createElement("p", { className: "text-base" }, text)),
+    /* @__PURE__ */ React43__default.createElement("div", { className: "text-neutral-content relative h-[50%] overflow-y-auto p-4 font-sans" }, /* @__PURE__ */ React43__default.createElement("div", { className: "mb-2 flex items-center justify-between" }, /* @__PURE__ */ React43__default.createElement("h2", { className: "text-base font-semibold" }, _("Translated Text")), /* @__PURE__ */ React43__default.createElement(
       "select",
       {
         value: targetLang,
         onChange: handleTargetLangChange,
         className: "select text-neutral-content h-8 min-h-8 rounded-md border-none bg-neutral-200/50 text-sm focus:outline-none focus:ring-0"
       },
-      Object.entries(LANGUAGES).filter(([code]) => code !== "AUTO").map(([code, name]) => /* @__PURE__ */ React42__default.createElement("option", { key: code, value: code }, name))
-    )), loading ? /* @__PURE__ */ React42__default.createElement("p", { className: "text-base italic text-gray-500" }, _("Loading...")) : error ? /* @__PURE__ */ React42__default.createElement("p", { className: "text-base text-red-600" }, error) : /* @__PURE__ */ React42__default.createElement("div", null, /* @__PURE__ */ React42__default.createElement("p", { className: "text-base" }, translation || "No translation available."), /* @__PURE__ */ React42__default.createElement("div", { className: "pt-4 text-sm opacity-60" }, "Translated by DeepL.")))
+      Object.entries(LANGUAGES).filter(([code]) => code !== "AUTO").map(([code, name]) => /* @__PURE__ */ React43__default.createElement("option", { key: code, value: code }, name))
+    )), loading ? /* @__PURE__ */ React43__default.createElement("p", { className: "text-base italic text-gray-500" }, _("Loading...")) : error ? /* @__PURE__ */ React43__default.createElement("p", { className: "text-base text-red-600" }, error) : /* @__PURE__ */ React43__default.createElement("div", null, /* @__PURE__ */ React43__default.createElement("p", { className: "text-base" }, translation || "No translation available."), /* @__PURE__ */ React43__default.createElement("div", { className: "pt-4 text-sm opacity-60" }, "Translated by DeepL.")))
   ));
 };
 var DeepLPopup_default = DeepLPopup;
@@ -10568,7 +10589,7 @@ var Annotator = ({ bookKey }) => {
     { tooltipText: _("Translate"), Icon: BsTranslate, onClick: handleTranslation },
     { tooltipText: _("Speak"), Icon: FaHeadphones, onClick: handleSpeakText }
   ];
-  return /* @__PURE__ */ React42__default.createElement("div", null, showWiktionaryPopup && trianglePosition && dictPopupPosition && /* @__PURE__ */ React42__default.createElement(
+  return /* @__PURE__ */ React43__default.createElement("div", null, showWiktionaryPopup && trianglePosition && dictPopupPosition && /* @__PURE__ */ React43__default.createElement(
     WiktionaryPopup_default,
     {
       word: selection?.text,
@@ -10578,7 +10599,7 @@ var Annotator = ({ bookKey }) => {
       popupWidth: dictPopupWidth,
       popupHeight: dictPopupHeight
     }
-  ), showWikipediaPopup && trianglePosition && dictPopupPosition && /* @__PURE__ */ React42__default.createElement(
+  ), showWikipediaPopup && trianglePosition && dictPopupPosition && /* @__PURE__ */ React43__default.createElement(
     WikipediaPopup_default,
     {
       text: selection?.text,
@@ -10588,7 +10609,7 @@ var Annotator = ({ bookKey }) => {
       popupWidth: dictPopupWidth,
       popupHeight: dictPopupHeight
     }
-  ), showDeepLPopup && trianglePosition && translatorPopupPosition && /* @__PURE__ */ React42__default.createElement(
+  ), showDeepLPopup && trianglePosition && translatorPopupPosition && /* @__PURE__ */ React43__default.createElement(
     DeepLPopup_default,
     {
       text: selection?.text,
@@ -10597,7 +10618,7 @@ var Annotator = ({ bookKey }) => {
       popupWidth: transPopupWidth,
       popupHeight: transPopupHeight
     }
-  ), showAnnotPopup && trianglePosition && annotPopupPosition && /* @__PURE__ */ React42__default.createElement(
+  ), showAnnotPopup && trianglePosition && annotPopupPosition && /* @__PURE__ */ React43__default.createElement(
     AnnotationPopup_default,
     {
       dir: viewSettings.rtl ? "rtl" : "ltr",
@@ -10784,14 +10805,14 @@ ${footnoteStyles}`);
       footnoteRef.current?.replaceChildren(footnoteViewRef.current);
     }
   }, [footnoteRef]);
-  return /* @__PURE__ */ React42__default.createElement("div", null, showPopup && /* @__PURE__ */ React42__default.createElement(
+  return /* @__PURE__ */ React43__default.createElement("div", null, showPopup && /* @__PURE__ */ React43__default.createElement(
     "div",
     {
       className: "fixed inset-0",
       onClick: handleDismissPopup,
       onContextMenu: handleDismissPopup
     }
-  ), /* @__PURE__ */ React42__default.createElement(
+  ), /* @__PURE__ */ React43__default.createElement(
     Popup_default,
     {
       width: responsiveWidth,
@@ -10800,7 +10821,7 @@ ${footnoteStyles}`);
       trianglePosition: showPopup ? trianglePosition : void 0,
       className: "select-text overflow-y-auto"
     },
-    /* @__PURE__ */ React42__default.createElement(
+    /* @__PURE__ */ React43__default.createElement(
       "div",
       {
         className: "",
@@ -10821,7 +10842,7 @@ var HintInfo = ({
   horizontalGap,
   verticalMargin
 }) => {
-  const [hintMessage, setHintMessage] = React42__default.useState(null);
+  const [hintMessage, setHintMessage] = React43__default.useState(null);
   const hintTimeout = useRef(2e3);
   const dismissTimeout = useRef(null);
   const handleShowHint = (event) => {
@@ -10843,7 +10864,7 @@ var HintInfo = ({
       if (dismissTimeout.current) clearTimeout(dismissTimeout.current);
     };
   }, [hintMessage]);
-  return /* @__PURE__ */ React42__default.createElement(
+  return /* @__PURE__ */ React43__default.createElement(
     "div",
     {
       className: clsx8(
@@ -10857,7 +10878,7 @@ var HintInfo = ({
         width: showDoubleBorder ? "30px" : `${horizontalGap}%`
       } : { insetInlineEnd: `${horizontalGap}%` }
     },
-    /* @__PURE__ */ React42__default.createElement("h2", { className: clsx8("text-neutral-content text-center font-sans text-xs font-light") }, hintMessage || "")
+    /* @__PURE__ */ React43__default.createElement("h2", { className: clsx8("text-neutral-content text-center font-sans text-xs font-light") }, hintMessage || "")
   );
 };
 var HintInfo_default = HintInfo;
@@ -10941,7 +10962,7 @@ var BooksGrid = ({ bookKeys, onCloseBook }) => {
     if (!bookData || !bookData.book) return;
     document.title = bookData.book.title;
   }, [sideBarBookKey]);
-  return /* @__PURE__ */ React42__default.createElement(
+  return /* @__PURE__ */ React43__default.createElement(
     "div",
     {
       className: clsx8(
@@ -10964,7 +10985,7 @@ var BooksGrid = ({ bookKeys, onCloseBook }) => {
       const isBookmarked = getViewState(bookKey)?.ribbonVisible;
       const horizontalGapPercent = viewSettings.gapPercent;
       const verticalMarginPixels = viewSettings.marginPx;
-      return /* @__PURE__ */ React42__default.createElement(
+      return /* @__PURE__ */ React43__default.createElement(
         "div",
         {
           id: `gridcell-${bookKey}`,
@@ -10974,8 +10995,8 @@ var BooksGrid = ({ bookKeys, onCloseBook }) => {
             !isSideBarVisible && appService?.hasRoundedWindow && "rounded-window"
           )
         },
-        isBookmarked && !hoveredBookKey && /* @__PURE__ */ React42__default.createElement(Ribbon_default, { width: `${horizontalGapPercent}%` }),
-        /* @__PURE__ */ React42__default.createElement(
+        isBookmarked && !hoveredBookKey && /* @__PURE__ */ React43__default.createElement(Ribbon_default, { width: `${horizontalGapPercent}%` }),
+        /* @__PURE__ */ React43__default.createElement(
           HeaderBar_default,
           {
             bookKey,
@@ -10986,8 +11007,8 @@ var BooksGrid = ({ bookKeys, onCloseBook }) => {
             onSetSettingsDialogOpen: setFontLayoutSettingsDialogOpen
           }
         ),
-        /* @__PURE__ */ React42__default.createElement(FoliateViewer_default, { bookKey, bookDoc, config }),
-        viewSettings.vertical && viewSettings.scrolled && /* @__PURE__ */ React42__default.createElement(React42__default.Fragment, null, /* @__PURE__ */ React42__default.createElement(
+        /* @__PURE__ */ React43__default.createElement(FoliateViewer_default, { bookKey, bookDoc, config }),
+        viewSettings.vertical && viewSettings.scrolled && /* @__PURE__ */ React43__default.createElement(React43__default.Fragment, null, /* @__PURE__ */ React43__default.createElement(
           "div",
           {
             className: "bg-base-100 absolute left-0 top-0 h-full",
@@ -10996,7 +11017,7 @@ var BooksGrid = ({ bookKeys, onCloseBook }) => {
               height: `calc(100% - ${verticalMarginPixels}px)`
             }
           }
-        ), /* @__PURE__ */ React42__default.createElement(
+        ), /* @__PURE__ */ React43__default.createElement(
           "div",
           {
             className: "bg-base-100 absolute right-0 top-0 h-full",
@@ -11006,7 +11027,7 @@ var BooksGrid = ({ bookKeys, onCloseBook }) => {
             }
           }
         )),
-        viewSettings.vertical && viewSettings.doubleBorder && /* @__PURE__ */ React42__default.createElement(
+        viewSettings.vertical && viewSettings.doubleBorder && /* @__PURE__ */ React43__default.createElement(
           DoubleBorder_default,
           {
             showHeader: viewSettings.showHeader,
@@ -11016,7 +11037,7 @@ var BooksGrid = ({ bookKeys, onCloseBook }) => {
             verticalMargin: verticalMarginPixels
           }
         ),
-        viewSettings.showHeader && /* @__PURE__ */ React42__default.createElement(
+        viewSettings.showHeader && /* @__PURE__ */ React43__default.createElement(
           SectionInfo_default,
           {
             section: sectionLabel,
@@ -11027,7 +11048,7 @@ var BooksGrid = ({ bookKeys, onCloseBook }) => {
             verticalMargin: verticalMarginPixels
           }
         ),
-        /* @__PURE__ */ React42__default.createElement(
+        /* @__PURE__ */ React43__default.createElement(
           HintInfo_default,
           {
             bookKey,
@@ -11037,7 +11058,7 @@ var BooksGrid = ({ bookKeys, onCloseBook }) => {
             verticalMargin: verticalMarginPixels
           }
         ),
-        viewSettings.showFooter && /* @__PURE__ */ React42__default.createElement(
+        viewSettings.showFooter && /* @__PURE__ */ React43__default.createElement(
           PageInfo_default,
           {
             bookFormat: book.format,
@@ -11050,9 +11071,9 @@ var BooksGrid = ({ bookKeys, onCloseBook }) => {
             verticalMargin: verticalMarginPixels
           }
         ),
-        /* @__PURE__ */ React42__default.createElement(Annotator_default, { bookKey }),
-        /* @__PURE__ */ React42__default.createElement(FootnotePopup_default, { bookKey, bookDoc }),
-        /* @__PURE__ */ React42__default.createElement(
+        /* @__PURE__ */ React43__default.createElement(Annotator_default, { bookKey }),
+        /* @__PURE__ */ React43__default.createElement(FootnotePopup_default, { bookKey, bookDoc }),
+        /* @__PURE__ */ React43__default.createElement(
           FooterBar_default,
           {
             bookKey,
@@ -11062,7 +11083,7 @@ var BooksGrid = ({ bookKeys, onCloseBook }) => {
             isHoveredAnim: false
           }
         ),
-        isFontLayoutSettingsDialogOpen && /* @__PURE__ */ React42__default.createElement(SettingsDialog_default, { bookKey, config })
+        isFontLayoutSettingsDialogOpen && /* @__PURE__ */ React43__default.createElement(SettingsDialog_default, { bookKey, config })
       );
     })
   );
@@ -12351,7 +12372,7 @@ var TTSPanel = ({
     fetchVoices();
   }, [ttsLang]);
   const timeoutOptions = getTTSTimeoutOptions(_);
-  return /* @__PURE__ */ React42__default.createElement("div", { className: "flex w-full flex-col items-center justify-center gap-2 rounded-2xl p-4" }, /* @__PURE__ */ React42__default.createElement("div", { className: "flex w-full flex-col items-center gap-0.5" }, /* @__PURE__ */ React42__default.createElement(
+  return /* @__PURE__ */ React43__default.createElement("div", { className: "flex w-full flex-col items-center justify-center gap-2 rounded-2xl p-4" }, /* @__PURE__ */ React43__default.createElement("div", { className: "flex w-full flex-col items-center gap-0.5" }, /* @__PURE__ */ React43__default.createElement(
     "input",
     {
       className: "range",
@@ -12362,7 +12383,7 @@ var TTSPanel = ({
       value: rate,
       onChange: handleSetRate
     }
-  ), /* @__PURE__ */ React42__default.createElement("div", { className: "grid w-full grid-cols-7 text-xs" }, /* @__PURE__ */ React42__default.createElement("span", { className: "text-center" }, "|"), /* @__PURE__ */ React42__default.createElement("span", { className: "text-center" }, "|"), /* @__PURE__ */ React42__default.createElement("span", { className: "text-center" }, "|"), /* @__PURE__ */ React42__default.createElement("span", { className: "text-center" }, "|"), /* @__PURE__ */ React42__default.createElement("span", { className: "text-center" }, "|"), /* @__PURE__ */ React42__default.createElement("span", { className: "text-center" }, "|"), /* @__PURE__ */ React42__default.createElement("span", { className: "text-center" }, "|")), /* @__PURE__ */ React42__default.createElement("div", { className: "grid w-full grid-cols-7 text-xs" }, /* @__PURE__ */ React42__default.createElement("span", { className: "text-center" }, _("Slow")), /* @__PURE__ */ React42__default.createElement("span", { className: "text-center" }), /* @__PURE__ */ React42__default.createElement("span", { className: "text-center" }, "1.0"), /* @__PURE__ */ React42__default.createElement("span", { className: "text-center" }, "1.5"), /* @__PURE__ */ React42__default.createElement("span", { className: "text-center" }, "2.0"), /* @__PURE__ */ React42__default.createElement("span", { className: "text-center" }), /* @__PURE__ */ React42__default.createElement("span", { className: "text-center" }, _("Fast")))), /* @__PURE__ */ React42__default.createElement("div", { className: "flex items-center justify-between space-x-2" }, /* @__PURE__ */ React42__default.createElement("button", { onClick: onBackward, className: "rounded-full p-1" }, /* @__PURE__ */ React42__default.createElement(MdFastRewind, { size: iconSize32 })), /* @__PURE__ */ React42__default.createElement("button", { onClick: onTogglePlay, className: "rounded-full p-1" }, isPlaying ? /* @__PURE__ */ React42__default.createElement(MdPauseCircle, { size: iconSize48, className: "fill-primary" }) : /* @__PURE__ */ React42__default.createElement(MdPlayCircle, { size: iconSize48, className: "fill-primary" })), /* @__PURE__ */ React42__default.createElement("button", { onClick: onForward, className: "rounded-full p-1" }, /* @__PURE__ */ React42__default.createElement(MdFastForward, { size: iconSize32 })), /* @__PURE__ */ React42__default.createElement("div", { className: "dropdown dropdown-top" }, /* @__PURE__ */ React42__default.createElement("button", { className: "flex flex-col items-center justify-center rounded-full p-1" }, /* @__PURE__ */ React42__default.createElement(MdAlarm, { size: iconSize32 }), timeoutCountdown && /* @__PURE__ */ React42__default.createElement(
+  ), /* @__PURE__ */ React43__default.createElement("div", { className: "grid w-full grid-cols-7 text-xs" }, /* @__PURE__ */ React43__default.createElement("span", { className: "text-center" }, "|"), /* @__PURE__ */ React43__default.createElement("span", { className: "text-center" }, "|"), /* @__PURE__ */ React43__default.createElement("span", { className: "text-center" }, "|"), /* @__PURE__ */ React43__default.createElement("span", { className: "text-center" }, "|"), /* @__PURE__ */ React43__default.createElement("span", { className: "text-center" }, "|"), /* @__PURE__ */ React43__default.createElement("span", { className: "text-center" }, "|"), /* @__PURE__ */ React43__default.createElement("span", { className: "text-center" }, "|")), /* @__PURE__ */ React43__default.createElement("div", { className: "grid w-full grid-cols-7 text-xs" }, /* @__PURE__ */ React43__default.createElement("span", { className: "text-center" }, _("Slow")), /* @__PURE__ */ React43__default.createElement("span", { className: "text-center" }), /* @__PURE__ */ React43__default.createElement("span", { className: "text-center" }, "1.0"), /* @__PURE__ */ React43__default.createElement("span", { className: "text-center" }, "1.5"), /* @__PURE__ */ React43__default.createElement("span", { className: "text-center" }, "2.0"), /* @__PURE__ */ React43__default.createElement("span", { className: "text-center" }), /* @__PURE__ */ React43__default.createElement("span", { className: "text-center" }, _("Fast")))), /* @__PURE__ */ React43__default.createElement("div", { className: "flex items-center justify-between space-x-2" }, /* @__PURE__ */ React43__default.createElement("button", { onClick: onBackward, className: "rounded-full p-1" }, /* @__PURE__ */ React43__default.createElement(MdFastRewind, { size: iconSize32 })), /* @__PURE__ */ React43__default.createElement("button", { onClick: onTogglePlay, className: "rounded-full p-1" }, isPlaying ? /* @__PURE__ */ React43__default.createElement(MdPauseCircle, { size: iconSize48, className: "fill-primary" }) : /* @__PURE__ */ React43__default.createElement(MdPlayCircle, { size: iconSize48, className: "fill-primary" })), /* @__PURE__ */ React43__default.createElement("button", { onClick: onForward, className: "rounded-full p-1" }, /* @__PURE__ */ React43__default.createElement(MdFastForward, { size: iconSize32 })), /* @__PURE__ */ React43__default.createElement("div", { className: "dropdown dropdown-top" }, /* @__PURE__ */ React43__default.createElement("button", { className: "flex flex-col items-center justify-center rounded-full p-1" }, /* @__PURE__ */ React43__default.createElement(MdAlarm, { size: iconSize32 }), timeoutCountdown && /* @__PURE__ */ React43__default.createElement(
     "span",
     {
       className: clsx8(
@@ -12371,7 +12392,7 @@ var TTSPanel = ({
       )
     },
     timeoutCountdown
-  )), /* @__PURE__ */ React42__default.createElement(
+  )), /* @__PURE__ */ React43__default.createElement(
     "ul",
     {
       tabIndex: 0,
@@ -12380,8 +12401,8 @@ var TTSPanel = ({
         "mt-4 inline max-h-96 w-[200px] overflow-y-scroll"
       )
     },
-    timeoutOptions.map((option, index) => /* @__PURE__ */ React42__default.createElement("li", { key: `${index}-${option.value}`, onClick: () => onSelectTimeout(option.value) }, /* @__PURE__ */ React42__default.createElement("div", { className: "flex items-center px-2" }, /* @__PURE__ */ React42__default.createElement("span", { style: { minWidth: `${defaultIconSize}px` } }, timeoutOption === option.value && /* @__PURE__ */ React42__default.createElement(MdCheck, { className: "text-base-content" })), /* @__PURE__ */ React42__default.createElement("span", { className: clsx8("text-base sm:text-sm") }, option.label))))
-  )), /* @__PURE__ */ React42__default.createElement("div", { className: "dropdown dropdown-top" }, /* @__PURE__ */ React42__default.createElement("button", { tabIndex: 0, className: "rounded-full p-1" }, /* @__PURE__ */ React42__default.createElement(RiVoiceAiFill, { size: iconSize32 })), /* @__PURE__ */ React42__default.createElement(
+    timeoutOptions.map((option, index) => /* @__PURE__ */ React43__default.createElement("li", { key: `${index}-${option.value}`, onClick: () => onSelectTimeout(option.value) }, /* @__PURE__ */ React43__default.createElement("div", { className: "flex items-center px-2" }, /* @__PURE__ */ React43__default.createElement("span", { style: { minWidth: `${defaultIconSize}px` } }, timeoutOption === option.value && /* @__PURE__ */ React43__default.createElement(MdCheck, { className: "text-base-content" })), /* @__PURE__ */ React43__default.createElement("span", { className: clsx8("text-base sm:text-sm") }, option.label))))
+  )), /* @__PURE__ */ React43__default.createElement("div", { className: "dropdown dropdown-top" }, /* @__PURE__ */ React43__default.createElement("button", { tabIndex: 0, className: "rounded-full p-1" }, /* @__PURE__ */ React43__default.createElement(RiVoiceAiFill, { size: iconSize32 })), /* @__PURE__ */ React43__default.createElement(
     "ul",
     {
       tabIndex: 0,
@@ -12390,20 +12411,20 @@ var TTSPanel = ({
         "mt-4 inline max-h-96 w-[250px] overflow-y-scroll"
       )
     },
-    voices.map((voice, index) => /* @__PURE__ */ React42__default.createElement(
+    voices.map((voice, index) => /* @__PURE__ */ React43__default.createElement(
       "li",
       {
         key: `${index}-${voice.id}`,
         onClick: () => !voice.disabled && handleSelectVoice(voice.id)
       },
-      /* @__PURE__ */ React42__default.createElement("div", { className: "flex items-center px-2" }, /* @__PURE__ */ React42__default.createElement("span", { style: { minWidth: `${defaultIconSize}px` } }, selectedVoice === voice.id && /* @__PURE__ */ React42__default.createElement(MdCheck, { className: "text-base-content" })), /* @__PURE__ */ React42__default.createElement("span", { className: clsx8("text-base sm:text-sm", voice.disabled && "text-gray-400") }, voice.name))
+      /* @__PURE__ */ React43__default.createElement("div", { className: "flex items-center px-2" }, /* @__PURE__ */ React43__default.createElement("span", { style: { minWidth: `${defaultIconSize}px` } }, selectedVoice === voice.id && /* @__PURE__ */ React43__default.createElement(MdCheck, { className: "text-base-content" })), /* @__PURE__ */ React43__default.createElement("span", { className: clsx8("text-base sm:text-sm", voice.disabled && "text-gray-400") }, voice.name))
     ))
   ))));
 };
 var TTSPanel_default = TTSPanel;
 var TTSIcon2 = ({ isPlaying, onClick }) => {
   const bars = [1, 2, 3, 4];
-  return /* @__PURE__ */ React42__default.createElement("div", { className: "relative h-full w-full cursor-pointer", onClick }, /* @__PURE__ */ React42__default.createElement("div", { className: "absolute inset-0 overflow-hidden rounded-full bg-gradient-to-r from-blue-500 via-emerald-500 to-violet-500" }, /* @__PURE__ */ React42__default.createElement(
+  return /* @__PURE__ */ React43__default.createElement("div", { className: "relative h-full w-full cursor-pointer", onClick }, /* @__PURE__ */ React43__default.createElement("div", { className: "absolute inset-0 overflow-hidden rounded-full bg-gradient-to-r from-blue-500 via-emerald-500 to-violet-500" }, /* @__PURE__ */ React43__default.createElement(
     "div",
     {
       className: "absolute -inset-full bg-gradient-to-r from-blue-500 via-emerald-500 to-violet-500",
@@ -12411,7 +12432,7 @@ var TTSIcon2 = ({ isPlaying, onClick }) => {
         animation: isPlaying ? "moveGradient 2s alternate infinite" : "none"
       }
     }
-  )), /* @__PURE__ */ React42__default.createElement("div", { className: "absolute inset-0 flex items-center justify-center" }, /* @__PURE__ */ React42__default.createElement("style", null, `
+  )), /* @__PURE__ */ React43__default.createElement("div", { className: "absolute inset-0 flex items-center justify-center" }, /* @__PURE__ */ React43__default.createElement("style", null, `
           @keyframes moveGradient {
             0% { transform: translate(0, 0); }
             100% { transform: translate(25%, 25%); }
@@ -12420,7 +12441,7 @@ var TTSIcon2 = ({ isPlaying, onClick }) => {
             0%, 100% { transform: scaleY(1); }
             50% { transform: scaleY(0.6); }
           }
-        `), /* @__PURE__ */ React42__default.createElement("div", { className: "flex items-end space-x-1" }, bars.map((bar) => /* @__PURE__ */ React42__default.createElement(
+        `), /* @__PURE__ */ React43__default.createElement("div", { className: "flex items-end space-x-1" }, bars.map((bar) => /* @__PURE__ */ React43__default.createElement(
     "div",
     {
       key: bar,
@@ -12684,14 +12705,14 @@ var TTSControl = () => {
   const handleDismissPopup = () => {
     setShowPanel(false);
   };
-  return /* @__PURE__ */ React42__default.createElement("div", null, showPanel && /* @__PURE__ */ React42__default.createElement(
+  return /* @__PURE__ */ React43__default.createElement("div", null, showPanel && /* @__PURE__ */ React43__default.createElement(
     "div",
     {
       className: "fixed inset-0",
       onClick: handleDismissPopup,
       onContextMenu: handleDismissPopup
     }
-  ), showIndicator && /* @__PURE__ */ React42__default.createElement(
+  ), showIndicator && /* @__PURE__ */ React43__default.createElement(
     "div",
     {
       ref: iconRef,
@@ -12700,8 +12721,8 @@ var TTSControl = () => {
         appService?.hasSafeAreaInset ? "bottom-[calc(env(safe-area-inset-bottom)+70px)]" : "bottom-[70px] sm:bottom-14"
       )
     },
-    /* @__PURE__ */ React42__default.createElement(TTSIcon_default, { isPlaying, onClick: togglePopup })
-  ), showPanel && panelPosition && trianglePosition && /* @__PURE__ */ React42__default.createElement(
+    /* @__PURE__ */ React43__default.createElement(TTSIcon_default, { isPlaying, onClick: togglePopup })
+  ), showPanel && panelPosition && trianglePosition && /* @__PURE__ */ React43__default.createElement(
     Popup_default,
     {
       width: popupWidth2,
@@ -12710,7 +12731,7 @@ var TTSControl = () => {
       trianglePosition,
       className: "bg-base-200 absolute flex shadow-lg"
     },
-    /* @__PURE__ */ React42__default.createElement(
+    /* @__PURE__ */ React43__default.createElement(
       TTSPanel_default,
       {
         bookKey,
@@ -12733,13 +12754,6 @@ var TTSControl = () => {
 var TTSControl_default = TTSControl;
 
 // src/app/reader/components/ReaderContent.tsx
-var useSearchParams = () => {
-  const params = new URLSearchParams(window.location.search);
-  return {
-    get: (key) => params.get(key),
-    toString: () => params.toString()
-  };
-};
 var ReaderContent = ({ ids }) => {
   const searchParams = useSearchParams();
   const { envConfig, appService } = useEnv();
@@ -12842,9 +12856,9 @@ var ReaderContent = ({ ids }) => {
   const bookData = getBookData(bookKeys[0]);
   if (!bookData || !bookData.book || !bookData.bookDoc) {
     setTimeout(() => setLoading(true), 300);
-    return loading && /* @__PURE__ */ React42.createElement("div", { className: clsx8("hero hero-content", appService?.isIOSApp ? "h-[100vh]" : "h-dvh") }, /* @__PURE__ */ React42.createElement(Spinner_default, { loading: true }));
+    return loading && /* @__PURE__ */ React43.createElement("div", { className: clsx8("hero hero-content", appService?.isIOSApp ? "h-[100vh]" : "h-dvh") }, /* @__PURE__ */ React43.createElement(Spinner_default, { loading: true }));
   }
-  return /* @__PURE__ */ React42.createElement("div", { className: clsx8("flex", appService?.isIOSApp ? "h-[100vh]" : "h-dvh") }, /* @__PURE__ */ React42.createElement(SideBar_default, { onGoToLibrary: handleCloseBooksAndReload }), /* @__PURE__ */ React42.createElement(BooksGrid_default, { bookKeys, onCloseBook: handleCloseBook }), /* @__PURE__ */ React42.createElement(TTSControl_default, null), /* @__PURE__ */ React42.createElement(Notebook_default, null), showDetailsBook && /* @__PURE__ */ React42.createElement(
+  return /* @__PURE__ */ React43.createElement("div", { className: clsx8("flex", appService?.isIOSApp ? "h-[100vh]" : "h-dvh") }, /* @__PURE__ */ React43.createElement(SideBar_default, { onGoToLibrary: handleCloseBooksAndReload }), /* @__PURE__ */ React43.createElement(BooksGrid_default, { bookKeys, onCloseBook: handleCloseBook }), /* @__PURE__ */ React43.createElement(TTSControl_default, null), /* @__PURE__ */ React43.createElement(Notebook_default, null), showDetailsBook && /* @__PURE__ */ React43.createElement(
     BookDetailModal_default,
     {
       isOpen: !!showDetailsBook,
@@ -12934,10 +12948,10 @@ var Reader = ({ bookUrl = "https://cdn.readest.com/books/the-scarlet-letter.epub
     initSettings();
   }, [bookUrl]);
   if (loading) {
-    return /* @__PURE__ */ React42.createElement("div", { className: "hero h-dvh bg-base-100" }, /* @__PURE__ */ React42.createElement("div", { className: "hero-content text-center" }, /* @__PURE__ */ React42.createElement("div", null, /* @__PURE__ */ React42.createElement(Spinner_default, { loading: true }), /* @__PURE__ */ React42.createElement("div", { className: "mt-4 text-base-content" }, "Loading book from URL..."))));
+    return /* @__PURE__ */ React43.createElement("div", { className: "hero h-dvh bg-base-100" }, /* @__PURE__ */ React43.createElement("div", { className: "hero-content text-center" }, /* @__PURE__ */ React43.createElement("div", null, /* @__PURE__ */ React43.createElement(Spinner_default, { loading: true }), /* @__PURE__ */ React43.createElement("div", { className: "mt-4 text-base-content" }, "Loading book from URL..."))));
   }
   if (error) {
-    return /* @__PURE__ */ React42.createElement("div", { className: "hero h-dvh bg-base-100" }, /* @__PURE__ */ React42.createElement("div", { className: "hero-content text-center" }, /* @__PURE__ */ React42.createElement("div", { className: "max-w-md" }, /* @__PURE__ */ React42.createElement("h1", { className: "text-2xl font-bold text-error" }, "Error"), /* @__PURE__ */ React42.createElement("p", { className: "py-4 text-base-content" }, error), /* @__PURE__ */ React42.createElement(
+    return /* @__PURE__ */ React43.createElement("div", { className: "hero h-dvh bg-base-100" }, /* @__PURE__ */ React43.createElement("div", { className: "hero-content text-center" }, /* @__PURE__ */ React43.createElement("div", { className: "max-w-md" }, /* @__PURE__ */ React43.createElement("h1", { className: "text-2xl font-bold text-error" }, "Error"), /* @__PURE__ */ React43.createElement("p", { className: "py-4 text-base-content" }, error), /* @__PURE__ */ React43.createElement(
       "button",
       {
         className: "btn btn-primary",
@@ -12946,7 +12960,7 @@ var Reader = ({ bookUrl = "https://cdn.readest.com/books/the-scarlet-letter.epub
       "Try Again"
     ))));
   }
-  return settings?.globalReadSettings && /* @__PURE__ */ React42.createElement(
+  return settings?.globalReadSettings && /* @__PURE__ */ React43.createElement(
     "div",
     {
       className: clsx8(
@@ -12954,7 +12968,7 @@ var Reader = ({ bookUrl = "https://cdn.readest.com/books/the-scarlet-letter.epub
         !isSideBarVisible && appService?.hasRoundedWindow && "rounded-window"
       )
     },
-    /* @__PURE__ */ React42.createElement(Suspense, null, /* @__PURE__ */ React42.createElement(ReaderContent_default, { key: bookHash || "default", ids: bookHash || void 0 }), /* @__PURE__ */ React42.createElement(Toast, null))
+    /* @__PURE__ */ React43.createElement(Suspense, null, /* @__PURE__ */ React43.createElement(ReaderContent_default, { key: bookHash || "default", ids: bookHash || void 0 }), /* @__PURE__ */ React43.createElement(Toast, null))
   );
 };
 var Reader_default = Reader;
@@ -12962,6 +12976,6 @@ var Reader_default = Reader;
 // src/index.ts
 var index_default = Reader_default;
 
-export { EnvProvider, FoliateViewer_default as FoliateViewer, FooterBar_default as FooterBar, HeaderBar_default as HeaderBar, Reader_default as Reader, ReaderContent_default as ReaderContent, SettingsDialog_default as SettingsDialog, SideBar_default as SideBar, SyncProvider, TOCView_default as TOCView, index_default as default, useEnv, useScreenWakeLock, useSettingsStore, useSidebarStore, useSyncContext, useTheme, useThemeStore, wrappedFoliateView };
+export { AppRouterContext, EnvProvider, FoliateViewer_default as FoliateViewer, FooterBar_default as FooterBar, HeaderBar_default as HeaderBar, MockNextNavigation, PathnameContext, Reader_default as Reader, ReaderContent_default as ReaderContent, SearchParamsContext, SettingsDialog_default as SettingsDialog, SideBar_default as SideBar, SyncProvider, TOCView_default as TOCView, index_default as default, useEnv, usePathname, useRouter, useScreenWakeLock, useSearchParams, useSettingsStore, useSidebarStore, useSyncContext, useTheme, useThemeStore, wrappedFoliateView };
 //# sourceMappingURL=index.mjs.map
 //# sourceMappingURL=index.mjs.map

@@ -1,26 +1,19 @@
 import { useEffect, useState } from 'react';
+import { useRouter, useSearchParams } from '@/context/RouterContext';
 import { useEnv } from '@/context/EnvContext';
 import { useReaderStore } from '@/store/readerStore';
 import { useSidebarStore } from '@/store/sidebarStore';
 import { uniqueId } from '@/utils/misc';
-import { navigateToReader, createMockRouter } from '@/utils/nav';
-
-// Create a mock search params implementation
-const createMockSearchParams = () => {
-  const params = new URLSearchParams(window.location.search);
-  return {
-    get: (key: string) => params.get(key),
-    toString: () => params.toString()
-  };
-};
+import { navigateToReader } from '@/utils/nav';
 
 const useBooksManager = () => {
-  const router = createMockRouter();
-  const searchParams = createMockSearchParams();
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const { envConfig } = useEnv();
   const { bookKeys } = useReaderStore();
   const { setBookKeys, initViewState } = useReaderStore();
-  // sideBarBookKey is used in the appendBook function
+  // sideBarBookKey is used within closures in the component, so we need to keep it
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { sideBarBookKey, setSideBarBookKey } = useSidebarStore();
   const [shouldUpdateSearchParams, setShouldUpdateSearchParams] = useState(false);
 

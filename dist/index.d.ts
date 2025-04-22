@@ -395,6 +395,30 @@ declare const EnvProvider: ({ children }: {
 }) => React__default.JSX.Element;
 declare const useEnv: () => EnvContextType;
 
+type RouterType = {
+    back: () => void;
+    forward: () => void;
+    refresh: () => void;
+    push: (url: string, options?: {
+        scroll?: boolean;
+    }) => void;
+    replace: (url: string, options?: {
+        scroll?: boolean;
+    }) => void;
+    prefetch: (url: string) => void;
+};
+
+declare const AppRouterContext: React__default.Context<RouterType | null>;
+declare const PathnameContext: React__default.Context<string>;
+declare const SearchParamsContext: React__default.Context<URLSearchParams>;
+
+declare function MockNextNavigation({ children }: {
+    children: React__default.ReactNode;
+}): React__default.JSX.Element;
+declare function useRouter(): RouterType;
+declare function usePathname(): string;
+declare function useSearchParams(): URLSearchParams;
+
 type SyncType = 'books' | 'configs' | 'notes';
 interface BookRecord extends BookDataRecord, Book {
 }
@@ -584,4 +608,4 @@ interface DBBookNote {
     deleted_at?: string | null;
 }
 
-export { type AppPlatform, type AppService, type BaseDir, type Book, type BookConfig, type BookContent, type BookDataRecord, type BookFont, type BookFormat, type BookGroupType, type BookLayout, type BookNote, type BookNoteType, type BookProgress, type BookSearchConfig, type BookSearchMatch, type BookSearchResult, type BookStyle, type BooknoteGroup, type BooksGroup, type DBBook, type DBBookConfig, type DBBookNote, EnvProvider, type FileSystem, type FoliateView, FoliateViewer, FooterBar, HeaderBar, type HighlightColor, type HighlightStyle, type PageInfo, type ReadSettings, Reader, ReaderContent, type SearchExcerpt, SettingsDialog, SideBar, SyncProvider, type SystemSettings, TOCView, type TTSConfig, type TTSGranularity, type ThemeType, type ViewConfig, type ViewSettings, type WritingMode, Reader as default, useEnv, useScreenWakeLock, useSettingsStore, useSidebarStore, useSyncContext, useTheme, useThemeStore, wrappedFoliateView };
+export { type AppPlatform, AppRouterContext, type AppService, type BaseDir, type Book, type BookConfig, type BookContent, type BookDataRecord, type BookFont, type BookFormat, type BookGroupType, type BookLayout, type BookNote, type BookNoteType, type BookProgress, type BookSearchConfig, type BookSearchMatch, type BookSearchResult, type BookStyle, type BooknoteGroup, type BooksGroup, type DBBook, type DBBookConfig, type DBBookNote, EnvProvider, type FileSystem, type FoliateView, FoliateViewer, FooterBar, HeaderBar, type HighlightColor, type HighlightStyle, MockNextNavigation, type PageInfo, PathnameContext, type ReadSettings, Reader, ReaderContent, type SearchExcerpt, SearchParamsContext, SettingsDialog, SideBar, SyncProvider, type SystemSettings, TOCView, type TTSConfig, type TTSGranularity, type ThemeType, type ViewConfig, type ViewSettings, type WritingMode, Reader as default, useEnv, usePathname, useRouter, useScreenWakeLock, useSearchParams, useSettingsStore, useSidebarStore, useSyncContext, useTheme, useThemeStore, wrappedFoliateView };
