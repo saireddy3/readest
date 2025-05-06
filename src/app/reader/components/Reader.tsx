@@ -19,7 +19,12 @@ interface ReaderProps {
   bookUrl?: string;
 }
 
-const Reader: React.FC<ReaderProps> = ({ bookUrl = 'https://cdn.readest.com/books/the-scarlet-letter.epub' }) => {
+const Reader: React.FC<ReaderProps> = ({ bookUrl: propBookUrl }) => {
+  console.log({propBookUrl})
+  const defaultBookUrl = 'https://cdn.readest.com/books/this-side-of-paradise.epub';
+  const [urlBookUrl, setUrlBookUrl] = useState<string | null>(null);
+  const [urlParamsProcessed, setUrlParamsProcessed] = useState(false);
+  const bookUrl = urlBookUrl || propBookUrl || defaultBookUrl;
   const { envConfig, appService } = useEnv();
   const { settings, setSettings } = useSettingsStore();
   const { isSideBarVisible } = useSidebarStore();
@@ -32,10 +37,23 @@ const Reader: React.FC<ReaderProps> = ({ bookUrl = 'https://cdn.readest.com/book
   useTheme();
   useScreenWakeLock(settings.screenWakeLock);
 
+  // First effect: Process URL parameters
   useEffect(() => {
+    // Get URL parameters only on the client side
+    const urlParams = new URLSearchParams(window.location.search);
+    setUrlBookUrl(urlParams.get('bookUrl'));
+    setUrlParamsProcessed(true);
+  }, []);
+
+  // Second effect: Initialize book only after URL parameters are processed
+  useEffect(() => {
+    if (!urlParamsProcessed) return; // Wait for URL params to be processed
+    
     updateAppTheme('base-100');
     if (isInitiating.current) return;
     isInitiating.current = true;
+    
+    console.log("⏳ Starting book initialization with URL:", bookUrl);
     
     const initSettings = async () => {
       try {
@@ -122,16 +140,20 @@ const Reader: React.FC<ReaderProps> = ({ bookUrl = 'https://cdn.readest.com/book
     };
 
     initSettings();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [bookUrl]);
+    return () => {
+      isInitiating.current = false;
+    };
+  }, [bookUrl, urlParamsProcessed]);
 
-  if (loading) {
+  if (!urlParamsProcessed || loading) {
     return (
       <div className="hero h-dvh bg-base-100">
         <div className="hero-content text-center">
           <div>
             <Spinner loading={true} />
-            <div className="mt-4 text-base-content">Loading book from URL...</div>
+            <div className="mt-4 text-base-content">
+              {!urlParamsProcessed ? "Processing URL parameters..." : "Loading book..."}
+            </div>
           </div>
         </div>
       </div>
