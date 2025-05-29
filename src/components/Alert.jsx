@@ -1,13 +1,9 @@
 import clsx from 'clsx';
 import React from 'react';
+import PropTypes from 'prop-types';
 import { useTranslation } from '@/hooks/useTranslation';
 
-const Alert: React.FC<{
-  title: string;
-  message: string;
-  onCancel: () => void;
-  onConfirm: () => void;
-}> = ({ title, message, onCancel, onConfirm }) => {
+const Alert = ({ title, message, onCancel, onConfirm }) => {
   const _ = useTranslation();
   return (
     <div className={clsx('z-[100] flex justify-center px-4')}>
@@ -51,4 +47,11 @@ const Alert: React.FC<{
   );
 };
 
-export default Alert;
+Alert.propTypes = {
+  title: PropTypes.string.isRequired,
+  message: PropTypes.string.isRequired,
+  onCancel: PropTypes.func.isRequired,
+  onConfirm: PropTypes.func.isRequired,
+};
+
+export default Alert; 

@@ -1,3 +1,5 @@
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Position } from '@/utils/sel';
 
 const Popup = ({
@@ -9,15 +11,6 @@ const Popup = ({
   className = '',
   triangleClassName = '',
   additionalStyle = {},
-}: {
-  width: number;
-  height: number;
-  position?: Position;
-  trianglePosition?: Position;
-  children: React.ReactNode;
-  className?: string;
-  triangleClassName?: string;
-  additionalStyle?: React.CSSProperties;
 }) => (
   <div>
     <div
@@ -81,4 +74,26 @@ const Popup = ({
   </div>
 );
 
-export default Popup;
+Popup.propTypes = {
+  width: PropTypes.number.isRequired,
+  height: PropTypes.number.isRequired,
+  position: PropTypes.shape({
+    point: PropTypes.shape({
+      x: PropTypes.number.isRequired,
+      y: PropTypes.number.isRequired,
+    }),
+  }),
+  trianglePosition: PropTypes.shape({
+    dir: PropTypes.oneOf(['left', 'right', 'up', 'down']),
+    point: PropTypes.shape({
+      x: PropTypes.number.isRequired,
+      y: PropTypes.number.isRequired,
+    }),
+  }),
+  children: PropTypes.node.isRequired,
+  className: PropTypes.string,
+  triangleClassName: PropTypes.string,
+  additionalStyle: PropTypes.object,
+};
+
+export default Popup; 

@@ -1,23 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
+import PropTypes from 'prop-types';
 
-interface SliderProps {
-  min?: number;
-  max?: number;
-  step?: number;
-  initialValue?: number;
-  heightPx?: number;
-  minLabel?: string;
-  maxLabel?: string;
-  bubbleElement?: React.ReactNode;
-  bubbleLabel?: string;
-  className?: string;
-  minClassName?: string;
-  maxClassName?: string;
-  bubbleClassName?: string;
-  onChange?: (value: number) => void;
-}
-
-const Slider: React.FC<SliderProps> = ({
+const Slider = ({
   min = 0,
   max = 100,
   step = 1,
@@ -37,10 +21,10 @@ const Slider: React.FC<SliderProps> = ({
   const safeInitialValue = isNaN(initialValue) ? 50 : initialValue;
   const [value, setValue] = useState(safeInitialValue);
   const [isRtl, setIsRtl] = useState(false);
-  const sliderRef = useRef<HTMLDivElement>(null);
+  const sliderRef = useRef(null);
 
-  const handleChange = (e: React.ChangeEvent) => {
-    const newValue = parseInt((e.target as HTMLInputElement).value, 10);
+  const handleChange = (e) => {
+    const newValue = parseInt(e.target.value, 10);
     if (!isNaN(newValue)) {
       setValue(newValue);
       if (onChange) {
@@ -50,7 +34,7 @@ const Slider: React.FC<SliderProps> = ({
   };
 
   useEffect(() => {
-    let node: HTMLElement | null = sliderRef.current;
+    let node = sliderRef.current;
     while (node) {
       if (node.getAttribute('dir') === 'rtl') {
         setIsRtl(true);
@@ -123,4 +107,21 @@ const Slider: React.FC<SliderProps> = ({
   );
 };
 
-export default Slider;
+Slider.propTypes = {
+  min: PropTypes.number,
+  max: PropTypes.number,
+  step: PropTypes.number,
+  initialValue: PropTypes.number,
+  heightPx: PropTypes.number,
+  minLabel: PropTypes.string,
+  maxLabel: PropTypes.string,
+  bubbleElement: PropTypes.node,
+  bubbleLabel: PropTypes.string,
+  className: PropTypes.string,
+  minClassName: PropTypes.string,
+  maxClassName: PropTypes.string,
+  bubbleClassName: PropTypes.string,
+  onChange: PropTypes.func,
+};
+
+export default Slider; 

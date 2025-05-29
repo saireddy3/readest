@@ -1,7 +1,7 @@
 import clsx from 'clsx';
-import React, { ReactNode, useEffect, useState, useRef, useImperativeHandle } from 'react';
-import { MdArrowBackIosNew, MdArrowForwardIos, MdClose } from 'react-icons/md';
-import { IoAlertCircleOutline } from 'react-icons/io5';
+import React, { useEffect, useState, useRef } from 'react';
+import PropTypes from 'prop-types';
+import { MdArrowBackIosNew, MdArrowForwardIos } from 'react-icons/md';
 import { useEnv } from '@/context/EnvContext';
 import { useDrag } from '@/hooks/useDrag';
 import { useResponsiveSize } from '@/hooks/useResponsiveSize';
@@ -11,21 +11,7 @@ import { getDirFromUILanguage } from '@/utils/rtl';
 const VELOCITY_THRESHOLD = 0.5;
 const SNAP_THRESHOLD = 0.2;
 
-interface DialogProps {
-  id?: string;
-  isOpen: boolean;
-  children: ReactNode;
-  snapHeight?: number;
-  header?: ReactNode;
-  title?: string;
-  className?: string;
-  bgClassName?: string;
-  boxClassName?: string;
-  contentClassName?: string;
-  onClose: () => void;
-}
-
-const Dialog: React.FC<DialogProps> = ({
+const Dialog = ({
   id,
   isOpen,
   children,
@@ -44,7 +30,7 @@ const Dialog: React.FC<DialogProps> = ({
   const iconSize22 = useResponsiveSize(22);
   const isMobile = window.innerWidth < 640;
 
-  const handleKeyDown = (event: KeyboardEvent) => {
+  const handleKeyDown = (event) => {
     if (event.key === 'Escape') {
       onClose();
     }
@@ -58,11 +44,11 @@ const Dialog: React.FC<DialogProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleDragMove = (data: { clientY: number; deltaY: number }) => {
+  const handleDragMove = (data) => {
     if (!isMobile) return;
 
-    const modal = document.querySelector('.modal-box') as HTMLElement;
-    const overlay = document.querySelector('.overlay') as HTMLElement;
+    const modal = document.querySelector('.modal-box');
+    const overlay = document.querySelector('.overlay');
 
     const heightFraction = data.clientY / window.innerHeight;
     const newTop = Math.max(0.0, Math.min(1, heightFraction));
@@ -77,9 +63,9 @@ const Dialog: React.FC<DialogProps> = ({
     }
   };
 
-  const handleDragEnd = (data: { velocity: number; clientY: number }) => {
-    const modal = document.querySelector('.modal-box') as HTMLElement;
-    const overlay = document.querySelector('.overlay') as HTMLElement;
+  const handleDragEnd = (data) => {
+    const modal = document.querySelector('.modal-box');
+    const overlay = document.querySelector('.overlay');
     if (!modal || !overlay) return;
 
     const snapUpper = snapHeight ? 1 - snapHeight - SNAP_THRESHOLD : 0.5;
@@ -229,4 +215,18 @@ const Dialog: React.FC<DialogProps> = ({
   );
 };
 
-export default Dialog;
+Dialog.propTypes = {
+  id: PropTypes.string,
+  isOpen: PropTypes.bool.isRequired,
+  children: PropTypes.node.isRequired,
+  snapHeight: PropTypes.number,
+  header: PropTypes.node,
+  title: PropTypes.string,
+  className: PropTypes.string,
+  bgClassName: PropTypes.string,
+  boxClassName: PropTypes.string,
+  contentClassName: PropTypes.string,
+  onClose: PropTypes.func.isRequired,
+};
+
+export default Dialog; 

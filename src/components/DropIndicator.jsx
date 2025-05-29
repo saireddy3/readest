@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from '@/hooks/useTranslation';
 import { HiArrowDownTray } from 'react-icons/hi2';
 
-const DropIndicator: React.FC = () => {
+const DropIndicator = () => {
   const _ = useTranslation();
   return (
     <>
@@ -17,4 +17,4 @@ const DropIndicator: React.FC = () => {
   );
 };
 
-export default DropIndicator;
+export default DropIndicator; 

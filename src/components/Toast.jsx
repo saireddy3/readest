@@ -1,15 +1,14 @@
 import clsx from 'clsx';
 import React, { useEffect, useRef, useState } from 'react';
+import PropTypes from 'prop-types';
 import { eventDispatcher } from '@/utils/event';
-
-export type ToastType = 'info' | 'success' | 'warning' | 'error';
 
 export const Toast = () => {
   const [toastMessage, setToastMessage] = useState('');
-  const toastType = useRef<ToastType>('info');
+  const toastType = useRef('info');
   const toastTimeout = useRef(5000);
   const messageClass = useRef('');
-  const toastDismissTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const toastDismissTimeout = useRef(null);
   const toastClassMap = {
     info: 'toast-info toast-center toast-middle',
     success: 'toast-success toast-top toast-end',
@@ -31,7 +30,7 @@ export const Toast = () => {
     };
   }, [toastMessage]);
 
-  const handleShowToast = async (event: CustomEvent) => {
+  const handleShowToast = async (event) => {
     const { message, type = 'info', timeout, className = '' } = event.detail;
     setToastMessage(message);
     toastType.current = type;
@@ -81,3 +80,5 @@ export const Toast = () => {
     )
   );
 };
+
+export default Toast; 

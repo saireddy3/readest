@@ -1,19 +1,8 @@
 import clsx from 'clsx';
 import React from 'react';
+import PropTypes from 'prop-types';
 
-type QuotaProps = {
-  quotas: {
-    name: string;
-    tooltip: string;
-    used: number;
-    total: number;
-    unit: string;
-  }[];
-  className?: string;
-  showProgress?: boolean;
-};
-
-const Quota: React.FC<QuotaProps> = ({ quotas, showProgress, className }) => {
+const Quota = ({ quotas, showProgress, className }) => {
   return (
     <div className={clsx('text-base-content w-full space-y-2 rounded-md text-base sm:text-sm')}>
       {quotas.map((quota) => {
@@ -55,4 +44,18 @@ const Quota: React.FC<QuotaProps> = ({ quotas, showProgress, className }) => {
   );
 };
 
-export default Quota;
+Quota.propTypes = {
+  quotas: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      tooltip: PropTypes.string.isRequired,
+      used: PropTypes.number.isRequired,
+      total: PropTypes.number.isRequired,
+      unit: PropTypes.string.isRequired,
+    }),
+  ).isRequired,
+  className: PropTypes.string,
+  showProgress: PropTypes.bool,
+};
+
+export default Quota; 

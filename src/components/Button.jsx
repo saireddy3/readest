@@ -1,16 +1,8 @@
 import React from 'react';
 import clsx from 'clsx';
+import PropTypes from 'prop-types';
 
-interface ButtonProps {
-  icon: React.ReactNode;
-  onClick: () => void;
-  disabled?: boolean;
-  tooltip?: string;
-  tooltipDirection?: 'top' | 'bottom' | 'left' | 'right';
-  className?: string;
-}
-
-const Button: React.FC<ButtonProps> = ({
+const Button = ({
   icon,
   onClick,
   disabled = false,
@@ -44,4 +36,13 @@ const Button: React.FC<ButtonProps> = ({
   );
 };
 
-export default Button;
+Button.propTypes = {
+  icon: PropTypes.node.isRequired,
+  onClick: PropTypes.func.isRequired,
+  disabled: PropTypes.bool,
+  tooltip: PropTypes.string,
+  tooltipDirection: PropTypes.oneOf(['top', 'bottom', 'left', 'right']),
+  className: PropTypes.string,
+};
+
+export default Button; 

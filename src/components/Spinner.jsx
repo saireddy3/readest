@@ -1,10 +1,9 @@
 import clsx from 'clsx';
 import React from 'react';
+import PropTypes from 'prop-types';
 import { useTranslation } from '@/hooks/useTranslation';
 
-const Spinner: React.FC<{
-  loading: boolean;
-}> = ({ loading }) => {
+const Spinner = ({ loading }) => {
   const _ = useTranslation();
   if (!loading) return null;
 
@@ -22,4 +21,8 @@ const Spinner: React.FC<{
   );
 };
 
-export default Spinner;
+Spinner.propTypes = {
+  loading: PropTypes.bool.isRequired,
+};
+
+export default Spinner; 

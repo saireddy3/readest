@@ -1,11 +1,13 @@
 'use client';
 
+import React from 'react';
+import PropTypes from 'prop-types';
 import { EnvProvider } from '@/context/EnvContext';
 import { SyncProvider } from '@/context/SyncContext';
 import { IconContext } from 'react-icons';
 import { useDefaultIconSize } from '@/hooks/useResponsiveSize';
 
-const Providers = ({ children }: { children: React.ReactNode }) => {
+const Providers = ({ children }) => {
   const iconSize = useDefaultIconSize();
   return (
     <EnvProvider>
@@ -16,4 +18,8 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export default Providers;
+Providers.propTypes = {
+  children: PropTypes.node.isRequired,
+};
+
+export default Providers; 

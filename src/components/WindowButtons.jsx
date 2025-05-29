@@ -1,28 +1,11 @@
 import clsx from 'clsx';
 import React, { useEffect, useRef } from 'react';
+import PropTypes from 'prop-types';
 import { useEnv } from '@/context/EnvContext';
 
 import { handleMinimize, handleToggleMaximize, handleClose } from '@/utils/webWindow';
 
-interface WindowButtonsProps {
-  className?: string;
-  headerRef?: React.RefObject<HTMLDivElement>;
-  showMinimize?: boolean;
-  showMaximize?: boolean;
-  showClose?: boolean;
-  onMinimize?: () => void;
-  onToggleMaximize?: () => void;
-  onClose?: () => void;
-}
-
-interface WindowButtonProps {
-  id: string;
-  onClick: () => void;
-  ariaLabel: string;
-  children: React.ReactNode;
-}
-
-const WindowButton: React.FC<WindowButtonProps> = ({ onClick, ariaLabel, id, children }) => (
+const WindowButton = ({ onClick, ariaLabel, id, children }) => (
   <button
     id={id}
     onClick={onClick}
@@ -33,7 +16,14 @@ const WindowButton: React.FC<WindowButtonProps> = ({ onClick, ariaLabel, id, chi
   </button>
 );
 
-const WindowButtons: React.FC<WindowButtonsProps> = ({
+WindowButton.propTypes = {
+  id: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired,
+  ariaLabel: PropTypes.string.isRequired,
+  children: PropTypes.node.isRequired,
+};
+
+const WindowButtons = ({
   className,
   headerRef,
   showMinimize = true,
@@ -43,11 +33,11 @@ const WindowButtons: React.FC<WindowButtonsProps> = ({
   onToggleMaximize,
   onClose,
 }) => {
-  const parentRef = useRef<HTMLDivElement>(null);
+  const parentRef = useRef(null);
   const { appService } = useEnv();
 
   // In web mode, we don't need the title bar dragging functionality
-  const handleMouseDown = async (e: MouseEvent) => {
+  const handleMouseDown = async (e) => {
     // No-op in web environment
     console.log('Title bar mouse down - not supported in web environment');
   };
@@ -121,4 +111,15 @@ const WindowButtons: React.FC<WindowButtonsProps> = ({
   );
 };
 
-export default WindowButtons;
+WindowButtons.propTypes = {
+  className: PropTypes.string,
+  headerRef: PropTypes.object,
+  showMinimize: PropTypes.bool,
+  showMaximize: PropTypes.bool,
+  showClose: PropTypes.bool,
+  onMinimize: PropTypes.func,
+  onToggleMaximize: PropTypes.func,
+  onClose: PropTypes.func,
+};
+
+export default WindowButtons; 

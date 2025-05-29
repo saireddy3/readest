@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import Image from 'next/image';
 
 import { Book } from '@/types/book';
@@ -19,17 +20,11 @@ import Alert from '@/components/Alert';
 import Spinner from './Spinner';
 import Dialog from './Dialog';
 
-interface BookDetailModalProps {
-  book: Book;
-  isOpen: boolean;
-  onClose: () => void;
-}
-
-const BookDetailModal = ({ book, isOpen, onClose }: BookDetailModalProps) => {
+const BookDetailModal = ({ book, isOpen, onClose }) => {
   const _ = useTranslation();
   const [loading, setLoading] = useState(false);
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
-  const [bookMeta, setBookMeta] = useState<BookDoc['metadata'] | null>(null);
+  const [bookMeta, setBookMeta] = useState(null);
   const { envConfig, appService } = useEnv();
   const { settings } = useSettingsStore();
 
@@ -97,15 +92,13 @@ const BookDetailModal = ({ book, isOpen, onClose }: BookDetailModalProps) => {
             <div className='mb-10 flex h-40 items-start'>
               <div className='book-cover relative mr-10 aspect-[28/41] h-40 items-end shadow-lg'>
                 <Image
-                  src={book.coverImageUrl!}
+                  src={book.coverImageUrl}
                   alt={formatTitle(book.title)}
                   fill={true}
                   className='w-10 object-cover'
                   onError={(e) => {
-                    (e.target as HTMLImageElement).style.display = 'none';
-                    (e.target as HTMLImageElement).nextElementSibling?.classList.remove(
-                      'invisible',
-                    );
+                    e.target.style.display = 'none';
+                    e.target.nextElementSibling?.classList.remove('invisible');
                   }}
                 />
                 <div
@@ -222,4 +215,17 @@ const BookDetailModal = ({ book, isOpen, onClose }: BookDetailModalProps) => {
   );
 };
 
-export default BookDetailModal;
+BookDetailModal.propTypes = {
+  book: PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    author: PropTypes.string,
+    coverImageUrl: PropTypes.string,
+    hash: PropTypes.string.isRequired,
+    lastUpdated: PropTypes.number,
+    uploadedAt: PropTypes.number,
+  }).isRequired,
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+};
+
+export default BookDetailModal; 

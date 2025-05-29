@@ -1,16 +1,8 @@
 import clsx from 'clsx';
-import React, { useState, isValidElement, ReactElement } from 'react';
+import React, { useState, isValidElement } from 'react';
+import PropTypes from 'prop-types';
 
-interface DropdownProps {
-  className?: string;
-  menuClassName?: string;
-  buttonClassName?: string;
-  toggleButton: React.ReactNode;
-  children: ReactElement<{ setIsDropdownOpen: (isOpen: boolean) => void; menuClassName?: string }>;
-  onToggle?: (isOpen: boolean) => void;
-}
-
-const Dropdown: React.FC<DropdownProps> = ({
+const Dropdown = ({
   className,
   menuClassName,
   buttonClassName,
@@ -26,7 +18,7 @@ const Dropdown: React.FC<DropdownProps> = ({
     onToggle?.(newIsOpen);
   };
 
-  const setIsDropdownOpen = (isOpen: boolean) => {
+  const setIsDropdownOpen = (isOpen) => {
     setIsOpen(isOpen);
     onToggle?.(isOpen);
   };
@@ -54,4 +46,13 @@ const Dropdown: React.FC<DropdownProps> = ({
   );
 };
 
-export default Dropdown;
+Dropdown.propTypes = {
+  className: PropTypes.string,
+  menuClassName: PropTypes.string,
+  buttonClassName: PropTypes.string,
+  toggleButton: PropTypes.node.isRequired,
+  children: PropTypes.element.isRequired,
+  onToggle: PropTypes.func,
+};
+
+export default Dropdown; 

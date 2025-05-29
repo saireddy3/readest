@@ -1,19 +1,9 @@
 import clsx from 'clsx';
 import React from 'react';
+import PropTypes from 'prop-types';
 import { useDefaultIconSize } from '@/hooks/useResponsiveSize';
 
-interface MenuItemProps {
-  label: string;
-  labelClass?: string;
-  shortcut?: string;
-  disabled?: boolean;
-  noIcon?: boolean;
-  icon?: React.ReactNode;
-  children?: React.ReactNode;
-  onClick?: () => void;
-}
-
-const MenuItem: React.FC<MenuItemProps> = ({
+const MenuItem = ({
   label,
   labelClass,
   shortcut,
@@ -70,4 +60,15 @@ const MenuItem: React.FC<MenuItemProps> = ({
   return menuButton;
 };
 
-export default MenuItem;
+MenuItem.propTypes = {
+  label: PropTypes.string.isRequired,
+  labelClass: PropTypes.string,
+  shortcut: PropTypes.string,
+  disabled: PropTypes.bool,
+  noIcon: PropTypes.bool,
+  icon: PropTypes.node,
+  children: PropTypes.node,
+  onClick: PropTypes.func,
+};
+
+export default MenuItem; 
