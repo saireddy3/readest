@@ -8,12 +8,7 @@ import { getStyles } from '@/utils/style';
 import { eventDispatcher } from '@/utils/event';
 import { MAX_ZOOM_LEVEL, MIN_ZOOM_LEVEL, ZOOM_STEP } from '@/services/constants';
 
-interface UseBookShortcutsProps {
-  sideBarBookKey: string | null;
-  bookKeys: string[];
-}
-
-const useBookShortcuts = ({ sideBarBookKey, bookKeys }: UseBookShortcutsProps) => {
+const useBookShortcuts = ({ sideBarBookKey, bookKeys }) => {
   const { getView, getViewSettings, setViewSettings } = useReaderStore();
   const { toggleSideBar, setSideBarBookKey } = useSidebarStore();
   const { setFontLayoutSettingsDialogOpen } = useSettingsStore();
@@ -28,7 +23,7 @@ const useBookShortcuts = ({ sideBarBookKey, bookKeys }: UseBookShortcutsProps) =
     const viewSettings = getViewSettings(sideBarBookKey ?? '');
     if (viewSettings && sideBarBookKey) {
       viewSettings.scrolled = !viewSettings.scrolled;
-      setViewSettings(sideBarBookKey, viewSettings!);
+      setViewSettings(sideBarBookKey, viewSettings);
       const flowMode = viewSettings.scrolled ? 'scrolled' : 'paginated';
       getView(sideBarBookKey)?.renderer.setAttribute('flow', flowMode);
     }
@@ -96,32 +91,32 @@ const useBookShortcuts = ({ sideBarBookKey, bookKeys }: UseBookShortcutsProps) =
     if (!sideBarBookKey) return;
     const view = getView(sideBarBookKey);
     if (!view?.renderer?.setStyles) return;
-    const viewSettings = getViewSettings(sideBarBookKey)!;
-    const zoomLevel = viewSettings!.zoomLevel + ZOOM_STEP;
-    viewSettings!.zoomLevel = Math.min(zoomLevel, MAX_ZOOM_LEVEL);
-    setViewSettings(sideBarBookKey, viewSettings!);
-    view?.renderer.setStyles?.(getStyles(viewSettings!));
+    const viewSettings = getViewSettings(sideBarBookKey);
+    const zoomLevel = viewSettings.zoomLevel + ZOOM_STEP;
+    viewSettings.zoomLevel = Math.min(zoomLevel, MAX_ZOOM_LEVEL);
+    setViewSettings(sideBarBookKey, viewSettings);
+    view?.renderer.setStyles?.(getStyles(viewSettings));
   };
 
   const zoomOut = () => {
     if (!sideBarBookKey) return;
     const view = getView(sideBarBookKey);
     if (!view?.renderer?.setStyles) return;
-    const viewSettings = getViewSettings(sideBarBookKey)!;
-    const zoomLevel = viewSettings!.zoomLevel - ZOOM_STEP;
-    viewSettings!.zoomLevel = Math.max(zoomLevel, MIN_ZOOM_LEVEL);
-    setViewSettings(sideBarBookKey, viewSettings!);
-    view?.renderer.setStyles?.(getStyles(viewSettings!));
+    const viewSettings = getViewSettings(sideBarBookKey);
+    const zoomLevel = viewSettings.zoomLevel - ZOOM_STEP;
+    viewSettings.zoomLevel = Math.max(zoomLevel, MIN_ZOOM_LEVEL);
+    setViewSettings(sideBarBookKey, viewSettings);
+    view?.renderer.setStyles?.(getStyles(viewSettings));
   };
 
   const resetZoom = () => {
     if (!sideBarBookKey) return;
     const view = getView(sideBarBookKey);
     if (!view?.renderer?.setStyles) return;
-    const viewSettings = getViewSettings(sideBarBookKey)!;
-    viewSettings!.zoomLevel = 100;
-    setViewSettings(sideBarBookKey, viewSettings!);
-    view?.renderer.setStyles?.(getStyles(viewSettings!));
+    const viewSettings = getViewSettings(sideBarBookKey);
+    viewSettings.zoomLevel = 100;
+    setViewSettings(sideBarBookKey, viewSettings);
+    view?.renderer.setStyles?.(getStyles(viewSettings));
   };
 
   useShortcuts(
@@ -150,4 +145,4 @@ const useBookShortcuts = ({ sideBarBookKey, bookKeys }: UseBookShortcutsProps) =
   );
 };
 
-export default useBookShortcuts;
+export default useBookShortcuts; 

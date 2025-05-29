@@ -15,7 +15,7 @@ const useBooksManager = () => {
 
   useEffect(() => {
     if (shouldUpdateSearchParams) {
-      const ids = bookKeys.map((key) => key.split('-')[0]!);
+      const ids = bookKeys.map((key) => key.split('-')[0]);
       if (ids) {
         navigateToReader(null, ids);
       }
@@ -25,7 +25,7 @@ const useBooksManager = () => {
   }, [bookKeys, shouldUpdateSearchParams]);
 
   // Append a new book and sync with bookKeys and URL
-  const appendBook = (id: string, isPrimary: boolean) => {
+  const appendBook = (id, isPrimary) => {
     const newKey = `${id}-${uniqueId()}`;
     initViewState(envConfig, id, newKey, isPrimary);
     if (!bookKeys.includes(newKey)) {
@@ -37,16 +37,16 @@ const useBooksManager = () => {
   };
 
   // Close a book and sync with bookKeys
-  const dismissBook = (bookKey: string) => {
+  const dismissBook = (bookKey) => {
     const updatedKeys = bookKeys.filter((key) => key !== bookKey);
     setBookKeys(updatedKeys);
     setShouldUpdateSearchParams(true);
   };
 
-  const getNextBookKey = (bookKey: string) => {
+  const getNextBookKey = (bookKey) => {
     const index = bookKeys.findIndex((key) => key === bookKey);
     const nextIndex = (index + 1) % bookKeys.length;
-    return bookKeys[nextIndex]!;
+    return bookKeys[nextIndex];
   };
 
   return {
@@ -57,4 +57,4 @@ const useBooksManager = () => {
   };
 };
 
-export default useBooksManager;
+export default useBooksManager; 

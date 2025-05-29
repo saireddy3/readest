@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react';
 import { useSync } from '@/hooks/useSync';
-import { BookConfig } from '@/types/book';
 import { useBookDataStore } from '@/store/bookDataStore';
 import { useReaderStore } from '@/store/readerStore';
 import { useSettingsStore } from '@/store/settingsStore';
@@ -10,7 +9,7 @@ import { CFI } from '@/libs/document';
 import { eventDispatcher } from '@/utils/event';
 import { DEFAULT_BOOK_SEARCH_CONFIG, SYNC_PROGRESS_INTERVAL_SEC } from '@/services/constants';
 
-export const useProgressSync = (bookKey: string) => {
+export const useProgressSync = (bookKey) => {
   const _ = useTranslation();
   const { getConfig, setConfig } = useBookDataStore();
   const { getView, getProgress } = useReaderStore();
@@ -23,9 +22,9 @@ export const useProgressSync = (bookKey: string) => {
   const configSynced = useRef(false);
   const firstPulled = useRef(false);
 
-  const pushConfig = (bookKey: string, config: BookConfig | null) => {
+  const pushConfig = (bookKey, config) => {
     if (!config) return;
-    const bookHash = bookKey.split('-')[0]!;
+    const bookHash = bookKey.split('-')[0];
     const newConfig = { bookHash, ...config };
     const compressedConfig = JSON.parse(
       serializeConfig(newConfig, settings.globalViewSettings, DEFAULT_BOOK_SEARCH_CONFIG),
@@ -34,8 +33,8 @@ export const useProgressSync = (bookKey: string) => {
     syncConfigs([compressedConfig], bookHash, 'push');
   };
   
-  const pullConfig = (bookKey: string) => {
-    const bookHash = bookKey.split('-')[0]!;
+  const pullConfig = (bookKey) => {
+    const bookHash = bookKey.split('-')[0];
     syncConfigs([], bookHash, 'pull');
   };
   
@@ -49,7 +48,7 @@ export const useProgressSync = (bookKey: string) => {
     }
   };
 
-  const handleSyncBookProgress = (event: CustomEvent) => {
+  const handleSyncBookProgress = (event) => {
     const { bookKey: syncBookKey } = event.detail;
     if (syncBookKey === bookKey) {
       syncConfig();
@@ -75,8 +74,8 @@ export const useProgressSync = (bookKey: string) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [progress]);
 
-  const lastProgressSyncTime = useRef<number>(0);
-  const syncTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const lastProgressSyncTime = useRef(0);
+  const syncTimeoutRef = useRef(null);
   useEffect(() => {
     if (!config?.location) return;
 
@@ -123,4 +122,4 @@ export const useProgressSync = (bookKey: string) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [syncedConfigs]);
-};
+}; 

@@ -1,6 +1,4 @@
 import {
-  webUpload,
-  webDownload,
   ProgressHandler,
   ProgressPayload,
 } from '@/utils/transfer';
@@ -26,9 +24,7 @@ export const createProgressHandler = (
 
 export const uploadFile = async (
   file: File,
-  fileFullPath: string,
   onProgress?: ProgressHandler,
-  bookHash?: string,
 ) => {
   // No remote upload needed in web mode
   console.log('File upload skipped in web mode:', file.name);
@@ -40,7 +36,6 @@ export const uploadFile = async (
 
 export const downloadFile = async (
   filePath: string,
-  fileFullPath: string,
   onProgress?: ProgressHandler,
 ) => {
   // No remote download needed in web mode

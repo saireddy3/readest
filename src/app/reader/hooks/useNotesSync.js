@@ -1,18 +1,17 @@
 import { useEffect, useRef } from 'react';
 import { useSync } from '@/hooks/useSync';
-import { BookNote } from '@/types/book';
 import { useBookDataStore } from '@/store/bookDataStore';
 import { SYNC_NOTES_INTERVAL_SEC } from '@/services/constants';
 
-export const useNotesSync = (bookKey: string) => {
+export const useNotesSync = (bookKey) => {
   const { syncedNotes, syncNotes, lastSyncedAtNotes } = useSync(bookKey);
   const { getConfig, setConfig } = useBookDataStore();
 
   const config = getConfig(bookKey);
-  const bookHash = bookKey.split('-')[0]!;
+  const bookHash = bookKey.split('-')[0];
 
-  const lastSyncTime = useRef<number>(0);
-  const syncTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const lastSyncTime = useRef(0);
+  const syncTimeoutRef = useRef(null);
 
   const getNewNotes = () => {
     if (!config?.location) return [];
@@ -50,7 +49,7 @@ export const useNotesSync = (bookKey: string) => {
   }, [config]);
 
   useEffect(() => {
-    const processNewNote = (note: BookNote) => {
+    const processNewNote = (note) => {
       const oldNotes = config?.booknotes ?? [];
       const existingNote = oldNotes.find((oldNote) => oldNote.id === note.id);
       if (existingNote) {
@@ -74,4 +73,4 @@ export const useNotesSync = (bookKey: string) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [syncedNotes]);
-};
+}; 

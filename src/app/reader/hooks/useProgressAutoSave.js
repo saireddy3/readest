@@ -5,7 +5,7 @@ import { useReaderStore } from '@/store/readerStore';
 import { useSettingsStore } from '@/store/settingsStore';
 import { throttle } from '@/utils/throttle';
 
-export const useProgressAutoSave = (bookKey: string) => {
+export const useProgressAutoSave = (bookKey) => {
   const { envConfig } = useEnv();
   const { getConfig, saveConfig } = useBookDataStore();
   const { getProgress } = useReaderStore();
@@ -14,7 +14,7 @@ export const useProgressAutoSave = (bookKey: string) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const saveBookConfig = useCallback(
     throttle(async () => {
-      const config = getConfig(bookKey)!;
+      const config = getConfig(bookKey);
       const settings = useSettingsStore.getState().settings;
       await saveConfig(envConfig, bookKey, config, settings);
     }, 10000),
@@ -25,4 +25,4 @@ export const useProgressAutoSave = (bookKey: string) => {
     saveBookConfig();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [progress, bookKey]);
-};
+}; 

@@ -8,7 +8,7 @@ import { SyncProvider } from '@/context/SyncContext';
 import { Toast } from '@/components/Toast';
 
 const HomePage = () => {
-  const [dbError, setDbError] = useState<string | null>(null);
+  const [dbError, setDbError] = useState(null);
 
   // Check for IndexedDB support
   useEffect(() => {
@@ -61,4 +61,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default HomePage; 

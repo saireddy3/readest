@@ -5,13 +5,13 @@ import { getOSPlatform } from '@/utils/misc';
 // See https://github.com/readest/readest/issues/600
 export const useAutoHideScrollbar = () => {
   const shouldAutoHideScrollbar = ['macos', 'ios'].includes(getOSPlatform());
-  const handleScrollbarAutoHide = (doc: Document) => {
+  const handleScrollbarAutoHide = (doc) => {
     if (doc && doc.defaultView && doc.defaultView.frameElement) {
-      const iframe = doc.defaultView.frameElement as HTMLIFrameElement;
+      const iframe = doc.defaultView.frameElement;
       const container = iframe.parentElement?.parentElement;
       if (!container) return;
 
-      let hideScrollbarTimeout: ReturnType<typeof setTimeout>;
+      let hideScrollbarTimeout;
       const showScrollbar = () => {
         container.style.overflow = 'auto';
         container.style.scrollbarWidth = 'thin';
@@ -34,4 +34,4 @@ export const useAutoHideScrollbar = () => {
   };
 
   return { shouldAutoHideScrollbar, handleScrollbarAutoHide };
-};
+}; 

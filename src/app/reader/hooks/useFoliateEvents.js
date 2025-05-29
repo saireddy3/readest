@@ -1,16 +1,6 @@
 import { useEffect } from 'react';
-import { FoliateView } from '@/types/view';
 
-type FoliateEventHandler = {
-  onLoad?: (event: Event) => void;
-  onRelocate?: (event: Event) => void;
-  onLinkClick?: (event: Event) => void;
-  onRendererRelocate?: (event: Event) => void;
-  onDrawAnnotation?: (event: Event) => void;
-  onShowAnnotation?: (event: Event) => void;
-};
-
-export const useFoliateEvents = (view: FoliateView | null, handlers?: FoliateEventHandler) => {
+export const useFoliateEvents = (view, handlers) => {
   const onLoad = handlers?.onLoad;
   const onRelocate = handlers?.onRelocate;
   const onLinkClick = handlers?.onLinkClick;
@@ -37,4 +27,4 @@ export const useFoliateEvents = (view: FoliateView | null, handlers?: FoliateEve
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [view]);
-};
+}; 

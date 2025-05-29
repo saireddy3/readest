@@ -2,7 +2,7 @@ import { useSettingsStore } from '@/store/settingsStore';
 import { useSidebarStore } from '@/store/sidebarStore';
 import { useEffect } from 'react';
 
-const useSidebar = (initialWidth: string, isPinned: boolean) => {
+const useSidebar = (initialWidth, isPinned) => {
   const { settings } = useSettingsStore();
   const {
     sideBarWidth,
@@ -22,7 +22,7 @@ const useSidebar = (initialWidth: string, isPinned: boolean) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleSideBarResize = (newWidth: string) => {
+  const handleSideBarResize = (newWidth) => {
     setSideBarWidth(newWidth);
     settings.globalReadSettings.sideBarWidth = newWidth;
   };
@@ -44,4 +44,4 @@ const useSidebar = (initialWidth: string, isPinned: boolean) => {
   };
 };
 
-export default useSidebar;
+export default useSidebar; 

@@ -34,6 +34,8 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
+    "**/*.js",
+    "**/*.jsx",
     "raw-loader.d.ts",
     ".next/types/**/*.ts"
   ],

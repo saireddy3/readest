@@ -10,10 +10,10 @@ const doubleClickEnabled =
   !DISABLE_DOUBLE_CLICK_ON_MOBILE || !['android', 'ios'].includes(getOSPlatform());
 
 let lastClickTime = 0;
-let longHoldTimeout: ReturnType<typeof setTimeout> | null = null;
+let longHoldTimeout = null;
 
-export const handleKeydown = (bookKey: string, event: KeyboardEvent) => {
-  if (['Backspace', 'ArrowDown', 'ArrowUp'].includes(event.key)) {
+export const handleKeydown = (bookKey, event) => {
+  if (["Backspace", "ArrowDown", "ArrowUp"].includes(event.key)) {
     event.preventDefault();
   }
   window.postMessage(
@@ -31,7 +31,7 @@ export const handleKeydown = (bookKey: string, event: KeyboardEvent) => {
   );
 };
 
-export const handleMousedown = (bookKey: string, event: MouseEvent) => {
+export const handleMousedown = (bookKey, event) => {
   longHoldTimeout = setTimeout(() => {
     longHoldTimeout = null;
   }, LONG_HOLD_THRESHOLD);
@@ -52,7 +52,7 @@ export const handleMousedown = (bookKey: string, event: MouseEvent) => {
   );
 };
 
-export const handleMouseup = (bookKey: string, event: MouseEvent) => {
+export const handleMouseup = (bookKey, event) => {
   // we will handle mouse back and forward buttons ourselves
   if ([3, 4].includes(event.button)) {
     event.preventDefault();
@@ -73,7 +73,7 @@ export const handleMouseup = (bookKey: string, event: MouseEvent) => {
   );
 };
 
-export const handleWheel = (bookKey: string, event: WheelEvent) => {
+export const handleWheel = (bookKey, event) => {
   window.postMessage(
     {
       type: 'iframe-wheel',
@@ -93,7 +93,7 @@ export const handleWheel = (bookKey: string, event: WheelEvent) => {
   );
 };
 
-export const handleClick = (bookKey: string, event: MouseEvent) => {
+export const handleClick = (bookKey, event) => {
   const now = Date.now();
 
   if (doubleClickEnabled && now - lastClickTime < DOUBLE_CLICK_INTERVAL_THRESHOLD_MS) {
@@ -117,9 +117,9 @@ export const handleClick = (bookKey: string, event: MouseEvent) => {
   lastClickTime = now;
 
   const postSingleClick = () => {
-    let element: HTMLElement | null = event.target as HTMLElement;
+    let element = event.target;
     while (element) {
-      if (['sup', 'a', 'audio', 'video'].includes(element.tagName.toLowerCase())) {
+      if (["sup", "a", "audio", "video"].includes(element.tagName.toLowerCase())) {
         return;
       }
       if (element.classList.contains('js_readerFooterNote')) {
@@ -163,7 +163,7 @@ export const handleClick = (bookKey: string, event: MouseEvent) => {
   }
 };
 
-const handleTouchEv = (bookKey: string, event: TouchEvent, type: string) => {
+const handleTouchEv = (bookKey, event, type) => {
   const touch = event.targetTouches[0];
   const touches = [];
   if (touch) {
@@ -184,14 +184,14 @@ const handleTouchEv = (bookKey: string, event: TouchEvent, type: string) => {
   );
 };
 
-export const handleTouchStart = (bookKey: string, event: TouchEvent) => {
+export const handleTouchStart = (bookKey, event) => {
   handleTouchEv(bookKey, event, 'iframe-touchstart');
 };
 
-export const handleTouchMove = (bookKey: string, event: TouchEvent) => {
+export const handleTouchMove = (bookKey, event) => {
   handleTouchEv(bookKey, event, 'iframe-touchmove');
 };
 
-export const handleTouchEnd = (bookKey: string, event: TouchEvent) => {
+export const handleTouchEnd = (bookKey, event) => {
   handleTouchEv(bookKey, event, 'iframe-touchend');
-};
+}; 

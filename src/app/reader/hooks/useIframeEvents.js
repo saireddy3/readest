@@ -1,23 +1,14 @@
 import { useEffect } from 'react';
-import { FoliateView } from '@/types/view';
-import { useEnv } from '@/context/EnvContext';
 import { useReaderStore } from '@/store/readerStore';
 import { eventDispatcher } from '@/utils/event';
 
-export const useClickEvent = (
-  bookKey: string,
-  viewRef: React.MutableRefObject<FoliateView | null>,
-  containerRef: React.RefObject<HTMLDivElement>,
-) => {
-  const { appService } = useEnv();
+export const useClickEvent = (bookKey, viewRef, containerRef) => {
   const { getViewSettings } = useReaderStore();
   const { hoveredBookKey, setHoveredBookKey } = useReaderStore();
-  const handleTurnPage = async (
-    msg: MessageEvent | React.MouseEvent<HTMLDivElement, MouseEvent>,
-  ) => {
+  const handleTurnPage = async (msg) => {
     if (msg instanceof MessageEvent) {
       if (msg.data && msg.data.bookKey === bookKey) {
-        const viewSettings = getViewSettings(bookKey)!;
+        const viewSettings = getViewSettings(bookKey);
         if (msg.data.type === 'iframe-single-click') {
           const viewElement = containerRef.current;
           if (viewElement) {
@@ -31,7 +22,7 @@ export const useClickEvent = (
               const centerStartX = viewStartX + viewRect.width * 0.375;
               const centerEndX = viewStartX + viewRect.width * 0.625;
               if (
-                viewSettings.disableClick! ||
+                viewSettings.disableClick ||
                 (screenX >= centerStartX && screenX <= centerEndX)
               ) {
                 // toggle visibility of the header bar and the footer bar
@@ -40,13 +31,13 @@ export const useClickEvent = (
                 if (hoveredBookKey) {
                   setHoveredBookKey(null);
                 }
-                if (!viewSettings.disableClick! && screenX >= viewCenterX) {
+                if (!viewSettings.disableClick && screenX >= viewCenterX) {
                   if (viewSettings.swapClickArea) {
                     viewRef.current?.goLeft();
                   } else {
                     viewRef.current?.goRight();
                   }
-                } else if (!viewSettings.disableClick! && screenX < viewCenterX) {
+                } else if (!viewSettings.disableClick && screenX < viewCenterX) {
                   if (viewSettings.swapClickArea) {
                     viewRef.current?.goRight();
                   } else {
@@ -98,35 +89,21 @@ export const useClickEvent = (
   };
 };
 
-interface IframeTouch {
-  clientX: number;
-  clientY: number;
-  screenX: number;
-  screenY: number;
-}
-
-interface IframeTouchEvent {
-  targetTouches: IframeTouch[];
-}
-
-export const useTouchEvent = (
-  bookKey: string,
-  viewRef: React.MutableRefObject<FoliateView | null>,
-) => {
+export const useTouchEvent = (bookKey, viewRef) => {
   const { hoveredBookKey, setHoveredBookKey, getViewSettings } = useReaderStore();
-  const viewSettings = getViewSettings(bookKey)!;
+  const viewSettings = getViewSettings(bookKey);
 
-  let touchStart: IframeTouch | null = null;
-  let touchEnd: IframeTouch | null = null;
+  let touchStart = null;
+  let touchEnd = null;
 
-  const onTouchStart = (e: IframeTouchEvent) => {
+  const onTouchStart = (e) => {
     touchEnd = null;
     const touch = e.targetTouches[0];
     if (!touch) return;
     touchStart = touch;
   };
 
-  const onTouchMove = (e: IframeTouchEvent) => {
+  const onTouchMove = (e) => {
     if (!touchStart) return;
     const touch = e.targetTouches[0];
     if (touch) {
@@ -135,7 +112,7 @@ export const useTouchEvent = (
     if (hoveredBookKey && touchEnd) {
       const deltaY = touchEnd.screenY - touchStart.screenY;
       const deltaX = touchEnd.screenX - touchStart.screenX;
-      if (!viewSettings!.scrolled && !viewSettings!.vertical) {
+      if (!viewSettings.scrolled && !viewSettings.vertical) {
         if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 10) {
           setHoveredBookKey(null);
         }
@@ -145,7 +122,7 @@ export const useTouchEvent = (
     }
   };
 
-  const onTouchEnd = (e: IframeTouchEvent) => {
+  const onTouchEnd = (e) => {
     if (!touchStart) return;
 
     const touch = e.targetTouches[0];
@@ -164,7 +141,7 @@ export const useTouchEvent = (
         Math.abs(deltaX) < windowWidth * 0.3
       ) {
         // swipe up to toggle the header bar and the footer bar, only for horizontal page mode
-        if (!viewSettings!.scrolled && !viewSettings!.vertical) {
+        if (!viewSettings.scrolled && !viewSettings.vertical) {
           setHoveredBookKey(hoveredBookKey ? null : bookKey);
         }
       } else {
@@ -178,7 +155,7 @@ export const useTouchEvent = (
     touchEnd = null;
   };
 
-  const handleTouch = (msg: MessageEvent) => {
+  const handleTouch = (msg) => {
     if (msg.data && msg.data.bookKey === bookKey) {
       if (msg.data.type === 'iframe-touchstart') {
         onTouchStart(msg.data);
@@ -197,4 +174,4 @@ export const useTouchEvent = (
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hoveredBookKey, viewRef]);
-};
+}; 

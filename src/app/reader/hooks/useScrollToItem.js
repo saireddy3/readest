@@ -1,9 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import * as CFI from 'foliate-js/epubcfi.js';
-import { BookProgress } from '@/types/book';
 
-const useScrollToItem = (cfi: string, progress: BookProgress | null) => {
-  const viewRef = useRef<HTMLLIElement | null>(null);
+const useScrollToItem = (cfi, progress) => {
+  const viewRef = useRef(null);
   const [isCurrent, setIsCurrent] = useState(false);
 
   useEffect(() => {
@@ -33,4 +32,4 @@ const useScrollToItem = (cfi: string, progress: BookProgress | null) => {
   return { isCurrent, viewRef };
 };
 
-export default useScrollToItem;
+export default useScrollToItem; 
