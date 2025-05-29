@@ -18,4 +18,4 @@ export const useTheme = () => {
     document.documentElement.setAttribute('data-theme', `${themeColor}-${colorScheme}`);
     document.documentElement.style.setProperty('color-scheme', colorScheme);
   }, [themeColor, isDarkMode]);
-};
+}; 

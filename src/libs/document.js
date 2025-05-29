@@ -1,5 +1,3 @@
-import { BookFormat } from '@/types/book';
-import { Contributor, LanguageMap } from '@/utils/book';
 import * as epubcfi from 'foliate-js/epubcfi.js';
 
 // A groupBy polyfill for foliate-js
@@ -34,52 +32,54 @@ Map.groupBy ??= (iterable, callbackfn) => {
 
 export const CFI = epubcfi;
 
-export type DocumentFile = File;
+/**
+ * @typedef {Object} TOCItem
+ * @property {number} id
+ * @property {string} label
+ * @property {string} href
+ * @property {string} [cfi]
+ * @property {TOCItem[]} [subitems]
+ */
 
-export interface TOCItem {
-  id: number;
-  label: string;
-  href: string;
-  cfi?: string;
-  subitems?: TOCItem[];
-}
+/**
+ * @typedef {Object} SectionItem
+ * @property {string} id
+ * @property {string} cfi
+ * @property {number} size
+ */
 
-export interface SectionItem {
-  id: string;
-  cfi: string;
-  size: number;
-}
+/**
+ * @typedef {Object} BookDoc
+ * @property {Object} metadata
+ * @property {string|Object} metadata.title - NOTE: the title and author fields should be formatted
+ * @property {string|Object} metadata.author
+ * @property {string|string[]} metadata.language
+ * @property {string} [metadata.editor]
+ * @property {string} [metadata.publisher]
+ * @property {string} [metadata.published]
+ * @property {string} [metadata.description]
+ * @property {string[]} [metadata.subject]
+ * @property {string} [metadata.identifier]
+ * @property {string} dir
+ * @property {TOCItem[]} [toc]
+ * @property {SectionItem[]} [sections]
+ * @property {EventTarget} [transformTarget]
+ * @property {function(string): Array<string|number>} splitTOCHref
+ * @property {function(): Promise<Blob|null>} getCover
+ */
 
-export interface BookDoc {
-  metadata: {
-    // NOTE: the title and author fields should be formatted
-    title: string | LanguageMap;
-    author: string | Contributor;
-    language: string | string[];
-    editor?: string;
-    publisher?: string;
-    published?: string;
-    description?: string;
-    subject?: string[];
-    identifier?: string;
-  };
-  dir: string;
-  toc?: Array<TOCItem>;
-  sections?: Array<SectionItem>;
-  transformTarget?: EventTarget;
-  splitTOCHref(href: string): Array<string | number>;
-  getCover(): Promise<Blob | null>;
-}
+/**
+ * @enum {string}
+ */
+export const SupportedFileFormats = {
+  EPUB: 'epub',
+  MOBI: 'mobi',
+  CBZ: 'cbz',
+  FB2: 'fb2',
+  FBZ: 'fbz',
+};
 
-export enum SupportedFileFormats {
-  EPUB = 'epub',
-  MOBI = 'mobi',
-  CBZ = 'cbz',
-  FB2 = 'fb2',
-  FBZ = 'fbz',
-}
-
-export const EXTS: Record<BookFormat, string> = {
+export const EXTS = {
   EPUB: 'epub',
   MOBI: 'mobi',
   CBZ: 'cbz',
@@ -88,19 +88,28 @@ export const EXTS: Record<BookFormat, string> = {
 };
 
 export class DocumentLoader {
-  private file: File;
-
-  constructor(file: File) {
+  /**
+   * @param {File} file
+   */
+  constructor(file) {
     this.file = file;
   }
 
-  private async isZip(): Promise<boolean> {
+  /**
+   * @private
+   * @returns {Promise<boolean>}
+   */
+  async isZip() {
     const signature = new Uint8Array(await this.file.slice(0, 4).arrayBuffer());
     return signature[0] === 0x50 && signature[1] === 0x4b && signature[2] === 0x03 && signature[3] === 0x04;
   }
 
-  private async makeZipLoader() {
-    const getComment = async (): Promise<string | null> => {
+  /**
+   * @private
+   * @returns {Promise<Object>}
+   */
+  async makeZipLoader() {
+    const getComment = async () => {
       const EOCD_SIGNATURE = [0x50, 0x4b, 0x05, 0x06];
       const maxEOCDSearch = 1024 * 64;
 
@@ -115,7 +124,7 @@ export class DocumentLoader {
           bytes[i + 2] === EOCD_SIGNATURE[2] &&
           bytes[i + 3] === EOCD_SIGNATURE[3]
         ) {
-          const commentLength = bytes[i + 20]! + (bytes[i + 21]! << 8);
+          const commentLength = bytes[i + 20] + (bytes[i + 21] << 8);
           const commentStart = i + 22;
           const commentBytes = bytes.slice(commentStart, commentStart + commentLength);
           return new TextDecoder().decode(commentBytes);
@@ -128,40 +137,51 @@ export class DocumentLoader {
     const { configure, ZipReader, BlobReader, TextWriter, BlobWriter } = await import(
       '@zip.js/zip.js'
     );
-    type Entry = import('@zip.js/zip.js').Entry;
     configure({ useWebWorkers: false });
     const reader = new ZipReader(new BlobReader(this.file));
     const entries = await reader.getEntries();
     const map = new Map(entries.map((entry) => [entry.filename, entry]));
     const load =
-      (f: (entry: Entry, type?: string) => Promise<string | Blob> | null) =>
-      (name: string, ...args: [string?]) =>
-        map.has(name) ? f(map.get(name)!, ...args) : null;
+      (f) =>
+      (name, ...args) =>
+        map.has(name) ? f(map.get(name), ...args) : null;
 
-    const loadText = load((entry: Entry) =>
+    const loadText = load((entry) =>
       entry.getData ? entry.getData(new TextWriter()) : null,
     );
-    const loadBlob = load((entry: Entry, type?: string) =>
-      entry.getData ? entry.getData(new BlobWriter(type!)) : null,
+    const loadBlob = load((entry, type) =>
+      entry.getData ? entry.getData(new BlobWriter(type)) : null,
     );
-    const getSize = (name: string) => map.get(name)?.uncompressedSize ?? 0;
+    const getSize = (name) => map.get(name)?.uncompressedSize ?? 0;
 
     return { entries, loadText, loadBlob, getSize, getComment, sha1: undefined };
   }
 
-  private isCBZ(): boolean {
+  /**
+   * @private
+   * @returns {boolean}
+   */
+  isCBZ() {
     return (
       this.file.type === 'application/vnd.comicbook+zip' || this.file.name.endsWith(`.${EXTS.CBZ}`)
     );
   }
 
-  private isFB2(): boolean {
+  /**
+   * @private
+   * @returns {boolean}
+   */
+  isFB2() {
     return (
       this.file.type === 'application/x-fictionbook+xml' || this.file.name.endsWith(`.${EXTS.FB2}`)
     );
   }
 
-  private isFBZ(): boolean {
+  /**
+   * @private
+   * @returns {boolean}
+   */
+  isFBZ() {
     return (
       this.file.type === 'application/x-zip-compressed-fb2' ||
       this.file.name.endsWith('.fb2.zip') ||
@@ -169,9 +189,12 @@ export class DocumentLoader {
     );
   }
 
-  public async open(): Promise<{ book: BookDoc; format: BookFormat }> {
-    let format: BookFormat = 'EPUB';
-    let book: BookDoc | null = null;
+  /**
+   * @returns {Promise<{book: BookDoc, format: string}>}
+   */
+  async open() {
+    let format = 'EPUB';
+    let book = null;
 
     if (await this.isZip()) {
       const loader = await this.makeZipLoader();
@@ -200,14 +223,18 @@ export class DocumentLoader {
       book = await makeFB2(this.file);
       format = 'FB2';
     }
-    return { book, format } as { book: BookDoc; format: BookFormat };
+    return { book, format };
   }
 }
 
-export const getDirection = (doc: Document) => {
+/**
+ * @param {Document} doc
+ * @returns {{vertical: boolean, rtl: boolean}}
+ */
+export const getDirection = (doc) => {
   const { defaultView } = doc;
-  const { writingMode, direction } = defaultView!.getComputedStyle(doc.body);
+  const { writingMode, direction } = defaultView.getComputedStyle(doc.body);
   const vertical = writingMode === 'vertical-rl' || writingMode === 'vertical-lr';
   const rtl = doc.body.dir === 'rtl' || direction === 'rtl' || doc.documentElement.dir === 'rtl';
   return { vertical, rtl };
-};
+}; 

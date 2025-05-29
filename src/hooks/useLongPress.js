@@ -1,26 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-interface UseLongPressOptions {
-  onTap?: () => void;
-  onLongPress?: () => void;
-  onContextMenu?: () => void;
-  onCancel?: () => void;
-  threshold?: number;
-  moveThreshold?: number;
-}
-
-interface UseLongPressResult {
-  pressing: boolean;
-  handlers: {
-    onPointerDown: (e: React.PointerEvent) => void;
-    onPointerUp: (e: React.PointerEvent) => void;
-    onPointerMove: (e: React.PointerEvent) => void;
-    onPointerCancel: (e: React.PointerEvent) => void;
-    onPointerLeave: (e: React.PointerEvent) => void;
-    onContextMenu: (e: React.MouseEvent) => void;
-  };
-}
-
 export const useLongPress = ({
   onTap,
   onLongPress,
@@ -28,11 +7,11 @@ export const useLongPress = ({
   onCancel,
   threshold = 500,
   moveThreshold = 10,
-}: UseLongPressOptions): UseLongPressResult => {
+}) => {
   const [pressing, setPressing] = useState(false);
-  const timerRef = useRef<NodeJS.Timeout>();
-  const startPosRef = useRef<{ x: number; y: number } | null>(null);
-  const pointerId = useRef<number | null>(null);
+  const timerRef = useRef();
+  const startPosRef = useRef(null);
+  const pointerId = useRef(null);
   const isLongPressTriggered = useRef(false);
 
   const reset = useCallback(() => {
@@ -44,7 +23,7 @@ export const useLongPress = ({
   }, []);
 
   const handlePointerDown = useCallback(
-    (e: React.PointerEvent) => {
+    (e) => {
       if (e.pointerType === 'mouse' && e.button !== 0) {
         return;
       }
@@ -66,7 +45,7 @@ export const useLongPress = ({
   );
 
   const handlePointerMove = useCallback(
-    (e: React.PointerEvent) => {
+    (e) => {
       if (e.pointerId !== pointerId.current || !startPosRef.current) return;
 
       const deltaX = Math.abs(e.clientX - startPosRef.current.x);
@@ -81,7 +60,7 @@ export const useLongPress = ({
   );
 
   const handlePointerUp = useCallback(
-    (e: React.PointerEvent) => {
+    (e) => {
       if (e.pointerId !== pointerId.current) return;
 
       if (!isLongPressTriggered.current && startPosRef.current) {
@@ -99,7 +78,7 @@ export const useLongPress = ({
   );
 
   const handleCancel = useCallback(
-    (e: React.PointerEvent) => {
+    (e) => {
       if (e.pointerId !== pointerId.current) return;
       onCancel?.();
       reset();
@@ -108,7 +87,7 @@ export const useLongPress = ({
   );
 
   const handleContextMenu = useCallback(
-    (e: React.MouseEvent) => {
+    (e) => {
       if (onContextMenu) {
         e.preventDefault();
         e.stopPropagation();
@@ -135,4 +114,4 @@ export const useLongPress = ({
       onContextMenu: handleContextMenu,
     },
   };
-};
+}; 

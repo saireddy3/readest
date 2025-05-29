@@ -1,12 +1,8 @@
 import { useEffect, useState } from 'react';
-import { loadShortcuts, ShortcutConfig } from '../helpers/shortcuts';
+import { loadShortcuts } from '../helpers/shortcuts';
 
-export type KeyActionHandlers = {
-  [K in keyof ShortcutConfig]?: () => void;
-};
-
-const useShortcuts = (actions: KeyActionHandlers, dependencies: React.DependencyList = []) => {
-  const [shortcuts, setShortcuts] = useState<ShortcutConfig>(loadShortcuts);
+const useShortcuts = (actions, dependencies = []) => {
+  const [shortcuts, setShortcuts] = useState(loadShortcuts);
 
   useEffect(() => {
     const handleShortcutUpdate = () => {
@@ -17,7 +13,7 @@ const useShortcuts = (actions: KeyActionHandlers, dependencies: React.Dependency
     return () => window.removeEventListener('shortcutUpdate', handleShortcutUpdate);
   }, []);
 
-  const parseShortcut = (shortcut: string) => {
+  const parseShortcut = (shortcut) => {
     const keys = shortcut.toLowerCase().split('+');
     return {
       ctrlKey: keys.includes('ctrl'),
@@ -29,12 +25,12 @@ const useShortcuts = (actions: KeyActionHandlers, dependencies: React.Dependency
   };
 
   const isShortcutMatch = (
-    shortcut: string,
-    key: string,
-    ctrlKey: boolean,
-    altKey: boolean,
-    metaKey: boolean,
-    shiftKey: boolean,
+    shortcut,
+    key,
+    ctrlKey,
+    altKey,
+    metaKey,
+    shiftKey,
   ) => {
     const parsedShortcut = parseShortcut(shortcut);
     return (
@@ -47,24 +43,24 @@ const useShortcuts = (actions: KeyActionHandlers, dependencies: React.Dependency
   };
 
   const processKeyEvent = (
-    key: string,
-    ctrlKey: boolean,
-    altKey: boolean,
-    metaKey: boolean,
-    shiftKey: boolean,
+    key,
+    ctrlKey,
+    altKey,
+    metaKey,
+    shiftKey,
   ) => {
     // FIXME: This is a temporary fix to disable Back button navigation
     if (key === 'backspace') return true;
     for (const [actionName, actionHandler] of Object.entries(actions)) {
-      const shortcutKey = actionName as keyof ShortcutConfig;
-      const handler = actionHandler as (() => void) | undefined;
-      const shortcutList = shortcuts[shortcutKey as keyof ShortcutConfig];
+      const shortcutKey = actionName;
+      const handler = actionHandler;
+      const shortcutList = shortcuts[shortcutKey];
       if (
         handler &&
         shortcutList?.some((shortcut) =>
           isShortcutMatch(shortcut, key, ctrlKey, altKey, metaKey, shiftKey),
-      )
-    ) {
+        )
+      ) {
         handler();
         return true;
       }
@@ -72,9 +68,9 @@ const useShortcuts = (actions: KeyActionHandlers, dependencies: React.Dependency
     return false;
   };
 
-  const unifiedHandleKeyDown = (event: KeyboardEvent | MessageEvent) => {
+  const unifiedHandleKeyDown = (event) => {
     // Check if the focus is on an input, textarea, or contenteditable element
-    const activeElement = document.activeElement as HTMLElement;
+    const activeElement = document.activeElement;
     const isInteractiveElement =
       (activeElement.tagName === 'INPUT' ||
       activeElement.tagName === 'TEXTAREA' ||
@@ -117,4 +113,4 @@ const useShortcuts = (actions: KeyActionHandlers, dependencies: React.Dependency
   }, [shortcuts, ...dependencies]);
 };
 
-export default useShortcuts;
+export default useShortcuts; 

@@ -1,42 +1,36 @@
 import { create } from 'zustand';
-import { getThemeCode, ThemeCode } from '@/utils/style';
-import { CustomTheme, Palette, ThemeMode } from '@/styles/themes';
-import { EnvConfigType, isWebAppPlatform } from '@/services/environment';
-import { SystemSettings } from '@/types/settings';
+import { getThemeCode } from '@/utils/style';
+import { isWebAppPlatform } from '@/services/environment';
 
-interface ThemeState {
-  themeMode: ThemeMode;
-  themeColor: string;
-  systemIsDarkMode: boolean;
-  themeCode: ThemeCode;
-  isDarkMode: boolean;
-  getIsDarkMode: () => boolean;
-  setThemeMode: (mode: ThemeMode) => void;
-  setThemeColor: (color: string) => void;
-  updateAppTheme: (color: keyof Palette) => void;
-  saveCustomTheme: (
-    envConfig: EnvConfigType,
-    settings: SystemSettings,
-    theme: CustomTheme,
-    isDelete?: boolean,
-  ) => void;
-}
+/**
+ * @typedef {Object} ThemeState
+ * @property {ThemeMode} themeMode
+ * @property {string} themeColor
+ * @property {boolean} systemIsDarkMode
+ * @property {ThemeCode} themeCode
+ * @property {boolean} isDarkMode
+ * @property {function(): boolean} getIsDarkMode
+ * @property {function(ThemeMode): void} setThemeMode
+ * @property {function(string): void} setThemeColor
+ * @property {function(keyof Palette): void} updateAppTheme
+ * @property {function(EnvConfigType, SystemSettings, CustomTheme, boolean?): void} saveCustomTheme
+ */
 
-const getInitialThemeMode = (): ThemeMode => {
+const getInitialThemeMode = () => {
   if (typeof window !== 'undefined' && localStorage) {
-    return (localStorage.getItem('themeMode') as ThemeMode) || 'auto';
+    return localStorage.getItem('themeMode') || 'auto';
   }
   return 'auto';
 };
 
-const getInitialThemeColor = (): string => {
+const getInitialThemeColor = () => {
   if (typeof window !== 'undefined' && localStorage) {
     return localStorage.getItem('themeColor') || 'default';
   }
   return 'default';
 };
 
-export const useThemeStore = create<ThemeState>((set, get) => {
+export const useThemeStore = create((set, get) => {
   const initialThemeMode = getInitialThemeMode();
   const initialThemeColor = getInitialThemeColor();
   const systemIsDarkMode =
@@ -112,4 +106,4 @@ export const useThemeStore = create<ThemeState>((set, get) => {
       await appService.saveSettings(settings);
     },
   };
-});
+}); 

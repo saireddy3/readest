@@ -2,14 +2,11 @@ import { useEffect, useRef, useState } from 'react';
 // Import router if needed
 // import { useRouter } from '@/context/RouterContext';
 import { useSyncContext } from '@/context/SyncContext';
-import { SyncData, SyncOp, SyncResult, SyncType } from '@/libs/sync';
 import { useSettingsStore } from '@/store/settingsStore';
 import { useBookDataStore } from '@/store/bookDataStore';
 import { transformBookConfigFromDB } from '@/utils/transform';
 import { transformBookNoteFromDB } from '@/utils/transform';
 import { transformBookFromDB } from '@/utils/transform';
-import { DBBook, DBBookConfig, DBBookNote } from '@/types/records';
-import { Book, BookConfig, BookDataRecord, BookNote } from '@/types/book';
 
 const transformsFromDB = {
   books: transformBookFromDB,
@@ -17,7 +14,7 @@ const transformsFromDB = {
   configs: transformBookConfigFromDB,
 };
 
-const computeMaxTimestamp = (records: BookDataRecord[]): number => {
+const computeMaxTimestamp = (records) => {
   let maxTime = 0;
   for (const rec of records) {
     if (rec.updated_at) {
@@ -34,7 +31,7 @@ const computeMaxTimestamp = (records: BookDataRecord[]): number => {
 
 const SEVEN_DAYS_IN_MS = 7 * 24 * 60 * 60 * 1000;
 
-export function useSync(bookKey?: string) {
+export function useSync(bookKey) {
   const { settings, setSettings } = useSettingsStore();
   const { getConfig, setConfig } = useBookDataStore();
   const config = bookKey ? getConfig(bookKey) : null;
@@ -42,22 +39,22 @@ export function useSync(bookKey?: string) {
   const [syncingBooks, setSyncingBooks] = useState(false);
   const [syncingConfigs, setSyncingConfigs] = useState(false);
   const [syncingNotes, setSyncingNotes] = useState(false);
-  const [syncError, setSyncError] = useState<string | null>(null);
-  const [lastSyncedAtBooks, setLastSyncedAtBooks] = useState<number>(0);
-  const [lastSyncedAtConfigs, setLastSyncedAtConfigs] = useState<number>(0);
-  const [lastSyncedAtNotes, setLastSyncedAtNotes] = useState<number>(0);
+  const [syncError, setSyncError] = useState(null);
+  const [lastSyncedAtBooks, setLastSyncedAtBooks] = useState(0);
+  const [lastSyncedAtConfigs, setLastSyncedAtConfigs] = useState(0);
+  const [lastSyncedAtNotes, setLastSyncedAtNotes] = useState(0);
   const lastSyncedAtInited = useRef(false);
 
   const [syncing, setSyncing] = useState(false);
   // null means unsynced, empty array means synced no changes
-  const [syncResult, setSyncResult] = useState<SyncResult>({
+  const [syncResult, setSyncResult] = useState({
     books: null,
     configs: null,
     notes: null,
   });
-  const [syncedBooks, setSyncedBooks] = useState<Book[] | null>(null);
-  const [syncedConfigs, setSyncedConfigs] = useState<BookConfig[] | null>(null);
-  const [syncedNotes, setSyncedNotes] = useState<BookNote[] | null>(null);
+  const [syncedBooks, setSyncedBooks] = useState(null);
+  const [syncedConfigs, setSyncedConfigs] = useState(null);
+  const [syncedNotes, setSyncedNotes] = useState(null);
 
   const { syncClient } = useSyncContext();
 
@@ -77,11 +74,11 @@ export function useSync(bookKey?: string) {
   // bookId is for configs and notes only, if bookId is provided, only pull changes for that book
   // and update the lastSyncedAt for that book in the book config
   const pullChanges = async (
-    type: SyncType,
-    since: number,
-    setLastSyncedAt: React.Dispatch<React.SetStateAction<number>>,
-    setSyncing: React.Dispatch<React.SetStateAction<boolean>>,
-    bookId?: string,
+    type,
+    since,
+    setLastSyncedAt,
+    setSyncing,
+    bookId,
   ) => {
     setSyncing(true);
     setSyncError(null);
@@ -121,7 +118,7 @@ export function useSync(bookKey?: string) {
           }
           break;
       }
-    } catch (err: unknown) {
+    } catch (err) {
       console.error(err);
       if (err instanceof Error) {
         setSyncError(err.message || `Error pulling ${type}`);
@@ -133,14 +130,14 @@ export function useSync(bookKey?: string) {
     }
   };
 
-  const pushChanges = async (payload: SyncData) => {
+  const pushChanges = async (payload) => {
     setSyncing(true);
     setSyncError(null);
 
     try {
       const result = await syncClient.pushChanges(payload);
       setSyncResult(result);
-    } catch (err: unknown) {
+    } catch (err) {
       console.error(err);
       if (err instanceof Error) {
         setSyncError(err.message || 'Error pushing changes');
@@ -152,7 +149,7 @@ export function useSync(bookKey?: string) {
     }
   };
 
-  const syncBooks = async (books?: Book[], op: SyncOp = 'both') => {
+  const syncBooks = async (books, op = 'both') => {
     if ((op === 'push' || op === 'both') && books?.length) {
       await pushChanges({ books });
     }
@@ -161,7 +158,7 @@ export function useSync(bookKey?: string) {
     }
   };
 
-  const syncConfigs = async (bookConfigs?: BookConfig[], bookId?: string, op: SyncOp = 'both') => {
+  const syncConfigs = async (bookConfigs, bookId, op = 'both') => {
     if ((op === 'push' || op === 'both') && bookConfigs?.length) {
       await pushChanges({ configs: bookConfigs });
     }
@@ -176,7 +173,7 @@ export function useSync(bookKey?: string) {
     }
   };
 
-  const syncNotes = async (bookNotes?: BookNote[], bookId?: string, op: SyncOp = 'both') => {
+  const syncNotes = async (bookNotes, bookId, op = 'both') => {
     if ((op === 'push' || op === 'both') && bookNotes?.length) {
       await pushChanges({ notes: bookNotes });
     }
@@ -189,13 +186,13 @@ export function useSync(bookKey?: string) {
     if (!syncing && syncResult) {
       const { books: dbBooks, configs: dbBookConfigs, notes: dbBookNotes } = syncResult;
       const books = dbBooks?.map((dbBook) =>
-        transformsFromDB['books'](dbBook as unknown as DBBook),
+        transformsFromDB['books'](dbBook),
       );
       const configs = dbBookConfigs?.map((dbBookConfig) =>
-        transformsFromDB['configs'](dbBookConfig as unknown as DBBookConfig),
+        transformsFromDB['configs'](dbBookConfig),
       );
       const notes = dbBookNotes?.map((dbBookNote) =>
-        transformsFromDB['notes'](dbBookNote as unknown as DBBookNote),
+        transformsFromDB['notes'](dbBookNote),
       );
       if (books) setSyncedBooks(books);
       if (configs) setSyncedConfigs(configs);
@@ -219,4 +216,4 @@ export function useSync(bookKey?: string) {
     syncConfigs,
     syncNotes,
   };
-}
+} 

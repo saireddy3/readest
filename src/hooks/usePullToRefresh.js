@@ -5,40 +5,40 @@ const SHOW_INDICATOR_THRESHOLD = 60;
 
 const MAX = 128;
 const k = 0.4;
-function appr(x: number) {
+function appr(x) {
   return MAX * (1 - Math.exp((-k * x) / MAX));
 }
 
-export const usePullToRefresh = (ref: React.RefObject<HTMLDivElement>, onTrigger: () => void) => {
+export const usePullToRefresh = (ref, onTrigger) => {
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
 
     el.addEventListener('touchstart', handleTouchStart, { passive: true });
 
-    function handleTouchStart(startEvent: TouchEvent) {
+    function handleTouchStart(startEvent) {
       const el = ref.current;
       if (!el) return;
 
       if (el.scrollTop > 0) return;
 
-      const initialX = startEvent.touches[0]!.clientX;
-      const initialY = startEvent.touches[0]!.clientY;
+      const initialX = startEvent.touches[0].clientX;
+      const initialY = startEvent.touches[0].clientY;
 
       el.addEventListener('touchmove', handleTouchMove, { passive: true });
       el.addEventListener('touchend', handleTouchEnd);
 
-      function handleTouchMove(moveEvent: TouchEvent) {
+      function handleTouchMove(moveEvent) {
         const el = ref.current;
         if (!el) return;
 
-        const currentX = moveEvent.touches[0]!.clientX;
-        const currentY = moveEvent.touches[0]!.clientY;
+        const currentX = moveEvent.touches[0].clientX;
+        const currentY = moveEvent.touches[0].clientY;
         const dx = currentX - initialX;
         const dy = currentY - initialY;
         if (dy < 0 || Math.abs(dx) * 2 > Math.abs(dy)) return;
 
-        const parentEl = el.parentNode as HTMLDivElement;
+        const parentEl = el.parentNode;
         if (dy > TRIGGER_THRESHOLD) {
           flipArrow(parentEl);
         } else if (dy > SHOW_INDICATOR_THRESHOLD) {
@@ -47,13 +47,13 @@ export const usePullToRefresh = (ref: React.RefObject<HTMLDivElement>, onTrigger
           removePullIndicator(parentEl);
         }
 
-        const wrapper = el.querySelector('.transform-wrapper') as HTMLElement;
+        const wrapper = el.querySelector('.transform-wrapper');
         if (wrapper) {
           wrapper.style.transform = `translate3d(0, ${appr(dy)}px, 0)`;
         }
       }
 
-      function addPullIndicator(el: HTMLDivElement) {
+      function addPullIndicator(el) {
         const indicator = el.querySelector('.pull-indicator');
         if (indicator) {
           if (indicator.classList.contains('flip')) {
@@ -72,33 +72,33 @@ export const usePullToRefresh = (ref: React.RefObject<HTMLDivElement>, onTrigger
         el.appendChild(pullIndicator);
       }
 
-      function removePullIndicator(el: HTMLDivElement) {
+      function removePullIndicator(el) {
         const pullIndicator = el.querySelector('.pull-indicator');
         if (pullIndicator) {
           pullIndicator.remove();
         }
       }
 
-      function flipArrow(el: HTMLDivElement) {
+      function flipArrow(el) {
         const pullIndicator = el.querySelector('.pull-indicator');
         if (pullIndicator && !pullIndicator.classList.contains('flip')) {
           pullIndicator.classList.add('flip');
         }
       }
 
-      function handleTouchEnd(endEvent: TouchEvent) {
+      function handleTouchEnd(endEvent) {
         const el = ref.current;
         if (!el) return;
 
-        const wrapper = el.querySelector('.transform-wrapper') as HTMLElement;
+        const wrapper = el.querySelector('.transform-wrapper');
         if (wrapper) {
           wrapper.style.transform = 'translateY(0)';
         }
-        removePullIndicator(el.parentNode as HTMLDivElement);
+        removePullIndicator(el.parentNode);
 
         el.style.transition = 'transform 0.2s';
 
-        const y = endEvent.changedTouches[0]!.clientY;
+        const y = endEvent.changedTouches[0].clientY;
         const dy = y - initialY;
         if (dy > TRIGGER_THRESHOLD) {
           onTrigger();
@@ -124,4 +124,4 @@ export const usePullToRefresh = (ref: React.RefObject<HTMLDivElement>, onTrigger
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ref.current]);
-};
+}; 

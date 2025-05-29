@@ -1,29 +1,30 @@
-export interface ShortcutConfig {
-  onSwitchSideBar: string[];
-  onToggleSideBar: string[];
-  onToggleNotebook: string[];
-  onToggleSearchBar: string[];
-  onToggleScrollMode: string[];
-  onToggleSelectMode: string[];
-  onOpenFontLayoutSettings: string[];
-  onReloadPage: string[];
-  onQuitApp: string[];
-  onGoLeft: string[];
-  onGoRight: string[];
-  onGoNext: string[];
-  onGoPrev: string[];
-  onGoHalfPageDown: string[];
-  onGoHalfPageUp: string[];
-  onGoBack: string[];
-  onGoForward: string[];
-  onZoomIn: string[];
-  onZoomOut: string[];
-  onResetZoom: string[];
-  onSaveNote: string[];
-  onCloseNote: string[];
-}
+/**
+ * @typedef {Object} ShortcutConfig
+ * @property {string[]} onSwitchSideBar
+ * @property {string[]} onToggleSideBar
+ * @property {string[]} onToggleNotebook
+ * @property {string[]} onToggleSearchBar
+ * @property {string[]} onToggleScrollMode
+ * @property {string[]} onToggleSelectMode
+ * @property {string[]} onOpenFontLayoutSettings
+ * @property {string[]} onReloadPage
+ * @property {string[]} onQuitApp
+ * @property {string[]} onGoLeft
+ * @property {string[]} onGoRight
+ * @property {string[]} onGoNext
+ * @property {string[]} onGoPrev
+ * @property {string[]} onGoHalfPageDown
+ * @property {string[]} onGoHalfPageUp
+ * @property {string[]} onGoBack
+ * @property {string[]} onGoForward
+ * @property {string[]} onZoomIn
+ * @property {string[]} onZoomOut
+ * @property {string[]} onResetZoom
+ * @property {string[]} onSaveNote
+ * @property {string[]} onCloseNote
+ */
 
-const DEFAULT_SHORTCUTS: ShortcutConfig = {
+const DEFAULT_SHORTCUTS = {
   onSwitchSideBar: ['ctrl+Tab', 'opt+Tab', 'alt+Tab'],
   onToggleSideBar: ['s'],
   onToggleNotebook: ['n'],
@@ -49,7 +50,7 @@ const DEFAULT_SHORTCUTS: ShortcutConfig = {
 };
 
 // Load shortcuts from localStorage or fallback to defaults
-export const loadShortcuts = (): ShortcutConfig => {
+export const loadShortcuts = () => {
   if (typeof localStorage === 'undefined') return DEFAULT_SHORTCUTS;
   const customShortcuts = JSON.parse(localStorage.getItem('customShortcuts') || '{}');
   return {
@@ -59,6 +60,6 @@ export const loadShortcuts = (): ShortcutConfig => {
 };
 
 // Save custom shortcuts to localStorage
-export const saveShortcuts = (shortcuts: ShortcutConfig) => {
+export const saveShortcuts = (shortcuts) => {
   localStorage.setItem('customShortcuts', JSON.stringify(shortcuts));
-};
+}; 

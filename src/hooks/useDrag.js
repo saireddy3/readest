@@ -1,16 +1,6 @@
 import { useCallback, useRef } from 'react';
 
-export const useDrag = (
-  onDragMove: (data: { clientX: number; clientY: number; deltaX: number; deltaY: number }) => void,
-  onDragEnd?: (data: {
-    velocity: number;
-    deltaT: number;
-    clientX: number;
-    clientY: number;
-    deltaX: number;
-    deltaY: number;
-  }) => void,
-) => {
+export const useDrag = (onDragMove, onDragEnd) => {
   const isDragging = useRef(false);
   const startX = useRef(0);
   const startY = useRef(0);
@@ -19,20 +9,20 @@ export const useDrag = (
   const startTime = useRef(0);
 
   const handleDragStart = useCallback(
-    (e: React.MouseEvent | React.TouchEvent) => {
+    (e) => {
       e.preventDefault();
       isDragging.current = true;
 
       if ('touches' in e) {
-        startY.current = e.touches[0]!.clientY;
-        startX.current = e.touches[0]!.clientX;
+        startY.current = e.touches[0].clientY;
+        startX.current = e.touches[0].clientX;
       } else {
         startY.current = e.clientY;
         startX.current = e.clientX;
       }
       startTime.current = performance.now();
 
-      const handleMove = (event: MouseEvent | TouchEvent) => {
+      const handleMove = (event) => {
         if (isDragging.current) {
           let deltaX = 0;
           let deltaY = 0;
@@ -40,11 +30,11 @@ export const useDrag = (
           let clientY = 0;
 
           if ('touches' in event && event.touches.length > 0) {
-            const currentTouch = event.touches[0]!;
+            const currentTouch = event.touches[0];
             clientX = currentTouch.clientX;
             clientY = currentTouch.clientY;
           } else {
-            const evt = event as MouseEvent;
+            const evt = event;
             clientX = evt.clientX;
             clientY = evt.clientY;
           }
@@ -57,7 +47,7 @@ export const useDrag = (
         }
       };
 
-      const handleEnd = (event: MouseEvent | TouchEvent) => {
+      const handleEnd = (event) => {
         isDragging.current = false;
         let deltaX = 0;
         let deltaY = 0;
@@ -67,11 +57,11 @@ export const useDrag = (
         const deltaT = endTime - startTime.current;
 
         if ('touches' in event) {
-          const currentTouch = event.changedTouches[0]!;
+          const currentTouch = event.changedTouches[0];
           clientX = currentTouch.clientX;
           clientY = currentTouch.clientY;
         } else {
-          const evt = event as MouseEvent;
+          const evt = event;
           clientX = evt.clientX;
           clientY = evt.clientY;
         }
@@ -98,4 +88,4 @@ export const useDrag = (
   );
 
   return { handleDragStart };
-};
+}; 

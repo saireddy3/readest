@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 
-export const useScreenWakeLock = (lock: boolean) => {
-  const wakeLockRef = useRef<WakeLockSentinel | null>(null);
+export const useScreenWakeLock = (lock) => {
+  const wakeLockRef = useRef(null);
 
   useEffect(() => {
     const requestWakeLock = async () => {
@@ -66,4 +66,4 @@ export const useScreenWakeLock = (lock: boolean) => {
       }
     };
   }, [lock]);
-};
+}; 

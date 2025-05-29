@@ -1,25 +1,25 @@
 import { create } from 'zustand';
-import { AppService } from '@/types/system';
 
-interface TrafficLightState {
-  appService?: AppService;
-  isTrafficLightVisible: boolean;
-  shouldShowTrafficLight: boolean;
-  initializeTrafficLightStore: (appService: AppService) => void;
-  setTrafficLightVisibility: (visible: boolean) => void;
-  initializeTrafficLightListeners: () => Promise<void>;
-  cleanupTrafficLightListeners: () => void;
-  unlistenEnterFullScreen?: () => void;
-  unlistenExitFullScreen?: () => void;
-}
+/**
+ * @typedef {Object} TrafficLightState
+ * @property {AppService} [appService]
+ * @property {boolean} isTrafficLightVisible
+ * @property {boolean} shouldShowTrafficLight
+ * @property {function(AppService): void} initializeTrafficLightStore
+ * @property {function(boolean): void} setTrafficLightVisibility
+ * @property {function(): Promise<void>} initializeTrafficLightListeners
+ * @property {function(): void} cleanupTrafficLightListeners
+ * @property {function(): void} [unlistenEnterFullScreen]
+ * @property {function(): void} [unlistenExitFullScreen]
+ */
 
-export const useTrafficLightStore = create<TrafficLightState>((set, get) => {
+export const useTrafficLightStore = create((set, get) => {
   return {
     appService: undefined,
     isTrafficLightVisible: false,
     shouldShowTrafficLight: false,
 
-    initializeTrafficLightStore: (appService: AppService) => {
+    initializeTrafficLightStore: (appService) => {
       set({
         appService,
         isTrafficLightVisible: appService.hasTrafficLight,
@@ -27,7 +27,7 @@ export const useTrafficLightStore = create<TrafficLightState>((set, get) => {
       });
     },
 
-    setTrafficLightVisibility: async (visible: boolean) => {
+    setTrafficLightVisibility: async (visible) => {
       // In web mode, we check if we're in fullscreen using the browser API
       const isFullscreen = !!document.fullscreenElement;
       set({ isTrafficLightVisible: !isFullscreen && visible, shouldShowTrafficLight: visible });
@@ -72,4 +72,4 @@ export const useTrafficLightStore = create<TrafficLightState>((set, get) => {
       set({ unlistenEnterFullScreen: undefined, unlistenExitFullScreen: undefined });
     },
   };
-});
+}); 
