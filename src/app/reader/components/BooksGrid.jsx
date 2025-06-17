@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { useEnv } from '@/context/EnvContext';
 import { useSettingsStore } from '@/store/settingsStore';
@@ -25,7 +25,13 @@ const BooksGrid = ({ bookKeys, onCloseBook }) => {
   const { getProgress, getViewState, getViewSettings, hoveredBookKey } = useReaderStore();
   const { isSideBarVisible, sideBarBookKey } = useSidebarStore();
   const { isFontLayoutSettingsDialogOpen, setFontLayoutSettingsDialogOpen } = useSettingsStore();
-  const gridTemplate = getGridTemplate(bookKeys.length, window.innerWidth / window.innerHeight);
+  const [gridTemplate, setGridTemplate] = useState({ columns: '1fr', rows: '1fr' });
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setGridTemplate(getGridTemplate(bookKeys.length, window.innerWidth / window.innerHeight));
+    }
+  }, [bookKeys.length]);
 
   useEffect(() => {
     if (!sideBarBookKey) return;

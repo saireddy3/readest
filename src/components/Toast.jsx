@@ -39,10 +39,13 @@ export const Toast = () => {
   };
 
   useEffect(() => {
-    eventDispatcher.on('toast', handleShowToast);
-    return () => {
-      eventDispatcher.off('toast', handleShowToast);
-    };
+    // Only set up event listeners if we're in the browser
+    if (typeof window !== 'undefined' && eventDispatcher) {
+      eventDispatcher.on('toast', handleShowToast);
+      return () => {
+        eventDispatcher.off('toast', handleShowToast);
+      };
+    }
   }, []);
 
   return (

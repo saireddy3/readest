@@ -204,7 +204,7 @@ export const useReaderStore = create((set, get) => ({
       const viewState = state.viewStates[key];
       if (!viewState || !bookData) return state;
 
-      const progress = [(pageinfo.next ?? pageinfo.current) + 1, pageinfo.total];
+      const progress = [(pageinfo?.next ?? pageinfo?.current ?? 0) + 1, pageinfo?.total ?? 1];
 
       // Update book progress without library store dependency
       const book = bookData.book;
@@ -238,9 +238,9 @@ export const useReaderStore = create((set, get) => ({
             ...state.viewStates[key],
             progress: {
               location,
-              sectionId: tocItem.id,
-              sectionHref: tocItem.href,
-              sectionLabel: tocItem.label,
+              sectionId: tocItem?.id ?? '',
+              sectionHref: tocItem?.href ?? '',
+              sectionLabel: tocItem?.label ?? '',
               section,
               pageinfo,
               range,

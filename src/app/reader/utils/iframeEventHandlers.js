@@ -6,7 +6,9 @@ import {
 import { eventDispatcher } from '@/utils/event';
 import { getOSPlatform } from '@/utils/misc';
 
-const doubleClickEnabled =
+// Initialize doubleClickEnabled in a way that works with SSR
+const doubleClickEnabled = typeof window === 'undefined' ? 
+  true : // Default value during SSR
   !DISABLE_DOUBLE_CLICK_ON_MOBILE || !['android', 'ios'].includes(getOSPlatform());
 
 let lastClickTime = 0;

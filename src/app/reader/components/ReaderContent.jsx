@@ -89,20 +89,26 @@ const ReaderContent = ({ ids }) => {
       setShowDetailsBook(book);
       return true;
     };
-    eventDispatcher.onSync('show-book-details', handleShowBookDetails);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
+    if (typeof window !== 'undefined' && eventDispatcher) {
+      eventDispatcher.onSync('show-book-details', handleShowBookDetails);
+      return () => {
+        eventDispatcher.offSync('show-book-details', handleShowBookDetails);
+      };
+    }
   }, [ids, idFromUrl]);
 
   useEffect(() => {
-    const unlisten = handleOnCloseWindow(handleCloseBooks);
-    window.addEventListener('beforeunload', handleCloseBooks);
-    eventDispatcher.on('quit-app', handleCloseBooks);
-    return () => {
-      unlisten();
-      window.removeEventListener('beforeunload', handleCloseBooks);
-      eventDispatcher.off('quit-app', handleCloseBooks);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (typeof window !== 'undefined') {
+      const unlisten = handleOnCloseWindow(handleCloseBooks);
+      window.addEventListener('beforeunload', handleCloseBooks);
+      eventDispatcher?.on('quit-app', handleCloseBooks);
+      return () => {
+        unlisten();
+        window.removeEventListener('beforeunload', handleCloseBooks);
+        eventDispatcher?.off('quit-app', handleCloseBooks);
+      };
+    }
   }, [bookKeys]);
 
   const saveBookConfig = async (bookKey) => {
