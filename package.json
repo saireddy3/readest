@@ -23,7 +23,7 @@
     "start": "dotenv -e .env.web -- next start",
     "i18n:extract": "i18next-scanner",
     "lint": "next lint",
-    "build:package": "tsup --config tsup.config.ts",
+    "build:package": "tsup --config tsup.config.js",
     "prepublishOnly": "npm run build:package"
   },
   "dependencies": {
@@ -51,14 +51,6 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
     "@eslint/js": "^9.24.0",
-    "@sindresorhus/tsconfig": "^7.0.0",
-    "@types/cors": "^2.8.17",
-    "@types/cssbeautify": "^0.3.5",
-    "@types/node": "^22.10.1",
-    "@types/react": "18.3.12",
-    "@types/react-color": "^3.0.13",
-    "@types/react-dom": "18.3.1",
-    "@types/tinycolor2": "^1.4.6",
     "autoprefixer": "^10.4.20",
     "cpx2": "^8.0.0",
     "daisyui": "^4.12.24",
@@ -76,8 +68,7 @@
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "tailwindcss": "^3.4.17",
-    "tsup": "^8.0.1",
-    "typescript": "^5.8.3"
+    "tsup": "^8.0.1"
   },
   "publishConfig": {
     "access": "public"

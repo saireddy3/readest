@@ -1,47 +1,55 @@
+/**
+ * @typedef {Object} BaseColor
+ * @property {string} bg
+ * @property {string} fg
+ * @property {string} primary
+ */
+
+/**
+ * @typedef {'auto' | 'light' | 'dark'} ThemeMode
+ */
+
+/**
+ * @typedef {Object} Palette
+ * @property {string} 'base-100'
+ * @property {string} 'base-200'
+ * @property {string} 'base-300'
+ * @property {string} 'base-content'
+ * @property {string} neutral
+ * @property {string} 'neutral-content'
+ * @property {string} primary
+ * @property {string} secondary
+ * @property {string} accent
+ */
+
+/**
+ * @typedef {Object} Theme
+ * @property {string} name
+ * @property {string} label
+ * @property {Object} colors
+ * @property {Palette} colors.light
+ * @property {Palette} colors.dark
+ * @property {boolean} [isCustomizale]
+ */
+
+/**
+ * @typedef {Object} CustomTheme
+ * @property {string} name
+ * @property {string} label
+ * @property {Object} colors
+ * @property {BaseColor} colors.light
+ * @property {BaseColor} colors.dark
+ */
+
 import tinycolor from 'tinycolor2';
 import { stubTranslation as _ } from '../utils/misc.js';
 import { getContrastOklch, hexToOklch } from '../utils/color.js';
 
-export type BaseColor = {
-  bg: string;
-  fg: string;
-  primary: string;
-};
-
-export type ThemeMode = 'auto' | 'light' | 'dark';
-
-export type Palette = {
-  'base-100': string;
-  'base-200': string;
-  'base-300': string;
-  'base-content': string;
-  neutral: string;
-  'neutral-content': string;
-  primary: string;
-  secondary: string;
-  accent: string;
-};
-
-export type Theme = {
-  name: string;
-  label: string;
-  colors: {
-    light: Palette;
-    dark: Palette;
-  };
-  isCustomizale?: boolean;
-};
-
-export type CustomTheme = {
-  name: string;
-  label: string;
-  colors: {
-    light: BaseColor;
-    dark: BaseColor;
-  };
-};
-
-export const generateLightPalette = ({ bg, fg, primary }: BaseColor) => {
+/**
+ * @param {BaseColor} param0
+ * @returns {Palette}
+ */
+export const generateLightPalette = ({ bg, fg, primary }) => {
   return {
     'base-100': bg, // Main background
     'base-200': tinycolor(bg).darken(5).toHexString(), // Slightly darker
@@ -51,11 +59,15 @@ export const generateLightPalette = ({ bg, fg, primary }: BaseColor) => {
     'neutral-content': tinycolor(fg).lighten(20).desaturate(20).toHexString(), // Slightly lighter text
     primary: primary,
     secondary: tinycolor(primary).lighten(20).toHexString(), // Lighter secondary
-    accent: tinycolor(primary).analogous()[1]!.toHexString(), // Analogous accent
-  } as Palette;
+    accent: tinycolor(primary).analogous()[1].toHexString(), // Analogous accent
+  };
 };
 
-export const generateDarkPalette = ({ bg, fg, primary }: BaseColor) => {
+/**
+ * @param {BaseColor} param0
+ * @returns {Palette}
+ */
+export const generateDarkPalette = ({ bg, fg, primary }) => {
   return {
     'base-100': bg, // Main background
     'base-200': tinycolor(bg).lighten(5).toHexString(), // Slightly lighter
@@ -65,10 +77,13 @@ export const generateDarkPalette = ({ bg, fg, primary }: BaseColor) => {
     'neutral-content': tinycolor(fg).darken(20).desaturate(20).toHexString(), // Darkened text
     primary: primary,
     secondary: tinycolor(primary).darken(20).toHexString(), // Darker secondary
-    accent: tinycolor(primary).triad()[1]!.toHexString(), // Triad accent
-  } as Palette;
+    accent: tinycolor(primary).triad()[1].toHexString(), // Triad accent
+  };
 };
 
+/**
+ * @type {Theme[]}
+ */
 export const themes = [
   {
     name: 'default',
@@ -158,9 +173,13 @@ export const themes = [
       dark: generateDarkPalette({ fg: '#f6e1d7', bg: '#3c2b25', primary: '#ff9c94' }),
     },
   },
-] as Theme[];
+];
 
-const generateCustomThemeVariables = (palette: Palette): string => {
+/**
+ * @param {Palette} palette
+ * @returns {string}
+ */
+const generateCustomThemeVariables = (palette) => {
   return `
     --b1: ${hexToOklch(palette['base-100'])};
     --b2: ${hexToOklch(palette['base-200'])};
@@ -168,13 +187,13 @@ const generateCustomThemeVariables = (palette: Palette): string => {
     --bc: ${hexToOklch(palette['base-content'])};
     
     --p: ${hexToOklch(palette.primary)};
-    --pc: ${getContrastOklch(palette.primary)};
+    --pc: ${getContrastOklch(hexToOklch(palette.primary), hexToOklch(palette['base-100']))};
     
     --s: ${hexToOklch(palette.secondary)};
-    --sc: ${getContrastOklch(palette.secondary)};
+    --sc: ${getContrastOklch(hexToOklch(palette.secondary), hexToOklch(palette['base-100']))};
     
     --a: ${hexToOklch(palette.accent)};
-    --ac: ${getContrastOklch(palette.accent)};
+    --ac: ${getContrastOklch(hexToOklch(palette.accent), hexToOklch(palette['base-100']))};
     
     --n: ${hexToOklch(palette.neutral)};
     --nc: ${hexToOklch(palette['neutral-content'])};
@@ -190,7 +209,11 @@ const generateCustomThemeVariables = (palette: Palette): string => {
   `;
 };
 
-export const applyCustomTheme = (customTheme: CustomTheme) => {
+/**
+ * @param {CustomTheme} customTheme
+ * @returns {{ light: string; dark: string }}
+ */
+export const applyCustomTheme = (customTheme) => {
   const lightPalette = generateLightPalette(customTheme.colors.light);
   const darkPalette = generateDarkPalette(customTheme.colors.dark);
 
@@ -227,4 +250,4 @@ export const applyCustomTheme = (customTheme: CustomTheme) => {
     light: lightThemeName,
     dark: darkThemeName,
   };
-};
+}; 

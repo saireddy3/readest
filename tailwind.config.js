@@ -1,8 +1,14 @@
-import type { Config } from 'tailwindcss';
-import { themes } from './src/styles/themes';
+/**
+ * @typedef {import('tailwindcss').Config} Config
+ */
+
+import { themes } from './src/styles/themes.js';
 import daisyui from 'daisyui';
 
-const config: Config = {
+/**
+ * @type {Config}
+ */
+const config = {
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
@@ -35,8 +41,9 @@ const config: Config = {
         });
         return acc;
       },
-      ['light', 'dark'] as (Record<string, unknown> | string)[],
+      ['light', 'dark'],
     ),
   },
 };
-export default config;
+
+export default config; 

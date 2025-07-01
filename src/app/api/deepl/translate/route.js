@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { query as deeplQuery } from '@/utils/deepl';
+import { NextResponse } from 'next/server';
+import { query as deeplQuery } from '@/utils/deepl.js';
 
 // CORS headers
 const corsHeaders = {
@@ -16,7 +16,11 @@ export async function OPTIONS() {
   });
 }
 
-export async function POST(request: NextRequest) {
+/**
+ * @param {NextRequest} request
+ * @returns {Promise<NextResponse>}
+ */
+export async function POST(request) {
   try {
     // DeepL authentication keys are passed directly to the deeplQuery utility
     const body = await request.json();

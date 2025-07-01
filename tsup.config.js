@@ -1,9 +1,9 @@
 import { defineConfig } from 'tsup';
 
 export default defineConfig({
-  entry: ['src/index.ts'],
+  entry: ['src/index.js'],
   format: ['cjs', 'esm'],
-  dts: true,
+  dts: false,
   sourcemap: true,
   clean: true,
   minify: false,
@@ -11,7 +11,11 @@ export default defineConfig({
   treeshake: true,
   skipNodeModulesBundle: true,
   outDir: 'dist',
-  outExtension({ format }: { format: string }) {
+  /**
+   * @param {{ format: string }} param0
+   * @returns {{ js: string }}
+   */
+  outExtension({ format }) {
     return {
       js: format === 'cjs' ? '.js' : '.mjs',
     };
@@ -48,11 +52,14 @@ export default defineConfig({
     'i18next-browser-languagedetector',
     'i18next-http-backend',
   ],
-  esbuildOptions(options: Record<string, unknown>) {
+  /**
+   * @param {Record<string, unknown>} options
+   */
+  esbuildOptions(options) {
     // Preserve path structure for imported assets
     options['assetNames'] = 'assets/[name]-[hash]';
     // Increase bundle size limit
     options['chunkNames'] = 'chunks/[name]-[hash]';
   },
   onSuccess: 'echo ✅ Build completed successfully!',
-});
+}); 
