@@ -1,15 +1,24 @@
-import type { Transformer } from './types';
+/**
+ * @typedef {import('./types').Transformer} Transformer
+ */
 
-const punctuationMap: Record<string, string> = {
-  '“': '﹃',
-  '”': '﹄',
-  '‘': '﹁',
-  '’': '﹂',
+const punctuationMap = {
+  '"': '﹃',
+  '"': '﹄',
+  "'": '﹁',
+  "'": '﹂',
 };
 
-export const punctuationTransformer: Transformer = {
+/**
+ * @type {Transformer}
+ */
+export const punctuationTransformer = {
   name: 'punctuation',
 
+  /**
+   * @param {import('./types').TransformContext} ctx
+   * @returns {Promise<string>}
+   */
   transform: async (ctx) => {
     if (!ctx.content.includes('<html')) return ctx.content;
 
@@ -23,4 +32,4 @@ export const punctuationTransformer: Transformer = {
 
     return result;
   },
-};
+}; 

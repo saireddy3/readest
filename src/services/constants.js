@@ -1,16 +1,18 @@
-import {
-  BookFont,
-  BookLayout,
-  BookSearchConfig,
-  BookStyle,
-  HighlightColor,
-  TTSConfig,
-  ViewConfig,
-  ViewSettings,
-} from '@/types/book';
-import { ReadSettings, SystemSettings } from '@/types/settings';
-import { getDefaultMaxBlockSize, getDefaultMaxInlineSize } from '@/utils/config';
-import { stubTranslation as _ } from '@/utils/misc';
+/**
+ * @typedef {import('@/types/book').BookFont} BookFont
+ * @typedef {import('@/types/book').BookLayout} BookLayout
+ * @typedef {import('@/types/book').BookSearchConfig} BookSearchConfig
+ * @typedef {import('@/types/book').BookStyle} BookStyle
+ * @typedef {import('@/types/book').HighlightColor} HighlightColor
+ * @typedef {import('@/types/book').TTSConfig} TTSConfig
+ * @typedef {import('@/types/book').ViewConfig} ViewConfig
+ * @typedef {import('@/types/book').ViewSettings} ViewSettings
+ * @typedef {import('@/types/settings').ReadSettings} ReadSettings
+ * @typedef {import('@/types/settings').SystemSettings} SystemSettings
+ */
+
+import { getDefaultMaxBlockSize, getDefaultMaxInlineSize } from '@/utils/config.js';
+import { stubTranslation as _ } from '@/utils/misc.js';
 
 export const LOCAL_BOOKS_SUBDIR = 'Readest/Books';
 export const CLOUD_BOOKS_SUBDIR = 'Readest/Books';
@@ -26,7 +28,10 @@ export const FILE_ACCEPT_FORMATS = ALLOWED_FILETYPES.map((ext) => `.${ext}`).joi
 export const BOOK_UNGROUPED_NAME = '';
 export const BOOK_UNGROUPED_ID = '';
 
-export const DEFAULT_SYSTEM_SETTINGS: Partial<SystemSettings> = {
+/**
+ * @type {Partial<SystemSettings>}
+ */
+export const DEFAULT_SYSTEM_SETTINGS = {
   keepLogin: false,
   autoUpload: true,
   alwaysOnTop: false,
@@ -39,7 +44,10 @@ export const DEFAULT_SYSTEM_SETTINGS: Partial<SystemSettings> = {
   lastSyncedAtNotes: 0,
 };
 
-export const DEFAULT_READSETTINGS: ReadSettings = {
+/**
+ * @type {ReadSettings}
+ */
+export const DEFAULT_READSETTINGS = {
   sideBarWidth: '15%',
   isSideBarPinned: true,
   notebookWidth: '25%',
@@ -56,7 +64,10 @@ export const DEFAULT_READSETTINGS: ReadSettings = {
   },
 };
 
-export const DEFAULT_BOOK_FONT: BookFont = {
+/**
+ * @type {BookFont}
+ */
+export const DEFAULT_BOOK_FONT = {
   serifFont: 'Bitter',
   sansSerifFont: 'Roboto',
   monospaceFont: 'Consolas',
@@ -67,7 +78,10 @@ export const DEFAULT_BOOK_FONT: BookFont = {
   fontWeight: 400,
 };
 
-export const DEFAULT_BOOK_LAYOUT: BookLayout = {
+/**
+ * @type {BookLayout}
+ */
+export const DEFAULT_BOOK_LAYOUT = {
   marginPx: 44,
   gapPercent: 5,
   scrolled: false,
@@ -87,7 +101,10 @@ export const DEFAULT_BOOK_LAYOUT: BookLayout = {
   showFooter: true,
 };
 
-export const DEFAULT_BOOK_STYLE: BookStyle = {
+/**
+ * @type {BookStyle}
+ */
+export const DEFAULT_BOOK_STYLE = {
   zoomLevel: 100,
   paragraphMargin: 1,
   lineHeight: 1.6,
@@ -103,28 +120,43 @@ export const DEFAULT_BOOK_STYLE: BookStyle = {
   userStylesheet: '',
 };
 
-export const DEFAULT_MOBILE_VIEW_SETTINGS: Partial<ViewSettings> = {
+/**
+ * @type {Partial<ViewSettings>}
+ */
+export const DEFAULT_MOBILE_VIEW_SETTINGS = {
   fullJustification: false,
   animated: true,
   defaultFont: 'Sans-serif',
 };
 
-export const DEFAULT_CJK_VIEW_SETTINGS: Partial<ViewSettings> = {
+/**
+ * @type {Partial<ViewSettings>}
+ */
+export const DEFAULT_CJK_VIEW_SETTINGS = {
   fullJustification: true,
   textIndent: 2,
 };
 
-export const DEFAULT_VIEW_CONFIG: ViewConfig = {
+/**
+ * @type {ViewConfig}
+ */
+export const DEFAULT_VIEW_CONFIG = {
   sideBarTab: 'toc',
   uiLanguage: '',
 };
 
-export const DEFAULT_TTS_CONFIG: TTSConfig = {
+/**
+ * @type {TTSConfig}
+ */
+export const DEFAULT_TTS_CONFIG = {
   ttsRate: 1.3,
   ttsVoice: '',
 };
 
-export const DEFAULT_BOOK_SEARCH_CONFIG: BookSearchConfig = {
+/**
+ * @type {BookSearchConfig}
+ */
+export const DEFAULT_BOOK_SEARCH_CONFIG = {
   scope: 'book',
   matchCase: false,
   matchWholeWords: false,
@@ -471,11 +503,14 @@ export const MAX_ZOOM_LEVEL = 500;
 export const MIN_ZOOM_LEVEL = 50;
 export const ZOOM_STEP = 10;
 
-export const DEFAULT_STORAGE_QUOTA: {
-  free: number;
-  plus: number;
-  pro: number;
-} = {
+/**
+ * @type {{
+ *   free: number;
+ *   plus: number;
+ *   pro: number;
+ * }}
+ */
+export const DEFAULT_STORAGE_QUOTA = {
   free: 500 * 1024 * 1024,
   plus: 2 * 1024 * 1024 * 1024,
   pro: 10 * 1024 * 1024 * 1024,
@@ -485,7 +520,10 @@ export const DOUBLE_CLICK_INTERVAL_THRESHOLD_MS = 250;
 export const DISABLE_DOUBLE_CLICK_ON_MOBILE = true;
 export const LONG_HOLD_THRESHOLD = 500;
 
-export const HIGHLIGHT_COLOR_HEX: Record<HighlightColor, string> = {
+/**
+ * @type {Record<HighlightColor, string>}
+ */
+export const HIGHLIGHT_COLOR_HEX = {
   red: '#f87171', // red-400
   yellow: '#facc15', // yellow-400
   green: '#4ade80', // green-400
@@ -567,4 +605,4 @@ export const TRANSLATED_LANGS = {
   vi: 'Tiếng Việt',
   'zh-CN': '简体中文',
   'zh-TW': '正體中文',
-};
+}; 

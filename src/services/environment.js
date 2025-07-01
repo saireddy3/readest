@@ -1,12 +1,8 @@
-import { AppService } from '@/types/system';
-import { READEST_WEB_BASE_URL } from './constants';
+/**
+ * @typedef {import('@/types/system').AppService} AppService
+ */
 
-declare global {
-  interface Window {
-    __READEST_CLI_ACCESS?: boolean;
-    __READEST_UPDATER_ACCESS?: boolean;
-  }
-}
+import { READEST_WEB_BASE_URL } from './constants.js';
 
 // Web-only implementation
 export const isTauriAppPlatform = () => false;
@@ -32,24 +28,28 @@ export const getAPIBaseUrl = () => {
     : `${apiBaseUrl ?? READEST_WEB_BASE_URL}/api`;
 };
 
-export interface EnvConfigType {
-  getAppService: () => Promise<AppService>;
-}
+/**
+ * @typedef {Object} EnvConfigType
+ * @property {function(): Promise<AppService>} getAppService
+ */
 
-let webAppService: AppService | null = null;
+let webAppService = null;
 const getWebAppService = async () => {
   if (!webAppService) {
-    const { WebAppService } = await import('@/services/webAppService');
+    const { WebAppService } = await import('@/services/webAppService.js');
     webAppService = new WebAppService();
     await webAppService.loadSettings();
   }
   return webAppService;
 };
 
-const environmentConfig: EnvConfigType = {
+/**
+ * @type {EnvConfigType}
+ */
+const environmentConfig = {
   getAppService: async () => {
     return getWebAppService();
   },
 };
 
-export default environmentConfig;
+export default environmentConfig; 

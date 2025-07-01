@@ -1,7 +1,14 @@
-import { activeTransformers } from './transformers';
-import { TransformContext } from './transformers/types';
+/**
+ * @typedef {import('./transformers/types.js').TransformContext} TransformContext
+ */
 
-export const transformContent = async (ctx: TransformContext): Promise<string> => {
+import { activeTransformers } from './transformers/index.js';
+
+/**
+ * @param {TransformContext} ctx
+ * @returns {Promise<string>}
+ */
+export const transformContent = async (ctx) => {
   let transformed = ctx.content;
 
   for (const transformer of activeTransformers) {
@@ -13,4 +20,4 @@ export const transformContent = async (ctx: TransformContext): Promise<string> =
   }
 
   return transformed;
-};
+}; 

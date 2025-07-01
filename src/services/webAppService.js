@@ -1,15 +1,25 @@
-import { Book } from '@/types/book';
-import { FileSystem, BaseDir, AppPlatform } from '@/types/system';
-import { getCoverFilename } from '@/utils/book';
-import { getOSPlatform, isValidURL } from '@/utils/misc';
-import { RemoteFile } from '@/utils/file';
+/**
+ * @typedef {import('@/types/book').Book} Book
+ * @typedef {import('@/types/system').FileSystem} FileSystem
+ * @typedef {import('@/types/system').BaseDir} BaseDir
+ * @typedef {import('@/types/system').AppPlatform} AppPlatform
+ */
 
-import { isPWA } from './environment';
-import { BaseAppService } from './appService';
-import { LOCAL_BOOKS_SUBDIR } from './constants';
-import { openFileDialog } from '@/utils/webFileSystem';
+import { getCoverFilename } from '@/utils/book.js';
+import { getOSPlatform, isValidURL } from '@/utils/misc.js';
+import { RemoteFile } from '@/utils/file.js';
 
-const resolvePath = (fp: string, base: BaseDir): { baseDir: number; base: BaseDir; fp: string } => {
+import { isPWA } from './environment.js';
+import { BaseAppService } from './appService.js';
+import { LOCAL_BOOKS_SUBDIR } from './constants.js';
+import { openFileDialog } from '@/utils/webFileSystem.js';
+
+/**
+ * @param {string} fp
+ * @param {BaseDir} base
+ * @returns {{ baseDir: number; base: BaseDir; fp: string }}
+ */
+const resolvePath = (fp, base) => {
   switch (base) {
     case 'Books':
       return { baseDir: 0, fp: `${LOCAL_BOOKS_SUBDIR}/${fp}`, base };
@@ -23,9 +33,12 @@ const resolvePath = (fp: string, base: BaseDir): { baseDir: number; base: BaseDi
 const dbName = 'AppFileSystem';
 const dbVersion = 1;
 
-async function openIndexedDB(): Promise<IDBDatabase> {
+/**
+ * @returns {Promise<IDBDatabase>}
+ */
+async function openIndexedDB() {
   return new Promise((resolve, reject) => {
-    let request: IDBOpenDBRequest;
+    let request;
     
     try {
       request = indexedDB.open(dbName, dbVersion);
@@ -63,15 +76,27 @@ async function openIndexedDB(): Promise<IDBDatabase> {
   });
 }
 
-const indexedDBFileSystem: FileSystem = {
-  getURL(path: string) {
+/**
+ * @type {FileSystem}
+ */
+const indexedDBFileSystem = {
+  /**
+   * @param {string} path
+   * @returns {string}
+   */
+  getURL(path) {
     if (isValidURL(path)) {
       return path;
     } else {
       return URL.createObjectURL(new Blob([path]));
     }
   },
-  async getBlobURL(path: string, base: BaseDir) {
+  /**
+   * @param {string} path
+   * @param {BaseDir} base
+   * @returns {Promise<string>}
+   */
+  async getBlobURL(path, base) {
     try {
       const content = await this.readFile(path, base, 'binary');
       return URL.createObjectURL(new Blob([content]));
@@ -79,7 +104,13 @@ const indexedDBFileSystem: FileSystem = {
       return path;
     }
   },
-  async openFile(path: string, base: BaseDir, filename?: string): Promise<File> {
+  /**
+   * @param {string} path
+   * @param {BaseDir} base
+   * @param {string} [filename]
+   * @returns {Promise<File>}
+   */
+  async openFile(path, base, filename) {
     try {
       if (isValidURL(path)) {
         // For URLs, create and initialize a RemoteFile
@@ -89,7 +120,7 @@ const indexedDBFileSystem: FileSystem = {
         await remoteFile.open();
         
         // Return the initialized RemoteFile which extends File
-        return remoteFile as File;
+        return remoteFile;
       } else {
         // For local files stored in IndexedDB
         const content = await this.readFile(path, base, 'binary');
@@ -101,11 +132,17 @@ const indexedDBFileSystem: FileSystem = {
       return new File([], filename || path.split('/').pop() || 'empty-file');
     }
   },
-  async copyFile(srcPath: string, dstPath: string, base: BaseDir) {
+  /**
+   * @param {string} srcPath
+   * @param {string} dstPath
+   * @param {BaseDir} base
+   * @returns {Promise<void>}
+   */
+  async copyFile(srcPath, dstPath, base) {
     const { fp } = resolvePath(dstPath, base);
     const db = await openIndexedDB();
 
-    return new Promise<void>((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       const transaction = db.transaction('files', 'readwrite');
       const store = transaction.objectStore('files');
       const getRequest = store.get(srcPath);
@@ -123,7 +160,13 @@ const indexedDBFileSystem: FileSystem = {
       getRequest.onerror = () => reject(getRequest.error);
     });
   },
-  async readFile(path: string, base: BaseDir, mode: 'text' | 'binary') {
+  /**
+   * @param {string} path
+   * @param {BaseDir} base
+   * @param {'text' | 'binary'} mode
+   * @returns {Promise<string | ArrayBuffer>}
+   */
+  async readFile(path, base, mode) {
     const { fp } = resolvePath(path, base);
     const isCoverImage = fp.includes('cover.png');
     
@@ -134,7 +177,7 @@ const indexedDBFileSystem: FileSystem = {
     
     const db = await openIndexedDB();
 
-    return new Promise<string | ArrayBuffer>((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       const transaction = db.transaction('files', 'readonly');
       const store = transaction.objectStore('files');
       const request = store.get(fp);
@@ -153,7 +196,7 @@ const indexedDBFileSystem: FileSystem = {
             } else if (content instanceof ArrayBuffer) {
               resolve(content);
             } else if (typeof content === 'string') {
-              resolve(new TextEncoder().encode(content).buffer as ArrayBuffer);
+              resolve(new TextEncoder().encode(content).buffer);
             } else {
               console.error(`❌ Unsupported content type in IndexedDB for ${fp}:`, typeof content);
               reject(new Error('Unsupported content type in IndexedDB'));
@@ -178,12 +221,18 @@ const indexedDBFileSystem: FileSystem = {
       };
     });
   },
-  async writeFile(path: string, base: BaseDir, content: string | ArrayBuffer) {
+  /**
+   * @param {string} path
+   * @param {BaseDir} base
+   * @param {string | ArrayBuffer} content
+   * @returns {Promise<void>}
+   */
+  async writeFile(path, base, content) {
     const { fp } = resolvePath(path, base);
     console.log(`📝 Writing file to IndexedDB: ${fp}`);
     const db = await openIndexedDB();
 
-    return new Promise<void>((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       const transaction = db.transaction('files', 'readwrite');
       const store = transaction.objectStore('files');
 
@@ -210,11 +259,16 @@ const indexedDBFileSystem: FileSystem = {
       };
     });
   },
-  async removeFile(path: string, base: BaseDir) {
+  /**
+   * @param {string} path
+   * @param {BaseDir} base
+   * @returns {Promise<void>}
+   */
+  async removeFile(path, base) {
     const { fp } = resolvePath(path, base);
     const db = await openIndexedDB();
 
-    return new Promise<void>((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       const transaction = db.transaction('files', 'readwrite');
       const store = transaction.objectStore('files');
 
@@ -224,21 +278,31 @@ const indexedDBFileSystem: FileSystem = {
       transaction.onerror = () => reject(transaction.error);
     });
   },
+  /**
+   * @returns {Promise<void>}
+   */
   async createDir() {
     // Directories are virtual in IndexedDB; no-op
   },
+  /**
+   * @returns {Promise<void>}
+   */
   async removeDir() {
     // Directories are virtual in IndexedDB; no-op
   },
-  async readDir(path: string) {
+  /**
+   * @param {string} path
+   * @returns {Promise<{ path: string; isDir: boolean }[]>}
+   */
+  async readDir(path) {
     const db = await openIndexedDB();
-    return new Promise<{ path: string; isDir: boolean }[]>((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       const transaction = db.transaction('files', 'readonly');
       const store = transaction.objectStore('files');
       const request = store.getAll();
 
       request.onsuccess = () => {
-        const files = request.result as { path: string }[];
+        const files = request.result;
         resolve(
           files
             .filter((file) => file.path.startsWith(path))
@@ -249,12 +313,17 @@ const indexedDBFileSystem: FileSystem = {
       request.onerror = () => reject(request.error);
     });
   },
-  async exists(path: string, base: BaseDir) {
+  /**
+   * @param {string} path
+   * @param {BaseDir} base
+   * @returns {Promise<boolean>}
+   */
+  async exists(path, base) {
     const { fp } = resolvePath(path, base);
     console.log(`🔍 Checking if file exists in IndexedDB: ${fp}`);
     const db = await openIndexedDB();
 
-    return new Promise<boolean>((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       const transaction = db.transaction('files', 'readonly');
       const store = transaction.objectStore('files');
       const request = store.get(fp);
@@ -271,40 +340,60 @@ const indexedDBFileSystem: FileSystem = {
       };
     });
   },
+  /**
+   * @returns {null}
+   */
   getPrefix() {
     return null;
   },
 };
 
 export class WebAppService extends BaseAppService {
-  fs = indexedDBFileSystem;
-  appPlatform = 'web' as AppPlatform;
-  isAppDataSandbox = false;
-  isMobile = ['android', 'ios'].includes(getOSPlatform());
-  isAndroidApp = false;
-  isIOSApp = false;
-  hasTrafficLight = false;
-  hasWindow = true;
-  hasWindowBar = false;
-  hasContextMenu = false;
-  hasRoundedWindow = false;
-  hasSafeAreaInset = isPWA();
-  hasHaptics = false;
-  hasSysFontsList = false;
+  constructor() {
+    super();
+    this.fs = indexedDBFileSystem;
+    this.appPlatform = 'web';
+    this.isAppDataSandbox = false;
+    this.isMobile = ['android', 'ios'].includes(getOSPlatform());
+    this.isAndroidApp = false;
+    this.isIOSApp = false;
+    this.hasTrafficLight = false;
+    this.hasWindow = true;
+    this.hasWindowBar = false;
+    this.hasContextMenu = false;
+    this.hasRoundedWindow = false;
+    this.hasSafeAreaInset = isPWA();
+    this.hasHaptics = false;
+    this.hasSysFontsList = false;
+  }
 
-  override resolvePath(fp: string, base: BaseDir): { baseDir: number; base: BaseDir; fp: string } {
+  /**
+   * @param {string} fp
+   * @param {BaseDir} base
+   * @returns {{ baseDir: number; base: BaseDir; fp: string }}
+   */
+  resolvePath(fp, base) {
     return resolvePath(fp, base);
   }
 
-  async getInitBooksDir(): Promise<string> {
+  /**
+   * @returns {Promise<string>}
+   */
+  async getInitBooksDir() {
     return LOCAL_BOOKS_SUBDIR;
   }
 
-  async getCacheDir(): Promise<string> {
+  /**
+   * @returns {Promise<string>}
+   */
+  async getCacheDir() {
     return 'Cache';
   }
 
-  async selectDirectory(): Promise<string> {
+  /**
+   * @returns {Promise<string>}
+   */
+  async selectDirectory() {
     try {
       const result = await openFileDialog({ directory: true });
       if (result && result.length > 0 && result[0]) {
@@ -317,7 +406,12 @@ export class WebAppService extends BaseAppService {
     }
   }
 
-  async selectFiles(name: string, extensions: string[]): Promise<string[]> {
+  /**
+   * @param {string} name
+   * @param {string[]} extensions
+   * @returns {Promise<string[]>}
+   */
+  async selectFiles(name, extensions) {
     try {
       const result = await openFileDialog({
         multiple: true,
@@ -334,7 +428,11 @@ export class WebAppService extends BaseAppService {
     }
   }
 
-  getCoverImageUrl = (book: Book): string => {
+  /**
+   * @param {Book} book
+   * @returns {string}
+   */
+  getCoverImageUrl = (book) => {
     const coverPath = `${LOCAL_BOOKS_SUBDIR}/${getCoverFilename(book)}`;
     try {
       return this.fs.getURL(coverPath);
@@ -344,7 +442,11 @@ export class WebAppService extends BaseAppService {
     }
   };
 
-  getCoverImageBlobUrl = async (book: Book): Promise<string> => {
+  /**
+   * @param {Book} book
+   * @returns {Promise<string>}
+   */
+  getCoverImageBlobUrl = async (book) => {
     const coverPath = `${LOCAL_BOOKS_SUBDIR}/${getCoverFilename(book)}`;
     
     try {
@@ -361,4 +463,4 @@ export class WebAppService extends BaseAppService {
       return '/assets/default-cover.png';
     }
   };
-}
+} 

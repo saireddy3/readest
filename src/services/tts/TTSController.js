@@ -1,34 +1,66 @@
-import { FoliateView, TTSGranularity } from '@/types/view';
-import { TTSClient, TTSMessageCode, TTSVoice } from './TTSClient';
-import { WebSpeechClient } from './WebSpeechClient';
-import { EdgeTTSClient } from './EdgeTTSClient';
-import { TTSUtils } from './TTSUtils';
+/**
+ * @typedef {import('@/types/view').FoliateView} FoliateView
+ * @typedef {import('@/types/view').TTSGranularity} TTSGranularity
+ * @typedef {import('./TTSClient.js').TTSClient} TTSClient
+ * @typedef {import('./TTSClient.js').TTSMessageCode} TTSMessageCode
+ * @typedef {import('./TTSClient.js').TTSVoice} TTSVoice
+ */
 
-type TTSState =
-  | 'stopped'
-  | 'playing'
-  | 'paused'
-  | 'backward-paused'
-  | 'forward-paused'
-  | 'setrate-paused'
-  | 'setvoice-paused';
+import { WebSpeechClient } from './WebSpeechClient.js';
+import { EdgeTTSClient } from './EdgeTTSClient.js';
+import { TTSUtils } from './TTSUtils.js';
+
+/**
+ * @typedef {'stopped' | 'playing' | 'paused' | 'backward-paused' | 'forward-paused' | 'setrate-paused' | 'setvoice-paused'} TTSState
+ */
 
 export class TTSController extends EventTarget {
-  state: TTSState = 'stopped';
-  view: FoliateView;
-  #nossmlCnt: number = 0;
-  #currentSpeakAbortController: AbortController | null = null;
-  #currentSpeakPromise: Promise<void> | null = null;
+  /**
+   * @type {TTSState}
+   */
+  state = 'stopped';
+  
+  /**
+   * @type {FoliateView}
+   */
+  view;
+  
+  #nossmlCnt = 0;
+  #currentSpeakAbortController = null;
+  #currentSpeakPromise = null;
 
-  ttsLang: string = '';
-  ttsRate: number = 1.0;
-  ttsClient: TTSClient;
-  ttsWebClient: TTSClient;
-  ttsEdgeClient: TTSClient;
-  ttsWebVoices: TTSVoice[] = [];
-  ttsEdgeVoices: TTSVoice[] = [];
+  ttsLang = '';
+  ttsRate = 1.0;
+  
+  /**
+   * @type {TTSClient}
+   */
+  ttsClient;
+  
+  /**
+   * @type {TTSClient}
+   */
+  ttsWebClient;
+  
+  /**
+   * @type {TTSClient}
+   */
+  ttsEdgeClient;
+  
+  /**
+   * @type {TTSVoice[]}
+   */
+  ttsWebVoices = [];
+  
+  /**
+   * @type {TTSVoice[]}
+   */
+  ttsEdgeVoices = [];
 
-  constructor(view: FoliateView) {
+  /**
+   * @param {FoliateView} view
+   */
+  constructor(view) {
     super();
     this.ttsWebClient = new WebSpeechClient();
     this.ttsEdgeClient = new EdgeTTSClient();
@@ -49,22 +81,28 @@ export class TTSController extends EventTarget {
   }
 
   async initViewTTS() {
-    let granularity: TTSGranularity = this.view.language.isCJK ? 'sentence' : 'word';
+    let granularity = this.view.language.isCJK ? 'sentence' : 'word';
     const supportedGranularities = this.ttsClient.getGranularities();
     if (!supportedGranularities.includes(granularity)) {
-      granularity = supportedGranularities[0]!;
+      granularity = supportedGranularities[0];
     }
     await this.view.initTTS(granularity);
   }
 
-  async preloadSSML(ssml: string | undefined) {
+  /**
+   * @param {string | undefined} ssml
+   */
+  async preloadSSML(ssml) {
     if (!ssml) return;
     const iter = await this.ttsClient.speak(ssml, new AbortController().signal, true);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     for await (const _ of iter);
   }
 
-  async preloadNextSSML(count: number = 2) {
+  /**
+   * @param {number} count
+   */
+  async preloadNextSSML(count = 2) {
     const tts = this.view.tts;
     if (!tts) return;
     let preloaded = 0;
@@ -78,7 +116,11 @@ export class TTSController extends EventTarget {
     }
   }
 
-  #preprocessSSML(ssml?: string) {
+  /**
+   * @param {string | undefined} ssml
+   * @returns {string | undefined}
+   */
+  #preprocessSSML(ssml) {
     if (!ssml) return;
     ssml = ssml
       .replace(/[–—]/g, ',')
@@ -88,7 +130,10 @@ export class TTSController extends EventTarget {
     return ssml;
   }
 
-  async #speak(ssml: string | undefined | Promise<string>) {
+  /**
+   * @param {string | undefined | Promise<string>} ssml
+   */
+  async #speak(ssml) {
     await this.stop();
     this.#currentSpeakAbortController = new AbortController();
     const { signal } = this.#currentSpeakAbortController;
@@ -113,7 +158,7 @@ export class TTSController extends EventTarget {
         }
 
         const iter = await this.ttsClient.speak(ssml, signal);
-        let lastCode: TTSMessageCode = 'boundary';
+        let lastCode = 'boundary';
         for await (const { code, mark } of iter) {
           if (signal.aborted) {
             resolve();
@@ -144,7 +189,10 @@ export class TTSController extends EventTarget {
     await this.#currentSpeakPromise.catch((e) => this.error(e));
   }
 
-  async speak(ssml: string | Promise<string>) {
+  /**
+   * @param {string | Promise<string>} ssml
+   */
+  async speak(ssml) {
     await this.initViewTTS();
     this.#speak(ssml).catch((e) => this.error(e));
     this.preloadNextSSML();
@@ -198,8 +246,7 @@ export class TTSController extends EventTarget {
       this.#speak(this.view.tts?.prev());
     } else {
       await this.stop();
-      this.state = 'backward-paused';
-      this.view.tts?.prev(true);
+      this.#speak(this.view.tts?.prev());
     }
   }
 
@@ -209,57 +256,66 @@ export class TTSController extends EventTarget {
     if (this.state === 'playing') {
       await this.stop();
       this.#speak(this.view.tts?.next());
-      this.preloadNextSSML();
     } else {
       await this.stop();
-      this.state = 'forward-paused';
-      this.view.tts?.next(true);
+      this.#speak(this.view.tts?.next());
     }
   }
 
-  async setLang(lang: string) {
+  /**
+   * @param {string} lang
+   */
+  async setLang(lang) {
     this.ttsLang = lang;
+    await this.ttsClient.setVoice('');
   }
 
-  async setRate(rate: number) {
-    this.state = 'setrate-paused';
+  /**
+   * @param {number} rate
+   */
+  async setRate(rate) {
     this.ttsRate = rate;
-    await this.ttsClient.setRate(this.ttsRate);
+    await this.ttsClient.setRate(rate);
   }
 
-  async getVoices(lang: string) {
-    const ttsWebVoices = await this.ttsWebClient.getVoices(lang);
-    const ttsEdgeVoices = await this.ttsEdgeClient.getVoices(lang);
-    return [...ttsEdgeVoices, ...ttsWebVoices];
+  /**
+   * @param {string} lang
+   * @returns {Promise<TTSVoice[]>}
+   */
+  async getVoices(lang) {
+    return this.ttsClient.getVoices(lang);
   }
 
-  async setVoice(voiceId: string) {
-    this.state = 'setvoice-paused';
-    const useEdgeTTS = !!this.ttsEdgeVoices.find(
-      (voice) => (voiceId === '' || voice.id === voiceId) && !voice.disabled,
-    );
-    if (useEdgeTTS) {
-      this.ttsClient = this.ttsEdgeClient;
-      await this.ttsClient.setRate(this.ttsRate);
-      TTSUtils.setPreferredVoice('edge-tts', this.ttsLang, voiceId);
-    } else {
-      this.ttsClient = this.ttsWebClient;
-      await this.ttsClient.setRate(this.ttsRate);
-      TTSUtils.setPreferredVoice('web-speech', this.ttsLang, voiceId);
+  /**
+   * @param {string} voiceId
+   */
+  async setVoice(voiceId) {
+    const voices = this.ttsWebVoices.concat(this.ttsEdgeVoices);
+    const voice = voices.find((v) => v.id === voiceId);
+    if (voice) {
+      TTSUtils.setPreferredVoice(
+        this.ttsClient === this.ttsWebClient ? 'web-speech' : 'edge-tts',
+        voice.lang,
+        voiceId,
+      );
+      await this.ttsClient.setVoice(voiceId);
     }
-    await this.ttsClient.setVoice(voiceId);
   }
 
   getVoiceId() {
     return this.ttsClient.getVoiceId();
   }
 
-  error(e: unknown) {
-    console.error(e);
-    this.state = 'stopped';
+  /**
+   * @param {unknown} e
+   */
+  error(e) {
+    console.error('TTS error:', e);
+    this.dispatchEvent(new CustomEvent('error', { detail: e }));
   }
 
   async kill() {
     await this.stop();
+    this.removeAllEventListeners();
   }
-}
+} 

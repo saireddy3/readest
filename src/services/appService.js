@@ -1,8 +1,16 @@
-import { AppPlatform, AppService } from '@/types/system';
+/**
+ * @typedef {import('@/types/system').AppPlatform} AppPlatform
+ * @typedef {import('@/types/system').AppService} AppService
+ * @typedef {import('@/types/system').FileSystem} FileSystem
+ * @typedef {import('@/types/system').BaseDir} BaseDir
+ * @typedef {import('@/types/settings').SystemSettings} SystemSettings
+ * @typedef {import('@/types/book').Book} Book
+ * @typedef {import('@/types/book').BookConfig} BookConfig
+ * @typedef {import('@/types/book').BookContent} BookContent
+ * @typedef {import('@/types/book').BookFormat} BookFormat
+ * @typedef {import('@/utils/transfer').ProgressHandler} ProgressHandler
+ */
 
-import { SystemSettings } from '@/types/settings';
-import { FileSystem, BaseDir } from '@/types/system';
-import { Book, BookConfig, BookContent, BookFormat } from '@/types/book';
 import {
   getDir,
   getLocalBookFilename,
@@ -15,9 +23,9 @@ import {
   formatTitle,
   formatAuthors,
   getFilename,
-} from '@/utils/book';
-import { partialMD5 } from '@/utils/md5';
-import { BookDoc, DocumentLoader } from '@/libs/document';
+} from '@/utils/book.js';
+import { partialMD5 } from '@/utils/md5.js';
+import { DocumentLoader } from '@/libs/document.js';
 import {
   DEFAULT_BOOK_LAYOUT,
   DEFAULT_BOOK_STYLE,
@@ -31,49 +39,35 @@ import {
   DEFAULT_MOBILE_VIEW_SETTINGS,
   DEFAULT_SYSTEM_SETTINGS,
   DEFAULT_CJK_VIEW_SETTINGS,
-} from './constants';
-import { getOSPlatform, isCJKEnv, isContentURI, isValidURL } from '@/utils/misc';
-import { deserializeConfig, serializeConfig } from '@/utils/serializer';
-import { downloadFile, uploadFile, deleteFile, createProgressHandler } from '@/libs/storage';
-import { ClosableFile } from '@/utils/file';
-import { ProgressHandler } from '@/utils/transfer';
-import { TxtToEpubConverter } from '@/utils/txt';
-import { BOOK_FILE_NOT_FOUND_ERROR } from './errors';
+} from './constants.js';
+import { getOSPlatform, isCJKEnv, isContentURI, isValidURL } from '@/utils/misc.js';
+import { deserializeConfig, serializeConfig } from '@/utils/serializer.js';
+import { downloadFile, uploadFile, deleteFile, createProgressHandler } from '@/libs/storage.js';
+import { TxtToEpubConverter } from '@/utils/txt.js';
+import { BOOK_FILE_NOT_FOUND_ERROR } from './errors.js';
 
-export abstract class BaseAppService implements AppService {
-  osPlatform: string = getOSPlatform();
-  localBooksDir: string = '';
-  abstract fs: FileSystem;
-  abstract appPlatform: AppPlatform;
-  abstract isAppDataSandbox: boolean;
-  abstract isMobile: boolean;
-  abstract isAndroidApp: boolean;
-  abstract isIOSApp: boolean;
-  abstract hasTrafficLight: boolean;
-  abstract hasWindow: boolean;
-  abstract hasWindowBar: boolean;
-  abstract hasContextMenu: boolean;
-  abstract hasRoundedWindow: boolean;
-  abstract hasSafeAreaInset: boolean;
-  abstract hasHaptics: boolean;
-  abstract hasSysFontsList: boolean;
+/**
+ * @abstract
+ * @implements {AppService}
+ */
+export class BaseAppService {
+  constructor() {
+    this.osPlatform = getOSPlatform();
+    this.localBooksDir = '';
+  }
 
-  abstract resolvePath(fp: string, base: BaseDir): { baseDir: number; base: BaseDir; fp: string };
-  abstract getCoverImageUrl(book: Book): string;
-  abstract getCoverImageBlobUrl(book: Book): Promise<string>;
-  abstract getInitBooksDir(): Promise<string>;
-  abstract getCacheDir(): Promise<string>;
-  abstract selectDirectory(): Promise<string>;
-  abstract selectFiles(name: string, extensions: string[]): Promise<string[]>;
-
-  async loadSettings(): Promise<SystemSettings> {
-    let settings: SystemSettings;
+  /**
+   * @abstract
+   * @returns {Promise<SystemSettings>}
+   */
+  async loadSettings() {
+    let settings;
     const { fp, base } = this.resolvePath('settings.json', 'Settings');
 
     try {
       await this.fs.exists(fp, base);
       const txt = await this.fs.readFile(fp, base, 'text');
-      settings = JSON.parse(txt as string);
+      settings = JSON.parse(txt);
       const version = settings.version ?? 0;
       if (this.isAppDataSandbox || version < SYSTEM_SETTINGS_VERSION) {
         settings.localBooksDir = await this.getInitBooksDir();
@@ -106,7 +100,7 @@ export abstract class BaseAppService implements AppService {
           ...DEFAULT_VIEW_CONFIG,
           ...DEFAULT_TTS_CONFIG,
         },
-      } as SystemSettings;
+      };
 
       await this.fs.createDir('', 'Books', true);
       await this.fs.createDir('', base, true);
@@ -115,7 +109,7 @@ export abstract class BaseAppService implements AppService {
 
     this.localBooksDir = settings.localBooksDir;
     const cacheDir = await this.getCacheDir();
-    this.fs.getPrefix = (baseDir: BaseDir) => {
+    this.fs.getPrefix = (baseDir) => {
       if (baseDir === 'Books') {
         return this.localBooksDir;
       } else if (baseDir === 'Cache') {
@@ -126,30 +120,38 @@ export abstract class BaseAppService implements AppService {
     return settings;
   }
 
-  async saveSettings(settings: SystemSettings): Promise<void> {
+  /**
+   * @param {SystemSettings} settings
+   * @returns {Promise<void>}
+   */
+  async saveSettings(settings) {
     const { fp, base } = this.resolvePath('settings.json', 'Settings');
     await this.fs.createDir('', base, true);
     await this.fs.writeFile(fp, base, JSON.stringify(settings));
   }
 
+  /**
+   * @param {string | File} file
+   * @param {Book[]} books
+   * @param {boolean} [saveBook=true]
+   * @param {boolean} [saveCover=true]
+   * @param {boolean} [overwrite=false]
+   * @param {boolean} [transient=false]
+   * @returns {Promise<Book | null>}
+   */
   async importBook(
-    // file might be:
-    // 1. absolute path for local file
-    // 2. remote url
-    // 3. content provider uri
-    // 4. File object from browsers
-    file: string | File,
-    books: Book[],
-    saveBook: boolean = true,
-    saveCover: boolean = true,
-    overwrite: boolean = false,
-    transient: boolean = false,
-  ): Promise<Book | null> {
+    file,
+    books,
+    saveBook = true,
+    saveCover = true,
+    overwrite = false,
+    transient = false,
+  ) {
     try {
-      let loadedBook: BookDoc;
-      let format: BookFormat;
-      let filename: string;
-      let fileobj: File;
+      let loadedBook;
+      let format;
+      let filename;
+      let fileobj;
 
       if (transient && typeof file !== 'string') {
         throw new Error('Transient import is only supported for file paths');
@@ -173,7 +175,7 @@ export abstract class BaseAppService implements AppService {
         }
       } catch (error) {
         console.error(error);
-        throw new Error(`Failed to open the book: ${(error as Error).message || error}`);
+        throw new Error(`Failed to open the book: ${error.message || error}`);
       }
 
       const hash = await partialMD5(fileobj);
@@ -185,7 +187,7 @@ export abstract class BaseAppService implements AppService {
         existingBook.updatedAt = Date.now();
       }
 
-      const book: Book = {
+      const book = {
         hash,
         format,
         title: formatTitle(loadedBook.metadata.title),
@@ -244,7 +246,7 @@ export abstract class BaseAppService implements AppService {
         }
       }
       book.coverImageUrl = await this.generateCoverImageUrl(book);
-      const f = file as ClosableFile;
+      const f = file;
       if (f && f.close) {
         await f.close();
       }
@@ -255,7 +257,12 @@ export abstract class BaseAppService implements AppService {
     }
   }
 
-  async deleteBook(book: Book, includingUploaded = false): Promise<void> {
+  /**
+   * @param {Book} book
+   * @param {boolean} [includingUploaded=false]
+   * @returns {Promise<void>}
+   */
+  async deleteBook(book, includingUploaded = false) {
     const fps = [getRemoteBookFilename(book), getCoverFilename(book)];
     const localDeleteFps = [getLocalBookFilename(book), getCoverFilename(book)];
     for (const fp of localDeleteFps) {
@@ -281,18 +288,30 @@ export abstract class BaseAppService implements AppService {
     }
   }
 
-  async uploadFileToCloud(lfp: string, cfp: string, handleProgress: ProgressHandler, hash: string) {
+  /**
+   * @param {string} lfp
+   * @param {string} cfp
+   * @param {ProgressHandler} handleProgress
+   * @param {string} hash
+   * @returns {Promise<void>}
+   */
+  async uploadFileToCloud(lfp, cfp, handleProgress, hash) {
     console.log('Uploading file:', lfp, 'to', cfp);
     const file = await this.fs.openFile(lfp, 'Books', cfp);
     const localFullpath = `${this.localBooksDir}/${lfp}`;
     await uploadFile(file, localFullpath, handleProgress, hash);
-    const f = file as ClosableFile;
+    const f = file;
     if (f && f.close) {
       await f.close();
     }
   }
 
-  async uploadBook(book: Book, onProgress?: ProgressHandler): Promise<void> {
+  /**
+   * @param {Book} book
+   * @param {ProgressHandler} [onProgress]
+   * @returns {Promise<void>}
+   */
+  async uploadBook(book, onProgress) {
     let uploaded = false;
     const completedFiles = { count: 0 };
     let toUploadFpCount = 0;
@@ -339,13 +358,19 @@ export abstract class BaseAppService implements AppService {
     }
   }
 
-  async downloadCloudFile(lfp: string, cfp: string, handleProgress: ProgressHandler) {
+  /**
+   * @param {string} lfp
+   * @param {string} cfp
+   * @param {ProgressHandler} handleProgress
+   * @returns {Promise<void>}
+   */
+  async downloadCloudFile(lfp, cfp, handleProgress) {
     console.log('Downloading file:', cfp, 'to', lfp);
     const localFullpath = `${this.localBooksDir}/${lfp}`;
     const result = await downloadFile(cfp, localFullpath, handleProgress);
     try {
       if (this.appPlatform === 'web') {
-        const fileobj = result as Blob;
+        const fileobj = result;
         await this.fs.writeFile(lfp, 'Books', await fileobj.arrayBuffer());
       }
     } catch {
@@ -354,7 +379,13 @@ export abstract class BaseAppService implements AppService {
     }
   }
 
-  async downloadBook(book: Book, onlyCover = false, onProgress?: ProgressHandler): Promise<void> {
+  /**
+   * @param {Book} book
+   * @param {boolean} [onlyCover=false]
+   * @param {ProgressHandler} [onProgress]
+   * @returns {Promise<void>}
+   */
+  async downloadBook(book, onlyCover = false, onProgress) {
     let bookDownloaded = false;
     const completedFiles = { count: 0 };
     let toDownloadFpCount = 0;
@@ -394,8 +425,13 @@ export abstract class BaseAppService implements AppService {
     }
   }
 
-  async loadBookContent(book: Book, settings: SystemSettings): Promise<BookContent> {
-    let file: File;
+  /**
+   * @param {Book} book
+   * @param {SystemSettings} settings
+   * @returns {Promise<BookContent>}
+   */
+  async loadBookContent(book, settings) {
+    let file;
     const fp = getLocalBookFilename(book);
     if (await this.fs.exists(fp, 'Books')) {
       file = await this.fs.openFile(fp, 'Books');
@@ -409,12 +445,17 @@ export abstract class BaseAppService implements AppService {
     return { book, file, config: await this.loadBookConfig(book, settings) };
   }
 
-  async loadBookConfig(book: Book, settings: SystemSettings): Promise<BookConfig> {
+  /**
+   * @param {Book} book
+   * @param {SystemSettings} settings
+   * @returns {Promise<BookConfig>}
+   */
+  async loadBookConfig(book, settings) {
     const { globalViewSettings } = settings;
     try {
       let str = '{}';
       if (await this.fs.exists(getConfigFilename(book), 'Books')) {
-        str = (await this.fs.readFile(getConfigFilename(book), 'Books', 'text')) as string;
+        str = await this.fs.readFile(getConfigFilename(book), 'Books', 'text');
       }
       return deserializeConfig(str, globalViewSettings, DEFAULT_BOOK_SEARCH_CONFIG);
     } catch {
@@ -422,21 +463,32 @@ export abstract class BaseAppService implements AppService {
     }
   }
 
-  async fetchBookDetails(book: Book, settings: SystemSettings) {
+  /**
+   * @param {Book} book
+   * @param {SystemSettings} settings
+   * @returns {Promise<any>}
+   */
+  async fetchBookDetails(book, settings) {
     const fp = getLocalBookFilename(book);
     if (!(await this.fs.exists(fp, 'Books')) && book.uploadedAt) {
       await this.downloadBook(book);
     }
-    const { file } = (await this.loadBookContent(book, settings)) as BookContent;
-    const bookDoc = (await new DocumentLoader(file).open()).book as BookDoc;
-    const f = file as ClosableFile;
+    const { file } = await this.loadBookContent(book, settings);
+    const bookDoc = (await new DocumentLoader(file).open()).book;
+    const f = file;
     if (f && f.close) {
       await f.close();
     }
     return bookDoc.metadata;
   }
 
-  async saveBookConfig(book: Book, config: BookConfig, settings?: SystemSettings): Promise<void> {
+  /**
+   * @param {Book} book
+   * @param {BookConfig} config
+   * @param {SystemSettings} [settings]
+   * @returns {Promise<void>}
+   */
+  async saveBookConfig(book, config, settings) {
     try {
       console.log(`📝 Saving book config for ${book.hash}`, { 
         hasBooknotes: config.booknotes?.length || 0,
@@ -444,7 +496,7 @@ export abstract class BaseAppService implements AppService {
         location: config.location?.substring(0, 30) || 'none'
       });
       
-      let serializedConfig: string;
+      let serializedConfig;
       if (settings) {
         const { globalViewSettings } = settings;
         serializedConfig = serializeConfig(config, globalViewSettings, DEFAULT_BOOK_SEARCH_CONFIG);
@@ -468,20 +520,27 @@ export abstract class BaseAppService implements AppService {
     }
   }
 
-  async generateCoverImageUrl(book: Book): Promise<string> {
+  /**
+   * @param {Book} book
+   * @returns {Promise<string>}
+   */
+  async generateCoverImageUrl(book) {
     return this.appPlatform === 'web'
       ? await this.getCoverImageBlobUrl(book)
       : this.getCoverImageUrl(book);
   }
 
-  async loadLibraryBooks(): Promise<Book[]> {
+  /**
+   * @returns {Promise<Book[]>}
+   */
+  async loadLibraryBooks() {
     console.log('Loading library books...');
-    let books: Book[] = [];
+    let books = [];
     const libraryFilename = getLibraryFilename();
 
     try {
       const txt = await this.fs.readFile(libraryFilename, 'Books', 'text');
-      books = JSON.parse(txt as string);
+      books = JSON.parse(txt);
     } catch {
       await this.fs.createDir('', 'Books', true);
       await this.fs.writeFile(libraryFilename, 'Books', '[]');
@@ -498,9 +557,13 @@ export abstract class BaseAppService implements AppService {
     return books;
   }
 
-  async saveLibraryBooks(books: Book[]): Promise<void> {
+  /**
+   * @param {Book[]} books
+   * @returns {Promise<void>}
+   */
+  async saveLibraryBooks(books) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const libraryBooks = books.map(({ coverImageUrl, ...rest }) => rest);
     await this.fs.writeFile(getLibraryFilename(), 'Books', JSON.stringify(libraryBooks));
   }
-}
+} 
