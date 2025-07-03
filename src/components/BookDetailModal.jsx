@@ -120,19 +120,6 @@ const BookDetailModal = ({ book, isOpen, onClose }) => {
                     {formatAuthors(book.author, bookMeta.language) || _('Unknown')}
                   </p>
                 </div>
-                {window.innerWidth >= 400 && (
-                  <div className='flex flex-wrap items-center gap-x-4 gap-y-2 py-2'>
-                    <button
-                      className='btn rounded-xl bg-red-600 px-4 text-white hover:bg-red-700'
-                      onClick={handleDelete}
-                    >
-                      {_('Delete')}
-                    </button>
-                    <button className='btn btn-disabled bg-primary/25 hover:bg-primary/85 rounded-xl px-4 text-white'>
-                      {_('More Info')}
-                    </button>
-                  </div>
-                )}
               </div>
             </div>
 

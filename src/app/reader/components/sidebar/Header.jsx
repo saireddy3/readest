@@ -29,13 +29,6 @@ const SidebarHeader = ({ isPinned, isSearchBarVisible, onGoToLibrary, onClose, o
         >
           <MdArrowBackIosNew size={iconSize22} />
         </button>
-        <button
-          className='btn btn-ghost hidden h-8 min-h-8 w-8 p-0 sm:flex'
-          onClick={onGoToLibrary}
-          title="Reload Book"
-        >
-          <IoReload className='fill-base-content' />
-        </button>
       </div>
       <div className='flex min-w-24 max-w-32 items-center justify-between sm:size-[70%]'>
         <button
