@@ -1,7 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 
-import { useNotebookStore } from '@/store/notebookStore';
-import { useTranslation } from '@/hooks/useTranslation';
+import { useNotebookStore } from '../../../../store/notebookStore';
+import { useTranslation } from '../../../../hooks/useTranslation';
+import { useResponsiveSize } from '../../../../hooks/useResponsiveSize';
 
 const NoteEditor = ({ onSave, onEdit }) => {
   const _ = useTranslation();

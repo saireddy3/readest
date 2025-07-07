@@ -11,25 +11,27 @@ const getSearchParam = (key) => {
   return params.get(key);
 };
 
-import { useEnv } from '@/context/EnvContext';
-import { useSettingsStore } from '@/store/settingsStore';
-import { useBookDataStore } from '@/store/bookDataStore';
-import { useReaderStore } from '@/store/readerStore';
-import { useSidebarStore } from '@/store/sidebarStore';
-import { handleOnCloseWindow } from '@/utils/webWindow';
-import { uniqueId } from '@/utils/misc';
-import { eventDispatcher } from '@/utils/event';
-import { redirectToDirectReader } from '@/utils/nav';
-import { BOOK_IDS_SEPARATOR } from '@/services/constants';
+import { useEnv } from '../../../context/EnvContext';
+import { useSettingsStore } from '../../../store/settingsStore';
+import { useBookDataStore } from '../../../store/bookDataStore';
+import { useReaderStore } from '../../../store/readerStore';
+import { useSidebarStore } from '../../../store/sidebarStore';
+import { handleOnCloseWindow } from '../../../utils/webWindow';
+import { uniqueId } from '../../../utils/misc';
+import { eventDispatcher } from '../../../utils/event';
+import { redirectToDirectReader } from '../../../utils/nav';
+import { BOOK_IDS_SEPARATOR } from '../../../services/constants';
 
 import useBooksManager from '../hooks/useBooksManager';
 import useBookShortcuts from '../hooks/useBookShortcuts';
-import BookDetailModal from '@/components/BookDetailModal';
-import Spinner from '@/components/Spinner';
+import BookDetailModal from '../../../components/BookDetailModal';
+import Spinner from '../../../components/Spinner';
 import SideBar from './sidebar/SideBar';
 import Notebook from './notebook/Notebook';
 import BooksGrid from './BooksGrid';
 import TTSControl from './tts/TTSControl';
+import { useTranslation } from '../../../hooks/useTranslation';
+import { useResponsiveSize } from '../../../hooks/useResponsiveSize';
 
 const ReaderContent = ({ ids }) => {
   // Use the IDs passed as prop or from URL

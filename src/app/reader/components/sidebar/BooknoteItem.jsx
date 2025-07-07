@@ -1,14 +1,14 @@
 import clsx from 'clsx';
 import React from 'react';
 
-import { useEnv } from '@/context/EnvContext';
-import { useSettingsStore } from '@/store/settingsStore';
-import { useReaderStore } from '@/store/readerStore';
-import { useNotebookStore } from '@/store/notebookStore';
-import { useBookDataStore } from '@/store/bookDataStore';
-import { useTranslation } from '@/hooks/useTranslation';
+import { useEnv } from '../../../../context/EnvContext';
+import { useSettingsStore } from '../../../../store/settingsStore';
+import { useReaderStore } from '../../../../store/readerStore';
+import { useNotebookStore } from '../../../../store/notebookStore';
+import { useBookDataStore } from '../../../../store/bookDataStore';
+import { useTranslation } from '../../../../hooks/useTranslation';
 import useScrollToItem from '../../hooks/useScrollToItem';
-import { eventDispatcher } from '@/utils/event';
+import { eventDispatcher } from '../../../../utils/event';
 
 const BooknoteItem = ({ bookKey, item }) => {
   const _ = useTranslation();

@@ -1,4 +1,5 @@
-import { getOSPlatform } from '@/utils/misc';
+import { getOSPlatform } from '../../../utils/misc';
+
 
 // NOTE: Be careful to use this hook. When the scrollbar is set always visible in macOS,
 // hide it will change the layout. Make sure to only use it in constrained widgets.

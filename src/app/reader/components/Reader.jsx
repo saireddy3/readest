@@ -5,15 +5,15 @@ import * as React from 'react';
 import { useEffect, Suspense, useRef, useState } from 'react';
 import { md5 } from 'js-md5';
 
-import { useEnv } from '@/context/EnvContext';
-import { useTheme } from '@/hooks/useTheme';
-import { useThemeStore } from '@/store/themeStore';
-import { useSettingsStore } from '@/store/settingsStore';
-import { useScreenWakeLock } from '@/hooks/useScreenWakeLock';
-import { Toast } from '@/components/Toast';
+import { useEnv } from '../../../context/EnvContext';
+import { useTheme } from '../../../hooks/useTheme';
+import { useThemeStore } from '../../../store/themeStore';
+import { useSettingsStore } from '../../../store/settingsStore';
+import { useScreenWakeLock } from '../../../hooks/useScreenWakeLock';
+import { Toast } from '../../../components/Toast';
 import ReaderContent from './ReaderContent';
-import { useSidebarStore } from '@/store/sidebarStore';
-import Spinner from '@/components/Spinner';
+import { useSidebarStore } from '../../../store/sidebarStore';
+import Spinner from '../../../components/Spinner';
 
 const Reader = ({ bookUrl: propBookUrl }) => {
   console.log({propBookUrl})

@@ -1,21 +1,25 @@
 import clsx from 'clsx';
 import React, { useState } from 'react';
-import { useSettingsStore } from '@/store/settingsStore';
-import { useTranslation } from '@/hooks/useTranslation';
+import { useSettingsStore } from '../../../../store/settingsStore';
+import { useTranslation } from '../../../../hooks/useTranslation';
 import { RiFontSize } from 'react-icons/ri';
 import { RiDashboardLine } from 'react-icons/ri';
 import { VscSymbolColor } from 'react-icons/vsc';
 import { PiDotsThreeVerticalBold } from 'react-icons/pi';
 import { IoAccessibilityOutline } from 'react-icons/io5';
 import { MdArrowBackIosNew, MdArrowForwardIos } from 'react-icons/md';
-import { getDirFromUILanguage } from '@/utils/rtl';
+import { getDirFromUILanguage } from '../../../../utils/rtl';
 import FontPanel from './FontPanel';
 import LayoutPanel from './LayoutPanel';
 import ColorPanel from './ColorPanel';
-import Dropdown from '@/components/Dropdown';
-import Dialog from '@/components/Dialog';
+import Dropdown from '../../../../components/Dropdown';
+import Dialog from '../../../../components/Dialog';
 import DialogMenu from './DialogMenu';
 import MiscPanel from './MiscPanel';
+import { useResponsiveSize } from '../../../../hooks/useResponsiveSize';
+import { useThemeStore } from '../../../../store/themeStore';
+import { useEnv } from '../../../../context/EnvContext';
+import { useDrag } from '../../../../hooks/useDrag';
 
 const SettingsDialog = ({ bookKey }) => {
   const _ = useTranslation();

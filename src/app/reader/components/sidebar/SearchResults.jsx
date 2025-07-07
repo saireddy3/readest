@@ -1,5 +1,9 @@
 import React from 'react';
-import { useReaderStore } from '@/store/readerStore';
+import { useTranslation } from '../../../../hooks/useTranslation';
+import { useResponsiveSize } from '../../../../hooks/useResponsiveSize';
+import { useReaderStore } from '../../../../store/readerStore';
+import { useSidebarStore } from '../../../../store/sidebarStore';
+import { eventDispatcher } from '../../../../utils/event';
 import useScrollToItem from '../../hooks/useScrollToItem';
 import clsx from 'clsx';
 

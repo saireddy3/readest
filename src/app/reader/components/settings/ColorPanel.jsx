@@ -9,13 +9,15 @@ import {
   generateDarkPalette,
   generateLightPalette,
   themes,
-} from '@/styles/themes';
-import { useEnv } from '@/context/EnvContext';
-import { useSettingsStore } from '@/store/settingsStore';
-import { useThemeStore } from '@/store/themeStore';
-import { useTranslation } from '@/hooks/useTranslation';
-import { useResponsiveSize } from '@/hooks/useResponsiveSize';
+} from '../../../../styles/themes';
+import { useEnv } from '../../../../context/EnvContext';
+import { useSettingsStore } from '../../../../store/settingsStore';
+import { useThemeStore } from '../../../../store/themeStore';
+import { useTranslation } from '../../../../hooks/useTranslation';
+import { useResponsiveSize } from '../../../../hooks/useResponsiveSize';
 import ThemeEditor from './ThemeEditor';
+import { eventDispatcher } from '../../../../utils/event';
+import { getStyles } from '../../../../utils/style';
 
 const ColorPanel = ({ bookKey }) => {
   const _ = useTranslation();
@@ -162,4 +164,4 @@ const ColorPanel = ({ bookKey }) => {
   );
 };
 
-export default ColorPanel; 
+export default ColorPanel;

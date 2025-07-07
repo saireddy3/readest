@@ -2,18 +2,22 @@ import clsx from 'clsx';
 import React, { useEffect, useRef, useState } from 'react';
 import { PiDotsThreeVerticalBold } from 'react-icons/pi';
 
-import { useEnv } from '@/context/EnvContext';
-import { useReaderStore } from '@/store/readerStore';
-import { useSidebarStore } from '@/store/sidebarStore';
-import { useTrafficLightStore } from '@/store/trafficLightStore';
-import { useResponsiveSize } from '@/hooks/useResponsiveSize';
-import WindowButtons from '@/components/WindowButtons';
-import Dropdown from '@/components/Dropdown';
+import { useEnv } from '../../../context/EnvContext';
+import { useReaderStore } from '../../../store/readerStore';
+import { useSidebarStore } from '../../../store/sidebarStore';
+import { useTrafficLightStore } from '../../../store/trafficLightStore';
+import { useResponsiveSize } from '../../../hooks/useResponsiveSize';
+import WindowButtons from '../../../components/WindowButtons';
+import Dropdown from '../../../components/Dropdown';
 import SidebarToggler from './SidebarToggler';
 import BookmarkToggler from './BookmarkToggler';
 import NotebookToggler from './NotebookToggler';
 import SettingsToggler from './SettingsToggler';
 import ViewMenu from './ViewMenu';
+import { useTranslation } from '../../../hooks/useTranslation';
+import { useSettingsStore } from '../../../store/settingsStore';
+import { useBookDataStore } from '../../../store/bookDataStore';
+import { eventDispatcher } from '../../../utils/event';
 
 const HeaderBar = ({
   bookKey,

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import Providers from '@/components/Providers';
+import Providers from '../components/Providers';
 
 import '../styles/globals.css';
 import '../styles/fonts.css';

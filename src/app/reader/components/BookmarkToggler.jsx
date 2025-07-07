@@ -2,14 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { MdOutlineBookmarkAdd, MdOutlineBookmark } from 'react-icons/md';
 import * as CFI from 'foliate-js/epubcfi.js';
 
-import { useSettingsStore } from '@/store/settingsStore';
-import { useBookDataStore } from '@/store/bookDataStore';
-import { useReaderStore } from '@/store/readerStore';
-import { useTranslation } from '@/hooks/useTranslation';
-import { useEnv } from '@/context/EnvContext';
-import { uniqueId } from '@/utils/misc';
-import Button from '@/components/Button';
-import { getCurrentPage } from '@/utils/book';
+import { useSettingsStore } from '../../../store/settingsStore';
+import { useBookDataStore } from '../../../store/bookDataStore';
+import { useReaderStore } from '../../../store/readerStore';
+import { useTranslation } from '../../../hooks/useTranslation';
+import { useEnv } from '../../../context/EnvContext';
+import { uniqueId } from '../../../utils/misc';
+import Button from '../../../components/Button';
+import { getCurrentPage } from '../../../utils/book';
+import { useResponsiveSize } from '../../../hooks/useResponsiveSize';
+import { eventDispatcher } from '../../../utils/event';
 
 const BookmarkToggler = ({ bookKey }) => {
   const _ = useTranslation();

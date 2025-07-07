@@ -1,8 +1,11 @@
 import { useState } from 'react';
-import { useTranslation } from '@/hooks/useTranslation';
-import { md5Fingerprint } from '@/utils/md5';
-import { CUSTOM_THEME_TEMPLATES } from '@/services/constants';
-import { useSettingsStore } from '@/store/settingsStore';
+import { useTranslation } from '../../../../hooks/useTranslation';
+import { useResponsiveSize } from '../../../../hooks/useResponsiveSize';
+import { useSettingsStore } from '../../../../store/settingsStore';
+import { useThemeStore } from '../../../../store/themeStore';
+import { eventDispatcher } from '../../../../utils/event';
+import { md5 } from '../../../../utils/md5';
+import { CUSTOM_THEME_TEMPLATES } from '../../../../services/constants';
 import clsx from 'clsx';
 import ColorInput from './ColorInput';
 
@@ -47,7 +50,7 @@ const ThemeEditor = ({ customTheme, onSave, onDelete, onCancel }) => {
 
   const getCustomTheme = () => {
     return {
-      name: md5Fingerprint(themeName),
+      name: md5(themeName),
       label: themeName,
       colors: {
         light: {
@@ -81,7 +84,7 @@ const ThemeEditor = ({ customTheme, onSave, onDelete, onCancel }) => {
               className={clsx(
                 'btn btn-ghost btn-sm px-2',
                 !settings.globalReadSettings.customThemes.find(
-                  (theme) => theme.name === md5Fingerprint(themeName),
+                  (theme) => theme.name === md5(themeName),
                 ) && 'btn-disabled',
               )}
               onClick={() => onDelete(getCustomTheme())}

@@ -3,15 +3,18 @@ import { MdOutlineAutoMode } from 'react-icons/md';
 import { MdOutlineTextRotationNone, MdTextRotateVertical } from 'react-icons/md';
 import { TbTextDirectionRtl } from 'react-icons/tb';
 
-import { useEnv } from '@/context/EnvContext';
-import { useReaderStore } from '@/store/readerStore';
-import { useBookDataStore } from '@/store/bookDataStore';
-import { useTranslation } from '@/hooks/useTranslation';
-import { isCJKEnv } from '@/utils/misc';
-import { getStyles } from '@/utils/style';
-import { getMaxInlineSize } from '@/utils/config';
-import { getBookDirFromWritingMode, getBookLangCode } from '@/utils/book';
-import { MIGHT_BE_RTL_LANGS } from '@/services/constants';
+import { useEnv } from '../../../../context/EnvContext';
+import { useReaderStore } from '../../../../store/readerStore';
+import { useBookDataStore } from '../../../../store/bookDataStore';
+import { useTranslation } from '../../../../hooks/useTranslation';
+import { useResponsiveSize } from '../../../../hooks/useResponsiveSize';
+import { useSettingsStore } from '../../../../store/settingsStore';
+import { eventDispatcher } from '../../../../utils/event';
+import { isCJKEnv } from '../../../../utils/misc';
+import { getStyles } from '../../../../utils/style';
+import { getMaxInlineSize } from '../../../../utils/config';
+import { getBookDirFromWritingMode, getBookLangCode } from '../../../../utils/book';
+import { MIGHT_BE_RTL_LANGS } from '../../../../services/constants';
 import { saveViewSettings } from '../../utils/viewSettingsHelper';
 import NumberInput from './NumberInput';
 

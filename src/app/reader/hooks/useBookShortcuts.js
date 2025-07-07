@@ -1,12 +1,12 @@
-import { useReaderStore } from '@/store/readerStore';
-import { useNotebookStore } from '@/store/notebookStore';
-import useShortcuts from '@/hooks/useShortcuts';
+import { useReaderStore } from '../../../store/readerStore';
+import { useNotebookStore } from '../../../store/notebookStore';
+import useShortcuts from '../../../hooks/useShortcuts';
 import useBooksManager from './useBooksManager';
-import { useSidebarStore } from '@/store/sidebarStore';
-import { useSettingsStore } from '@/store/settingsStore';
-import { getStyles } from '@/utils/style';
-import { eventDispatcher } from '@/utils/event';
-import { MAX_ZOOM_LEVEL, MIN_ZOOM_LEVEL, ZOOM_STEP } from '@/services/constants';
+import { useSidebarStore } from '../../../store/sidebarStore';
+import { useSettingsStore } from '../../../store/settingsStore';
+import { getStyles } from '../../../utils/style';
+import { eventDispatcher } from '../../../utils/event';
+import { MAX_ZOOM_LEVEL, MIN_ZOOM_LEVEL, ZOOM_STEP } from '../../../services/constants';
 
 const useBookShortcuts = ({ sideBarBookKey, bookKeys }) => {
   const { getView, getViewSettings, setViewSettings } = useReaderStore();

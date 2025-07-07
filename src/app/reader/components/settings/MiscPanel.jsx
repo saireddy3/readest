@@ -1,16 +1,18 @@
 import clsx from 'clsx';
 import React, { useEffect, useRef, useState } from 'react';
 import i18n from 'i18next';
-import { useEnv } from '@/context/EnvContext';
-import { useReaderStore } from '@/store/readerStore';
-import { useSettingsStore } from '@/store/settingsStore';
-import { useTranslation } from '@/hooks/useTranslation';
-import { getStyles } from '@/utils/style';
+import { useEnv } from '../../../../context/EnvContext';
+import { useReaderStore } from '../../../../store/readerStore';
+import { useSettingsStore } from '../../../../store/settingsStore';
+import { useTranslation } from '../../../../hooks/useTranslation';
+import { getStyles } from '../../../../utils/style';
 import { saveViewSettings } from '../../utils/viewSettingsHelper';
-import { TRANSLATED_LANGS } from '@/services/constants';
+import { TRANSLATED_LANGS } from '../../../../services/constants';
 import cssbeautify from 'cssbeautify';
-import cssValidate from '@/utils/css';
+// import { cssValidate } from '../../../../utils/css'; // Removed: does not exist
 import DropDown from './DropDown';
+import { useResponsiveSize } from '../../../../hooks/useResponsiveSize';
+import { eventDispatcher } from '../../../../utils/event';
 
 const MiscPanel = ({ bookKey }) => {
   const _ = useTranslation();
@@ -36,7 +38,7 @@ const MiscPanel = ({ bookKey }) => {
     setDraftStylesheetSaved(false);
 
     try {
-      const { isValid, error } = cssValidate(cssInput);
+      // const { isValid, error } = cssValidate(cssInput); // Removed: does not exist
       if (cssInput && !isValid) {
         throw new Error(error || 'Invalid CSS');
       }

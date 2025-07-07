@@ -1,6 +1,6 @@
 import { md5 } from 'js-md5';
-import { randomMd5 } from '@/utils/misc';
-import { LRUCache } from '@/utils/lru';
+import { randomMd5 } from '../utils/misc';
+import { LRUCache } from '../utils/lru';
 
 const EDGE_SPEECH_URL =
   'wss://speech.platform.bing.com/consumer/speech/synthesize/readaloud/edge/v1';

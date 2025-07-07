@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useDefaultIconSize } from '@/hooks/useResponsiveSize';
+import { useDefaultIconSize } from '../hooks/useResponsiveSize';
 
 const MenuItem = ({
   label,

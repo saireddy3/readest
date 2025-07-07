@@ -1,23 +1,25 @@
 import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
 
-import { impactFeedback } from '@/utils/haptics';
-import { useSettingsStore } from '@/store/settingsStore';
-import { useBookDataStore } from '@/store/bookDataStore';
-import { useReaderStore } from '@/store/readerStore';
-import { useSidebarStore } from '@/store/sidebarStore';
-import { eventDispatcher } from '@/utils/event';
-import { getBookDirFromLanguage } from '@/utils/book';
-import { useEnv } from '@/context/EnvContext';
-import { useDrag } from '@/hooks/useDrag';
-import { useThemeStore } from '@/store/themeStore';
+import { impactFeedback } from '../../../../utils/haptics';
+import { useSettingsStore } from '../../../../store/settingsStore';
+import { useBookDataStore } from '../../../../store/bookDataStore';
+import { useReaderStore } from '../../../../store/readerStore';
+import { useSidebarStore } from '../../../../store/sidebarStore';
+import { eventDispatcher } from '../../../../utils/event';
+import { getBookDirFromLanguage } from '../../../../utils/book';
+import { useEnv } from '../../../../context/EnvContext';
+import { useDrag } from '../../../../hooks/useDrag';
+import { useThemeStore } from '../../../../store/themeStore';
 import SidebarHeader from './Header';
 import SidebarContent from './Content';
 import BookCard from './BookCard';
 import useSidebar from '../../hooks/useSidebar';
 import SearchBar from './SearchBar';
 import SearchResults from './SearchResults';
-import useShortcuts from '@/hooks/useShortcuts';
+import useShortcuts from '../../../../hooks/useShortcuts';
+import { useTranslation } from '../../../../hooks/useTranslation';
+import { useResponsiveSize } from '../../../../hooks/useResponsiveSize';
 
 const MIN_SIDEBAR_WIDTH = 0.05;
 const MAX_SIDEBAR_WIDTH = 0.45;

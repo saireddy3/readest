@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
-import { useSync } from '@/hooks/useSync';
-import { useBookDataStore } from '@/store/bookDataStore';
-import { SYNC_NOTES_INTERVAL_SEC } from '@/services/constants';
+import { useSync } from '../../../hooks/useSync';
+import { useBookDataStore } from '../../../store/bookDataStore';
+import { SYNC_NOTES_INTERVAL_SEC } from '../../../services/constants';
 
 export const useNotesSync = (bookKey) => {
   const { syncedNotes, syncNotes, lastSyncedAtNotes } = useSync(bookKey);

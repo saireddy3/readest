@@ -1,9 +1,11 @@
 import React from 'react';
 import { RiFontSize } from 'react-icons/ri';
 
-import { useTranslation } from '@/hooks/useTranslation';
-import { useSettingsStore } from '@/store/settingsStore';
-import Button from '@/components/Button';
+import { useTranslation } from '../../../hooks/useTranslation';
+import { useResponsiveSize } from '../../../hooks/useResponsiveSize';
+import { useSettingsStore } from '../../../store/settingsStore';
+import { eventDispatcher } from '../../../utils/event';
+import Button from '../../../components/Button';
 
 const SettingsToggler = () => {
   const _ = useTranslation();

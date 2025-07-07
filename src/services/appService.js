@@ -1,14 +1,14 @@
 /**
- * @typedef {import('@/types/system').AppPlatform} AppPlatform
- * @typedef {import('@/types/system').AppService} AppService
- * @typedef {import('@/types/system').FileSystem} FileSystem
- * @typedef {import('@/types/system').BaseDir} BaseDir
- * @typedef {import('@/types/settings').SystemSettings} SystemSettings
- * @typedef {import('@/types/book').Book} Book
- * @typedef {import('@/types/book').BookConfig} BookConfig
- * @typedef {import('@/types/book').BookContent} BookContent
- * @typedef {import('@/types/book').BookFormat} BookFormat
- * @typedef {import('@/utils/transfer').ProgressHandler} ProgressHandler
+ * @typedef {import('../types/system').AppPlatform} AppPlatform
+ * @typedef {import('../types/system').AppService} AppService
+ * @typedef {import('../types/system').FileSystem} FileSystem
+ * @typedef {import('../types/system').BaseDir} BaseDir
+ * @typedef {import('../types/settings').SystemSettings} SystemSettings
+ * @typedef {import('../types/book').Book} Book
+ * @typedef {import('../types/book').BookConfig} BookConfig
+ * @typedef {import('../types/book').BookContent} BookContent
+ * @typedef {import('../types/book').BookFormat} BookFormat
+ * @typedef {import('../utils/transfer').ProgressHandler} ProgressHandler
  */
 
 import {
@@ -23,9 +23,9 @@ import {
   formatTitle,
   formatAuthors,
   getFilename,
-} from '@/utils/book.js';
-import { partialMD5 } from '@/utils/md5.js';
-import { DocumentLoader } from '@/libs/document.js';
+} from '../utils/book.js';
+import { partialMD5 } from '../utils/md5.js';
+import { DocumentLoader } from '../libs/document.js';
 import {
   DEFAULT_BOOK_LAYOUT,
   DEFAULT_BOOK_STYLE,
@@ -40,10 +40,10 @@ import {
   DEFAULT_SYSTEM_SETTINGS,
   DEFAULT_CJK_VIEW_SETTINGS,
 } from './constants.js';
-import { getOSPlatform, isCJKEnv, isContentURI, isValidURL } from '@/utils/misc.js';
-import { deserializeConfig, serializeConfig } from '@/utils/serializer.js';
-import { downloadFile, uploadFile, deleteFile, createProgressHandler } from '@/libs/storage.js';
-import { TxtToEpubConverter } from '@/utils/txt.js';
+import { getOSPlatform, isCJKEnv, isContentURI, isValidURL } from '../utils/misc.js';
+import { deserializeConfig, serializeConfig } from '../utils/serializer.js';
+import { downloadFile, uploadFile, deleteFile, createProgressHandler } from '../libs/storage.js';
+import { TxtToEpubConverter } from '../utils/txt.js';
 import { BOOK_FILE_NOT_FOUND_ERROR } from './errors.js';
 
 /**

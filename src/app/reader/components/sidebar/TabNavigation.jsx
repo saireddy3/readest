@@ -4,7 +4,9 @@ import { MdBookmarkBorder as BookmarkIcon } from 'react-icons/md';
 import { IoIosList as TOCIcon } from 'react-icons/io';
 import { PiNotePencil as NoteIcon } from 'react-icons/pi';
 
-import { useTranslation } from '@/hooks/useTranslation';
+import { useTranslation } from '../../../../hooks/useTranslation';
+import { useResponsiveSize } from '../../../../hooks/useResponsiveSize';
+import { useSidebarStore } from '../../../../store/sidebarStore';
 
 const TabNavigation = ({ activeTab, onTabChange }) => {
   const _ = useTranslation();

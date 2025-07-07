@@ -1,8 +1,11 @@
 import clsx from 'clsx';
 import React from 'react';
 import { FaCheckCircle } from 'react-icons/fa';
-import { useSettingsStore } from '@/store/settingsStore';
-import { useResponsiveSize } from '@/hooks/useResponsiveSize';
+import { useSettingsStore } from '../../../../store/settingsStore';
+import { useResponsiveSize } from '../../../../hooks/useResponsiveSize';
+import { useTranslation } from '../../../../hooks/useTranslation';
+import { useNotebookStore } from '../../../../store/notebookStore';
+import { eventDispatcher } from '../../../../utils/event';
 
 const styles = ['highlight', 'underline', 'squiggly'];
 const colors = ['red', 'violet', 'blue', 'green', 'yellow'];

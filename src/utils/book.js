@@ -1,9 +1,9 @@
-import { EXTS } from '@/libs/document';
+import { EXTS } from '../libs/document';
 import { getUserLang, isContentURI, isValidURL, makeSafeFilename } from './misc.js';
 import { getDirFromLanguage } from './rtl.js';
 
 /**
- * @param {import('@/types/book').Book} book
+ * @param {import('../types/book').Book} book
  * @returns {string}
  */
 export const getDir = (book) => {
@@ -18,7 +18,7 @@ export const getLibraryFilename = () => {
 };
 
 /**
- * @param {import('@/types/book').Book} book
+ * @param {import('../types/book').Book} book
  * @returns {string}
  */
 export const getRemoteBookFilename = (book) => {
@@ -26,7 +26,7 @@ export const getRemoteBookFilename = (book) => {
 };
 
 /**
- * @param {import('@/types/book').Book} book
+ * @param {import('../types/book').Book} book
  * @returns {string}
  */
 export const getLocalBookFilename = (book) => {
@@ -34,7 +34,7 @@ export const getLocalBookFilename = (book) => {
 };
 
 /**
- * @param {import('@/types/book').Book} book
+ * @param {import('../types/book').Book} book
  * @returns {string}
  */
 export const getCoverFilename = (book) => {
@@ -42,7 +42,7 @@ export const getCoverFilename = (book) => {
 };
 
 /**
- * @param {import('@/types/book').Book} book
+ * @param {import('../types/book').Book} book
  * @returns {string}
  */
 export const getConfigFilename = (book) => {
@@ -81,7 +81,7 @@ export const getBaseFilename = (filename) => {
   return baseName;
 };
 
-/** @type {import('@/types/book').BookConfig} */
+/** @type {import('../types/book').BookConfig} */
 export const INIT_BOOK_CONFIG = {
   updatedAt: 0,
 };
@@ -212,7 +212,7 @@ export const formatSubject = (subject) => {
 };
 
 /**
- * @param {import('@/types/book').BookProgress} progress
+ * @param {import('../types/book').BookProgress} progress
  * @returns {number}
  */
 export const getCurrentPage = (progress) => {
@@ -225,7 +225,7 @@ export const getCurrentPage = (progress) => {
 };
 
 /**
- * @param {import('@/types/book').WritingMode} writingMode
+ * @param {import('../types/book').WritingMode} writingMode
  * @returns {'ltr' | 'rtl' | 'auto'}
  */
 export const getBookDirFromWritingMode = (writingMode) => {

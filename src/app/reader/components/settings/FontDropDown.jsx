@@ -2,8 +2,12 @@ import clsx from 'clsx';
 import React from 'react';
 import { FiChevronUp, FiChevronLeft } from 'react-icons/fi';
 import { MdCheck } from 'react-icons/md';
-import { useTranslation } from '@/hooks/useTranslation';
-import { useDefaultIconSize, useResponsiveSize } from '@/hooks/useResponsiveSize';
+import { useTranslation } from '../../../../hooks/useTranslation';
+import { useResponsiveSize } from '../../../../hooks/useResponsiveSize';
+import { useSettingsStore } from '../../../../store/settingsStore';
+import { useReaderStore } from '../../../../store/readerStore';
+import { eventDispatcher } from '../../../../utils/event';
+import { getStyles } from '../../../../utils/style';
 
 const FontDropdown = ({
   family,
@@ -15,7 +19,7 @@ const FontDropdown = ({
 }) => {
   const _ = useTranslation();
   const iconSize16 = useResponsiveSize(16);
-  const defaultIconSize = useDefaultIconSize();
+  const defaultIconSize = useResponsiveSize(16);
   const allOptions = [...options, ...(moreOptions ?? [])];
   const selectedOption = allOptions.find((option) => option.option === selected) ?? allOptions[0];
   return (

@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import React, { useEffect, useRef } from 'react';
-import { eventDispatcher } from '@/utils/event';
+import { eventDispatcher } from '../../../utils/event';
 
 const HintInfo = ({
   bookKey,

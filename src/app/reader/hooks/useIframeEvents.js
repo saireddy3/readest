@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
-import { useReaderStore } from '@/store/readerStore';
-import { eventDispatcher } from '@/utils/event';
+import { useReaderStore } from '../../../store/readerStore';
+
+import { eventDispatcher } from '../../../utils/event';
 
 export const useClickEvent = (bookKey, viewRef, containerRef) => {
   const { getViewSettings } = useReaderStore();

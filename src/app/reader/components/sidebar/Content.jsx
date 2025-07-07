@@ -1,11 +1,15 @@
 import clsx from 'clsx';
 import React, { useEffect, useRef, useState } from 'react';
 
-import { useEnv } from '@/context/EnvContext';
-import { useBookDataStore } from '@/store/bookDataStore';
+import { useEnv } from '../../../../context/EnvContext';
+import { useBookDataStore } from '../../../../store/bookDataStore';
 import TOCView from './TOCView';
 import BooknoteView from './BooknoteView';
 import TabNavigation from './TabNavigation';
+import { useTranslation } from '../../../../hooks/useTranslation';
+import { useResponsiveSize } from '../../../../hooks/useResponsiveSize';
+import { useSidebarStore } from '../../../../store/sidebarStore';
+import { useReaderStore } from '../../../../store/readerStore';
 
 const SidebarContent = ({ bookDoc, sideBarBookKey }) => {
   const { appService } = useEnv();

@@ -1,8 +1,8 @@
 import { create } from 'zustand';
-import { updateTocCFI, updateTocID } from '@/utils/toc';
+import { updateTocCFI, updateTocID } from '../utils/toc';
 import { useSettingsStore } from './settingsStore';
 import { useBookDataStore } from './bookDataStore';
-import { DocumentLoader } from '@/libs/document';
+import { DocumentLoader } from '../libs/document';
 
 /**
  * @typedef {Object} ViewState

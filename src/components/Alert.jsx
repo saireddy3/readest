@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useTranslation } from '@/hooks/useTranslation';
+import { useTranslation } from '../hooks/useTranslation';
 
 const Alert = ({ title, message, onCancel, onConfirm }) => {
   const _ = useTranslation();

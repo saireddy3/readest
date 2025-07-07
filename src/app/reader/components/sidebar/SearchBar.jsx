@@ -2,14 +2,16 @@ import clsx from 'clsx';
 import React, { useEffect, useRef, useState } from 'react';
 import { FaSearch, FaChevronDown } from 'react-icons/fa';
 
-import { useEnv } from '@/context/EnvContext';
-import { useSettingsStore } from '@/store/settingsStore';
-import { useBookDataStore } from '@/store/bookDataStore';
-import { useReaderStore } from '@/store/readerStore';
-import { useTranslation } from '@/hooks/useTranslation';
-import { useResponsiveSize } from '@/hooks/useResponsiveSize';
-import Dropdown from '@/components/Dropdown';
+import { useEnv } from '../../../../context/EnvContext';
+import { useSettingsStore } from '../../../../store/settingsStore';
+import { useBookDataStore } from '../../../../store/bookDataStore';
+import { useReaderStore } from '../../../../store/readerStore';
+import { useTranslation } from '../../../../hooks/useTranslation';
+import { useResponsiveSize } from '../../../../hooks/useResponsiveSize';
+import Dropdown from '../../../../components/Dropdown';
 import SearchOptions from './SearchOptions';
+import { useSidebarStore } from '../../../../store/sidebarStore';
+import { eventDispatcher } from '../../../../utils/event';
 
 const MINIMUM_SEARCH_TERM_LENGTH_DEFAULT = 2;
 const MINIMUM_SEARCH_TERM_LENGTH_CJK = 1;

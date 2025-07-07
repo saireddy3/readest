@@ -9,7 +9,7 @@
  * Transform book config to database format
  * @param {unknown} bookConfig - Book configuration to transform
  * @param {string} userId - User ID
- * @returns {import('@/types/records').DBBookConfig} Database book config
+ * @returns {import('../types/records').DBBookConfig} Database book config
  */
 export const transformBookConfigToDB = (bookConfig, userId) => {
   const { bookHash, progress, location, searchConfig, viewSettings, updatedAt } = bookConfig;
@@ -27,8 +27,8 @@ export const transformBookConfigToDB = (bookConfig, userId) => {
 
 /**
  * Transform database book config to application format
- * @param {import('@/types/records').DBBookConfig} dbBookConfig - Database book config
- * @returns {import('@/types/book').BookConfig} Application book config
+ * @param {import('../types/records').DBBookConfig} dbBookConfig - Database book config
+ * @returns {import('../types/book').BookConfig} Application book config
  */
 export const transformBookConfigFromDB = (dbBookConfig) => {
   const { book_hash, progress, location, search_config, view_settings, updated_at } = dbBookConfig;
@@ -46,7 +46,7 @@ export const transformBookConfigFromDB = (dbBookConfig) => {
  * Transform book to database format
  * @param {unknown} book - Book to transform
  * @param {string} userId - User ID
- * @returns {import('@/types/records').DBBook} Database book
+ * @returns {import('../types/records').DBBook} Database book
  */
 export const transformBookToDB = (book, userId) => {
   const {
@@ -83,8 +83,8 @@ export const transformBookToDB = (book, userId) => {
 
 /**
  * Transform database book to application format
- * @param {import('@/types/records').DBBook} dbBook - Database book
- * @returns {import('@/types/book').Book} Application book
+ * @param {import('../types/records').DBBook} dbBook - Database book
+ * @returns {import('../types/book').Book} Application book
  */
 export const transformBookFromDB = (dbBook) => {
   const {
@@ -122,7 +122,7 @@ export const transformBookFromDB = (dbBook) => {
  * Transform book note to database format
  * @param {unknown} bookNote - Book note to transform
  * @param {string} userId - User ID
- * @returns {import('@/types/records').DBBookNote} Database book note
+ * @returns {import('../types/records').DBBookNote} Database book note
  */
 export const transformBookNoteToDB = (bookNote, userId) => {
   const { bookHash, id, type, cfi, text, style, color, note, createdAt, updatedAt, deletedAt } = bookNote;
@@ -146,8 +146,8 @@ export const transformBookNoteToDB = (bookNote, userId) => {
 
 /**
  * Transform database book note to application format
- * @param {import('@/types/records').DBBookNote} dbBookNote - Database book note
- * @returns {import('@/types/book').BookNote} Application book note
+ * @param {import('../types/records').DBBookNote} dbBookNote - Database book note
+ * @returns {import('../types/book').BookNote} Application book note
  */
 export const transformBookNoteFromDB = (dbBookNote) => {
   const { book_hash, id, type, cfi, text, style, color, note, created_at, updated_at, deleted_at } = dbBookNote;

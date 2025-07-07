@@ -1,7 +1,7 @@
-import { useBookDataStore } from '@/store/bookDataStore';
-import { useReaderStore } from '@/store/readerStore';
-import { useSettingsStore } from '@/store/settingsStore';
-import { getStyles } from '@/utils/style';
+import { useBookDataStore } from '../../../store/bookDataStore';
+import { useReaderStore } from '../../../store/readerStore';
+import { useSettingsStore } from '../../../store/settingsStore';
+import { getStyles } from '../../../utils/style';
 
 export const saveViewSettings = async (
   envConfig,

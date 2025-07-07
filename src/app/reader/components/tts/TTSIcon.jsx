@@ -1,4 +1,8 @@
 import React from 'react';
+import { useTranslation } from '../../../../hooks/useTranslation';
+import { useResponsiveSize } from '../../../../hooks/useResponsiveSize';
+import { useReaderStore } from '../../../../store/readerStore';
+import { useSettingsStore } from '../../../../store/settingsStore';
 
 const TTSIcon = ({ isPlaying, onClick }) => {
   const bars = [1, 2, 3, 4];

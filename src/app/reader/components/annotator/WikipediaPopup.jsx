@@ -1,5 +1,8 @@
 import React, { useEffect, useRef } from 'react';
-import Popup from '@/components/Popup';
+import Popup from '../../../../components/Popup';
+import { useTranslation } from '../../../../hooks/useTranslation';
+import { useResponsiveSize } from '../../../../hooks/useResponsiveSize';
+import { eventDispatcher } from '../../../../utils/event';
 
 const WikipediaPopup = ({
   text,

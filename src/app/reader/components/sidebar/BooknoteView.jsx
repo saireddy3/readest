@@ -1,9 +1,12 @@
 import React from 'react';
 
 import * as CFI from 'foliate-js/epubcfi.js';
-import { useBookDataStore } from '@/store/bookDataStore';
-import { findTocItemBS } from '@/utils/toc';
+import { useTranslation } from '../../../../hooks/useTranslation';
+import { useResponsiveSize } from '../../../../hooks/useResponsiveSize';
+import { useBookDataStore } from '../../../../store/bookDataStore';
+import { findTocItemBS } from '../../../../utils/toc';
 import BooknoteItem from './BooknoteItem';
+import { eventDispatcher } from '../../../../utils/event';
 
 const BooknoteView = ({ type, bookKey, toc }) => {
   const { getConfig } = useBookDataStore();

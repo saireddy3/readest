@@ -1,6 +1,7 @@
-import { useSettingsStore } from '@/store/settingsStore';
-import { useSidebarStore } from '@/store/sidebarStore';
+import { useSettingsStore } from '../../../store/settingsStore';
+import { useSidebarStore } from '../../../store/sidebarStore';
 import { useEffect } from 'react';
+
 
 const useSidebar = (initialWidth, isPinned) => {
   const { settings } = useSettingsStore();

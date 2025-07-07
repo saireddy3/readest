@@ -1,13 +1,13 @@
 import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
 
-import { useEnv } from '@/context/EnvContext';
-import { useSettingsStore } from '@/store/settingsStore';
-import { useReaderStore } from '@/store/readerStore';
-import { useBookDataStore } from '@/store/bookDataStore';
-import { useSidebarStore } from '@/store/sidebarStore';
+import { useEnv } from '../../../context/EnvContext';
+import { useSettingsStore } from '../../../store/settingsStore';
+import { useReaderStore } from '../../../store/readerStore';
+import { useBookDataStore } from '../../../store/bookDataStore';
+import { useSidebarStore } from '../../../store/sidebarStore';
 import FoliateViewer from './FoliateViewer';
-import getGridTemplate from '@/utils/grid';
+import getGridTemplate from '../../../utils/grid';
 import SectionInfo from './SectionInfo';
 import HeaderBar from './HeaderBar';
 import FooterBar from './FooterBar';
@@ -18,6 +18,9 @@ import Annotator from './annotator/Annotator';
 import FootnotePopup from './FootnotePopup';
 import HintInfo from './HintInfo';
 import DoubleBorder from './DoubleBorder';
+import { useTranslation } from '../../../hooks/useTranslation';
+import { useResponsiveSize } from '../../../hooks/useResponsiveSize';
+import { eventDispatcher } from '../../../utils/event';
 
 const BooksGrid = ({ bookKeys, onCloseBook }) => {
   const { appService } = useEnv();

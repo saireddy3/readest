@@ -14,14 +14,18 @@ import {
   SANS_SERIF_FONTS,
   SERIF_FONTS,
   WINDOWS_FONTS,
-} from '@/services/constants';
-import { useReaderStore } from '@/store/readerStore';
-import { useTranslation } from '@/hooks/useTranslation';
-import { useEnv } from '@/context/EnvContext';
-import { getOSPlatform, isCJKEnv } from '@/utils/misc';
+} from '../../../../services/constants';
+import { useReaderStore } from '../../../../store/readerStore';
+import { useTranslation } from '../../../../hooks/useTranslation';
+import { useEnv } from '../../../../context/EnvContext';
+import { getOSPlatform, isCJKEnv } from '../../../../utils/misc';
 import { saveViewSettings } from '../../utils/viewSettingsHelper';
 import NumberInput from './NumberInput';
 import FontDropdown from './FontDropDown';
+import { useResponsiveSize } from '../../../../hooks/useResponsiveSize';
+import { useSettingsStore } from '../../../../store/settingsStore';
+import { eventDispatcher } from '../../../../utils/event';
+import { getStyles } from '../../../../utils/style';
 
 const handleFontFaceFont = (option, family) => {
   return `'${option}', ${family}`;

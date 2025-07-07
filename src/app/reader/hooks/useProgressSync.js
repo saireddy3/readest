@@ -1,13 +1,13 @@
 import { useEffect, useRef } from 'react';
-import { useSync } from '@/hooks/useSync';
-import { useBookDataStore } from '@/store/bookDataStore';
-import { useReaderStore } from '@/store/readerStore';
-import { useSettingsStore } from '@/store/settingsStore';
-import { useTranslation } from '@/hooks/useTranslation';
-import { serializeConfig } from '@/utils/serializer';
-import { CFI } from '@/libs/document';
-import { eventDispatcher } from '@/utils/event';
-import { DEFAULT_BOOK_SEARCH_CONFIG, SYNC_PROGRESS_INTERVAL_SEC } from '@/services/constants';
+import { useSync } from '../../../hooks/useSync';
+import { useBookDataStore } from '../../../store/bookDataStore';
+import { useReaderStore } from '../../../store/readerStore';
+import { useSettingsStore } from '../../../store/settingsStore';
+import { useTranslation } from '../../../hooks/useTranslation';
+import { serializeConfig } from '../../../utils/serializer';
+import { CFI } from '../../../libs/document';
+import { eventDispatcher } from '../../../utils/event';
+import { DEFAULT_BOOK_SEARCH_CONFIG, SYNC_PROGRESS_INTERVAL_SEC } from '../../../services/constants';
 
 export const useProgressSync = (bookKey) => {
   const _ = useTranslation();

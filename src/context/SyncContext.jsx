@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext } from 'react';
 import PropTypes from 'prop-types';
-import { SyncClient } from '@/libs/sync';
+import { SyncClient } from '../libs/sync';
 
 const syncClient = new SyncClient();
 

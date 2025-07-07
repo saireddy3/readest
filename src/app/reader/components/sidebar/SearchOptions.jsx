@@ -1,8 +1,9 @@
 import clsx from 'clsx';
 import React from 'react';
 import { MdCheck } from 'react-icons/md';
-import { useTranslation } from '@/hooks/useTranslation';
-import { useDefaultIconSize } from '@/hooks/useResponsiveSize';
+import { useTranslation } from '../../../../hooks/useTranslation';
+import { useResponsiveSize } from '../../../../hooks/useResponsiveSize';
+import { useSidebarStore } from '../../../../store/sidebarStore';
 
 const Option = ({ label, isActive, onClick }) => (
   <button
@@ -10,7 +11,7 @@ const Option = ({ label, isActive, onClick }) => (
     onClick={onClick}
   >
     <div className='flex items-center'>
-      <span style={{ minWidth: `${useDefaultIconSize()}px` }}>
+      <span style={{ minWidth: `${useResponsiveSize()}px` }}>
         {isActive && <MdCheck className='text-base-content' />}
       </span>
       <span className='ml-2'>{label}</span>

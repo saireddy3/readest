@@ -1,7 +1,10 @@
 import clsx from 'clsx';
 import React from 'react';
-import { useEnv } from '@/context/EnvContext';
-import { useTranslation } from '@/hooks/useTranslation';
+import { useEnv } from '../../../context/EnvContext';
+import { useTranslation } from '../../../hooks/useTranslation';
+import { useResponsiveSize } from '../../../hooks/useResponsiveSize';
+import { useReaderStore } from '../../../store/readerStore';
+import { eventDispatcher } from '../../../utils/event';
 
 const PageInfoView = ({
   bookFormat,

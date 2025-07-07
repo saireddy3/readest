@@ -1,9 +1,12 @@
 import clsx from 'clsx';
 import React from 'react';
-import Popup from '@/components/Popup';
+import Popup from '../../../../components/Popup';
 import PopupButton from './PopupButton';
 import HighlightOptions from './HighlightOptions';
-import { useResponsiveSize } from '@/hooks/useResponsiveSize';
+import { useTranslation } from '../../../../hooks/useTranslation';
+import { useResponsiveSize } from '../../../../hooks/useResponsiveSize';
+import { useNotebookStore } from '../../../../store/notebookStore';
+import { eventDispatcher } from '../../../../utils/event';
 
 const OPTIONS_HEIGHT_PIX = 28;
 const OPTIONS_PADDING_PIX = 16;

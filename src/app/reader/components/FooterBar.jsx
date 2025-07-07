@@ -11,15 +11,15 @@ import { MdOutlineHeadphones as TTSIcon } from 'react-icons/md';
 import { TbBoxMargin } from 'react-icons/tb';
 import { RxLineHeight } from 'react-icons/rx';
 
-import { useEnv } from '@/context/EnvContext';
-import { useReaderStore } from '@/store/readerStore';
-import { useSidebarStore } from '@/store/sidebarStore';
-import { useTranslation } from '@/hooks/useTranslation';
-import { useResponsiveSize } from '@/hooks/useResponsiveSize';
-import { eventDispatcher } from '@/utils/event';
+import { useEnv } from '../../../context/EnvContext';
+import { useReaderStore } from '../../../store/readerStore';
+import { useSidebarStore } from '../../../store/sidebarStore';
+import { useTranslation } from '../../../hooks/useTranslation';
+import { useResponsiveSize } from '../../../hooks/useResponsiveSize';
+import { eventDispatcher } from '../../../utils/event';
 import { saveViewSettings } from '../utils/viewSettingsHelper';
-import Button from '@/components/Button';
-import Slider from '@/components/Slider';
+import Button from '../../../components/Button';
+import Slider from '../../../components/Slider';
 
 const FooterBar = ({
   bookKey,

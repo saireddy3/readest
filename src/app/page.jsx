@@ -2,10 +2,10 @@
 
 import { Suspense, useEffect, useState } from 'react';
 import Reader from './reader/components/Reader';
-import Spinner from '@/components/Spinner';
-import { EnvProvider } from '@/context/EnvContext';
-import { SyncProvider } from '@/context/SyncContext';
-import { Toast } from '@/components/Toast';
+import Spinner from '../components/Spinner';
+import { EnvProvider } from '../context/EnvContext';
+import { SyncProvider } from '../context/SyncContext';
+import { Toast } from '../components/Toast';
 
 const HomePage = () => {
   const [dbError, setDbError] = useState(null);

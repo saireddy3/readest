@@ -1,6 +1,6 @@
 import { create } from 'zustand';
-import { getThemeCode } from '@/utils/style';
-import { isWebAppPlatform } from '@/services/environment';
+import { getThemeCode } from '../utils/style';
+import { isWebAppPlatform } from '../services/environment';
 
 /**
  * @typedef {Object} ThemeState

@@ -1,4 +1,4 @@
-import { CFI } from '@/libs/document';
+import { CFI } from '../libs/document';
 
 /**
  * Find the path to a TOC item by href

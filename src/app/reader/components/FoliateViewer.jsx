@@ -1,14 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { BookDoc, getDirection } from '@/libs/document';
-import { useThemeStore } from '@/store/themeStore';
-import { useReaderStore } from '@/store/readerStore';
+import { BookDoc, getDirection } from '../../../libs/document';
+import { useThemeStore } from '../../../store/themeStore';
+import { useReaderStore } from '../../../store/readerStore';
 import { useClickEvent, useTouchEvent } from '../hooks/useIframeEvents';
 import { useFoliateEvents } from '../hooks/useFoliateEvents';
 import { useProgressSync } from '../hooks/useProgressSync';
 import { useProgressAutoSave } from '../hooks/useProgressAutoSave';
-import { getStyles, mountAdditionalFonts, transformStylesheet } from '@/utils/style';
-import { getBookDirFromLanguage, getBookDirFromWritingMode } from '@/utils/book';
-import { useUICSS } from '@/hooks/useUICSS';
+import { getStyles, mountAdditionalFonts, transformStylesheet } from '../../../utils/style';
+import { getBookDirFromLanguage, getBookDirFromWritingMode } from '../../../utils/book';
+import { useUICSS } from '../../../hooks/useUICSS';
 import {
   handleKeydown,
   handleMousedown,
@@ -19,10 +19,10 @@ import {
   handleTouchMove,
   handleTouchEnd,
 } from '../utils/iframeEventHandlers';
-import { getMaxInlineSize } from '@/utils/config';
-import { getDirFromUILanguage } from '@/utils/rtl';
-import { transformContent } from '@/services/transformService';
-import { wrappedFoliateView } from '@/types/view';
+import { getMaxInlineSize } from '../../../utils/config';
+import { getDirFromUILanguage } from '../../../utils/rtl';
+import { transformContent } from '../../../services/transformService';
+import { wrappedFoliateView } from '../../../types/view';
 
 const FoliateViewer = ({ bookKey, bookDoc, config }) => {
   const containerRef = useRef(null);

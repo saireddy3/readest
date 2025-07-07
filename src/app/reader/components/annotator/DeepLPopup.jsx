@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import Popup from '@/components/Popup';
-import { getAPIBaseUrl } from '@/services/environment';
-import { useSettingsStore } from '@/store/settingsStore';
-import { useTranslation } from '@/hooks/useTranslation';
+import Popup from '../../../../components/Popup';
+import { getAPIBaseUrl } from '../../../../services/environment';
+import { useSettingsStore } from '../../../../store/settingsStore';
+import { useTranslation } from '../../../../hooks/useTranslation';
+import { useResponsiveSize } from '../../../../hooks/useResponsiveSize';
+import { eventDispatcher } from '../../../../utils/event';
 
 const LANGUAGES = {
   AUTO: 'Auto Detect',

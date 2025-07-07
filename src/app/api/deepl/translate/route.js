@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { query as deeplQuery } from '@/utils/deepl.js';
+import { query as deeplQuery } from '../../../../utils/deepl.js';
 
 // CORS headers
 const corsHeaders = {

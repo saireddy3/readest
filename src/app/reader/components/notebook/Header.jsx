@@ -2,7 +2,8 @@ import React from 'react';
 import { MdClose, MdPushPin } from 'react-icons/md';
 import clsx from 'clsx';
 
-import { useTranslation } from '@/hooks/useTranslation';
+import { useTranslation } from '../../../../hooks/useTranslation';
+import { useResponsiveSize } from '../../../../hooks/useResponsiveSize';
 
 const NotebookHeader = ({ isPinned, handleClose, handleTogglePin }) => {
   const _ = useTranslation();

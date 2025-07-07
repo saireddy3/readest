@@ -1,6 +1,6 @@
 /**
- * @typedef {import('@/types/view').FoliateView} FoliateView
- * @typedef {import('@/types/view').TTSGranularity} TTSGranularity
+ * @typedef {import('../../types/view').FoliateView} FoliateView
+ * @typedef {import('../../types/view').TTSGranularity} TTSGranularity
  * @typedef {import('./TTSClient.js').TTSClient} TTSClient
  * @typedef {import('./TTSClient.js').TTSMessageCode} TTSMessageCode
  * @typedef {import('./TTSClient.js').TTSVoice} TTSVoice

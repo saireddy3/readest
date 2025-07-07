@@ -2,7 +2,8 @@ import clsx from 'clsx';
 import React from 'react';
 import { FiChevronDown } from 'react-icons/fi';
 import { MdCheck } from 'react-icons/md';
-import { useDefaultIconSize, useResponsiveSize } from '@/hooks/useResponsiveSize';
+import { useDefaultIconSize, useResponsiveSize } from '../../../../hooks/useResponsiveSize';
+import { useTranslation } from '../../../../hooks/useTranslation';
 
 const DropDown = ({ selected, options, onSelect }) => {
   const iconSize16 = useResponsiveSize(16);

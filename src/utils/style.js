@@ -5,12 +5,12 @@ import {
   FALLBACK_FONTS,
   CJK_SANS_SERIF_FONTS,
   CJK_SERIF_FONTS,
-} from '@/services/constants';
+} from '../services/constants';
 import {
   themes,
   generateLightPalette,
   generateDarkPalette,
-} from '@/styles/themes';
+} from '../styles/themes';
 import { getOSPlatform } from './misc.js';
 
 // Embedded fonts CSS instead of using raw-loader
@@ -48,7 +48,7 @@ const fontfacesCSS = `/* Basic web fonts, specific font definitions are loaded a
  * @param {number} minFontSize - Minimum font size in pixels
  * @param {number} fontWeight - Font weight
  * @param {boolean} overrideFont - Whether to override font settings
- * @param {import('@/types/book').ThemeCode} themeCode - Theme code
+ * @param {import('../types/book').ThemeCode} themeCode - Theme code
  * @returns {string} Font styles CSS
  */
 const getFontStyles = (
@@ -212,7 +212,7 @@ const getAdditionalFontFaces = () => `
  * @param {number} zoomLevel - Zoom level
  * @param {string} writingMode - Writing mode
  * @param {boolean} vertical - Whether text is vertical
- * @param {import('@/types/book').ThemeCode} themeCode - Theme code
+ * @param {import('../types/book').ThemeCode} themeCode - Theme code
  * @returns {string} Layout styles CSS
  */
 const getLayoutStyles = (
@@ -377,7 +377,7 @@ export const getFootnoteStyles = () => `
 
 /**
  * Get theme code
- * @returns {import('@/types/book').ThemeCode} Theme code
+ * @returns {import('../types/book').ThemeCode} Theme code
  */
 export const getThemeCode = () => {
   let themeMode = 'auto';
@@ -418,8 +418,8 @@ export const getThemeCode = () => {
 
 /**
  * Get styles CSS
- * @param {import('@/types/book').ViewSettings} viewSettings - View settings
- * @param {import('@/types/book').ThemeCode} [themeCode] - Theme code
+ * @param {import('../types/book').ViewSettings} viewSettings - View settings
+ * @param {import('../types/book').ThemeCode} [themeCode] - Theme code
  * @returns {string} Styles CSS
  */
 export const getStyles = (viewSettings, themeCode) => {

@@ -3,11 +3,11 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Image from 'next/image';
 
-import { Book } from '@/types/book';
-import { BookDoc } from '@/libs/document';
-import { useEnv } from '@/context/EnvContext';
-import { useSettingsStore } from '@/store/settingsStore';
-import { useTranslation } from '@/hooks/useTranslation';
+import { Book } from '../types/book';
+import { BookDoc } from '../libs/document';
+import { useEnv } from '../context/EnvContext';
+import { useSettingsStore } from '../store/settingsStore';
+import { useTranslation } from '../hooks/useTranslation';
 import {
   formatAuthors,
   formatDate,
@@ -15,8 +15,8 @@ import {
   formatPublisher,
   formatSubject,
   formatTitle,
-} from '@/utils/book';
-import Alert from '@/components/Alert';
+} from '../utils/book';
+import Alert from './Alert';
 import Spinner from './Spinner';
 import Dialog from './Dialog';
 

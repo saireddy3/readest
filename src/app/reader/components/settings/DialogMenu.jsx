@@ -1,12 +1,12 @@
 import React from 'react';
 import { MdCheck } from 'react-icons/md';
-import { useSettingsStore } from '@/store/settingsStore';
-import { useTranslation } from '@/hooks/useTranslation';
-import { useDefaultIconSize } from '@/hooks/useResponsiveSize';
+import { useSettingsStore } from '../../../../store/settingsStore';
+import { useTranslation } from '../../../../hooks/useTranslation';
+import { useResponsiveSize } from '../../../../hooks/useResponsiveSize';
 
 const DialogMenu = ({ toggleDropdown }) => {
   const _ = useTranslation();
-  const iconSize = useDefaultIconSize();
+  const iconSize = useResponsiveSize();
   const { isFontLayoutSettingsGlobal, setFontLayoutSettingsGlobal } = useSettingsStore();
 
   const handleToggleGlobal = () => {

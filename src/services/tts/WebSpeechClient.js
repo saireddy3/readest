@@ -1,13 +1,13 @@
 /**
- * @typedef {import('@/types/view').TTSGranularity} TTSGranularity
+ * @typedef {import('../../types/view').TTSGranularity} TTSGranularity
  * @typedef {import('./TTSClient.js').TTSClient} TTSClient
  * @typedef {import('./TTSClient.js').TTSMessageEvent} TTSMessageEvent
  * @typedef {import('./TTSClient.js').TTSVoice} TTSVoice
  */
 
 
-import { AsyncQueue } from '@/utils/queue.js';
-import { findSSMLMark, parseSSMLLang, parseSSMLMarks } from '@/utils/ssml.js';
+import { Queue } from '../../utils/queue.js';
+import { findSSMLMark, parseSSMLLang, parseSSMLMarks } from '../../utils/ssml.js';
 import { TTSUtils } from './TTSUtils.js';
 
 const BLACKLISTED_VOICES = [
@@ -76,7 +76,7 @@ async function* speakWithBoundary(ssml, getRate, getPitch, getVoice) {
     utterance.lang = lang;
   }
 
-  const queue = new AsyncQueue();
+  const queue = new Queue();
 
   utterance.onboundary = (event) => {
     utterance.rate = getRate();

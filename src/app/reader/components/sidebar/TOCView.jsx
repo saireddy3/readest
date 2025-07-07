@@ -1,12 +1,14 @@
 import clsx from 'clsx';
 import React, { useEffect, useRef, useState } from 'react';
 
-import { TOCItem } from '@/libs/document';
-import { useReaderStore } from '@/store/readerStore';
-import { useSidebarStore } from '@/store/sidebarStore';
-import { findParentPath } from '@/utils/toc';
-import { getContentMd5 } from '@/utils/misc';
-import { eventDispatcher } from '@/utils/event';
+import { TOCItem } from '../../../../libs/document';
+import { useTranslation } from '../../../../hooks/useTranslation';
+import { useResponsiveSize } from '../../../../hooks/useResponsiveSize';
+import { useReaderStore } from '../../../../store/readerStore';
+import { useSidebarStore } from '../../../../store/sidebarStore';
+import { findParentPath } from '../../../../utils/toc';
+import { getContentMd5 } from '../../../../utils/misc';
+import { eventDispatcher } from '../../../../utils/event';
 
 const createExpanderIcon = (isExpanded) => {
   return (

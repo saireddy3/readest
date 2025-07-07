@@ -1,15 +1,15 @@
 /**
- * @typedef {import('@/types/view').TTSGranularity} TTSGranularity
+ * @typedef {import('../../types/view').TTSGranularity} TTSGranularity
  * @typedef {import('./TTSClient.js').TTSClient} TTSClient
  * @typedef {import('./TTSClient.js').TTSMessageEvent} TTSMessageEvent
  * @typedef {import('./TTSClient.js').TTSVoice} TTSVoice
- * @typedef {import('@/libs/edgeTTS.js').EdgeSpeechTTS} EdgeSpeechTTS
- * @typedef {import('@/libs/edgeTTS.js').EdgeTTSPayload} EdgeTTSPayload
+ * @typedef {import('../../libs/edgeTTS.js').EdgeSpeechTTS} EdgeSpeechTTS
+ * @typedef {import('../../libs/edgeTTS.js').EdgeTTSPayload} EdgeTTSPayload
  */
 
 
-import { EdgeSpeechTTS } from '@/libs/edgeTTS.js';
-import { parseSSMLLang, parseSSMLMarks } from '@/utils/ssml.js';
+import { EdgeSpeechTTS } from '../../libs/edgeTTS.js';
+import { parseSSMLLang, parseSSMLMarks } from '../../utils/ssml.js';
 import { TTSUtils } from './TTSUtils.js';
 
 export class EdgeTTSClient {

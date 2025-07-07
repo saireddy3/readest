@@ -1,5 +1,5 @@
 /**
- * @typedef {import('@/types/system').AppService} AppService
+ * @typedef {import('../types/system').AppService} AppService
  */
 
 import { READEST_WEB_BASE_URL } from './constants.js';
@@ -29,27 +29,33 @@ export const getAPIBaseUrl = () => {
 };
 
 /**
- * @typedef {Object} EnvConfigType
- * @property {function(): Promise<AppService>} getAppService
+ * Environment configuration for the application
  */
-
-let webAppService = null;
-const getWebAppService = async () => {
-  if (!webAppService) {
-    const { WebAppService } = await import('@/services/webAppService.js');
-    webAppService = new WebAppService();
-    await webAppService.loadSettings();
+export class EnvConfig {
+  constructor() {
+    this.appService = null;
+    this.isWebApp = isWebAppPlatform();
   }
-  return webAppService;
-};
 
-/**
- * @type {EnvConfigType}
- */
-const environmentConfig = {
-  getAppService: async () => {
-    return getWebAppService();
-  },
-};
+  /**
+   * Get the app service instance
+   * @returns {Promise<AppService>}
+   */
+  async getAppService() {
+    if (this.appService) {
+      return this.appService;
+    }
 
-export default environmentConfig; 
+    if (this.isWebApp) {
+      const { WebAppService } = await import('./webAppService.js');
+      this.appService = new WebAppService();
+    } else {
+      const { AppService } = await import('./appService.js');
+      this.appService = new AppService();
+    }
+
+    return this.appService;
+  }
+}
+
+export default new EnvConfig(); 

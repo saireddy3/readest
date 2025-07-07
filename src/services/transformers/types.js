@@ -1,5 +1,5 @@
 /**
- * @typedef {import('@/types/book').ViewSettings} ViewSettings
+ * @typedef {import('../../types/book').ViewSettings} ViewSettings
  */
 
 /**

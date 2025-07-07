@@ -5,15 +5,18 @@ import { BiMoon, BiSun } from 'react-icons/bi';
 import { TbSunMoon } from 'react-icons/tb';
 import { MdZoomOut, MdZoomIn, MdCheck } from 'react-icons/md';
 
-import { MAX_ZOOM_LEVEL, MIN_ZOOM_LEVEL, ZOOM_STEP } from '@/services/constants';
-import { useEnv } from '@/context/EnvContext';
-import { useThemeStore } from '@/store/themeStore';
-import { useReaderStore } from '@/store/readerStore';
-import { useTranslation } from '@/hooks/useTranslation';
-import { getStyles } from '@/utils/style';
-import { getMaxInlineSize } from '@/utils/config';
+import { MAX_ZOOM_LEVEL, MIN_ZOOM_LEVEL, ZOOM_STEP } from '../../../services/constants';
+import { useEnv } from '../../../context/EnvContext';
+import { useThemeStore } from '../../../store/themeStore';
+import { useReaderStore } from '../../../store/readerStore';
+import { useTranslation } from '../../../hooks/useTranslation';
+import { getStyles } from '../../../utils/style';
+import { getMaxInlineSize } from '../../../utils/config';
 import { saveViewSettings } from '../utils/viewSettingsHelper';
-import MenuItem from '@/components/MenuItem';
+import MenuItem from '../../../components/MenuItem';
+import { useResponsiveSize } from '../../../hooks/useResponsiveSize';
+import { useSettingsStore } from '../../../store/settingsStore';
+import { eventDispatcher } from '../../../utils/event';
 
 const ViewMenu = ({
   bookKey,

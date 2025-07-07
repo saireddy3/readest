@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import { BookDoc } from '@/libs/document';
-import { useReaderStore } from '@/store/readerStore';
+import { BookDoc } from '../../../libs/document';
+import { useReaderStore } from '../../../store/readerStore';
 import { useFoliateEvents } from '../hooks/useFoliateEvents';
-import { getFootnoteStyles, getStyles, getThemeCode } from '@/utils/style';
-import { getPopupPosition, getPosition } from '@/utils/sel';
-import { eventDispatcher } from '@/utils/event';
+import { getFootnoteStyles, getStyles, getThemeCode } from '../../../utils/style';
+import { getPopupPosition, getPosition } from '../../../utils/sel';
+import { eventDispatcher } from '../../../utils/event';
 import { FootnoteHandler } from 'foliate-js/footnotes.js';
-import Popup from '@/components/Popup';
+import Popup from '../../../components/Popup';
 
 const popupWidth = 360;
 const popupHeight = 88;

@@ -1,18 +1,18 @@
 /**
- * @typedef {import('@/types/book').BookFont} BookFont
- * @typedef {import('@/types/book').BookLayout} BookLayout
- * @typedef {import('@/types/book').BookSearchConfig} BookSearchConfig
- * @typedef {import('@/types/book').BookStyle} BookStyle
- * @typedef {import('@/types/book').HighlightColor} HighlightColor
- * @typedef {import('@/types/book').TTSConfig} TTSConfig
- * @typedef {import('@/types/book').ViewConfig} ViewConfig
- * @typedef {import('@/types/book').ViewSettings} ViewSettings
- * @typedef {import('@/types/settings').ReadSettings} ReadSettings
- * @typedef {import('@/types/settings').SystemSettings} SystemSettings
+ * @typedef {import('../types/book').BookFont} BookFont
+ * @typedef {import('../types/book').BookLayout} BookLayout
+ * @typedef {import('../types/book').BookSearchConfig} BookSearchConfig
+ * @typedef {import('../types/book').BookStyle} BookStyle
+ * @typedef {import('../types/book').HighlightColor} HighlightColor
+ * @typedef {import('../types/book').TTSConfig} TTSConfig
+ * @typedef {import('../types/book').ViewConfig} ViewConfig
+ * @typedef {import('../types/book').ViewSettings} ViewSettings
+ * @typedef {import('../types/settings').ReadSettings} ReadSettings
+ * @typedef {import('../types/settings').SystemSettings} SystemSettings
  */
 
-import { getDefaultMaxBlockSize, getDefaultMaxInlineSize } from '@/utils/config.js';
-import { stubTranslation as _ } from '@/utils/misc.js';
+import { getDefaultMaxBlockSize, getDefaultMaxInlineSize } from '../utils/config.js';
+import { stubTranslation as _ } from '../utils/misc.js';
 
 export const LOCAL_BOOKS_SUBDIR = 'Readest/Books';
 export const CLOUD_BOOKS_SUBDIR = 'Readest/Books';

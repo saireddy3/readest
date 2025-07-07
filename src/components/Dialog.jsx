@@ -2,11 +2,11 @@ import clsx from 'clsx';
 import React, { useEffect, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { MdArrowBackIosNew, MdArrowForwardIos } from 'react-icons/md';
-import { useEnv } from '@/context/EnvContext';
-import { useDrag } from '@/hooks/useDrag';
-import { useResponsiveSize } from '@/hooks/useResponsiveSize';
-import { impactFeedback } from '@/utils/haptics';
-import { getDirFromUILanguage } from '@/utils/rtl';
+import { useEnv } from '../context/EnvContext';
+import { useDrag } from '../hooks/useDrag';
+import { useResponsiveSize } from '../hooks/useResponsiveSize';
+import { impactFeedback } from '../utils/haptics';
+import { getDirFromUILanguage } from '../utils/rtl';
 
 const VELOCITY_THRESHOLD = 0.5;
 const SNAP_THRESHOLD = 0.2;

@@ -1,10 +1,12 @@
 import React from 'react';
 import { TbLayoutSidebar, TbLayoutSidebarFilled } from 'react-icons/tb';
 
-import { useReaderStore } from '@/store/readerStore';
-import { useSidebarStore } from '@/store/sidebarStore';
-import { useTranslation } from '@/hooks/useTranslation';
-import Button from '@/components/Button';
+import { useReaderStore } from '../../../store/readerStore';
+import { useSidebarStore } from '../../../store/sidebarStore';
+import { useTranslation } from '../../../hooks/useTranslation';
+import { useResponsiveSize } from '../../../hooks/useResponsiveSize';
+import { eventDispatcher } from '../../../utils/event';
+import Button from '../../../components/Button';
 
 const SidebarToggler = ({ bookKey }) => {
   const _ = useTranslation();

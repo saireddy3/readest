@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
-import { useEnv } from '@/context/EnvContext';
-import { useReaderStore } from '@/store/readerStore';
-import { useSidebarStore } from '@/store/sidebarStore';
-import { uniqueId } from '@/utils/misc';
-import { navigateToReader } from '@/utils/nav';
+import { useEnv } from '../../../context/EnvContext';
+import { useReaderStore } from '../../../store/readerStore';
+import { useSidebarStore } from '../../../store/sidebarStore';
+import { uniqueId } from '../../../utils/misc';
+import { navigateToReader } from '../../../utils/nav';
+
 
 const useBooksManager = () => {
   const { envConfig } = useEnv();

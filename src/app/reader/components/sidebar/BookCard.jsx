@@ -2,11 +2,13 @@ import clsx from 'clsx';
 import React from 'react';
 import Image from 'next/image';
 import { MdInfoOutline } from 'react-icons/md';
-import { useThemeStore } from '@/store/themeStore';
-import { useTranslation } from '@/hooks/useTranslation';
-import { eventDispatcher } from '@/utils/event';
-import { useResponsiveSize } from '@/hooks/useResponsiveSize';
-import { formatAuthors, formatTitle } from '@/utils/book';
+import { useThemeStore } from '../../../../store/themeStore';
+import { useTranslation } from '../../../../hooks/useTranslation';
+import { useResponsiveSize } from '../../../../hooks/useResponsiveSize';
+import { formatAuthors, formatTitle } from '../../../../utils/book';
+import { useReaderStore } from '../../../../store/readerStore';
+import { useBookDataStore } from '../../../../store/bookDataStore';
+import { eventDispatcher } from '../../../../utils/event';
 
 const BookCard = ({ book }) => {
   const { coverImageUrl, title, author } = book;

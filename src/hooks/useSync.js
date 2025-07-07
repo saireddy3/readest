@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 // Import router if needed
-// import { useRouter } from '@/context/RouterContext';
-import { useSyncContext } from '@/context/SyncContext';
-import { useSettingsStore } from '@/store/settingsStore';
-import { useBookDataStore } from '@/store/bookDataStore';
-import { transformBookConfigFromDB } from '@/utils/transform';
-import { transformBookNoteFromDB } from '@/utils/transform';
-import { transformBookFromDB } from '@/utils/transform';
+// import { useRouter } from '../context/RouterContext';
+import { useSyncContext } from '../context/SyncContext';
+import { useSettingsStore } from '../store/settingsStore';
+import { useBookDataStore } from '../store/bookDataStore';
+import { transformBookConfigFromDB } from '../utils/transform';
+import { transformBookNoteFromDB } from '../utils/transform';
+import { transformBookFromDB } from '../utils/transform';
 
 const transformsFromDB = {
   books: transformBookFromDB,

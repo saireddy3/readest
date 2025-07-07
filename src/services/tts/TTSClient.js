@@ -1,5 +1,5 @@
 /**
- * @typedef {import('@/types/view').TTSGranularity} TTSGranularity
+ * @typedef {import('../../types/view').TTSGranularity} TTSGranularity
  */
 
 /**

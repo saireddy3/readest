@@ -5,8 +5,10 @@ import { FiSearch } from 'react-icons/fi';
 import { MdOutlinePushPin, MdPushPin } from 'react-icons/md';
 import { MdArrowBackIosNew } from 'react-icons/md';
 
-import { useResponsiveSize } from '@/hooks/useResponsiveSize';
-import { useTrafficLightStore } from '@/store/trafficLightStore';
+import { useTranslation } from '../../../../hooks/useTranslation';
+import { useResponsiveSize } from '../../../../hooks/useResponsiveSize';
+import { useTrafficLightStore } from '../../../../store/trafficLightStore';
+import { useSidebarStore } from '../../../../store/sidebarStore';
 
 const SidebarHeader = ({ isPinned, isSearchBarVisible, onGoToLibrary, onClose, onTogglePin, onToggleSearchBar }) => {
   const { isTrafficLightVisible } = useTrafficLightStore();

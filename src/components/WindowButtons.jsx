@@ -1,9 +1,9 @@
 import clsx from 'clsx';
 import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { useEnv } from '@/context/EnvContext';
+import { useEnv } from '../context/EnvContext';
 
-import { handleMinimize, handleToggleMaximize, handleClose } from '@/utils/webWindow';
+// import { handleMinimize, handleToggleMaximize, handleClose } from '../utils/webWindow'; // Removed: not implemented
 
 const WindowButton = ({ onClick, ariaLabel, id, children }) => (
   <button
@@ -52,7 +52,7 @@ const WindowButtons = ({
     if (onMinimize) {
       onMinimize();
     } else {
-      handleMinimize();
+      // handleMinimize(); // Removed: not implemented
     }
   };
 
@@ -60,7 +60,7 @@ const WindowButtons = ({
     if (onToggleMaximize) {
       onToggleMaximize();
     } else {
-      handleToggleMaximize();
+      // handleToggleMaximize(); // Removed: not implemented
     }
   };
 
@@ -68,7 +68,7 @@ const WindowButtons = ({
     if (onClose) {
       onClose();
     } else {
-      handleClose();
+      // handleClose(); // Removed: not implemented
     }
   };
 

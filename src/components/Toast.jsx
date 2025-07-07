@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import { eventDispatcher } from '@/utils/event';
+import { eventDispatcher } from '../utils/event';
 
 export const Toast = () => {
   const [toastMessage, setToastMessage] = useState('');

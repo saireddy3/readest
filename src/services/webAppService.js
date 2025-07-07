@@ -1,18 +1,18 @@
 /**
- * @typedef {import('@/types/book').Book} Book
- * @typedef {import('@/types/system').FileSystem} FileSystem
- * @typedef {import('@/types/system').BaseDir} BaseDir
- * @typedef {import('@/types/system').AppPlatform} AppPlatform
+ * @typedef {import('../types/book').Book} Book
+ * @typedef {import('../types/system').FileSystem} FileSystem
+ * @typedef {import('../types/system').BaseDir} BaseDir
+ * @typedef {import('../types/system').AppPlatform} AppPlatform
  */
 
-import { getCoverFilename } from '@/utils/book.js';
-import { getOSPlatform, isValidURL } from '@/utils/misc.js';
-import { RemoteFile } from '@/utils/file.js';
+import { getCoverFilename } from '../utils/book.js';
+import { getOSPlatform, isValidURL } from '../utils/misc.js';
+import { RemoteFile } from '../utils/file.js';
 
 import { isPWA } from './environment.js';
 import { BaseAppService } from './appService.js';
 import { LOCAL_BOOKS_SUBDIR } from './constants.js';
-import { openFileDialog } from '@/utils/webFileSystem.js';
+import { openFileDialog } from '../utils/webFileSystem.js';
 
 /**
  * @param {string} fp

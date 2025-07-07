@@ -3,11 +3,12 @@ import React, { useState, useEffect } from 'react';
 import { MdPlayCircle, MdPauseCircle, MdFastRewind, MdFastForward, MdAlarm } from 'react-icons/md';
 import { RiVoiceAiFill } from 'react-icons/ri';
 import { MdCheck } from 'react-icons/md';
-import { useEnv } from '@/context/EnvContext';
-import { useReaderStore } from '@/store/readerStore';
-import { useTranslation } from '@/hooks/useTranslation';
-import { useSettingsStore } from '@/store/settingsStore';
-import { useDefaultIconSize, useResponsiveSize } from '@/hooks/useResponsiveSize';
+import { useEnv } from '../../../../context/EnvContext';
+import { useReaderStore } from '../../../../store/readerStore';
+import { useTranslation } from '../../../../hooks/useTranslation';
+import { useSettingsStore } from '../../../../store/settingsStore';
+import { useDefaultIconSize, useResponsiveSize } from '../../../../hooks/useResponsiveSize';
+import { eventDispatcher } from '../../../../utils/event';
 
 const getTTSTimeoutOptions = (_) => {
   return [

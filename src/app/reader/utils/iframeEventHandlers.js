@@ -2,9 +2,9 @@ import {
   DISABLE_DOUBLE_CLICK_ON_MOBILE,
   DOUBLE_CLICK_INTERVAL_THRESHOLD_MS,
   LONG_HOLD_THRESHOLD,
-} from '@/services/constants';
-import { eventDispatcher } from '@/utils/event';
-import { getOSPlatform } from '@/utils/misc';
+} from '../../../services/constants';
+import { eventDispatcher } from '../../../utils/event';
+import { getOSPlatform } from '../../../utils/misc';
 
 // Initialize doubleClickEnabled in a way that works with SSR
 const doubleClickEnabled = typeof window === 'undefined' ? 

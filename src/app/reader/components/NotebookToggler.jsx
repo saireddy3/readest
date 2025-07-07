@@ -1,11 +1,12 @@
 import React from 'react';
 import { LuNotebookPen } from 'react-icons/lu';
 
-import { useSidebarStore } from '@/store/sidebarStore';
-import { useNotebookStore } from '@/store/notebookStore';
-import { useTranslation } from '@/hooks/useTranslation';
-import { useResponsiveSize } from '@/hooks/useResponsiveSize';
-import Button from '@/components/Button';
+import { useSidebarStore } from '../../../store/sidebarStore';
+import { useNotebookStore } from '../../../store/notebookStore';
+import { useTranslation } from '../../../hooks/useTranslation';
+import { useResponsiveSize } from '../../../hooks/useResponsiveSize';
+import Button from '../../../components/Button';
+import { eventDispatcher } from '../../../utils/event';
 
 const NotebookToggler = ({ bookKey }) => {
   const _ = useTranslation();
