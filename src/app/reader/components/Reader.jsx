@@ -63,12 +63,20 @@ const Reader = ({ bookUrl: propBookUrl }) => {
         
         console.log("⏳ Fetching book from URL:", bookUrl);
         // Fetch the file from URL
-        const response = await fetch(bookUrl);
-        if (!response.ok) {
-          throw new Error(`Failed to fetch book: ${response.status} ${response.statusText}`);
+        let blob;
+        try {
+          const response = await fetch(bookUrl);
+          if (!response.ok) {
+            throw new Error(`Failed to fetch book: ${response.status} ${response.statusText}`);
+          }
+          blob = await response.blob();
+        } catch (fetchError) {
+          console.warn("Failed to fetch book from URL, continuing with empty state:", fetchError);
+          // Continue without the book - let the user upload one manually
+          setLoading(false);
+          return;
         }
         
-        const blob = await response.blob();
         console.log("✅ Successfully fetched book content:", blob.size, "bytes");
         
         // Create a File object from the blob

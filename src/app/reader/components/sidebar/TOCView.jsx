@@ -1,7 +1,5 @@
 import clsx from 'clsx';
 import React, { useEffect, useRef, useState } from 'react';
-
-import { TOCItem } from '../../../../libs/document';
 import { useTranslation } from '../../../../hooks/useTranslation';
 import { useResponsiveSize } from '../../../../hooks/useResponsiveSize';
 import { useReaderStore } from '../../../../store/readerStore';

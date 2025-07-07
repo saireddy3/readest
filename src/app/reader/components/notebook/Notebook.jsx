@@ -10,7 +10,6 @@ import { useTranslation } from '../../../../hooks/useTranslation';
 import { useThemeStore } from '../../../../store/themeStore';
 import { useEnv } from '../../../../context/EnvContext';
 import { useDrag } from '../../../../hooks/useDrag';
-import { TextSelection } from '../../../../utils/sel';
 import { uniqueId } from '../../../../utils/misc';
 import { eventDispatcher } from '../../../../utils/event';
 import { getBookDirFromLanguage } from '../../../../utils/book';

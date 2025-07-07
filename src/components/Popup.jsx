@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Position } from '../utils/sel';
 
 const Popup = ({
   width,

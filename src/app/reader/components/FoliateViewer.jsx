@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { BookDoc, getDirection } from '../../../libs/document';
+import { getDirection } from '../../../libs/document';
 import { useThemeStore } from '../../../store/themeStore';
 import { useReaderStore } from '../../../store/readerStore';
 import { useClickEvent, useTouchEvent } from '../hooks/useIframeEvents';

@@ -1,8 +1,8 @@
 {
-  "name": "readest-reader",
+  "name": "@shmandadi/book-reader",
   "version": "0.9.36",
   "description": "A reusable e-book reader component for React applications",
-  "private": false,
+  "private": true,
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",

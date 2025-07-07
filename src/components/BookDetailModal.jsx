@@ -3,8 +3,6 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Image from 'next/image';
 
-import { Book } from '../types/book';
-import { BookDoc } from '../libs/document';
 import { useEnv } from '../context/EnvContext';
 import { useSettingsStore } from '../store/settingsStore';
 import { useTranslation } from '../hooks/useTranslation';

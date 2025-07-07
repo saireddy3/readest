@@ -1,6 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-
-import { BookDoc } from '../../../libs/document';
 import { useReaderStore } from '../../../store/readerStore';
 import { useFoliateEvents } from '../hooks/useFoliateEvents';
 import { getFootnoteStyles, getStyles, getThemeCode } from '../../../utils/style';
