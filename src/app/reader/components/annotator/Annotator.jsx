@@ -5,7 +5,7 @@ import { PiHighlighterFill } from 'react-icons/pi';
 import { FaWikipediaW } from 'react-icons/fa';
 import { BsPencilSquare } from 'react-icons/bs';
 import { RiDeleteBinLine } from 'react-icons/ri';
-import { BsTranslate } from 'react-icons/bs';
+
 import { TbHexagonLetterD } from 'react-icons/tb';
 import { FaHeadphones } from 'react-icons/fa6';
 
@@ -28,7 +28,7 @@ import { HIGHLIGHT_COLOR_HEX } from '../../../../services/constants';
 import AnnotationPopup from './AnnotationPopup';
 import WiktionaryPopup from './WiktionaryPopup';
 import WikipediaPopup from './WikipediaPopup';
-import DeepLPopup from './DeepLPopup';
+
 
 const Annotator = ({ bookKey }) => {
   const _ = useTranslation();
@@ -55,11 +55,11 @@ const Annotator = ({ bookKey }) => {
   const [showAnnotPopup, setShowAnnotPopup] = useState(false);
   const [showWiktionaryPopup, setShowWiktionaryPopup] = useState(false);
   const [showWikipediaPopup, setShowWikipediaPopup] = useState(false);
-  const [showDeepLPopup, setShowDeepLPopup] = useState(false);
+
   const [trianglePosition, setTrianglePosition] = useState();
   const [annotPopupPosition, setAnnotPopupPosition] = useState();
   const [dictPopupPosition, setDictPopupPosition] = useState();
-  const [translatorPopupPosition, setTranslatorPopupPosition] = useState();
+
   const [highlightOptionsVisible, setHighlightOptionsVisible] = useState(false);
 
   const [selectedStyle, setSelectedStyle] = useState(
@@ -74,8 +74,7 @@ const Annotator = ({ bookKey }) => {
   const maxHeight = window.innerHeight - 2 * popupPadding;
   const dictPopupWidth = Math.min(480, maxWidth);
   const dictPopupHeight = Math.min(300, maxHeight);
-  const transPopupWidth = Math.min(480, maxWidth);
-  const transPopupHeight = Math.min(360, maxHeight);
+
   const annotPopupWidth = Math.min(useResponsiveSize(300), maxWidth);
   const annotPopupHeight = useResponsiveSize(44);
   const androidSelectionHandlerHeight = 0;
@@ -126,7 +125,7 @@ const Annotator = ({ bookKey }) => {
         setShowAnnotPopup(false);
         setShowWiktionaryPopup(false);
         setShowWikipediaPopup(false);
-        setShowDeepLPopup(false);
+
       }
     };
     const handlePointerup = () => {
@@ -216,7 +215,7 @@ const Annotator = ({ bookKey }) => {
     setShowAnnotPopup(false);
     setShowWiktionaryPopup(false);
     setShowWikipediaPopup(false);
-    setShowDeepLPopup(false);
+
     isShowingPopup.current = false;
   };
 
@@ -277,18 +276,12 @@ const Annotator = ({ bookKey }) => {
         dictPopupHeight,
         popupPadding,
       );
-      const transPopupPos = getPopupPosition(
-        triangPos,
-        rect,
-        transPopupWidth,
-        transPopupHeight,
-        popupPadding,
-      );
+
       if (triangPos.point.x == 0 || triangPos.point.y == 0) return;
       setShowAnnotPopup(true);
       setAnnotPopupPosition(annotPopupPos);
       setDictPopupPosition(dictPopupPos);
-      setTranslatorPopupPosition(transPopupPos);
+
       setTrianglePosition(triangPos);
       isShowingPopup.current = true;
     }
@@ -436,7 +429,7 @@ const Annotator = ({ bookKey }) => {
   const handleTranslation = () => {
     if (!selection || !selection.text) return;
     setShowAnnotPopup(false);
-    setShowDeepLPopup(true);
+    // Translation feature removed - you can integrate your own translation service here
   };
 
   const handleSpeakText = async () => {
@@ -542,7 +535,7 @@ const Annotator = ({ bookKey }) => {
     { tooltipText: _('Search'), Icon: FiSearch, onClick: handleSearch },
     { tooltipText: _('Dictionary'), Icon: TbHexagonLetterD, onClick: handleDictionary },
     { tooltipText: _('Wikipedia'), Icon: FaWikipediaW, onClick: handleWikipedia },
-    { tooltipText: _('Translate'), Icon: BsTranslate, onClick: handleTranslation },
+
     { tooltipText: _('Speak'), Icon: FaHeadphones, onClick: handleSpeakText },
   ];
 
@@ -568,15 +561,7 @@ const Annotator = ({ bookKey }) => {
           popupHeight={dictPopupHeight}
         />
       )}
-      {showDeepLPopup && trianglePosition && translatorPopupPosition && (
-        <DeepLPopup
-          text={selection?.text}
-          position={translatorPopupPosition}
-          trianglePosition={trianglePosition}
-          popupWidth={transPopupWidth}
-          popupHeight={transPopupHeight}
-        />
-      )}
+
       {showAnnotPopup && trianglePosition && annotPopupPosition && (
         <AnnotationPopup
           dir={viewSettings.rtl ? 'rtl' : 'ltr'}
