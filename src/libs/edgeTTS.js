@@ -1,4 +1,4 @@
-import { md5 } from 'js-md5';
+import { md5 } from '../utils/md5.js';
 import { randomMd5 } from '../utils/misc';
 import { LRUCache } from '../utils/lru';
 
@@ -128,9 +128,9 @@ const genVoiceList = (voices) => {
   });
 };
 
-const hashPayload = (payload) => {
+const hashPayload = async (payload) => {
   const base = JSON.stringify(payload);
-  return md5(base);
+  return await md5(base);
 };
 
 export class EdgeSpeechTTS {
@@ -254,7 +254,7 @@ export class EdgeSpeechTTS {
   }
 
   async create(payload) {
-    const hash = hashPayload(payload);
+    const hash = await hashPayload(payload);
     const cached = EdgeSpeechTTS.audioCache.get(hash);
     if (cached) {
       return new Response(cached);

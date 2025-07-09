@@ -3,7 +3,7 @@
 import clsx from 'clsx';
 import * as React from 'react';
 import { useEffect, Suspense, useRef, useState } from 'react';
-import { md5 } from 'js-md5';
+import { md5 } from '../../../utils/md5.js';
 
 import { useEnv } from '../../../context/EnvContext';
 import { useTheme } from '../../../hooks/useTheme';
@@ -85,7 +85,7 @@ const Reader = ({ bookUrl: propBookUrl }) => {
         
         // Generate a hash for the book
         const arrayBuffer = await file.arrayBuffer();
-        const hash = md5(arrayBuffer);
+        const hash = await md5(arrayBuffer);
         console.log("📊 Book hash:", hash);
         
         // We need to ensure the library exists in IndexedDB
