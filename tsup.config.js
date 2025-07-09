@@ -36,7 +36,6 @@ export default defineConfig({
   external: [
     'react',
     'react-dom',
-    'next',
     'foliate-js',
     'foliate-js/epubcfi.js',
     'foliate-js/comic-book.js',

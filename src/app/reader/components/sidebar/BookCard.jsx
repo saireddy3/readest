@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import React from 'react';
-import Image from 'next/image';
+// Removed next/image dependency for framework agnostic compatibility
 import { MdInfoOutline } from 'react-icons/md';
 import { useThemeStore } from '../../../../store/themeStore';
 import { useTranslation } from '../../../../hooks/useTranslation';
@@ -22,11 +22,9 @@ const BookCard = ({ book }) => {
 
   return (
     <div className='flex h-20 w-full items-center'>
-      <Image
+      <img
         src={coverImageUrl}
         alt={_('Book Cover')}
-        width={56}
-        height={80}
         className={clsx(
           'me-4 aspect-auto max-h-16 w-[15%] max-w-12 rounded-sm object-cover shadow-md',
           isDarkMode ? 'mix-blend-screen' : 'mix-blend-multiply',

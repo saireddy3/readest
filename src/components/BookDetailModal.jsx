@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import Image from 'next/image';
+// Removed next/image dependency for framework agnostic compatibility
 
 import { useEnv } from '../context/EnvContext';
 import { useSettingsStore } from '../store/settingsStore';
@@ -89,11 +89,10 @@ const BookDetailModal = ({ book, isOpen, onClose }) => {
           <div className='relative w-full rounded-lg'>
             <div className='mb-10 flex h-40 items-start'>
               <div className='book-cover relative mr-10 aspect-[28/41] h-40 items-end shadow-lg'>
-                <Image
+                <img
                   src={book.coverImageUrl}
                   alt={formatTitle(book.title)}
-                  fill={true}
-                  className='w-10 object-cover'
+                  className='w-full h-full object-cover'
                   onError={(e) => {
                     e.target.style.display = 'none';
                     e.target.nextElementSibling?.classList.remove('invisible');
