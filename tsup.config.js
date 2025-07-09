@@ -3,7 +3,7 @@ import { defineConfig } from 'tsup';
 export default defineConfig({
   entry: ['src/index.js'],
   format: ['cjs', 'esm'],
-  dts: false,
+  dts: true,
   sourcemap: true,
   clean: true,
   minify: false,
@@ -31,7 +31,6 @@ export default defineConfig({
     '.woff2': 'file',
     '.ttf': 'file',
     '.eot': 'file',
-    '.css': 'file',
   },
   external: [
     'react',

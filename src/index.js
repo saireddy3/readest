@@ -1,3 +1,7 @@
+// Import CSS styles to bundle them with the library
+import './styles/globals.css';
+import './styles/fonts.css';
+
 // Export main components
 import Reader from './app/reader/components/Reader';
 import ReaderContent from './app/reader/components/ReaderContent';

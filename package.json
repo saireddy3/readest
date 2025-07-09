@@ -2,7 +2,9 @@
   "name": "@shmandadi/book-reader",
   "version": "0.9.36",
   "description": "A framework-agnostic e-book reader component library for React applications",
-  "private": true,
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -14,7 +16,8 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.js"
-    }
+    },
+    "./dist/index.css": "./dist/index.css"
   },
   "scripts": {
     "dev": "dotenv -e .env.web -- next dev -p 4000",
@@ -75,9 +78,6 @@
     "tailwindcss": "^3.4.17",
     "tsup": "^8.0.1",
     "typescript": "^5.0.0"
-  },
-  "publishConfig": {
-    "access": "public"
   },
   "keywords": [
     "ebook",
