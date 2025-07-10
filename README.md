@@ -2,6 +2,31 @@
 
 Readest is a modern, web-based e-book reader application built with Next.js. It provides a feature-rich reading experience with support for various e-book formats.
 
+## 📦 NPM Package
+
+This project is also available as a React component library on GitHub Packages:
+
+```bash
+npm install @saireddy3/book-reader@latest
+```
+
+### Quick Start with Package
+
+```javascript
+import { Reader } from '@saireddy3/book-reader';
+import '@saireddy3/book-reader/dist/index.css';
+
+function App() {
+  return (
+    <div className="App">
+      <Reader />
+    </div>
+  );
+}
+```
+
+**📖 For detailed installation instructions, see [INSTALLATION_GUIDE.md](./INSTALLATION_GUIDE.md)**
+
 ## Features
 
 - Support for popular e-book formats (EPUB, etc.)

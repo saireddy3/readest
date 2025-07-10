@@ -3,7 +3,7 @@ import { defineConfig } from 'tsup';
 export default defineConfig({
   entry: ['src/index.js'],
   format: ['cjs', 'esm'],
-  dts: true,
+  dts: false,
   sourcemap: true,
   clean: true,
   minify: false,

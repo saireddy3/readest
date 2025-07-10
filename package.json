@@ -1,19 +1,21 @@
 {
-  "name": "@shmandadi/book-reader",
-  "version": "0.9.36",
+  "name": "@saireddy3/book-reader",
+  "version": "0.9.38",
   "description": "A framework-agnostic e-book reader component library for React applications",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/saireddy3/readest.git"
+  },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
   },
   "main": "dist/index.js",
   "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.js"
     },
