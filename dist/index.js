@@ -2,7 +2,7 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-var CFI4 = require('foliate-js/epubcfi.js');
+var CFI4 = require('@skillsoft/foliate-js/epubcfi.js');
 var clsx8 = require('clsx');
 var React42 = require('react');
 var PropTypes13 = require('prop-types');
@@ -30,8 +30,8 @@ var cg = require('react-icons/cg');
 var reactColor = require('react-color');
 var cssbeautify = require('cssbeautify');
 var bs = require('react-icons/bs');
-var overlayer_js = require('foliate-js/overlayer.js');
-var footnotes_js = require('foliate-js/footnotes.js');
+var overlayer_js = require('@skillsoft/foliate-js/overlayer.js');
+var footnotes_js = require('@skillsoft/foliate-js/footnotes.js');
 
 function _interopDefault (e) { return e && e.__esModule ? e : { default: e }; }
 
@@ -841,27 +841,27 @@ var init_document = __esm({
         if (await this.isZip()) {
           const loader = await this.makeZipLoader();
           if (this.isCBZ()) {
-            const { makeCBZ } = await import('foliate-js/comic-book.js');
+            const { makeCBZ } = await import('@skillsoft/foliate-js/comic-book.js');
             const blob = await this.file.arrayBuffer();
             book = await makeCBZ(blob);
             format = "CBZ";
           } else if (this.isFBZ()) {
-            const { makeFB2 } = await import('foliate-js/fb2.js');
+            const { makeFB2 } = await import('@skillsoft/foliate-js/fb2.js');
             const blob = await this.file.arrayBuffer();
             book = await makeFB2(blob);
             format = "FBZ";
           } else {
-            const { EPUB } = await import('foliate-js/epub.js');
+            const { EPUB } = await import('@skillsoft/foliate-js/epub.js');
             book = await new EPUB(loader).init();
             format = "EPUB";
           }
-        } else if (await (await import('foliate-js/mobi.js')).isMOBI(this.file)) {
-          const fflate = await import('foliate-js/vendor/fflate.js');
-          const { MOBI } = await import('foliate-js/mobi.js');
+        } else if (await (await import('@skillsoft/foliate-js/mobi.js')).isMOBI(this.file)) {
+          const fflate = await import('@skillsoft/foliate-js/vendor/fflate.js');
+          const { MOBI } = await import('@skillsoft/foliate-js/mobi.js');
           book = await new MOBI({ unzlib: fflate.unzlibSync }).open(this.file);
           format = "MOBI";
         } else if (this.isFB2()) {
-          const { makeFB2 } = await import('foliate-js/fb2.js');
+          const { makeFB2 } = await import('@skillsoft/foliate-js/fb2.js');
           book = await makeFB2(this.file);
           format = "FB2";
         }
@@ -7271,7 +7271,7 @@ var FoliateViewer = ({ bookKey, bookDoc, config: config2 }) => {
     const openBook = async () => {
       var _a, _b, _c, _d;
       console.log("Opening book", bookKey);
-      await import('foliate-js/view.js');
+      await import('@skillsoft/foliate-js/view.js');
       const view = wrappedFoliateView(document.createElement("foliate-view"));
       view.id = `foliate-view-${bookKey}`;
       document.body.append(view);

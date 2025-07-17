@@ -1,6 +1,6 @@
 import React from 'react';
 
-import * as CFI from 'foliate-js/epubcfi.js';
+import * as CFI from '@skillsoft/foliate-js/epubcfi.js';
 import { useTranslation } from '../../../../hooks/useTranslation';
 import { useResponsiveSize } from '../../../../hooks/useResponsiveSize';
 import { useBookDataStore } from '../../../../store/bookDataStore';

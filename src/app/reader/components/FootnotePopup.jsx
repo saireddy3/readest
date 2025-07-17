@@ -4,7 +4,7 @@ import { useFoliateEvents } from '../hooks/useFoliateEvents';
 import { getFootnoteStyles, getStyles, getThemeCode } from '../../../utils/style';
 import { getPopupPosition, getPosition } from '../../../utils/sel';
 import { eventDispatcher } from '../../../utils/event';
-import { FootnoteHandler } from 'foliate-js/footnotes.js';
+import { FootnoteHandler } from '@skillsoft/foliate-js/footnotes.js';
 import Popup from '../../../components/Popup';
 
 const popupWidth = 360;

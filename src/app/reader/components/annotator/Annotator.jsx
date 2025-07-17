@@ -9,8 +9,8 @@ import { RiDeleteBinLine } from 'react-icons/ri';
 import { TbHexagonLetterD } from 'react-icons/tb';
 import { FaHeadphones } from 'react-icons/fa6';
 
-import * as CFI from 'foliate-js/epubcfi.js';
-import { Overlayer } from 'foliate-js/overlayer.js';
+import * as CFI from '@skillsoft/foliate-js/epubcfi.js';
+import { Overlayer } from '@skillsoft/foliate-js/overlayer.js';
 import { useEnv } from '../../../../context/EnvContext';
 import { getOSPlatform, uniqueId } from '../../../../utils/misc';
 import { useBookDataStore } from '../../../../store/bookDataStore';

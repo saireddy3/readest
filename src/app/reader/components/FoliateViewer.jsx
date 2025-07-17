@@ -142,7 +142,7 @@ const FoliateViewer = ({ bookKey, bookDoc, config }) => {
 
     const openBook = async () => {
       console.log('Opening book', bookKey);
-      await import('foliate-js/view.js');
+      await import('@skillsoft/foliate-js/view.js');
       const view = wrappedFoliateView(document.createElement('foliate-view'));
       view.id = `foliate-view-${bookKey}`;
       document.body.append(view);

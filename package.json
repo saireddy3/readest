@@ -1,11 +1,7 @@
 {
-  "name": "@saireddy3/book-reader",
-  "version": "0.9.39",
+  "name": "@skillsoft/book-reader",
+  "version": "0.0.2",
   "description": "A framework-agnostic e-book reader component library for React applications",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/saireddy3/readest.git"
-  },
   "publishConfig": {
     "registry": "https://nexus.tools.squads-dev.com/repository/npm-skillsoft/"
   },
@@ -33,6 +29,7 @@
     "prepublishOnly": "npm run build:lib"
   },
   "dependencies": {
+    "@skillsoft/foliate-js": "^0.0.1",
     "@zip.js/zip.js": "^2.7.53",
     "clsx": "^2.1.1",
     "cssbeautify": "^0.3.1",
@@ -41,7 +38,6 @@
     "tinycolor2": "^1.6.0"
   },
   "peerDependencies": {
-    "foliate-js": "1.0.1",
     "i18next": "^24.0.0",
     "i18next-browser-languagedetector": "^8.0.0",
     "i18next-http-backend": "^3.0.0",
@@ -60,7 +56,6 @@
     "dotenv-cli": "^7.4.4",
     "eslint": "^9.16.0",
     "eslint-config-next": "15.0.3",
-    "foliate-js": "1.0.1",
     "i18next": "^24.2.0",
     "i18next-browser-languagedetector": "^8.0.2",
     "i18next-http-backend": "^3.0.1",

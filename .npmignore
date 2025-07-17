@@ -1,0 +1,5 @@
+.eslintrc.cjs
+.gitignore
+.npmrc
+__tests__
+ava.config.cjs

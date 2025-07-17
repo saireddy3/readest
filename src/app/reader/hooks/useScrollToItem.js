@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import * as CFI from 'foliate-js/epubcfi.js';
+import * as CFI from '@skillsoft/foliate-js/epubcfi.js';
 
 const useScrollToItem = (cfi, progress) => {
   const viewRef = useRef(null);
