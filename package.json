@@ -1,13 +1,13 @@
 {
   "name": "@saireddy3/book-reader",
-  "version": "0.9.38",
+  "version": "0.9.39",
   "description": "A framework-agnostic e-book reader component library for React applications",
   "repository": {
     "type": "git",
     "url": "https://github.com/saireddy3/readest.git"
   },
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
+    "registry": "https://nexus.tools.squads-dev.com/repository/npm-skillsoft/"
   },
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -60,6 +60,10 @@
     "dotenv-cli": "^7.4.4",
     "eslint": "^9.16.0",
     "eslint-config-next": "15.0.3",
+    "foliate-js": "1.0.1",
+    "i18next": "^24.2.0",
+    "i18next-browser-languagedetector": "^8.0.2",
+    "i18next-http-backend": "^3.0.1",
     "i18next-scanner": "^4.6.0",
     "mkdirp": "^3.0.1",
     "next": "15.2.4",
@@ -70,16 +74,12 @@
     "raw-loader": "^4.0.2",
     "react": "19.0.0",
     "react-dom": "19.0.0",
-    "react-icons": "^5.4.0",
     "react-i18next": "^15.4.1",
-    "i18next": "^24.2.0",
-    "i18next-browser-languagedetector": "^8.0.2",
-    "i18next-http-backend": "^3.0.1",
-    "zustand": "5.0.1",
-    "foliate-js": "1.0.1",
+    "react-icons": "^5.4.0",
     "tailwindcss": "^3.4.17",
     "tsup": "^8.0.1",
-    "typescript": "^5.0.0"
+    "typescript": "^5.0.0",
+    "zustand": "5.0.1"
   },
   "keywords": [
     "ebook",
