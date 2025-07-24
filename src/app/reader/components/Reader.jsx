@@ -23,6 +23,8 @@ import { useLocationChangeTracking } from '../hooks/useLocationChangeTracking';
  * @param {Function} trackConsumption - Function to track content consumption
  * @param {string} bookId - Book identifier for consumption tracking
  * @param {string} bookType - Book type for consumption tracking
+ * @param {number} instanceNumber - Instance number for dynamic content restart
+ * @param {string} lastCFI - Last CFI for resume functionality
  */
 const Reader = ({ 
   bookUrl: propBookUrl, 
@@ -31,7 +33,8 @@ const Reader = ({
   trackConsumption, 
   bookId, 
   bookType,
-  instanceNumber
+  instanceNumber,
+  lastCFI
 }) => {
   console.log({propBookUrl})
   const defaultBookUrl = 'https://cdn.readest.com/books/this-side-of-paradise.epub';
@@ -116,6 +119,23 @@ const Reader = ({
         const existingBook = books.find(b => b.hash === hash);
         if (existingBook) {
           console.log("📕 Book already exists in library:", existingBook);
+          
+          // Update resume location if lastCFI is provided and different from current
+          if (lastCFI && existingBook.config?.location !== lastCFI) {
+            console.log("📖 Updating resume location for existing book:", lastCFI);
+            // Remove the CACHED_CFI_PREFIX if present
+            const cleanCFI = lastCFI.startsWith('cached:') ? lastCFI.substring(7) : lastCFI;
+            existingBook.config = {
+              ...existingBook.config,
+              location: cleanCFI,
+              updatedAt: Date.now(),
+            };
+            
+            // Save the updated library to IndexedDB
+            console.log("💾 Saving updated library to storage");
+            await appService.saveLibraryBooks(books);
+          }
+          
           setBookHash(existingBook.hash);
         } else {
           console.log("📗 Importing new book");
@@ -133,6 +153,18 @@ const Reader = ({
           if (book) {
             // Ensure the book has the source URL saved
             book.url = bookUrl;
+            
+            // Set resume location if lastCFI is provided
+            if (lastCFI) {
+              console.log("📖 Setting resume location:", lastCFI);
+              // Remove the CACHED_CFI_PREFIX if present
+              const cleanCFI = lastCFI.startsWith('cached:') ? lastCFI.substring(7) : lastCFI;
+              book.config = {
+                ...book.config,
+                location: cleanCFI,
+                updatedAt: Date.now(),
+              };
+            }
             
             console.log("✅ Book successfully imported:", book);
             
