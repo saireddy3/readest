@@ -15,7 +15,9 @@
       "import": "./dist/index.mjs",
       "require": "./dist/index.js"
     },
-    "./dist/index.css": "./dist/index.css"
+    "./dist/index.css": "./dist/index.css",
+    "./src/styles/globals.css": "./src/styles/globals.css",
+    "./src/styles/fonts.css": "./src/styles/fonts.css"
   },
   "scripts": {
     "dev": "dotenv -e .env.web -- next dev -p 4000",
@@ -26,6 +28,9 @@
     "lint": "next lint",
     "build:package": "tsup --config tsup.config.js",
     "build:lib": "tsup --config tsup.config.js",
+    "build:css": "tailwindcss -i ./src/styles/globals.css -o ./dist/index.css",
+    "build:css:watch": "tailwindcss -i ./src/styles/globals.css -o ./dist/index.css --watch",
+    "watch:lib": "tsup --config tsup.config.js --watch",
     "prepublishOnly": "npm run build:lib"
   },
   "dependencies": {

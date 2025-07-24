@@ -4,7 +4,6 @@ import clsx from 'clsx';
 import * as React from 'react';
 import { useEffect, Suspense, useRef, useState } from 'react';
 import { md5 } from '../../../utils/md5.js';
-
 import { useEnv } from '../../../context/EnvContext';
 import { useTheme } from '../../../hooks/useTheme';
 import { useThemeStore } from '../../../store/themeStore';
@@ -13,9 +12,27 @@ import { useScreenWakeLock } from '../../../hooks/useScreenWakeLock';
 import { Toast } from '../../../components/Toast';
 import ReaderContent from './ReaderContent';
 import { useSidebarStore } from '../../../store/sidebarStore';
-import Spinner from '../../../components/Spinner';
+import { useLocationChangeTracking } from '../hooks/useLocationChangeTracking';
 
-const Reader = ({ bookUrl: propBookUrl }) => {
+/**
+ * Reader component with integrated content consumption tracking
+ * 
+ * @param {string} propBookUrl - URL of the book to load
+ * @param {Function} onLocationChange - Callback for location changes
+ * @param {string} sessionKey - Session identifier for consumption tracking
+ * @param {Function} trackConsumption - Function to track content consumption
+ * @param {string} bookId - Book identifier for consumption tracking
+ * @param {string} bookType - Book type for consumption tracking
+ */
+const Reader = ({ 
+  bookUrl: propBookUrl, 
+  onLocationChange, 
+  sessionKey, 
+  trackConsumption, 
+  bookId, 
+  bookType,
+  instanceNumber
+}) => {
   console.log({propBookUrl})
   const defaultBookUrl = 'https://cdn.readest.com/books/this-side-of-paradise.epub';
   const [urlBookUrl, setUrlBookUrl] = useState(null);
@@ -32,6 +49,9 @@ const Reader = ({ bookUrl: propBookUrl }) => {
   const { updateAppTheme } = useThemeStore();
   useTheme();
   useScreenWakeLock(settings.screenWakeLock);
+
+  // Location change handling for content consumption tracking
+  useLocationChangeTracking(onLocationChange, sessionKey, trackConsumption, bookId, bookType, instanceNumber);
 
   // First effect: Process URL parameters
   useEffect(() => {
@@ -154,9 +174,8 @@ const Reader = ({ bookUrl: propBookUrl }) => {
       <div className="hero h-dvh bg-base-100">
         <div className="hero-content text-center">
           <div>
-            <Spinner loading={true} />
             <div className="mt-4 text-base-content">
-              {!urlParamsProcessed ? "Processing URL parameters..." : "Loading book..."}
+            {!urlParamsProcessed ? "Processing URL parameters..." : "Loading book..."}
             </div>
           </div>
         </div>

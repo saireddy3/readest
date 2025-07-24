@@ -23,6 +23,7 @@ import { getMaxInlineSize } from '../../../utils/config';
 import { getDirFromUILanguage } from '../../../utils/rtl';
 import { transformContent } from '../../../services/transformService';
 import { wrappedFoliateView } from '../../../types/view';
+import { eventDispatcher } from '../../../utils/event';
 
 const FoliateViewer = ({ bookKey, bookDoc, config }) => {
   const containerRef = useRef(null);
@@ -46,6 +47,16 @@ const FoliateViewer = ({ bookKey, bookDoc, config }) => {
   const progressRelocateHandler = (event) => {
     const detail = event.detail;
     setProgress(bookKey, detail.cfi, detail.tocItem, detail.section, detail.location, detail.range);
+    
+    // Dispatch progress-relocated event for external consumption tracking
+    eventDispatcher.dispatch('progress-relocated', {
+      bookKey,
+      cfi: detail.cfi,
+      tocItem: detail.tocItem,
+      section: detail.section,
+      location: detail.location,
+      range: detail.range,
+    });
   };
 
   const docTransformHandler = (event) => {
