@@ -1,6 +1,6 @@
 {
   "name": "@skillsoft/book-reader",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A framework-agnostic e-book reader component library for React applications",
   "publishConfig": {
     "registry": "https://nexus.tools.squads-dev.com/repository/npm-skillsoft/"
