@@ -321,3 +321,12 @@ foliate-view {
 .drop-zone.drag-over .drop-indicator {
   display: block;
 }
+
+.checkbox {
+width: auto !important;
+border-width: 0 !important;
+}
+
+.flex.h-20.w-full.items-center {
+  display: none !important;
+}

@@ -6,7 +6,7 @@
  * @typedef {import('./TTSClient.js').TTSVoice} TTSVoice
  */
 
-import { WebSpeechClient } from './WebSpeechClient.js';
+import { WebSpeechClient } from './WebSpeechClient.ts';
 import { EdgeTTSClient } from './EdgeTTSClient.js';
 import { TTSUtils } from './TTSUtils.js';
 
@@ -70,19 +70,80 @@ export class TTSController extends EventTarget {
 
   async init() {
     await this.ttsWebClient.init();
-    const success = await this.ttsEdgeClient.init();
-    if (success) {
-      this.ttsClient = this.ttsEdgeClient;
-    } else {
+    try {
+      // Add timeout to prevent hanging
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error('EdgeTTSClient initialization timeout')), 2000);
+      });
+      
+      try {
+        const initPromise = this.ttsEdgeClient.init();
+        const success = await Promise.race([initPromise, timeoutPromise]);
+        
+        if (success) {
+          this.ttsClient = this.ttsEdgeClient;
+        } else {
+          this.ttsClient = this.ttsWebClient;
+        }
+      } catch {
+        this.ttsClient = this.ttsWebClient;
+      }
+    } catch {
       this.ttsClient = this.ttsWebClient;
     }
-    this.ttsWebVoices = await this.ttsWebClient.getAllVoices();
-    this.ttsEdgeVoices = await this.ttsEdgeClient.getAllVoices();
+    
+    // If both clients failed, create a basic fallback
+    if (!this.ttsWebClient.available && !this.ttsEdgeClient.available) {
+      this.ttsClient = {
+        speak: async function* (ssml, signal) {
+          // Check if signal is aborted
+          if (signal && signal.aborted) {
+            return;
+          }
+          yield { code: 'boundary', speaking: true };
+          yield { code: 'end', speaking: false };
+        },
+        pause: async () => {},
+        resume: async () => {},
+        stop: async () => {},
+        setRate: async () => {},
+        setVoice: async () => {},
+        getGranularities: () => ['word', 'sentence'],
+        getVoiceId: () => '',
+        getVoices: async () => [],
+        getAllVoices: async () => [],
+      };
+    }
+    
+    try {
+      // Add timeout to prevent hanging
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error('WebSpeechClient voices loading timeout')), 3000);
+      });
+      
+      const voicesPromise = this.ttsWebClient.getAllVoices();
+      this.ttsWebVoices = await Promise.race([voicesPromise, timeoutPromise]);
+    } catch {
+      this.ttsWebVoices = [];
+    }
+    
+    try {
+      // Add timeout to prevent hanging
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error('EdgeTTSClient voices loading timeout')), 3000);
+      });
+      
+      const voicesPromise = this.ttsEdgeClient.getAllVoices();
+      this.ttsEdgeVoices = await Promise.race([voicesPromise, timeoutPromise]);
+    } catch {
+      this.ttsEdgeVoices = [];
+    }
   }
 
   async initViewTTS() {
     let granularity = this.view.language.isCJK ? 'sentence' : 'word';
     const supportedGranularities = this.ttsClient.getGranularities();
+    
     if (!supportedGranularities.includes(granularity)) {
       granularity = supportedGranularities[0];
     }
@@ -140,7 +201,6 @@ export class TTSController extends EventTarget {
 
     this.#currentSpeakPromise = new Promise(async (resolve, reject) => {
       try {
-        console.log('TTS speak');
         this.state = 'playing';
         ssml = this.#preprocessSSML(await ssml);
         await this.preloadSSML(ssml);
